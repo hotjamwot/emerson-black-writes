@@ -54,6 +54,8 @@ jobs:
           # this file is belt-and-braces so the artifact can never be chewed up
           # by the legacy Jekyll pipeline if it is ever served from a branch.
           touch _site/.nojekyll
+          # Belt-and-braces: never ship macOS junk, even if one is ever committed.
+          find _site -name '.DS_Store' -delete
 
       - name: Guard checks
         run: |
