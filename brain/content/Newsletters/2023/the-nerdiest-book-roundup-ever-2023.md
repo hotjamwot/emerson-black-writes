@@ -2,14 +2,13 @@
 title: The Nerdiest Book Roundup Ever 2023
 description: How to Track Your Reading Habits Like a Prize Geek
 date: 2023-12-19
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:139887463
 ---
-
 Well done, everybody! We made it through another year with enthusiasm, optimism and an impressive drive to achieve more in our writing and reading lives.
 
 I’m gonna take a break from writing lessons this week. Instead, I’m excited to talk about my…
@@ -24,7 +23,7 @@ Wait, don’t they? Do you? I do. I’ve tracked what I read on [Goodreads](http
 
 Now, my favourite tool for tracking what I read is a simple Google Sheets spreadsheet.
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-01.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-01.webp)
 
 *Originally built by Brock Roberts who I found through a YouTube video.*
 
@@ -46,7 +45,7 @@ Apart from my goal of reading fifty books, I set myself a separate *Pages Read* 
 
 But never worry, your trusty nerd has a trick up his sleeve. I use Calibre, an app to organize my ebooks:
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-02.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-02.webp)
 
 *Calibre. My preferred way of organising my ebook library.*
 
@@ -64,7 +63,7 @@ Tracking is good. But the greatest thing about is the CHARTS.
 
 ## 👸🏼 Pretty as a Picture
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-03.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-03.webp)
 
 *OH YEAH THAT FEELS GOOD*
 
@@ -72,19 +71,19 @@ Whenever I start a new book, I enter its details into the *Tracker* sheet. When 
 
 As the books stack up through the year, I get this lovely Gantt chart:
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-04.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-04.webp)
 
 *Gantt charts are a great way to visualisetimeliness*
 
 The graphs fill up the further through the year and the more books I complete.
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-05.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-05.webp)
 
 I track quite a few metrics that don’t matter too much. But I refer to the sheet for some metrics to police my book choice. Due to living in the West and the power structures that be, the majority of books on my *To Read* list are written by white authors and published in the United States of America.
 
 Nothing *wrong* with that, exactly, but there’s a lot to say for reading books by a diverse range of authors from different countries and backgrounds. So, there’s a column for *Author Gender* and *Author Nationality* (not ethnicity).
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-06.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-06.webp)
 
 *Note the bottom left, Author Gender graph*
 
@@ -106,33 +105,9 @@ If you’d like to give this spreadsheet a try, [here is a link to make a copy o
 
 Add books to the *Tracker* sheet, and if a genre, publisher or country isn’t available in the data validation cell, add it to the *Categories* sheet and it’ll become available.
 
-## 🥳 HAPPY CHRISTMAS AND NEW YEAR!!!
-
-This is the last newsletter of 2023 from Stormhouse. Please have an amazing break and enjoy spending time with your loved ones.
-
-Thank you for joining me on our writing and reading adventure this year.
-
-We published three books this year:
-
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-07.webp)
-
-They’re all available to buy on [Amazon](https://www.amazon.com/author/emersonblack), [Kobo](https://www.kobo.com/gb/en/search?query=emerson+black&ac=1&acp=emerson+black&ac.author=emerson+black&sort=Temperature), [Barnes and Noble](https://www.barnesandnoble.com/s/%22Emerson%20Black%22;jsessionid=7DA62F2C0A030540AB0751BB25478753.prodny_store02-atgap16?Ntk=P_key_Contributor_List&Ns=P_Sales_Rank&Ntx=mode+matchall), and (soon) Google Play.
-
-A hearty, *hearty* debt of gratitude goes to you if you’ve purchased any of these titles. It’s my first year of publishing and it’s been a year of non-stop learning but also staggering just how much more information there is out there yet to learn.
-
-**ONWARDS TO 2024!!**
-
-## 🌊 Stormhouse News
-
-As mentioned, we published three books this year (all in the *Seen in Silverbridge* series).
-
-Emerson Black (that’s me) is planning the third book in the *Seen* series and also…
-
-Emerson Black is in the early stages of the first draft of an *Untitled Stormhouse Romantic Mystery*. More details about this next year…
-
 ## 📣 Shout Out to: Big Beacon by Alan Partridge.
 
-![](../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-08.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-08.webp)
 
 *Funniest audiobook/book I’ve ever listened to/read*
 
@@ -144,4 +119,3 @@ If you like laughing at pathetic men who have a desperately high view of themsel
 
 Without exaggeration, this book now holds my top spot in Funniest Books of All Time.
 
----

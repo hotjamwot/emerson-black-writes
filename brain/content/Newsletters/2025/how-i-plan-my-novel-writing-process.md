@@ -38,19 +38,19 @@ Those Bits will become **tasks**, and each individual task shouldn’t feel over
 
 Now that I’ve written a few long-form projects, I’ve got the process down to a nifty step-by-step that I keep on Notion. First, I create my new Book as a page in a database:
 
-![](../../../organise/Images/newsletters/2025/how-i-plan-my-novel-writing-process-01.webp)
+![](/organise/images/newsletters/2025/how-i-plan-my-novel-writing-process-01.webp)
 
 *I have a lot of properties. It’s how I keep track of by ISBNs, URLs, everything.*
 
 As a template for a new book, I’ve got a dropdown list of all my tasks that I’ve refined over the last couple of years of publishing, figuring out what tasks need to be done when.
 
-![](../../../organise/Images/newsletters/2025/how-i-plan-my-novel-writing-process-02.webp)
+![](/organise/images/newsletters/2025/how-i-plan-my-novel-writing-process-02.webp)
 
 Each of these is a ‘phase’. Next to the phase, I’ve put in brackets how long I expect the process to take (spoiler: it always takes longer than I plan, but that’s okay).
 
 Inside each of these dropdown menus is the steps of that phase:
 
-![](../../../organise/Images/newsletters/2025/how-i-plan-my-novel-writing-process-03.webp)
+![](/organise/images/newsletters/2025/how-i-plan-my-novel-writing-process-03.webp)
 
 These are deliberately vague and I can always add more or remove some. Each of these tickboxes is essentially a task, and the important trait of each task is that it’s completable. As in, I know when it’s done. When I have a logline, I can tick the ‘logline’ tickbox.
 
@@ -83,7 +83,7 @@ If you end up with too many tasks and if feels like you’ll never finish the pr
 
 ## 👩‍🏫 What I’m Reading: The Players by Minette Walters
 
-![The Players: Must-read sweeping historical fiction from 25-million copy bestselling author: Amazon.co.uk: Walters, Minette: 9781805463153: Books](../../../organise/Images/newsletters/2025/how-i-plan-my-novel-writing-process-06.webp)
+![The Players: Must-read sweeping historical fiction from 25-million copy bestselling author: Amazon.co.uk: Walters, Minette: 9781805463153: Books](/organise/images/newsletters/2025/how-i-plan-my-novel-writing-process-06.webp)
 
 The sequel to *The Swift and the Harrier*, this Austen-esque romance is set during the late 1600s in England, when King James’ throne is being fought over and rebellions and uprisings are all over the place.
 

@@ -1,15 +1,14 @@
 ---
-title: "An Enforced Break"
-description: "How a simple accident can lead to loads of free time"
+title: An Enforced Break
+description: How a simple accident can lead to loads of free time
 date: 2023-10-25
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:138221824
 ---
-
 For the last week I have been without the device I am most dependent on.
 
 Following the hilarious experience of being scammed for a fake apartment and spending over £1,000 on a deposit that seems to be gone forever, I had another mishap.
@@ -24,21 +23,9 @@ This, I later found out, means that the battery short-circuited the logic board.
 
 Not ideal.
 
-![](../../../organise/Images/newsletters/2023/an-enforced-break-01.webp)
+![](/organise/images/newsletters/2023/an-enforced-break-01.webp)
 
 *My workspace prior to the incident. Look how close that water bottle is … playing with fire, I was.*
-
----
-
-**By the way, if you’re new here, this is a slightly different kind of newsletter from the usual at Stormhouse. We typically write writing advice like these posts:**
-
-- [Your Reader’s Invisible Eye](https://stormhouse.substack.com/p/your-readers-invisible-eye)
-- [Master Your Calendar](https://open.substack.com/pub/stormhouse/p/master-your-calendar?r=1s8xdo)
-- [The Art of Restraint](https://open.substack.com/pub/stormhouse/p/the-art-of-restraint?r=1s8xdo)
-
-Okay, back to the heartbreaking story.
-
----
 
 ## 😶 After the initial panic subsided
 
@@ -87,17 +74,3 @@ Basically, be extremely careful with water bottles around your laptop.
 Mayyyybe there’s something to be said about reading and relaxing and enjoying your time here on earth, living in the present instead of being obsessed with work, but I think the lesson about water and laptops is more pertinent.
 
 Oh, and insurance. Have insurance.
-
-## 🌊 Stormhouse News
-
-An Actress Is Missing, the second book in the Seen in Silverbridge series, will be released in only two weeks - 5th November 2023.
-
-![](../../../organise/Images/newsletters/2023/an-enforced-break-02.webp)
-
-*Luce, Huds, Faven and Rodney are back.*
-
-I’ve been so excited about this book ever since I finished the first draft almost a year ago!
-
-You can pre-order from Amazon, either on Kindle or paperback. Please read and review because this series is still in its infancy and every bit helps. You’re such an early adopter … you’re amazing.
-
----

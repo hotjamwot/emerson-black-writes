@@ -1,15 +1,14 @@
 ---
-title: "Instinct, Intuition and Integrity"
-description: "How the fastest way forward is to stop rushing"
+title: Instinct, Intuition and Integrity
+description: How the fastest way forward is to stop rushing
 date: 2023-10-11
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:137774373
 ---
-
 Have you ever been scammed?
 
 As of this week, I have! 🎉🥳
@@ -27,10 +26,6 @@ As I mentioned in the last newsletter, me and my partner have moved to London. W
 So, it was with immense joy that we found a *great* place after less than a week of searching. Would you believe it? No? Well, you’re already more on the ball than I…
 
 We’d posted in multiple Facebook groups and messages were flooding in. Most of them were either too far out of the city, too expensive, or too cramped. One apartment in particular, though it was further out of the city than we’d have ideally liked, was great. It was affordable, the landlord seemed friendly, and it was in a great neighbourhood.
-
-![](../../../organise/Images/newsletters/2023/instinct-intuition-and-integrity-01.webp)
-
-*An artist’s visualisation of me in the new apartment. They just … couldn’t get the hand right.*
 
 The landlord invited us to view it, but because were leaving the next day for Portugal, we didn’t have the time. She put us in touch with the current tenant who sent us a video of the place. We decided we’d take it.
 
@@ -70,10 +65,6 @@ Yes, you have to go the long way.
 
 An hour of your time now could save you a dozen hours in the future. Rewriting, though it takes a seemingly endless amount of time and energy, will save you hundreds of dollars of editing down the line. Paying for a professional cover designer will save you gigantic headaches if you were to instead go with your cousin’s friend’s hair removal specialist’s son who claims he knows his way around Photoshop but actually just loves Canva.
 
-![](../../../organise/Images/newsletters/2023/instinct-intuition-and-integrity-02.webp)
-
-*What it could have been…*
-
 We all know deep down what the right thing to do is when faced with these opportunities. Our intuition tells us that it’s worth putting in the time to get the best possible product into the hands of your reader. But even knowing that, it’s easy to be swayed by the promise of time and energy saved.
 
 Trust your intuition. Put in the hard yards. It’s worth it in the long run.
@@ -108,24 +99,12 @@ Let me repeat:
 
 > Take your time. We’re in it for the long haul.
 
-## 🌊 Stormhouse News
-
-![](../../../organise/Images/newsletters/2023/instinct-intuition-and-integrity-03.webp)
-
-*The Seen in Silverbridge team are back!*
-
-Book 2 in the *Seen in Silverbridge* series comes out November 2nd!
-
-If you haven’t yet read *A Rockstar Has Exploded,* [check it out here](https://www.amazon.com.au/dp/B0BTML7L86).
-
 ## 📣 Shout Out to: The Thursday Murder Club by Richard Osman
 
-![](../../../organise/Images/newsletters/2023/instinct-intuition-and-integrity-04.webp)
+![](/organise/images/newsletters/2023/instinct-intuition-and-integrity-04.webp)
 
 I couldn’t put this down. A friend of mine recommended it. She said she loves the characters so much and she was excited for the upcoming release of the fourth book in the series. So, I bought the first book (released back in the Covid days of 2020) and read it in two days.
 
 I was busy walking around London, writing, and editing a film, but I couldn’t stop. I’d wake up at 4 a.m., unable to sleep, and find myself reading until the sun came up. The characters are charming as heck — they’re all older adults who have such wisdom and emotional intelligence but also are a bit dotty — and the murder mystery plot is fantastic.
 
 Highly recommended!
-
----

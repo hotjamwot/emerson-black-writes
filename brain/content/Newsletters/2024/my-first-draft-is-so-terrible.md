@@ -1,15 +1,14 @@
 ---
-title: "My first draft is so terrible I’m considering giving up writing books"
-description: "All that work just for the writing to suck?!"
+title: My first draft is so terrible I’m considering giving up writing books
+description: All that work just for the writing to suck?!
 date: 2024-11-14
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:151657568
 ---
-
 Great news! Last week, I finished the first draft of my new book! 🥳🎉👏
 
 Bad news… It’s absolutely awful.
@@ -20,7 +19,7 @@ I’m sitting in a coffee shop on Bethnal Green in London. All around me, creati
 
 I’m totally one of them, right? I fit in. My laptop screen shows screeds of words, a full-length novel, sitting right here on Scrivener. It looks impressive!
 
-![](../../../organise/Images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
+![](/organise/images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
 
 But what these cool people don’t know is that I’m an imposter! My novel is *bad*. It’s so bad, in fact, that upon rereading it, I’m wondering if it’s time to give up writing books altogether.
 
@@ -85,19 +84,6 @@ But, genuinely: I am not a gifted nor talented writer.
 Instead: I am a practiced, persistent, hard-working writer. I’m happy with that. This industry and climate rewards relentlessness more than it does raw talent. I’ve made enough stuff to know that writing is terrible until it isn’t.
 
 And if by some cruel twist of chance, I continue practicing writing my entire life and my books are still awful, then at least I’ll know I tried. I’ll be proud of trying and failing. It’s better than regretting not trying.
-
-## 🌊 Stormhouse News
-
-As mentioned above, the first draft of Book 3 is now complete! However, that’s the easy part. The real work begins now.
-
-1. I’ll finish rereading the entire draft, making notes of what I think needs to change.
-2. I’ll rewrite. I expect it’ll take a couple of months at least, perhaps even longer.
-3. Beta readers! I’ll get my girlfriend and close friends to read it
-4. If there aren’t any massive concerns with the structure, characters, and mystery story, I’ll do the ‘polish pass’
-
-Then, it’ll be ready for the editor and cover designer…
-
-But that’ll be its own story.
 
 ## 📣 Shout Out to: Colin From Accounts
 

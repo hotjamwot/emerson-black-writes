@@ -1,24 +1,22 @@
 ---
-title: "Using Actors to Improve Your Writing"
-description: "I made a film!"
+title: Using Actors to Improve Your Writing
+description: I made a film!
 date: 2025-08-15
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:171060366
 ---
-
 Hello fellow writers and readers and creators!
 
 First, I apologise for no newsletter last month. There's no excuse. I was simply being lazy, and because it's summer in London right now, we've had plenty of visitors from around the world staying with us, which means I've been too busy being popular to stare at my screen.
 
 Also:
-
 ## I made a film!
 
-![](../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-01.webp)
+![](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-01.webp)
 
 The film is tentatively titled *Not Looking For Anything Right Now*, although I've already had feedback from more than one person that the name being too long. What do you think?
 
@@ -76,7 +74,7 @@ Stefan and I met up with Minty for coffee and after barely five minutes of talki
 
 ## Read Throughs and Rewrites
 
-![](../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-02.webp)
+![](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-02.webp)
 
 Korban, Minty and I met up in Victoria Park to talk through the script. They were strangers to each other, so I gave them two minutes to fire questions at each other, and then we got down to work. We read the script aloud, beginning to end, then discussed how we felt. I asked Korban and Minty the following questions:
 
@@ -125,16 +123,10 @@ But what if your writing a book? Well, you can still achieve this by asking frie
 
 A helpful note: Encourage your reader to be brutally honest, even though they might risk hurting your feelings by doing so. But if they’re brave enough to be honest with you, take it like a champ and genuinely consider what they’re saying. Any time they stutters, pauses, or gets tongue-tied, treat this like a neon sign saying 'THIS PART NEEDS REWRITING'.
 
-## 🌊 Stormhouse News
-
-I'm still doing the third rewrite of *Seen in Silverbridge* Book 3, okay? Yes, it's taking a long time, but it's because I want it to be as entertaining as possible for you.
-
 ## 👩‍🏫 What I’m Reading: Who Wants To Live Forever by Hannah Thomas Uose
 
 It’s our book club book and so far, it’s very interesting. It’s a great concept—some San Francisco whizz comes up with a medication that extends human life, and one by one, countries around the world are either legalising or outlawing its use.
 
 The story centres around a married couple whose political viewpoints are diametrically opposed. Juicy stuff!
 
-![Who Wants to Live Forever: A BBC Radio 2 Book Club Pick: Amazon.co.uk: Thomas Uose, Hanna: 9781840918458: Books](../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-03.webp)
-
----
+![Who Wants to Live Forever: A BBC Radio 2 Book Club Pick: Amazon.co.uk: Thomas Uose, Hanna: 9781840918458: Books](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-03.webp)

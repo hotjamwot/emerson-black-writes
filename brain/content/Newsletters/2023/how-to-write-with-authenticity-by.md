@@ -92,4 +92,4 @@ Eleanor Catton is a Kiwi writer who *won the Booker Prize* for her book The Lumi
 
 [Birnam Wood](https://amzn.to/3N53ZdM) is her latest book, released ten years hence, and I really dug it. There’s a lot of dialogue discussing political ideologies, left vs. right, and quite a few icky characters, but they’re wrapped up in a fun multi-viewpoint thriller.
 
-![](../../../organise/Images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)
+![](/organise/images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)

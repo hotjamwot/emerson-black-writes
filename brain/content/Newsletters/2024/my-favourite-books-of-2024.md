@@ -15,7 +15,7 @@ How many books did you read this year? How many books did you *want* to read thi
 
 Well, *I —* picture me saying this with a big smug grin — read 47 books in 2024, which is 7 more than my planned 40.
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-01.gif)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-01.gif)
 
 That totals 19,817 pages.
 
@@ -25,7 +25,7 @@ I’m glad you asked.
 
 I keep an incredibly nerdy Book Tracking spreadsheet where I enter a selection of data points:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-02.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-02.webp)
 
 I can dive deeper on my reading trends and discover insights about my preferences. If you’d like to do this, too, here is a link to [Copy My Spreadsheet](https://docs.google.com/spreadsheets/d/1odNARZEkom7H4VnYG3Qn7z4fL7VsZeMa-f6e_Wia2JM/copy) into your own Google Sheets. To use, just fill out the light blue cells at the top of the Summary tab — the rest is automated.
 
@@ -33,23 +33,23 @@ I can dive deeper on my reading trends and discover insights about my preference
 
 The protagonists’ genders are fairly split:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-03.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-03.webp)
 
 But the authors skewed slightly male:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-04.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-04.webp)
 
 I read from a panoply of genres, but my favourite genres tended to be **Contemporary** and **Historical Fiction**:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-05.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-05.webp)
 
 The authors are from an impressively diverse range of countries, skewing heavily toward the two English-speaking superpowers of **UK** and **US**:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-06.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-06.webp)
 
 The vast majority of books I read this year were published in the last 2-3 years, with only a handful published pre-2000. The earliest published book I read was *The Sun Also Rises* by Ernest Hemingway (published 1926).
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-07.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-07.webp)
 
 Now the nerdy stuff is outta the way, let’s get into my favourites.
 
@@ -63,13 +63,13 @@ Let’s start off with, arguably, the most boring category first.
 
 ### 🏅 Best Non-Fiction books
 
-![The Anxious Generation by Jonathan Haidt](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-08.webp)
+![The Anxious Generation by Jonathan Haidt](/organise/images/newsletters/2024/my-favourite-books-of-2024-08.webp)
 
 **The Anxious Generation** by Jonathan Haidt
 
 Absolutely riveting. Highly recommended reading for anyone who has children in their lives, or for anyone who is keen to understand the issues facing our young people a little deeper. Definitely made me feel a lot of empathy for the poor little buggers.
 
-![Ultra-Processed People by Chris van Tulleken](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-09.webp)
+![Ultra-Processed People by Chris van Tulleken](/organise/images/newsletters/2024/my-favourite-books-of-2024-09.webp)
 
 **Ultra-Processed People** by Chris van Tulleken
 
@@ -79,7 +79,7 @@ I'd love to read it again some time.
 
 ### 🏅 Best Light Contemporary novels
 
-![You Are Here by David Nicholls](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-10.webp)
+![You Are Here by David Nicholls](/organise/images/newsletters/2024/my-favourite-books-of-2024-10.webp)
 
 **You Are Here** by David Nicholls
 
@@ -87,7 +87,7 @@ Oh man, this was so far up my alley it's ridiculous. Beautiful countryside setti
 
 Perfect holiday read if you've got one coming up. Or equally satisfying as a normal day read.
 
-![Good Material by Dolly Alderton](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-11.webp)
+![Good Material by Dolly Alderton](/organise/images/newsletters/2024/my-favourite-books-of-2024-11.webp)
 
 **Good Material** by Dolly Alderton
 
@@ -97,13 +97,13 @@ If you want to feel what life is like for a white straight dude in his 30s, this
 
 ### 🏅 Best Perimenopausal Comedies
 
-![All Fours by Miranda July](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-12.webp)
+![All Fours by Miranda July](/organise/images/newsletters/2024/my-favourite-books-of-2024-12.webp)
 
 **All Fours** by Miranda July
 
 Unexpected, graphically sexual, and often laugh-out-loud funny. Loved it.
 
-![Big Swiss by Jen Beagin](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-13.webp)
+![Big Swiss by Jen Beagin](/organise/images/newsletters/2024/my-favourite-books-of-2024-13.webp)
 
 **Big Swiss** by Jen Beagin
 
@@ -111,7 +111,7 @@ Darkly funny and psychologically athletic, I found this novel an uncomfortably e
 
 ### 🏅 Best Epic, Sprawling, Entire-Life-Story novels
 
-![Demon Copperhead by Barbara Kingsolver](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-14.webp)
+![Demon Copperhead by Barbara Kingsolver](/organise/images/newsletters/2024/my-favourite-books-of-2024-14.webp)
 
 **Demon Copperhead** by Barbara Kingsolver
 
@@ -119,7 +119,7 @@ What a long, wild, painful and beautiful ride.
 
 A modern epic, capturing a time and place that I've not experienced and yet Kingsolver somehow had me feeling nostalgia for. Twists and turns galore. Real tragedy and pain. Adrenalin rush reading at multiple chapters. A beautifully written epic.
 
-![East of Eden by John Steinbeck](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-15.webp)
+![East of Eden by John Steinbeck](/organise/images/newsletters/2024/my-favourite-books-of-2024-15.webp)
 
 **East of Eden** by John Steinbeck
 
@@ -139,7 +139,7 @@ No. I cannot. I thought I could, but I can’t. There were just too many great b
 
 Some Special Mentions are:
 
-![](../../../organise/Images/newsletters/2024/my-favourite-books-of-2024-16.webp)
+![](/organise/images/newsletters/2024/my-favourite-books-of-2024-16.webp)
 
 **James** by Percival Everett
 

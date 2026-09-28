@@ -1,15 +1,14 @@
 ---
-title: "My Legs Hurt"
-description: "But I feel really good."
+title: My Legs Hurt
+description: But I feel good that I can do hard things.
 date: 2024-05-23
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:144844402
 ---
-
 I ran a half marathon on Sunday.
 
 The Hackney Half. *Thirteen miles* around London’s hip East End.
@@ -18,7 +17,7 @@ I hadn’t trained. A quick Google shows you should start training for a half ma
 
 But thanks to my three-month New Zealand trip film *Camp Be Better,* I didn’t train. Instead, I went for a five-kilometre run last week, ate some pasta the night before, and told myself I’d stop running if I felt like I was risking injury. Ego be damned!
 
-![](../../../organise/Images/newsletters/2024/my-legs-hurt-01.webp)
+![](/organise/images/newsletters/2024/my-legs-hurt-01.webp)
 
 But hey, I did it. I finished it. Not a bad time, either — 2 hours and 10 minutes! I was stoked. The final stretch was *gruelling*. A proper unfun time.
 

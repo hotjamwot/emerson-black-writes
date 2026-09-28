@@ -1,15 +1,14 @@
 ---
-title: "Saying Goodbye"
-description: "A threnody for finishing a project"
+title: Saying Goodbye
+description: A threnody for finishing a project
 date: 2024-09-16
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:148972561
 ---
-
 Last night, Julia and I went to our local pub for a celebratory roast. The Virgin Queen is a cosy Tudor style building about thirty seconds walk from our apartment with uneven wooden floors and dim lighting. Quintessentially English, they do a killer Sunday roast.
 
 What were we celebrating? A gigantic career milestone for me.
@@ -60,7 +59,7 @@ Don’t get me wrong, it hasn’t been all smooth sailing and luxury. To my know
 
 But despite the fact I have not taken a single full day off since we were greenlit last November, and despite the relentless compromises we had to make which often caused me to wake up in the middle of the night with a raised heart rate, and despite the literal scars I’ve incurred (true story: I gave myself a large cold sore after one particularly stressful battle was lost, which has left a pink scar under my lip), I’d do it again immediately.
 
-![](../../../organise/Images/newsletters/2024/saying-goodbye-01.webp)
+![](/organise/images/newsletters/2024/saying-goodbye-01.webp)
 
 *This is what a it looks like to review a sound mix on a budget. I had noise-cancelling headphones on but still, I ended up leaving the cafe as soon as I’d finished my coffee because a couple was having audible fight next to me.*
 
@@ -84,7 +83,7 @@ Despite not writing prose, editing this show has made me a better author. Being 
 
 I’m revved up to take all the lessons I’ve learned and move forward into the next project with vim.
 
-![](../../../organise/Images/newsletters/2024/saying-goodbye-02.webp)
+![](/organise/images/newsletters/2024/saying-goodbye-02.webp)
 
 *Our flatmate, as luck would have it, has a sound studio, so I was able to do my ADR (Additional Dialogue Recording) here in London.*
 
@@ -100,7 +99,7 @@ So, it’s not really goodbye after all. Not yet…
 
 By keeping up a strict Writing Hour every morning, I have written 3/5 parts of the latest *Seen in Silverbridge* book.
 
-![](../../../organise/Images/newsletters/2024/saying-goodbye-03.webp)
+![](/organise/images/newsletters/2024/saying-goodbye-03.webp)
 
 *A pretty boring screengrab from Scrivener*
 
@@ -117,5 +116,3 @@ Oh man, I think this is one of the funniest shows I’ve ever seen. Alan Partrid
 Watch it on YouTube for a couple of bucks:
 
 [Watch on YouTube](https://www.youtube.com/watch?v=0H-tjV9O69A)
-
----

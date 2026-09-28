@@ -61,7 +61,7 @@ The only way to do this is to trust your gut. TRUST IT!
 
 *[House of Leaves](https://amzn.to/3XbGl1F)* is a genre-mash of horror, romance and satire. It’s got all these weird formatting changes in it where the text is flipped upside down and back to front, and random pictures and a bunch of footnotes on basically every page.
 
-![Weird, right?](../../../organise/Images/newsletters/2023/style-vs-correctness-01.webp)
+![Weird, right?](/organise/images/newsletters/2023/style-vs-correctness-01.webp)
 
 *Weird, right?*
 

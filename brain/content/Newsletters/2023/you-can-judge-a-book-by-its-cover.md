@@ -33,7 +33,7 @@ A few clicks and a short form later, and we were in business.
 
 I had a lot of fun chatting back and forth with them about the tone, world, characters and plot of *[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86)*(now renamed to A Rockstar Has Exploded). Two weeks later, three design ideas arrived in my inbox.
 
-![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-01.webp)
+![](/organise/images/newsletters/2023/you-can-judge-a-book-by-its-cover-01.webp)
 
 From these, I could choose one to pursue, or request an additional design.
 
@@ -45,13 +45,13 @@ From here, we went back and forth about six times. I’d give feedback and the d
 
 We experimented with different colours, different fonts, slightly different layouts, and different levels of debris.
 
-![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-02.webp)
+![](/organise/images/newsletters/2023/you-can-judge-a-book-by-its-cover-02.webp)
 
 Happily, we had a great working relationship and eventually settled on a cover that we all love.
 
 ## The Big Reveal
 
-![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-03.webp)
+![](/organise/images/newsletters/2023/you-can-judge-a-book-by-its-cover-03.webp)
 
 *YOU HEARD IT HERE FIRST by Emerson Black - what a cover!*
 
@@ -77,7 +77,7 @@ Designing a cover is a battle of art and commerce, instinct and analysis. But re
 
 ### 📣 What I’m reading: [THE TWYFORD CODE](https://amzn.to/40Uc0aa) by Janice Hallett
 
-![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-04.webp)
+![](/organise/images/newsletters/2023/you-can-judge-a-book-by-its-cover-04.webp)
 
 I **highly** recommend this book if you’re a fan of mystery fiction. I read it in two days despite being swamped with work.
 

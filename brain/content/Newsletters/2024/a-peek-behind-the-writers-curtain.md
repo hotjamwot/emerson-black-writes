@@ -1,15 +1,14 @@
 ---
-title: "A Peek Behind the Writer's Curtain"
-description: "How to rewrite a novel"
+title: A Peek Behind the Writer's Curtain
+description: How to rewrite a novel
 date: 2024-06-26
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:145972949
 ---
-
 Kia ora, readers!
 
 Life has been wonderfully busy lately. Not in that dastardly capitalist way that some people like to proudly proclaim, as if it makes them more interesting — *How are you? Oh, I’m sooooo busy* — but in a comfortable and fulfilling way.
@@ -66,5 +65,3 @@ Wish me luck as I continue with fleshing out the chapter outlines!
 This video came up on my homepage for YouTube and on a whim, I skipped through it. Then I went back to the start and watched the whole thing.
 
 The Two Triangle Method is a brilliant, quick and concise process that has helped me craft the characters for Seen in Silverbridge Book 3 to a satisfying degree. Highly recommended.
-
----

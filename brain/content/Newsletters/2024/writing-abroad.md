@@ -17,7 +17,7 @@ I hope the last month has been fruitful and/or relaxing for you. I’ve been hea
 
 I have finished — or *mostly* finished — the outline for Seen in Silverbridge Book 3. As I ran through in [my last missive](https://emersonblackwrites.substack.com/p/a-peek-behind-the-writers-curtain?r=1s8xdo), the process for restructuring Nicholas’ draft was time-consuming, intensive and very satisfying. After hours spent on Google Sheets swapping scenes around, rewriting mystery and emotional beats, combining chapters and slicing unnecessary subplots, I compiled the chapter outline into Scrivener.
 
-![](../../../organise/Images/newsletters/2024/writing-abroad-01.webp)
+![](/organise/images/newsletters/2024/writing-abroad-01.webp)
 
 *Yup. I’m a meticulously planner.*
 
@@ -35,7 +35,7 @@ While I love writing on my laptop, I didn’t fancy the idea of rereading and re
 
 I joined my local library. They have a great printing deal. I exported my outline from Scrivener with double-spaced lines: it came to 51 pages. At £0.12 a page, this set me back £6.12 and took less than an hour of administration time. Worth it.
 
-![](../../../organise/Images/newsletters/2024/writing-abroad-02.webp)
+![](/organise/images/newsletters/2024/writing-abroad-02.webp)
 
 *This felt way too cool, seeing it all printed like this.*
 
@@ -45,7 +45,7 @@ It just so happens that my printing of the outline coincided with a trip to Spai
 
 While we were there, we worked our normal full-time jobs. I’m currently editing a TV series shot in New Zealand earlier this year and I’d recently finished a new round of cuts that I felt confident would garner effusive praise from the network. Unfortunately, the feedback wasn’t as sunny as the weather we were enjoying in Spain. I spent the entire week on video calls with my collaborators discussing how we were going to completely re-order the series … which left precious little mental bandwidth for writing.
 
-![](../../../organise/Images/newsletters/2024/writing-abroad-03.webp)
+![](/organise/images/newsletters/2024/writing-abroad-03.webp)
 
 *Look at that! How bloody romantic.*
 
@@ -71,7 +71,7 @@ Emerson x
 
 Every time I read a Stephen King novel, I’m struck by the ease of his prose. The voice of his characters, and his narrator, whether it be first or third person, is a joy.
 
-![It (novel) - Wikipedia](../../../organise/Images/newsletters/2024/writing-abroad-04.webp)
+![It (novel) - Wikipedia](/organise/images/newsletters/2024/writing-abroad-04.webp)
 
 *IT* has been on my To Read list for a long time and I decided to finally tackle the 1200+ page behemoth. I’m enjoying it immensely.
 

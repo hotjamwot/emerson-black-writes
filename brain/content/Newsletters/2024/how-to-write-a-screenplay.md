@@ -21,7 +21,7 @@ As in, one and a half months away.
 
 Burying myself in the world of scriptwriting has reignited a passion for the craft of screenplays. I have a few hours of produced films behind me as a writer, and I’d love to share the most important facets of what I’ve learned about writing for the screen.
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-01.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-01.webp)
 
 *Ah, the romantic nostalgia for screenwriting…*
 
@@ -68,7 +68,7 @@ It’s familiar to me because I’m a big nerd. Films have excited me since I wa
 
 Since then, I’ve worked on gigantic films (*The Hobbit* trilogy back in 2011-2013), independent films, theatre plays, TV shows, commercials, music videos and short films. All of these mediums use a broadly similar format.
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-02.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-02.webp)
 
 That’s an example of a scene header. It tells you where the scene takes place (INT means interior; *EXT* means exterior) and what time of day. Some productions underline the scene heading, some have two line spaces before it, and some only one.
 
@@ -80,11 +80,11 @@ You will get judged harshly if you fail to use the correct margin sizes, and don
 
 Here are some examples of films and their different scripts:
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-03.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-03.webp)
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-04.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-04.webp)
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-05.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-05.webp)
 
 Scripts are formatted to be a lot more spaced out and sparse than a novel’s prose. Which means the writers’ job is complicated by the need for precision and consicion.
 
@@ -100,13 +100,13 @@ Etc, etc. The moment of Georgina reaching for a dude’s hand can last pages. We
 
 Does it happen quickly? Slowly? Tentatively? Confidently? Either way, the screenplay version of the same moment might look like this:
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-06.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-06.webp)
 
 Now it’s up to the actors and director to decide how the moment plays out.
 
 When writing a screenplay, you must be efficient and economical. An infamous example of this is the script for *Lord of the Rings: The Two Towers*. The Battle of Helm’s Deep lasts for just over twenty-two minutes in the finished film. In the script, it read:
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-07.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-07.webp)
 
 Apocryphal or not, the sentiment can be interpreted as good advice. A good writer is sparing, allowing the filmmakers to fill in the white space.
 
@@ -144,7 +144,7 @@ The point is, it takes time to be concise. And I would argue that it takes more 
 
 ## 📣 Shout Out to: Writer’s Routine Podcast
 
-![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-08.webp)
+![](/organise/images/newsletters/2024/how-to-write-a-screenplay-08.webp)
 
 Writer’s Routine is a wonderful podcast that I’ve spent many hours listening to.
 

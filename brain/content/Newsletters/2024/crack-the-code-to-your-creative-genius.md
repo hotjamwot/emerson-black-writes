@@ -1,15 +1,14 @@
 ---
-title: "Crack the Code to Your Creative Genius"
-description: "How to use ChatGPT to reveal your unique artistic superpowers"
+title: Crack the Code to Your Creative Genius
+description: How to use ChatGPT to reveal your unique artistic superpowers
 date: 2024-10-17
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:150301956
 ---
-
 Hello!
 
 I’ve spent the last three and a half weeks in beautiful Aotearoa New Zealand.
@@ -20,7 +19,7 @@ Then, I hired a car and drove down the North Island to visit friends and family 
 
 Finally, I joined up with my key collaborators back in Auckland for some release parties for our TV show.
 
-![](../../../organise/Images/newsletters/2024/crack-the-code-to-your-creative-genius-01.webp)
+![](/organise/images/newsletters/2024/crack-the-code-to-your-creative-genius-01.webp)
 
 *We dressed up like camp counsellors because the show is called Camp Be Better…*
 
@@ -147,22 +146,12 @@ I highly recommend doing this exercise yourself. Here is the prompt I used to ge
 
 I look forward to hearing what you find out — let me know by replying to this email!
 
-## 🌊 Stormhouse News
-
-I’m still writing the first draft of *Seen in Silverbridge Book 3*. I’m about 70% of the way through, which tends to be a sticky part of the draft where the excitement is over and the plot inevitably drags.
-
-Based on my experience with the other books, I know that this period will pass. I just have to stick at it!
-
-I know that it’ll get more fun when I break through and start writing the climactic sequence of the book, so I’m pumped to get to that point.
-
 ## 📣 Shout Out to: Camp Be Better
 
 [Camp Be Better](https://www.tvnz.co.nz/shows/camp-be-better) is a six-part comedy show made in New Zealand, co-written, co-directed and edited by me (under a different name).
 
-![](../../../organise/Images/newsletters/2024/crack-the-code-to-your-creative-genius-02.webp)
+![](/organise/images/newsletters/2024/crack-the-code-to-your-creative-genius-02.webp)
 
 For those of you who are living in New Zealand, show [Camp Be Better](https://www.tvnz.co.nz/shows/camp-be-better) is available now to watch on TVNZ+. It’s also screening on TV2 on Friday nights.
 
 I feel bereft at having finished this project and hope we can make a second season sometime soon!
-
----

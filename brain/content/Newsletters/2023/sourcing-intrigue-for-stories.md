@@ -1,15 +1,14 @@
 ---
-title: "Sourcing Intrigue for Stories"
-description: "Train your brain to notice ideas as they come"
+title: Sourcing Intrigue for Stories
+description: Train your brain to notice ideas as they come
 date: 2023-08-15
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:135978140
 ---
-
 This past weekend, I took a rental car down the North Island of New Zealand.
 
 Due to great timing, I was able to film a music video with the talented Simeon Duncombe (my chief collaborator on [Chronesthesia](https://youtu.be/ZTmlsLz2nGQ), my first feature film) and to attend the Wellington screening of [Loop Track](https://www.nziff.co.nz/2023/film/loop-track/) (directed by Tom Sainsbury, my co-writer and co-star in [DEAD](https://youtu.be/R5bevGY7dcA)).
@@ -82,11 +81,11 @@ The way Robert made jokes about his situation made him seem like an upbeat sort 
 
 During my trip, I came across countless points of inspiration: scenery that evoked a certain feeling in me that I wanted to capture in a story, interactions I noted down to be recreated in words, and random thoughts and feelings about life that’ll no doubt find their way into whatever I’m writing.
 
-![](../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-01.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-01.webp)
 
 At 6:30 a.m., I drove past these giant wind turbines. They rose out of the mist like Leviathans and made me want to write a sci-fi story about gigantic creatures.
 
-![](../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-02.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-02.webp)
 
 This is the view from New Plymouth, one of the towns I stayed in. On one side, you have islands and the ocean, and on the other, you have snow-capped Mount Taranaki (known for gracing the background of *The Last Samurai* with Tom Cruise, doubling as Mount Fuji).
 
@@ -94,7 +93,7 @@ I considered how, after living in the township for a month, the spectacular view
 
 All sorts of random ideas followed.
 
-![](../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-03.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-03.webp)
 
 I rode a $1 electric train with my mum and stepdad, purely because we were walking by and decided to give it a go. I made a quick note about it because it’s a setting I’d never considered before: a tourist mini-train. Surely a fun adventure scene could happen there, right? There was even a spooky tunnel.
 
@@ -105,11 +104,3 @@ Next time you find yourself stuck somewhere you don’t want to be, take up the 
 Why is that guy walking his dog right now? What happened to him an hour ago? Maybe the dog is actually his girlfriend’s dog, and he *hates* walking it, or maybe he has to put it down next week, and this is one of the last walks they’ll do together.
 
 The more you practice, the easier it becomes. Any time you stumble upon an interesting idea, write it down. I guarantee that within a week, you’ll have a long list of random ideas, and you can draw upon your list whenever you need some inspiration while writing.
-
-## 🕵️‍♀️ Seen in Silverbridge Book 2 is ready to read!
-
-It brings me great pleasure to announce that *Seen in Silverbridge Book 2* is edited, proofed, and formatted 🎉🎉🎊🍾
-
-We’ll be publishing it in a couple of months, but before we do, I’d love to extend the opportunity for you to read it first.
-
-If you’re interested in a **FREE** **advanced copy**, hit Reply to this email and write ‘I’m keen to read!’ and I’ll put your email on the list for the ARC (advanced reader copy).

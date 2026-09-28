@@ -1,26 +1,25 @@
 ---
-title: "5 Lessons I Learned Writing My First Sequel"
-description: "Reflecting on writing Book 2 in the Seen in Silverbridge series"
+title: 5 Lessons I Learned Writing My First Sequel
+description: Reflecting on writing Book 2 in the Seen in Silverbridge series
 date: 2023-11-21
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:139016955
 ---
-
 For more than two years I’ve been writing within a single universe: the *Seen in Silverbridge* series. I spent eighteen months writing *A Rockstar Has Exploded*, the first book, and then the last year writing *An Actress Is Missing.*
 
 I’ve been spending so much time thinking about and writing from the perspectives of the characters of Luce, Huds, Faven and Rodney that they feel like real people to me now. It’s immensely gratifying.
 
-Now, with the second book in the series published widely and making loads and loads of money*, I’ve been able to reflect on five lessons I’ve learned from writing my first sequel.
+Now, with the second book in the series published widely and making loads and loads of money§, I’ve been able to reflect on five lessons I’ve learned from writing my first sequel.
 
-![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-01.webp)
+![](https://m.media-amazon.com/images/I/81sFk3X4cML._SL1500_.jpg)
 
 *An Actress Is Missing* is available to buy on [Amazon](https://www.amazon.com/dp/B0CJ5Z85S4) and [Kobo](https://www.kobo.com/gb/en/ebook/you-should-have-said) (Barnes & Noble, Google Books, and Apple Books to come soon).
 
-*Not 100% accurate†
+§Not 100% accurate†
 
 †Not even 5% accurate. Sales have been modest due to my shockingly laissez-faire approach to marketing. If you have any recommendations or want to help, please get in touch by Replying to this email.
 
@@ -36,7 +35,7 @@ Despite all this, I still really dig her. I like writing her dialogue and all of
 
 I’m happy to report that other readers love her like I do and don’t find her annoying. So, I haven’t decided to go back and make any significant changes to make her more pallatable. And even if everybody hated her, I still don’t think I would. I don’t think I *could* change her, actually.
 
-![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-02.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-02.webp)
 
 *These images were made by AI: Luce, Huds, Faven, and Rodney. The Seen team!*
 
@@ -48,7 +47,7 @@ The *Seen in Silverbridge* series is set in a fictional New Zealand city called 
 
 Luckily, I had the good sense to jot down the names in a Google Sheet as I went. This meant with An Actress Is Missing, I was able to revisit this spreadsheet, add to it and alter it, and end up with a fairly hefty list of places.
 
-![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-03.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-03.webp)
 
 *Spoilers obscured for Book 2*
 
@@ -101,7 +100,7 @@ With the second book, the process was *so much faster and easier*.
 
 I knew the characters deeper. I knew the world better. I knew that most of the words I wrote in my first draft would be replaced in later drafts, so I could take the handbrake off and go for it. The feedback was equally helpful, but it was easier to take. No exhaustion!
 
-![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-04.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-04.webp)
 
 As you can see above in my nerdy time (I track the ‘writing phases’ of each of my works), I managed to finish a workable draft, get it beta reader, make more changes, edit and format and release the book in under a year.
 
@@ -127,26 +126,12 @@ You owe your readers the courage to be cruel and indifferent. Make a good story 
 
 Then, you know, make it all right again, if you’re into happy endings.
 
-## 🌊 Stormhouse News
-
-As I’ve mentioned, *An Actress Is Missing* is available now.
-
-Get it on [Amazon](https://www.amazon.com/dp/B0CJ5Z85S4) and [Kobo](https://www.kobo.com/gb/en/ebook/you-should-have-said).
-
-*You Heard It First* is also available, if you feel like starting at the beginning of the series.
-
-Get it on [Amazon](https://www.amazon.com/dp/B0BTML7L86), [Barnes & Noble](https://www.barnesandnoble.com/w/you-heard-it-here-first-emerson-black/1143497223;jsessionid=BEF060A77E6167C6417440A0FAA77DFE.prodny_store02-atgap01?ean=2940186204084), [Kobo](https://www.kobo.com/gb/en/ebook/you-heard-it-here-first-2).
-
-And, if you feel like a treat, *[A Student Has Drowned](https://dl.bookfunnel.com/nifh8epwur)* is the introductory novella to the *Seen in Silverbridge* series, available as a free download.
-
 ## 📣 Shout Out to: The Winter Rose by Jennifer Donnelly
 
-![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-05.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-05.webp)
 
 I’ve been obsessed with this book since I started it. It’s the second book in the series and it packs as much of a punch as its predecessor The Tea Rose.
 
 Set in the early 1900s, it’s lengthy and epic, written in [third-person-limited](https://stormhouse.substack.com/p/your-readers-invisible-eye) and following multiple characters. It’s first and foremost a romance story but has plenty of action and intrigue. I especially like the character of India Selwyn Jones, a plucky female doctor who dreams of opening her own free clinic for the poor women and children of London’s East End.
 
 Highly recommended.
-
----

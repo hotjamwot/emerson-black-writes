@@ -1,15 +1,14 @@
 ---
-title: "How to Successfully Fail at Deadlines"
-description: "Dealing with my shame around not achieving what I set out to"
+title: How to Successfully Fail at Deadlines
+description: Dealing with my shame around not achieving what I set out to
 date: 2024-02-21
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:141834255
 ---
-
 Hey, where was the newsletter last week?
 
 I’ll tell you where it was — floating around in my head, obstinately refusing to flow out into my computer so I could schedule it.
@@ -68,7 +67,7 @@ Mediocrity. Not a very sexy concept, is it?
 
 > AUREA MEDIOCRITAS
 
-![](../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-01.webp)
+![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-01.webp)
 
 “**The Golden Mean**”. Aristotle came up with this back in his Stoicism days, and it’s a simple concept that has contributed greatly to my sense of contentment and overall joy in my life.
 
@@ -86,26 +85,20 @@ Life is about more than work. We’re told this all the time, but it’s a diffi
 
 Today, I went out for lunch with a good friend and he told me about a funeral he attended earlier in the year. “There were like, two hundred people there,” he said, shaking his head. “And it just drove it all home: it’s all about people. Nobody there was saying how amazing he was at his job.”
 
-## 🌊 Stormhouse News
-
-- All writing and publishing is on pause while I work on this TV show in New Zealand! I’ll be back into things in April.
-
 ## 📣 Shout Out to: KOReader
 
 *KOReader* is an open-source app that you can load onto your e-reader to open up more controls for your reading experience.
 
 You’re able to add a more details status bar to the bottom of your page:
 
-![](../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-02.webp)
+![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-02.webp)
 
 And view the book in this radical ‘book map’. The dark bars are the time it took me to read those pages.
 
-![](../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-03.webp)
+![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-03.webp)
 
 And the reading statistics are SO NERDY, I love it:
 
-![](../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-04.webp)
+![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-04.webp)
 
 It’s fully free and simple to [install](https://koreader.rocks/).
-
----

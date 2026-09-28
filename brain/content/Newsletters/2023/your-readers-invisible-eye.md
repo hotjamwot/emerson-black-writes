@@ -1,19 +1,14 @@
 ---
-title: "Your Reader's Invisible Eye"
-description: "Where do you want it to be?"
+title: Your Reader's Invisible Eye
+description: Where do you want it to be?
 date: 2023-09-13
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:136921106
 ---
-
-Before we start:
-
-**Seen in Silverbridge Book 2**(the sequel to [A Rockstar Has Exploded](https://www.goodreads.com/book/show/107526648-you-heard-it-here-first)), is with Advanced Readers. If you’d like to read it for free, hit Reply and let me know!
-
 Yesterday I braved the rain and scuttled to the village to meet a writer friend for brunch. She recently started a Masters and is loving learning specifics about the craft of writing. We discussed a lesson she’d learned about ‘third person limited’ over our eggs benedict and spicy chicken pizza (I know, who gets a pizza for breakfast? I was as shocked as you).
 
 That led us to discuss **Point of View**.
@@ -30,7 +25,7 @@ Okay so there are basically four main ones (there’s kinda five but the fifth o
 
 1. **The Omniscient Everywhereman**
 
-![](../../../organise/Images/newsletters/2023/your-readers-invisible-eye-01.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-01.webp)
 
 *The all-seeing, all-knowing presence*
 
@@ -42,7 +37,7 @@ Examples: *A Man Called Ove* by Fredrick Backman (proof that omniscient doesn’
 
 1. **Third Person (Objective) – The Fly on the Wall**
 
-![](../../../organise/Images/newsletters/2023/your-readers-invisible-eye-02.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-02.webp)
 
 *Perched, watching, reporting back to the reader*
 
@@ -52,7 +47,7 @@ Examples: *The Goldfinch* by Donna Tartt, *The Girl on the Train* by Paula Hawki
 
 1. **Third Person Close (Limited) – Angel on Your Character’s Shoulder**
 
-![](../../../organise/Images/newsletters/2023/your-readers-invisible-eye-03.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-03.webp)
 
 *The Angel on your Character’s Shoulder*
 
@@ -66,7 +61,7 @@ Very special mention: *[A Rockstar Has Exploded](https://www.amazon.com.au/dp/B0
 
 1. **First Person - Your Reader is** **Inside** **Your Protagonist**
 
-![](../../../organise/Images/newsletters/2023/your-readers-invisible-eye-04.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-04.webp)
 
 *Right up close and personal*
 

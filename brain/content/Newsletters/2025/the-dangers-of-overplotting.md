@@ -1,15 +1,14 @@
 ---
-title: "The Dangers of Overplotting"
+title: The Dangers of Overplotting
 description: "Or: How I wrote a Truly Terrible First Draft"
 date: 2025-02-14
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:157069670
 ---
-
 Greetings!
 
 This is the first Emerson Black Writes newsletter of 2025, and I’m thrilled you’re reading it. Thank you for being here.
@@ -103,5 +102,3 @@ Luckily, I’m more than up for it. I love the Silverbridge characters—Luce, H
 While they’re investigating their latest mystery, poor Huds is struggling with the idea that Luce is about to marry Jordan, but he doesn’t know what to do. Faven is officially ready to enter the dating world, and Rodney is struggling with a father’s worst nightmare.
 
 As far as hobbies go, writing the Silverbridge books rates damn high. I’m so excited to finish writing it so you can read it. Wish me luck!
-
----

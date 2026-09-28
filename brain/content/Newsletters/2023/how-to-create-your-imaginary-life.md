@@ -1,25 +1,14 @@
 ---
-title: "How to Create Your Imaginary Life Coach"
-description: "Available all the time to help you achieve your DREAMS"
+title: How to Create Your Imaginary Life Coach
+description: Available all the time to help you achieve your DREAMS
 date: 2023-11-07
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:138650849
 ---
-
-![](../../../organise/Images/newsletters/2023/how-to-create-your-imaginary-life-01.webp)
-
-*Look at this happy author with his books!*
-
-First things first, *An Actress Is Missing* is officially out!
-
-It’s slightly bigger than *A Rockstar Has Exploded* and so far, the reviews from early readers are that it’s a lot more fun (and Luce is less annoying).
-
-With that out of the way, let’s get into the writing lesson of the fortnight.
-
 ## 🍋 When Life Gives You Lemons
 
 Over the last month, life has thrown a couple of curveballs my way.
@@ -32,7 +21,7 @@ And third, I’ve been dealing with consistent acid reflux as part of a suspecte
 
 Before you feel too sorry for me, I assure you it wasn’t all gloom. I spent the last month traipsing around Portugal enjoying the sun and the ocean, the cobbled streets and pastels de nata, the company of my beautiful, supportive partner and drinking too much coffee and red wine (especially for someone with a healing ulcer). It was pretty amazing.
 
-![](../../../organise/Images/newsletters/2023/how-to-create-your-imaginary-life-02.webp)
+![](/organise/images/newsletters/2023/how-to-create-your-imaginary-life-02.webp)
 
 But despite my blissful surroundings, the roadbumps still got to me. I found the persistent acid reflux most frustrating. It was like a toothache or having something in your eye. *It was always there,* annoying me, shortening my temper.
 
@@ -112,12 +101,6 @@ It’s easy to conk out and choose the easy route when it’s only yourself you�
 
 Cast your Imaginary Coach and take their advice for a week. You’ll be glad you did.
 
-## 🌊 Stormhouse News
-
-The Seen in Silverbridge series has grown by one more!
-
-![](../../../organise/Images/newsletters/2023/how-to-create-your-imaginary-life-03.webp)
-
 ## 📣 Shout Out to my pal Kendyl
 
 Kendyl’s a friend of mine who recently finished reading *A Rockstar Has Exploded*. We had brunch together on Sunday morning and she told me all her favourite parts.
@@ -125,5 +108,3 @@ Kendyl’s a friend of mine who recently finished reading *A Rockstar Has Explod
 It made me so excited to hear about the story and characters from another perspective. It really made it feel like a real thing. Which, of course it is, but it’s easy to think of our work as somehow ‘lesser than’ when seen in the wild.
 
 Thanks for your support, Kendyl! Love you!
-
----

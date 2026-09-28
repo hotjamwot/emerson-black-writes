@@ -15,23 +15,23 @@ I hope you’ve been well over the last fortnight. Firstly I want to welcome all
 
 Last weekend we had a launch party for the first Stormhouse book to hit the interweb waves, *A Rockstar Has Exploded.*
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-01.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-01.webp)
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-02.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-02.webp)
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-03.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-03.webp)
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-04.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-04.webp)
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-05.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-05.webp)
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-06.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-06.webp)
 
 It was a blast. Special thanks to Sophie for convincing me to do the work involved in getting the paperback to the world, and to Julia for organising a wine hook-up… There is a slight chance we over-indulged, but it was worth it to celebrate!
 
 ### Check out my character board
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-07.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-07.webp)
 
 It’s a spoiler-free image of my character sheet for the fourth *Seen in Silverbridge* book. Some of you got in touch to say it was great (thank you), or to ask questions about it, so I thought I’d spend today telling you about:
 
@@ -57,15 +57,15 @@ Excel spreadsheet, a Notion database, a table in Apple Notes, Google Sheets, any
 
 I use Google Sheets for no other reason than I’m used to it.
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-08.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-08.webp)
 
 1. Write the names of your lead characters across the top
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-09.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-09.webp)
 
 1. Write the details down the side
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-10.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-10.webp)
 
 1. Fill out the info
 
@@ -79,11 +79,11 @@ Look through Pinterest. Google search. Hell, use Bing if you want. If your chara
 
 ### 👾 Pro Tip
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-11.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-11.webp)
 
 If you don’t feel like trawling the internet for hours looking for an overly specific image of a person, you can use AI. I use [Leonardo.ai](http://Leonardo.ai) for my character images. You could try [www.artbreeder.com](http://www.artbreeder.com), [ThisPersonDoesNotExist.com](http://ThisPersonDoesNotExist.com), [character-generator.org.uk](https://www.character-generator.org.uk/), or [GeneratedPhotos](https://generated.photos/).
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-12.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-12.webp)
 
 Once you’ve got the faces in place, it’s time to move on to the harder part.
 
@@ -103,7 +103,7 @@ Nickname, Age, Birthday, Ethnicity/Country of Birth, Height, Residence, Relation
 
 That looks like a daunting list, I know! But once you start, it is fun. If you struggle to fill out every last thing, I suggest using AI to help. I often write a few prompts into ChatGPT to get ideas flowing. For example:
 
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-13.webp)
+![](/organise/images/newsletters/2023/how-to-build-a-human-13.webp)
 
 ## 🧪 Cook Up A Character
 

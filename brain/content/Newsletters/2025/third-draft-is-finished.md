@@ -1,20 +1,19 @@
 ---
-title: "Third Draft is Finished!"
-description: "A writing update"
+title: Third Draft is Finished!
+description: A writing update
 date: 2025-10-21
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:176627320
 ---
-
 I write this newsletter today aglow with the celebratory news that a milestone has been reached!
 
 The third draft of the third ***Seen in Silverbridge*** book is now complete! 🎉🥳🙌
 
-![](../../../organise/Images/newsletters/2025/third-draft-is-finished-01.webp)
+![](/organise/images/newsletters/2025/third-draft-is-finished-01.webp)
 
 *Scrivener screenshot of the Parts of the book. Total word count: 87,778*
 
@@ -46,9 +45,7 @@ Then, you’re left with a pretty decent draft, *almost* ready to go into the wo
 
 ### But this book has been different
 
-You might remember a newsletter I wrote about 1.5 years ago, in which I showed off my gorgeous red-pen-scribbled scene-by-scene in Spain:
-
-[Writing Abroad](https://emersonblackwrites.substack.com/p/writing-abroad)
+You might remember a newsletter I wrote about 1.5 years ago, in which I showed off my gorgeous red-pen-scribbled scene-by-scene in Spain: [[writing-abroad|Writing Abroad]]
 
 I’d printed out a 51-page outline and taken the hard copy away with me to Spain where I sat by the pool and made the final changes before getting into the first draft.
 
@@ -68,7 +65,7 @@ The emotionally dark vibe of the book cast a pall over my enjoyment of writing i
 
 ### Keep Keep Keep Going
 
-I’ve made a [few](https://emersonblackwrites.substack.com/p/how-to-successfully-fail-at-deadlines?r=1s8xdo) posts about the [relentlessness](https://emersonblackwrites.substack.com/p/keep-keep-keep-writing?r=1s8xdo) [necessary](https://emersonblackwrites.substack.com/p/the-furry-region?r=1s8xdo) for authors if they want to finish anything. Writing a long-form project like a novel can be a punishing (and rewarding!) experience, and there are a thousand points along the journey where giving up is an enticing option, but you just gotta ... not give up. If you keep going, you make achieving your goals inevitable.
+I’ve made a [[how-to-successfully-fail-at-deadlines|few]] posts about the [[keep-keep-keep-writing|relentlessness]] [[the-furry-region|necessary]] for authors if they want to finish anything. Writing a long-form project like a novel can be a punishing (and rewarding!) experience, and there are a thousand points along the journey where giving up is an enticing option, but you just gotta ... not give up. If you keep going, you make achieving your goals inevitable.
 
 I really had to take my own medicine during the third draft of this book, and do the work even when I didn’t feel like it. I had to silence the voice in my head that was begging me to turn off my alarm and go back to bed, and get up instead, stare at my computer screen, and push through it.
 
@@ -76,7 +73,7 @@ Geez, I’m making it sound like it was a drag to write this thing, when in real
 
 Here’s a snippet from my Juju app from when I finished the draft:
 
-![](../../../organise/Images/newsletters/2025/third-draft-is-finished-02.webp)
+![](/organise/images/newsletters/2025/third-draft-is-finished-02.webp)
 
 ### Onward
 

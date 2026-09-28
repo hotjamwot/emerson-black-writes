@@ -1,15 +1,14 @@
 ---
-title: "What's Your Fantasy?"
-description: "Find the common theme in your favourite stories and apply it to your own"
+title: What's Your Fantasy?
+description: Find the common theme in your favourite stories and apply it to your own
 date: 2023-12-05
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:139422950
 ---
-
 I finished writing the fourth book in the *Seen in Silverbridge* series this week.
 
 It’s a big boy, cracking 110k words, so there are bound to be some major rewrites before the manuscript goes to the editor. But the book is great. I loved spending time with Luce, Huds, Faven and Rodney again and putting them through even more turmoil.
@@ -40,7 +39,7 @@ It’s the idea that most bestselling fiction (or more broadly, any popular stor
 
 The desire to be rich and famous (*Red, White and Royal Blue*), be a billionaire’s obsession (*50 Shades of Grey*), even to be loved by a big beast (*Beauty and The Beast*)… the list is exhaustive.
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-01.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-01.webp)
 
 *The amount of fanfic out there proves that these fantasies aren’t as uncommon as you’d think*
 
@@ -70,17 +69,17 @@ In my other career, I make films. What I love most about making films isn’t th
 
 That’s what I remember when I look back at working for three years on *The Hobbit*, or five weeks filming in the bush for *Loop Track* (playing now at a cinema near you, North Americans!).
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-02.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-02.webp)
 
 *A film I acted in with such a wonderful cast and crew. The dream job.*
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-03.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-03.webp)
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-04.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-04.webp)
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-05.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-05.webp)
 
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-06.webp)
+![](/organise/images/newsletters/2023/whats-your-fantasy-06.webp)
 
 What does this tell me? It tells me that it’s okay to lean into this universal fantasy of togetherness. It’s the main *thing* in my books, and I’m going to wear that badge proudly.
 
@@ -93,13 +92,3 @@ I predict you’ll find that the core fantasies you find in common are simple. T
 Do you overcomplicate stories and try to be clever when you could take it back to the basics? Write a one-sentence fantasy pitch for your story and see if you can capture the essence of why it excites you.
 
 That’s your new North Star. Follow it and make a great story!
-
-## 🌊 Stormhouse News
-
-- As mentioned, I finished the first official draft of Book 4 in the *Seen in Silverbridge* series. This won’t be released for a long time, though, so don’t get too excited.
-- I’ve outlined a romance set in Portugal about a therapist and a gangster. It will be a Silverbridge standalone and most likely a short novel (I’m thinking 50-70k words). Will hopefully do a scene-by-scene over the next week and start drafting before Christmas.
-- *An Actress Is Missing* is in the hands of readers! I’ve been very touched by people sending me photos of their paperback copies with the garishly dentist-white pages. I wish I had chosen cream paper instead of white… Next time!
-
-![](../../../organise/Images/newsletters/2023/whats-your-fantasy-07.webp)
-
-*Looks damn good on the bookshelf, Sophie!!*
