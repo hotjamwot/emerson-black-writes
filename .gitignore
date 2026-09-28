@@ -1,0 +1,3 @@
+# Ignore build output and temp directories at the repository root
+_site/
+.DS_Store

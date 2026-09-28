@@ -1,0 +1,77 @@
+name: Deploy Storefront and Brain to Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: ./brain
+        run: npm ci
+
+      - name: Build Quartz (Brain)
+        working-directory: ./brain
+        run: npx quartz build
+
+      - name: Assemble site artifact
+        run: |
+          mkdir -p _site/brain
+          # Copy storefront root files and directories
+          cp index.html bio.html CNAME style.css README.md _site/
+          cp -R img _site/
+          # Copy Quartz build output to /brain/
+          cp -R brain/public/. _site/brain/
+          # Remove duplicate CNAME created by Quartz inside /brain/
+          rm -f _site/brain/CNAME
+
+      - name: Guard checks
+        run: |
+          if [ ! -f "_site/index.html" ]; then
+            echo "::error::Guard failure: _site/index.html missing! Deployment aborted."
+            exit 1
+          fi
+          if [ ! -f "_site/CNAME" ]; then
+            echo "::error::Guard failure: _site/CNAME missing! Deployment aborted."
+            exit 1
+          fi
+          if [ ! -f "_site/brain/index.html" ]; then
+            echo "::error::Guard failure: _site/brain/index.html missing! Deployment aborted."
+            exit 1
+          fi
+          echo "All safety guard checks passed."
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
