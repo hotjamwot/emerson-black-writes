@@ -1,15 +1,14 @@
 ---
-title: "Master Your Calendar"
-description: "Prioritise your Priorities."
+title: Master Your Calendar
+description: Prioritise your Priorities.
 date: 2023-08-01
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:135577801
 ---
-
 Put your hand up if you’ve heard of the ‘Ideal Week’, popularised in recent years by Ali Abdaal and a bunch of other Productivity Bros?
 
 Okay, those of you with your hands raised, feel free to archive this email and move on with your day.
@@ -121,12 +120,6 @@ I had grand ideas about waking up at 6 a.m. to write … but because I had a chi
 Did I fit everything in? No. Could I have done better with my time management? Yes.
 
 But I’m gonna take it easy on myself. I got a lot done last week. So what if I wasn’t a superhuman?
-
-## 🌊 Stormhouse News
-
-- *Seen in Silverbridge Book 2’*s edits are complete! The manuscript is back with Tarryn Thomas, the editor, for her proofreading.
-- I hit the 80,000-word mark on *Seen in Silverbridge Book 4*! Still loads to go though…. I fear it’s going to be a *long* first draft.
-- [A Rockstar Has Exploded](https://www.amazon.com/gp/product/B0BTML7L86) is reaching the end of its 3-month KDP Select exclusive period. We’re debating whether or not to pull it from KDP Select and put it on other platforms, or whether to keep it there. If you have experience or opinions on the matter, please reply to this email and let me know!
 
 ## 📣 Shout Out to: Dave Richards
 
