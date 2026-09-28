@@ -2,7 +2,9 @@
 title: What Turns You On?
 description: And how the answer can help your writing
 date: 2023-08-29
+created: 2023-08-29
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -77,7 +79,7 @@ Does that mean that writing is less worthy of your time? No, because:
 
 **The release of finished projects is memorable.** Hugely so. Our release for A Rockstar Has Exploded was a blast this year (admittedly, I didn’t originally want to do it. I wanted to release it as an ebook only but my pal Sophie pressured me and I’m glad she did).
 
-![](/organise/images/newsletters/2023/what-turns-you-on-01.webp)
+![](../../../../../organise/Images/newsletters/2023/what-turns-you-on-01.webp)
 
 And:
 
@@ -85,13 +87,13 @@ And:
 
 This last weekend, I got an ‘On This Day’ memory of a film shoot I did six years ago with friends.
 
-![](/organise/images/newsletters/2023/what-turns-you-on-02.webp)
+![](../../../../../organise/Images/newsletters/2023/what-turns-you-on-02.webp)
 
 *Watch ‘Jack and Joni’ below.*
 
 Later, looking through an old hard drive, I found an entire folder of photos from *another* film shoot with a different set of friends.
 
-![](/organise/images/newsletters/2023/what-turns-you-on-03.webp)
+![](../../../../../organise/Images/newsletters/2023/what-turns-you-on-03.webp)
 
 Suddenly hours had passed. These memories — and how much they mean to me — reminded me that I love collaboration and teamwork more than writing alone.
 

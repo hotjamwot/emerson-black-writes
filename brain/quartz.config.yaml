@@ -44,7 +44,10 @@ plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
     options:
-      defaultDateType: modified
+      # `created` reads frontmatter.created, which Publish Brain.command now
+      # derives from each note's `date:` field — so the archive shows real
+      # publication dates instead of "today" on every mirrored note.
+      defaultDateType: created
       priority:
         - frontmatter
         - git
@@ -159,11 +162,26 @@ plugins:
     enabled: true
   - source: "@quartz-community/explorer"
     enabled: true
+    options:
+      title: The Archive
+      folderDefaultState: collapsed
+      folderClickBehavior: link
+      useSavedState: true
     layout:
       position: left
       priority: 50
   - source: "@quartz-community/graph"
     enabled: true
+    options:
+      localGraph:
+        depth: 1
+        showTags: false
+        focusOnHover: true
+        fontSize: 0.7
+      globalGraph:
+        showTags: false
+        focusOnHover: true
+        fontSize: 0.7
     layout:
       position: right
       priority: 10
@@ -238,11 +256,14 @@ plugins:
   - source: "@quartz-community/recent-notes"
     enabled: true
     options:
-      title: Latest from the Brain
+      title: Latest dispatches
       limit: 5
       linkToMore: Newsletters/index
       showTags: false
       showDate: true
+      # Keep folder index pages (year archives, homepage) out of the list —
+      # they carry no publication date and would sort to the top.
+      hideFolderPages: true
   - source: "@quartz-community/spacer"
     enabled: true
     options: {}

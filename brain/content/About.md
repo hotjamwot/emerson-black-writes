@@ -1,6 +1,9 @@
 ---
 title: About Emerson Black
 description: Author of the Seen in Silverbridge mystery series
+# Anchors this site page to the start of the archive so it never outranks a
+# real dispatch in the "Latest dispatches" list.
+created: 2023-01-19
 publish: true
 ---
 

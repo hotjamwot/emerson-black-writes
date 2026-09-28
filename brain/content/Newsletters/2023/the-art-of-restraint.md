@@ -2,7 +2,9 @@
 title: The Art of Restraint
 description: Whet thy appetite, but no more.
 date: 2023-07-18
+created: 2023-07-18
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post

@@ -2,7 +2,9 @@
 title: How to Create Your Imaginary Life Coach
 description: Available all the time to help you achieve your DREAMS
 date: 2023-11-07
+created: 2023-11-07
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -21,7 +23,7 @@ And third, I’ve been dealing with consistent acid reflux as part of a suspecte
 
 Before you feel too sorry for me, I assure you it wasn’t all gloom. I spent the last month traipsing around Portugal enjoying the sun and the ocean, the cobbled streets and pastels de nata, the company of my beautiful, supportive partner and drinking too much coffee and red wine (especially for someone with a healing ulcer). It was pretty amazing.
 
-![](/organise/images/newsletters/2023/how-to-create-your-imaginary-life-02.webp)
+![](../../../../../organise/Images/newsletters/2023/how-to-create-your-imaginary-life-02.webp)
 
 But despite my blissful surroundings, the roadbumps still got to me. I found the persistent acid reflux most frustrating. It was like a toothache or having something in your eye. *It was always there,* annoying me, shortening my temper.
 

@@ -2,7 +2,9 @@
 title: A Peek Behind the Writer's Curtain
 description: How to rewrite a novel
 date: 2024-06-26
+created: 2024-06-26
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post

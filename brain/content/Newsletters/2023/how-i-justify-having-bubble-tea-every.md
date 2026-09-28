@@ -2,7 +2,9 @@
 title: The Art of Not Feeling Guilty
 description: My highly scientific method for justifying joy in a productive life.
 date: 2023-01-31
+created: 2023-01-31
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -15,11 +17,11 @@ Recently, I’ve been trapped in my editing dungeon. No windows and no sunlight�
 
 Having said that, I did manage to spend a record-breaking amount of time with friends. Genuinely, I spent almost every evening with a pal.
 
-![](/organise/images/newsletters/2023/how-i-justify-having-bubble-tea-every-01.webp)
+![](../../../../../organise/Images/newsletters/2023/how-i-justify-having-bubble-tea-every-01.webp)
 
-![](/organise/images/newsletters/2023/how-i-justify-having-bubble-tea-every-02.webp)
+![](../../../../../organise/Images/newsletters/2023/how-i-justify-having-bubble-tea-every-02.webp)
 
-![](/organise/images/newsletters/2023/how-i-justify-having-bubble-tea-every-03.webp)
+![](../../../../../organise/Images/newsletters/2023/how-i-justify-having-bubble-tea-every-03.webp)
 
 Every week, I look back over how I’ve spent my time and I consider whether I’ve been productive enough. I’ll ask myself if I’ve spent too much time watching Netflix or scrolling social media, or if I’ve spent too much time (and money) on cafes and coffee.
 

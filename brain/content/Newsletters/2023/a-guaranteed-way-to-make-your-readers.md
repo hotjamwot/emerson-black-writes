@@ -2,7 +2,9 @@
 title: "Emotional Gutting 101: Your Guide to Breaking Reader Hearts"
 description: Learn the secret sauce that turns stoic readers into blubbering messes
 date: 2023-03-14
+created: 2023-03-14
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -17,11 +19,11 @@ For me, I can’t remember the last time I bawled. Like, properly wept. I think 
 
 When it comes to screen, don’t get me started on this scene:
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-01.gif)
+![](../../../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-01.gif)
 
 Or this one:
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-02.gif)
+![](../../../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-02.gif)
 
 ### **How can we play our readers’ hearts like a violin?**
 
@@ -97,11 +99,11 @@ Say you have a character, a tough detective. He or she is probably physically bi
 
 Picture Arnie in… well, anything.
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-03.gif)
+![](../../../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-03.gif)
 
 Or Sigourney Weaver in *Alien*.
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-04.gif)
+![](../../../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-04.gif)
 
 Now, how can we make them vulnerable? Ooh, how about we give him… an addiction, like Sherlock Holmes (cocaine)? Or a disability, like Cormoran Strike in the *Strike books* (amputated leg from war injury)? Or some kind tragic backstory, like Robin Griffin in *Top of the Lake* (assaulted as a teen) or Veronica Mars in *Veronica Mars* (dead best friend)?
 
@@ -121,6 +123,6 @@ While I’m biking to work or walking to a cafe, or when I’m at the gym pumpin
 
 It’s narrated by Ray Porter, who does a magnificent job with so many accents (even a New Zealand one—yay!). I’d forgotten how often the book makes me laugh, and I’ve unexpectedly teared up about a dozen times in the first half.
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-05.webp)
+![](../../../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-05.webp)
 
 **GOODREADS BEST SCIENCE FICTION WINNER 2021**

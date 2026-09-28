@@ -2,7 +2,9 @@
 title: The Furry Region
 description: Rummaging your way through the creative thicket
 date: 2023-07-04
+created: 2023-07-04
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -33,7 +35,7 @@ You find yourself inexplicably unmotivated to work on the project you were previ
 
 Tim Urban of [waitbutwhy.com](http://waitbutwhy.com) fame has a concept where we feel insecure when we’re learning about something, and while the context is dissimilar, I feel like the core idea is the same:
 
-![](/organise/images/newsletters/2023/the-furry-region-01.webp)
+![](../../../../../organise/Images/newsletters/2023/the-furry-region-01.webp)
 
 *Credit to Tim Urban*
 
@@ -43,11 +45,11 @@ Rephrased for our purposes, I christen them ‘The Furry Region’ and ‘I’m 
 
 We see this kind of graph in a bunch of places, like the 3 Act Structure:
 
-![](/organise/images/newsletters/2023/the-furry-region-02.webp)
+![](../../../../../organise/Images/newsletters/2023/the-furry-region-02.webp)
 
 And the Kübling Ross Change curve:
 
-![](/organise/images/newsletters/2023/the-furry-region-03.webp)
+![](../../../../../organise/Images/newsletters/2023/the-furry-region-03.webp)
 
 It seems there’s always a slump before a climb. Our mission is simple: brave out the slump.
 
@@ -61,7 +63,7 @@ The important part about that anecdote is the 600 words. Even though I suspect t
 
 Soon, I know I’ll hit that ‘I’m a Writer and I’m Writing’ incline, and it is gonna taste *sweet*.
 
-![](/organise/images/newsletters/2023/the-furry-region-04.webp)
+![](../../../../../organise/Images/newsletters/2023/the-furry-region-04.webp)
 
 *Okay sure, it’s not as flash or charming as Tim Urban’s graphs, but it’s a start*
 
@@ -69,7 +71,7 @@ Soon, I know I’ll hit that ‘I’m a Writer and I’m Writing’ incline, and
 
 Apart from having one of the coolest covers I’ve seen in a long while (I first laid my eyes on this book upon its release mid-last year while I was perusing a book shop in Brighton, UK), this quirky historical fiction has had me glued to my Kobo.
 
-![](/organise/images/newsletters/2023/the-furry-region-05.webp)
+![](../../../../../organise/Images/newsletters/2023/the-furry-region-05.webp)
 
 > “Living in the country may be but a half-life, but life in London is not whole – it is simply the other half.”
 

@@ -2,7 +2,9 @@
 title: How to Successfully Fail at Deadlines
 description: Dealing with my shame around not achieving what I set out to
 date: 2024-02-21
+created: 2024-02-21
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -67,7 +69,7 @@ Mediocrity. Not a very sexy concept, is it?
 
 > AUREA MEDIOCRITAS
 
-![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-01.webp)
+![](../../../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-01.webp)
 
 “**The Golden Mean**”. Aristotle came up with this back in his Stoicism days, and it’s a simple concept that has contributed greatly to my sense of contentment and overall joy in my life.
 
@@ -91,14 +93,14 @@ Today, I went out for lunch with a good friend and he told me about a funeral he
 
 You’re able to add a more details status bar to the bottom of your page:
 
-![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-02.webp)
+![](../../../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-02.webp)
 
 And view the book in this radical ‘book map’. The dark bars are the time it took me to read those pages.
 
-![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-03.webp)
+![](../../../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-03.webp)
 
 And the reading statistics are SO NERDY, I love it:
 
-![](/organise/images/newsletters/2024/how-to-successfully-fail-at-deadlines-04.webp)
+![](../../../../../organise/Images/newsletters/2024/how-to-successfully-fail-at-deadlines-04.webp)
 
 It’s fully free and simple to [install](https://koreader.rocks/).

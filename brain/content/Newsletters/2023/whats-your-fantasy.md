@@ -2,7 +2,9 @@
 title: What's Your Fantasy?
 description: Find the common theme in your favourite stories and apply it to your own
 date: 2023-12-05
+created: 2023-12-05
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -39,7 +41,7 @@ It’s the idea that most bestselling fiction (or more broadly, any popular stor
 
 The desire to be rich and famous (*Red, White and Royal Blue*), be a billionaire’s obsession (*50 Shades of Grey*), even to be loved by a big beast (*Beauty and The Beast*)… the list is exhaustive.
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-01.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-01.webp)
 
 *The amount of fanfic out there proves that these fantasies aren’t as uncommon as you’d think*
 
@@ -69,17 +71,17 @@ In my other career, I make films. What I love most about making films isn’t th
 
 That’s what I remember when I look back at working for three years on *The Hobbit*, or five weeks filming in the bush for *Loop Track* (playing now at a cinema near you, North Americans!).
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-02.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-02.webp)
 
 *A film I acted in with such a wonderful cast and crew. The dream job.*
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-03.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-03.webp)
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-04.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-04.webp)
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-05.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-05.webp)
 
-![](/organise/images/newsletters/2023/whats-your-fantasy-06.webp)
+![](../../../../../organise/Images/newsletters/2023/whats-your-fantasy-06.webp)
 
 What does this tell me? It tells me that it’s okay to lean into this universal fantasy of togetherness. It’s the main *thing* in my books, and I’m going to wear that badge proudly.
 

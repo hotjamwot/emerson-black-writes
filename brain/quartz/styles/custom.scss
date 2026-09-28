@@ -1,3 +1,1029 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+// ═══════════════════════════════════════════════════════════════════════════
+//  THE BRAIN · brand layer for Emerson Black Writes
+//
+//  Mirrors the storefront (EBW website/style.css):
+//    navy   #060D14 / #0B1926 / #111F2E
+//    crimson #E31C3D   cream #F0F4F8   mist #A8B5C9   steel #6B7A91
+//    Jost display type · film-grain overlay · hairline rules · card lift
+//
+//  This file is appended AFTER `@layer quartz-base` (see
+//  quartz/plugins/emitters/componentResources.ts), so plain selectors here
+//  always win over framework defaults — no `!important` required.
+//
+//  Sections: 1 tokens · 2 surface/grain · 3 typography · 4 chrome
+//            5 reading experience · 6 archive lists · 7 landing-page kit
+//            8 responsive & motion
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── 1. Design tokens ───────────────────────────────────────────────────────
+// Semantic aliases point at the colours configured in quartz.config.yaml, so
+// a palette change there flows through automatically.
+:root {
+  --eb-accent: var(--secondary);
+  --eb-accent-bright: #b81232;
+  --eb-radius: 4px;
+  --eb-radius-lg: 10px;
+  --eb-display: "Jost", "Century Gothic", "Avant Garde", "Futura", system-ui, sans-serif;
+  --eb-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --eb-tracking: 0.16em;
+  --eb-shadow: 0 20px 40px -26px rgba(6, 13, 20, 0.45);
+  --eb-shadow-lift: 0 26px 50px -28px rgba(6, 13, 20, 0.6);
+  --eb-line: rgba(17, 31, 46, 0.14);
+  --eb-line-strong: rgba(17, 31, 46, 0.32);
+  --eb-surface: rgba(17, 31, 46, 0.035);
+  --eb-surface-strong: rgba(17, 31, 46, 0.07);
+  --eb-grain-opacity: 0.1;
+  --eb-grain-blend: multiply;
+  --eb-glow: rgba(227, 28, 61, 0.07);
+  --eb-glow-alt: rgba(132, 165, 157, 0.06);
+}
+
+:root[saved-theme="dark"] {
+  --eb-accent-bright: #ff3b4a;
+  --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
+  --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
+  --eb-line: rgba(240, 244, 248, 0.09);
+  --eb-line-strong: rgba(240, 244, 248, 0.22);
+  --eb-surface: rgba(255, 255, 255, 0.028);
+  --eb-surface-strong: rgba(255, 255, 255, 0.055);
+  --eb-grain-opacity: 0.22;
+  --eb-grain-blend: overlay;
+  --eb-glow: rgba(227, 28, 61, 0.16);
+  --eb-glow-alt: rgba(132, 165, 157, 0.1);
+}
+
+// Pre-hydration fallback: respect the OS before the darkmode toggle runs.
+@media (prefers-color-scheme: dark) {
+  :root:not([saved-theme="light"]) {
+    --eb-accent-bright: #ff3b4a;
+    --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
+    --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
+    --eb-line: rgba(240, 244, 248, 0.09);
+    --eb-line-strong: rgba(240, 244, 248, 0.22);
+    --eb-surface: rgba(255, 255, 255, 0.028);
+    --eb-surface-strong: rgba(255, 255, 255, 0.055);
+    --eb-grain-opacity: 0.22;
+    --eb-grain-blend: overlay;
+    --eb-glow: rgba(227, 28, 61, 0.16);
+    --eb-glow-alt: rgba(132, 165, 157, 0.1);
+  }
+}
+
+// ── 2. Surface, grain and page furniture ───────────────────────────────────
+body {
+  background-color: var(--light);
+  background-image:
+    radial-gradient(1100px 520px at 12% -8%, var(--eb-glow), transparent 62%),
+    radial-gradient(900px 460px at 104% 4%, var(--eb-glow-alt), transparent 60%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-weight: 400;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+// Film grain — the single strongest visual tie to the storefront.
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-image: url("static/film_grain.webp");
+  background-size: 420px 255px;
+  opacity: var(--eb-grain-opacity);
+  mix-blend-mode: var(--eb-grain-blend);
+  pointer-events: none;
+}
+
+::selection {
+  background: var(--eb-accent);
+  color: #fff;
+}
+
+html {
+  scrollbar-color: var(--eb-line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+:focus-visible {
+  outline: 2px solid var(--eb-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+// ── 3. Typography ──────────────────────────────────────────────────────────
+// Display face (Jost ≈ the storefront's Century Gothic) carries the small
+// structural labels; long-form headings stay sentence case for readability.
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--eb-display);
+  color: var(--dark);
+  letter-spacing: 0.005em;
+}
+
+// Section labels get the storefront's tracked-uppercase treatment.
+.page-title,
+h2.page-title,
+.graph > h3,
+.toc-header > h3,
+.backlinks > h3,
+.recent-notes > h3,
+.explorer .folder-title,
+.eb-kicker,
+.eb-section-title {
+  font-family: var(--eb-display);
+  text-transform: uppercase;
+  letter-spacing: var(--eb-tracking);
+  font-weight: 600;
+}
+
+// ── 4. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
+#quartz-body .center {
+  min-width: 0;
+}
+
+// Left sidebar wordmark
+h2.page-title {
+  font-size: 1.02rem;
+  margin: 0.4rem 0 0.2rem;
+
+  a {
+    color: var(--dark);
+    text-decoration: none;
+    transition: color 0.25s ease;
+
+    &:hover {
+      color: var(--eb-accent);
+      text-decoration: none;
+    }
+  }
+}
+
+.page-title::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin-top: 0.55rem;
+  background: var(--eb-accent);
+}
+
+h2.page-title::after {
+  // only the sidebar wordmark gets the underline tick
+  margin-left: 0;
+}
+
+// Breadcrumbs -> micro caps trail
+.breadcrumb-container {
+  font-family: var(--eb-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray);
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+
+  .breadcrumb-element {
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+
+  a {
+    color: var(--gray);
+    background: none;
+
+    &:hover {
+      color: var(--eb-accent);
+    }
+  }
+
+  p {
+    color: var(--eb-line-strong);
+    margin: 0;
+  }
+}
+
+// Article header block
+.page-header {
+  margin-top: 0.5rem;
+}
+
+h1.article-title {
+  font-size: clamp(1.65rem, 1.1rem + 2vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  margin: 0.15rem 0 0.5rem;
+}
+
+p.content-meta {
+  font-family: var(--eb-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin: 0 0 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--eb-line);
+  max-width: none;
+}
+
+// Sidebar control buttons (search · dark mode · reader mode)
+.search-button,
+.darkmode,
+.readermode {
+  border: 1px solid var(--eb-line);
+  border-radius: var(--eb-radius);
+  background: var(--eb-surface);
+  color: var(--darkgray);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+
+  &:hover {
+    color: var(--eb-accent);
+    border-color: var(--eb-accent);
+    background: var(--eb-surface-strong);
+  }
+}
+
+.search-bar {
+  font-family: var(--eb-display);
+  letter-spacing: 0.03em;
+}
+
+
+// ── Explorer (archive tree) ────────────────────────────────────────────────
+.explorer {
+  margin-top: 0.25rem;
+
+  button.desktop-explorer,
+  button.mobile-explorer {
+    font-family: var(--eb-display);
+    text-transform: uppercase;
+    letter-spacing: var(--eb-tracking);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+}
+
+.explorer-content {
+  scrollbar-width: thin;
+}
+
+.explorer a.nav-file-title.tree-item-self {
+  display: block;
+  padding: 0.22rem 0.5rem 0.22rem 0.55rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--eb-radius) var(--eb-radius) 0;
+  color: var(--darkgray);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    color: var(--dark);
+    background: var(--eb-surface-strong);
+  }
+
+  &.active,
+  &.is-active {
+    color: var(--eb-accent);
+    border-left-color: var(--eb-accent);
+    background: var(--eb-surface);
+    font-weight: 500;
+  }
+}
+
+.folder-container.nav-folder-title {
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--eb-radius);
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--eb-surface);
+  }
+
+  .folder-title,
+  span {
+    font-family: var(--eb-display);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--gray);
+  }
+
+  &:hover .folder-title,
+  &:hover span {
+    color: var(--dark);
+  }
+}
+
+.folder-outer > ul {
+  border-left-color: var(--eb-line);
+}
+
+.explorer svg.collapse-icon,
+.explorer svg.folder-icon {
+  color: var(--eb-accent);
+  opacity: 0.75;
+}
+
+// ── Sidebar panels: TOC · Backlinks · Recent · Graph ───────────────────────
+.toc,
+.backlinks,
+.recent-notes,
+.graph {
+  h3,
+  .toc-header > h3 {
+    font-size: 0.72rem;
+    color: var(--gray);
+    margin: 0 0 0.55rem;
+  }
+}
+
+.toc-content.overflow a,
+.backlinks ul a,
+.recent-ul a {
+  color: var(--darkgray);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--eb-accent);
+    text-decoration: none;
+  }
+}
+
+.toc-content.overflow {
+  border-left: 1px solid var(--eb-line);
+  padding-left: 0.7rem;
+
+  a.active,
+  a:hover {
+    color: var(--eb-accent);
+  }
+}
+
+.backlinks ul,
+.recent-ul {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    border-bottom: 1px solid var(--eb-line);
+    padding: 0.2rem 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+// "Latest dispatches" — date + title rows
+.recent-notes {
+  margin-top: 0.5rem;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.45rem 0;
+  }
+
+  .desc h3 {
+    font-family: var(--eb-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.3;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  p.meta,
+  .meta {
+    order: -1;
+    font-family: var(--eb-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin: 0;
+  }
+}
+
+.graph-outer {
+  height: 230px;
+}
+
+.graph-container {
+  border: 1px solid var(--eb-line);
+  border-radius: var(--eb-radius-lg);
+  background: var(--eb-surface);
+  overflow: hidden;
+}
+
+.global-graph-icon {
+  color: var(--eb-accent);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--eb-line);
+  margin: 2.5rem 0 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+
+hr::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 40px;
+  height: 1px;
+  background: var(--eb-accent);
+}
+
+// ── 6. Archive listings (folder pages: /newsletters/2023/ …) ───────────────
+.page-listing {
+  margin-top: 2rem;
+
+  > p:first-child {
+    font-family: var(--eb-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+    border-bottom: 1px solid var(--eb-line);
+    padding-bottom: 0.6rem;
+    margin-bottom: 0;
+  }
+
+  ul.section-ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li.section-li .section {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    align-items: baseline;
+    gap: 0.35rem 1.1rem;
+    padding: 0.85rem 0.6rem 0.85rem 0.75rem;
+    border-bottom: 1px solid var(--eb-line);
+    border-left: 2px solid transparent;
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease;
+
+    &:hover {
+      background: var(--eb-surface);
+      border-left-color: var(--eb-accent);
+      transform: translateX(2px);
+    }
+  }
+
+  p.meta,
+  .meta {
+    font-family: var(--eb-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin: 0;
+  }
+
+  .desc h3 {
+    font-family: var(--eb-display);
+    font-size: 1.06rem;
+    font-weight: 500;
+    line-height: 1.34;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+
+    a {
+      color: var(--dark);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--eb-accent);
+      }
+    }
+  }
+
+  ul.tags:empty {
+    display: none;
+  }
+}
+
+// ── 7. Landing-page kit (used by content/index.md) ─────────────────────────
+// The homepage supplies its own <h1> inside the hero, so the duplicate article
+// title (and its meta line) are dropped only on that page. Browsers without
+// `:has()` simply show the extra heading — harmless.
+#quartz-body .center:has(.eb-hero) {
+  h1.article-title,
+  p.content-meta {
+    display: none;
+  }
+}
+
+.eb-hero {
+  padding: 1rem 0 2.6rem;
+  border-bottom: 1px solid var(--eb-line);
+  margin-bottom: 3rem;
+
+  h1,
+  .eb-hero-title {
+    font-family: var(--eb-display);
+    font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.7rem);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--dark);
+    margin: 0.5rem 0 1.1rem;
+    text-transform: none;
+  }
+}
+
+.eb-kicker {
+  font-size: 0.7rem;
+  color: var(--eb-accent);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  &::before {
+    content: "";
+    width: 26px;
+    height: 2px;
+    background: var(--eb-accent);
+  }
+}
+
+.eb-hero-lede {
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.22rem);
+  color: var(--darkgray);
+  max-width: 46ch;
+  margin-bottom: 1.7rem;
+}
+
+.eb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+}
+
+// Buttons — mirror the storefront's .btn-primary / .btn-secondary
+.eb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--eb-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 3px;
+  border: 2px solid var(--eb-line-strong);
+  background: transparent;
+  color: var(--dark);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+
+  &:hover {
+    color: var(--eb-accent);
+    border-color: var(--eb-accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  &.eb-btn--primary {
+    background: var(--eb-accent);
+    border-color: var(--eb-accent);
+    color: #fff;
+
+    &:hover {
+      background: var(--eb-accent-bright);
+      border-color: var(--eb-accent-bright);
+      color: #fff;
+    }
+  }
+
+  &.eb-btn--quiet {
+    border-color: transparent;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+
+    &:hover {
+      border-color: transparent;
+      background: none;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+}
+
+// ── 5. Reading experience ──────────────────────────────────────────────────
+.markdown-preview-view.markdown-rendered {
+  font-size: 1.03rem;
+  line-height: 1.78;
+
+  p {
+    margin: 0 0 1.2rem;
+    color: var(--darkgray);
+  }
+
+  // Section breaks carry the crimson mark used across the storefront.
+  h2 {
+    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.62rem);
+    font-weight: 600;
+    line-height: 1.24;
+    margin: 2.7rem 0 0.9rem;
+    text-transform: none;
+    letter-spacing: -0.005em;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 30px;
+      height: 3px;
+      background: var(--eb-accent);
+      margin-bottom: 0.85rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 2rem 0 0.6rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+    margin: 1.6rem 0 0.4rem;
+  }
+
+  a {
+    color: var(--eb-accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(227, 28, 61, 0.35);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    transition:
+      color 0.2s ease,
+      text-decoration-color 0.2s ease;
+
+    &:hover {
+      color: var(--eb-accent-bright);
+      text-decoration-color: var(--eb-accent-bright);
+    }
+  }
+
+  strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  blockquote {
+    margin: 1.6rem 0;
+    padding: 0.35rem 0 0.35rem 1.15rem;
+    border-left: 3px solid var(--eb-accent);
+    background: linear-gradient(90deg, var(--eb-surface), transparent 85%);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--dark);
+
+    p {
+      color: inherit;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  ul,
+  ol {
+    padding-left: 1.15rem;
+    margin-bottom: 1.2rem;
+
+    li {
+      color: var(--darkgray);
+      margin-bottom: 0.4rem;
+
+      &::marker {
+        color: var(--eb-accent);
+      }
+    }
+  }
+
+  img {
+    border-radius: var(--eb-radius);
+    box-shadow: var(--eb-shadow);
+    max-width: 100%;
+  }
+
+  code {
+    font-family: var(--eb-mono);
+    font-size: 0.86em;
+    background: var(--eb-surface-strong);
+    border: 1px solid var(--eb-line);
+    border-radius: 3px;
+    padding: 0.1rem 0.32rem;
+  }
+
+  pre {
+    border: 1px solid var(--eb-line);
+    border-radius: var(--eb-radius);
+    background: var(--eb-surface);
+    padding: 1rem 1.1rem;
+
+    code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  .table-container {
+    border: 1px solid var(--eb-line);
+    border-radius: var(--eb-radius);
+    overflow: hidden;
+  }
+
+  table {
+    th {
+      font-family: var(--eb-display);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.72rem;
+      color: var(--gray);
+      background: var(--eb-surface);
+    }
+
+    td,
+    th {
+      border-color: var(--eb-line);
+      padding: 0.6rem 0.75rem;
+    }
+  }
+
+  .callout {
+    border-radius: var(--eb-radius);
+    border: 1px solid var(--eb-line);
+    background: var(--eb-surface);
+  }
+
+  a.tag-link,
+  .tag-link {
+    font-family: var(--eb-display);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.66rem;
+    color: var(--gray);
+    border: 1px solid var(--eb-line);
+    border-radius: 999px;
+    padding: 0.12rem 0.55rem;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--eb-accent);
+      border-color: var(--eb-accent);
+    }
+  }
+}
+
+
+// Section headings, cards and trails
+.eb-section {
+  margin: 0 0 3.2rem;
+
+  > .eb-section-title {
+    font-size: 0.74rem;
+    color: var(--gray);
+    margin: 0 0 1.3rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--eb-line);
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+
+    .eb-count {
+      font-family: var(--eb-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: none;
+      color: var(--gray);
+    }
+  }
+}
+
+.eb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.9rem;
+}
+
+.eb-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border: 1px solid var(--eb-line);
+  border-radius: var(--eb-radius-lg);
+  background: var(--eb-surface);
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--eb-accent);
+    background: var(--eb-surface-strong);
+    box-shadow: var(--eb-shadow-lift);
+    text-decoration: none;
+  }
+
+  .eb-card-kicker {
+    font-family: var(--eb-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--eb-accent);
+  }
+
+  .eb-card-title {
+    font-family: var(--eb-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.28;
+    color: var(--dark);
+  }
+
+  .eb-card-text {
+    font-size: 0.92rem;
+    color: var(--darkgray);
+    margin: 0;
+  }
+}
+
+// Year cards carry a little more weight
+.eb-year .eb-card-title {
+  font-size: 1.85rem;
+  letter-spacing: -0.01em;
+}
+
+
+// Reading trails on the homepage
+.eb-trail {
+  border-top: 1px solid var(--eb-line);
+  padding: 1.1rem 0 1.2rem;
+
+  &:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0 0 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.3rem;
+
+      &::before {
+        content: "→";
+        color: var(--eb-accent);
+        margin-right: 0.5rem;
+        font-size: 0.9em;
+      }
+    }
+  }
+}
+
+.eb-cta {
+  padding: 1.8rem 1.9rem;
+  border: 1px solid var(--eb-line);
+  border-radius: var(--eb-radius-lg);
+  background:
+    radial-gradient(600px 200px at 100% 0%, var(--eb-glow), transparent 70%),
+    var(--eb-surface);
+  margin-bottom: 2.5rem;
+
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: -0.005em;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    margin: 0 0 1.2rem;
+    color: var(--darkgray);
+  }
+}
+
+.eb-fine {
+  font-family: var(--eb-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin: 0;
+}
+
+// ── 8. Responsive & motion ─────────────────────────────────────────────────
+@media (max-width: 800px) {
+  .eb-hero {
+    padding-bottom: 2rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .eb-actions .eb-btn {
+    flex: 1 1 100%;
+  }
+
+  .page-listing li.section-li .section {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    padding-left: 0.6rem;
+  }
+
+  .markdown-preview-view.markdown-rendered {
+    font-size: 1rem;
+    line-height: 1.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  .eb-card:hover,
+  .eb-btn:hover,
+  .page-listing li.section-li .section:hover {
+    transform: none;
+  }
+}
+
+@media print {
+  body::after {
+    display: none;
+  }
+}
+

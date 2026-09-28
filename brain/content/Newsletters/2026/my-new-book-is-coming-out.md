@@ -2,7 +2,9 @@
 title: My new book is coming out!
 description: Seen in Silverbridge Book 3 is ready...
 date: 2026-04-27
+created: 2026-04-27
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -17,7 +19,7 @@ My goodness, it’s been a minute since my last newsletter. I’ve been ... busy
 
 I’m in love with it. It’s a great book, and I’m very proud. The cover is great, the editing is slick, and the formatting is clean. The title of this book is *[A Fiancé Has Flatlined](https://www.amazon.com/dp/B0GY5YH83F)*, and it sees the Seen team back on another case. It’ll be released in June.
 
-![](/organise/images/newsletters/2026/my-new-book-is-coming-out-01.webp)
+![](../../../../../organise/Images/newsletters/2026/my-new-book-is-coming-out-01.webp)
 
 >
 > *Luce and Jordan’s engagement party was going beautifully… Then the body turned up.*

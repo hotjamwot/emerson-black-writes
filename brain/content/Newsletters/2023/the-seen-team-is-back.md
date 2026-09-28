@@ -2,7 +2,9 @@
 title: The Seen Team is Back!
 description: And I want you to be the first to know
 date: 2023-09-27
+created: 2023-09-27
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -43,7 +45,7 @@ I’m glad you asked.
 
 Stormhouse has moved to London!
 
-![](/organise/images/newsletters/2023/the-seen-team-is-back-02.webp)
+![](../../../../../organise/Images/newsletters/2023/the-seen-team-is-back-02.webp)
 
 I’ve never lived abroad. It’s something I always wanted to do but for whatever reason, I let the opportunity pass me by. Meanwhile, a bunch of my friends moved to various cities around the world and have been having the time of their lives.
 

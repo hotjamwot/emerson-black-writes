@@ -2,7 +2,9 @@
 title: How a Ghost Gave Me a Story Epiphany
 description: Unveiling the Core of Your Story
 date: 2024-05-08
+created: 2024-05-08
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -21,7 +23,7 @@ Years ago, I cheated on a partner. My partner discovered my betrayals and as a r
 
 Later in my life, I co-wrote and directed a film with a comedian friend of mine, a buddy murder mystery called DEAD. In it, a stoner who can see ghosts is confronted with the ghost of his recently dead father who is slowly turning into a terrifying and inhuman ‘ghoul’.
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-01.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-01.webp)
 
 *Tom Sainsbury plays “Marbles”, a stoner who can see ghosts (including a recently murdered police offcer)*
 
@@ -29,7 +31,7 @@ The story details of DEAD have *no* relevance to my life. I haven’t lost my fa
 
 One day during filming, we were way out of the city on a farm filming at nighttime during a massive storm. We were filming the climax, where the protagonist comes face to face with his father’s ghost, and he’s struggling to reconcile who his father used to be with the awful phantasm standing before him. It’s terrifying and intense, absolutely *masterful* filmmaking, as you’d expect.
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-02.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-02.webp)
 
 *The amazing Michael Hurst as our ghoulish dad.*
 
@@ -80,15 +82,15 @@ My last newsletter was about failing to write the newsletter because I was worki
 
 We shot it! Not only did I get the privilege of co-writing it, but I also co-directed it and had a small role in it. And now, I’m editing it.
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-03.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-03.webp)
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-04.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-04.webp)
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-05.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-05.webp)
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-06.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-06.webp)
 
-![](/organise/images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-07.webp)
+![](../../../../../organise/Images/newsletters/2024/how-a-ghost-gave-me-a-story-epiphany-07.webp)
 
 The shoot went great. It was exhausting and intense, like all shoots are, and we had to rewrite a bunch of scenes on the fly because … well, because that’s always the case.
 

@@ -2,7 +2,9 @@
 title: I bought a typewriter!
 description: Yes, I'm a wanker. And it's lovely.
 date: 2024-12-16
+created: 2024-12-16
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -23,13 +25,13 @@ I’m looking forward to having leftover ham I can fry up for breakfast on Boxin
 4. I completed my Goodreads Reading Challenge of 40 books. I might do a Top Ten newsletter before the end of the month.
 5. I BOUGHT A TYPEWRITER!
 
-![](/organise/images/newsletters/2024/i-bought-a-typewriter-01.webp)
+![](../../../../../organise/Images/newsletters/2024/i-bought-a-typewriter-01.webp)
 
 About three years ago, I visited my mum in small-town New Zealand. My sister was also visiting from Melbourne, and we visited the local museum. It’s open for two hours a day and the entry fee is a gold coin donation.
 
 After checking out a room filled with *terrifying dolls—*
 
-![](/organise/images/newsletters/2024/i-bought-a-typewriter-02.webp)
+![](../../../../../organise/Images/newsletters/2024/i-bought-a-typewriter-02.webp)
 
 … we wandered outside and looked around an old garage. I don’t think the broken-down corrugated iron structure was part of the displays, but inside, the pile of rusty pushbikes stacked atop each other was impressive. As was the line of long-forgotten typewriters, none of which still worked.
 
@@ -55,7 +57,7 @@ After researching vintage typewriters on YouTube and Reddit for *way too long*, 
 
 It took a little over two weeks to finally arrive, and I was half-conscious when I unwrapped it thanks to Covid, but when I tested the keys and found that they all worked, I felt euphoric. Even better, the ink ribbon was still wet! All functions on my Olympia Splendid 33 (made in 1966) work!
 
-![](/organise/images/newsletters/2024/i-bought-a-typewriter-03.webp)
+![](../../../../../organise/Images/newsletters/2024/i-bought-a-typewriter-03.webp)
 
 *Not worth reading the text on this page. Just admire the look of courier font on real paper.*
 
@@ -67,4 +69,4 @@ I’m thrilled with it. This Christmas and New Year, all my friends are getting 
 
 I’ve been LOVING this book. It’s funny, sweet, and possibly the most accurate representation of white straight men in their mid-late-30s I’ve ever read.
 
-![Good Material: THE INSTANT SUNDAY TIMES BESTSELLER, FROM THE AUTHOR OF EVERYTHING I KNOW ABOUT LOVE : Alderton, Dolly: Amazon.co.uk: Books](/organise/images/newsletters/2024/i-bought-a-typewriter-04.webp)
+![Good Material: THE INSTANT SUNDAY TIMES BESTSELLER, FROM THE AUTHOR OF EVERYTHING I KNOW ABOUT LOVE : Alderton, Dolly: Amazon.co.uk: Books](../../../../../organise/Images/newsletters/2024/i-bought-a-typewriter-04.webp)

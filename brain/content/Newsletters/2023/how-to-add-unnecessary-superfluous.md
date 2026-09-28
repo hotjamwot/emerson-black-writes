@@ -2,7 +2,9 @@
 title: When Wandering Off-Path Enhances Your Story
 description: Why Narrative Rabbit Holes Enrich Your Fiction
 date: 2023-04-11
+created: 2023-04-11
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post

@@ -2,7 +2,9 @@
 title: 5 Ways to Sweeten Up Unlikeable Characters
 description: Transform your lead character from Arsehole to Heartthrob
 date: 2023-05-09
+created: 2023-05-09
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -79,4 +81,4 @@ The world is richly built, the characters are charming, and the pace of the pros
 
 I find myself picking up my Kobo first thing in the morning and also right before sleeping at night, which is the sign of a good read.
 
-![https://reenchantmentoftheworld.files.wordpress.com/2015/05/sanderson-mistborntrilogyuk4.jpg](/organise/images/newsletters/2023/5-ways-to-sweeten-up-unlikeable-characters-02.webp)
+![https://reenchantmentoftheworld.files.wordpress.com/2015/05/sanderson-mistborntrilogyuk4.jpg](../../../../../organise/Images/newsletters/2023/5-ways-to-sweeten-up-unlikeable-characters-02.webp)

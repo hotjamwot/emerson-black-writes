@@ -2,7 +2,9 @@
 title: Keep, Keep, Keep Writing
 description: Even When You Don't Want To
 date: 2023-06-20
+created: 2023-06-20
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -23,17 +25,17 @@ I don’t plan to take a day off writing until the first draft is finished. That
 
 When Stormhouse does a writing bee, we keep a very nerdy spreadsheet:
 
-![](/organise/images/newsletters/2023/keep-keep-keep-writing-01.webp)
+![](../../../../../organise/Images/newsletters/2023/keep-keep-keep-writing-01.webp)
 
 *It’s helpful to see that even though the daily word count doesn’t vary much between writers, the total word count is very different. A little bit a day…*
 
 But when I’m writing a first draft by myself, I eschew keeping any kind of intense counter or spreadsheet. Instead, Scrivener provides a very simple, motivational daily goal counter:
 
-![](/organise/images/newsletters/2023/keep-keep-keep-writing-02.webp)
+![](../../../../../organise/Images/newsletters/2023/keep-keep-keep-writing-02.webp)
 
 And a more in depth Writing History tool if I ever feel like reflecting:
 
-![](/organise/images/newsletters/2023/keep-keep-keep-writing-03.webp)
+![](../../../../../organise/Images/newsletters/2023/keep-keep-keep-writing-03.webp)
 
 The fourth book in a series is a *lot* easier to write than the first. By now, the characters speak for themselves, their growth almost feels inevitable, yet still surprises me, and the structure of a young adult mystery is more obvious.
 
@@ -53,7 +55,7 @@ Let’s start with the most well-worn and most useful technique:
 3. **Chrysalism**
   The idea of a ‘sanctuary’ brings to mind a photograph of my little sister. While I was having lunch, I opened my Photos app and saw a blast from the past: a photograph of my [now very successful](https://www.smartcompany.com.au/marketing/ai-disrupt-transform-marketing-women-business-leaders-weigh-in/) little sister squeezed into the gap in a cane table between the glass top and a shelf. It reminded me that Lana loved squeezing herself into weird places, like the bottom of the kitchen pantry or the gap behind the bookshelf. If feeling cosy helps you write, then wrap yourself up. Write from bed (I do!). If your sanctuary is a busy cafe, then find a local cafe you like and write there every day.
   
-  ![](/organise/images/newsletters/2023/keep-keep-keep-writing-04.webp)
+  ![](../../../../../organise/Images/newsletters/2023/keep-keep-keep-writing-04.webp)
 1. **Petrol (or** **Gas** if you’re in the States)
   Eating well and exercising helps you get a good night’s sleep, and sleeping helps your creativity. If you can’t do this, then stock up on coffee (I do!) and cut down on McDonald’s. If you need a block of chocolate to hit your word count, then you know? Do it. You can hit the gym when you’ve finished your draft.
 2. **Be a Sponge**
@@ -71,7 +73,7 @@ Have any more tips? Hit me with them.
 
 ## 📣 Shout out to Exhalation by Ted Chiang
 
-![Exhalation eBook by Ted Chiang - EPUB Book | Rakuten Kobo New Zealand](/organise/images/newsletters/2023/keep-keep-keep-writing-05.webp)
+![Exhalation eBook by Ted Chiang - EPUB Book | Rakuten Kobo New Zealand](../../../../../organise/Images/newsletters/2023/keep-keep-keep-writing-05.webp)
 
 This series of eight short sci-fi stories is making me think a lot about decision-making and how our past influences everything we do.
 

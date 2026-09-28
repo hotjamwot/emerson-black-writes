@@ -42,5 +42,24 @@ while IFS= read -r f; do
 done < <(grep -rho 'organise/images/newsletters/[^)"]*' "$CONTENT/Newsletters/" 2>/dev/null | sed 's/.*newsletters\///;s/[)"]$//' | sort -u)
 if [ "$MISSING" = "1" ]; then echo "Publish aborted: missing images."; exit 1; fi
 
-cd "$REPO" && git add -A && git commit -m "Brain: publish $(date +%F)" && git push
+# 5. Enrich frontmatter with Quartz's date keys so the Brain shows real
+#    publication dates instead of "today" for every mirrored note.
+#      date:    -> created:   (archive + per-note date, newest-first sorting)
+#      updated: -> modified:  (used by modified-date views)
+#    Idempotent: a key is only added when it is missing, so re-running is a no-op.
+find "$CONTENT/Newsletters" -name '*.md' -print0 | while IFS= read -r -d '' f; do
+  if grep -q '^date:' "$f" && ! grep -q '^created:' "$f"; then
+    /usr/bin/perl -pi -e 'if (/^date:\s*(\S+)/ && !$done) { $_ .= "created: $1\n"; $done = 1 }' "$f" || exit 1
+  fi
+  if grep -q '^updated:' "$f" && ! grep -q '^modified:' "$f"; then
+    /usr/bin/perl -pi -e 'if (/^updated:\s*(\S+)/ && !$done) { $_ .= "modified: $1\n"; $done = 1 }' "$f" || exit 1
+  fi
+done
+
+cd "$REPO" && git add -A
+if git diff --cached --quiet; then
+  echo "Nothing new to publish — the mirror is already up to date."
+else
+  git commit -m "Brain: publish $(date +%F)" && git push
+fi
 echo "Published."

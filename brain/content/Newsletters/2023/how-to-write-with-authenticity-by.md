@@ -2,7 +2,9 @@
 title: How to Write With Authenticity by Turning On Your Flame
 description: Follow your instincts and write like you mean it
 date: 2023-04-25
+created: 2023-04-25
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -92,4 +94,4 @@ Eleanor Catton is a Kiwi writer who *won the Booker Prize* for her book The Lumi
 
 [Birnam Wood](https://amzn.to/3N53ZdM) is her latest book, released ten years hence, and I really dug it. There’s a lot of dialogue discussing political ideologies, left vs. right, and quite a few icky characters, but they’re wrapped up in a fun multi-viewpoint thriller.
 
-![](/organise/images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)
+![](../../../../../organise/Images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)

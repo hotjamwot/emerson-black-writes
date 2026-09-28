@@ -2,7 +2,9 @@
 title: Third Draft is Finished!
 description: A writing update
 date: 2025-10-21
+created: 2025-10-21
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -13,7 +15,7 @@ I write this newsletter today aglow with the celebratory news that a milestone h
 
 The third draft of the third ***Seen in Silverbridge*** book is now complete! 🎉🥳🙌
 
-![](/organise/images/newsletters/2025/third-draft-is-finished-01.webp)
+![](../../../../../organise/Images/newsletters/2025/third-draft-is-finished-01.webp)
 
 *Scrivener screenshot of the Parts of the book. Total word count: 87,778*
 
@@ -73,7 +75,7 @@ Geez, I’m making it sound like it was a drag to write this thing, when in real
 
 Here’s a snippet from my Juju app from when I finished the draft:
 
-![](/organise/images/newsletters/2025/third-draft-is-finished-02.webp)
+![](../../../../../organise/Images/newsletters/2025/third-draft-is-finished-02.webp)
 
 ### Onward
 

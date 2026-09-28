@@ -595,6 +595,18 @@ footer { padding: var(--space-xl) 0; text-align: center; border-top: 1px solid r
 footer p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 footer a { color: var(--accent-red); }
 
+/* Footer nav — the thread between the storefront and The Brain */
+footer .footer-nav {
+    margin-top: var(--space-md);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+footer .footer-nav a { color: var(--text-secondary); }
+footer .footer-nav a:hover { color: var(--accent-red); }
+
 /* Responsive */
 @media (max-width: 960px) {
     .book-grid { grid-template-columns: repeat(2, 1fr); }

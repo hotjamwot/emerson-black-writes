@@ -2,7 +2,9 @@
 title: Starting a First Draft
 description: The Eight Stages of Drafting
 date: 2024-08-16
+created: 2024-08-16
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -18,7 +20,7 @@ I have officially started writing the first draft for the new book in the *Seen 
 
 You’ll remember in my previous newsletter, I was [writing abroad from Málaga in Spain.](https://emersonblackwrites.substack.com/p/writing-abroad?r=1s8xdo) I had printed out the entire 51 page outline of the book and used a red biro to mark up the final changes before I embarked on the drafting stage.
 
-![](/organise/images/newsletters/2024/starting-a-first-draft-01.webp)
+![](../../../../../organise/Images/newsletters/2024/starting-a-first-draft-01.webp)
 
 Reading and making edit changes on an outline is comparatively low effort to drafting. During that trip, I would sit by the pool with a red wine mixed with Coke Zero (it’s a real thing, I promise. It’s called a Calimocho and it’s a Spanish thing, so by drinking this ungodly but delicious mix, I’m showing that I’m cultured, okay?) and flick through the tangible pages of my genius, reading a paragraph here and there, taking regular breaks to swim in the pool.
 
@@ -34,7 +36,7 @@ My winning equation is:
 
 At the mature age of 36, I’m proud to say I’ve written quite a few projects that have gone on to become completed pieces of work. In the last ten years, I’ve become familiar with my emotional trajectory during the first draft stage of a project, and it’s quite an adventure.
 
-![](/organise/images/newsletters/2024/starting-a-first-draft-02.webp)
+![](../../../../../organise/Images/newsletters/2024/starting-a-first-draft-02.webp)
 
 1. I’m going to smash this out of the park! Look at me go, I’m writing 2000 words a day! If I keep this up, I’ll be finished the whole book in only forty days!
 2. Didn’t make my word count because I got up late and am tired today, but that’s okay, I’ll make up for it tomorrow.
@@ -47,7 +49,7 @@ At the mature age of 36, I’m proud to say I’ve written quite a few projects 
 
 Right now, I’m at number 4, and I’ve been at 4 for the last week or so.
 
-![](/organise/images/newsletters/2024/starting-a-first-draft-03.webp)
+![](../../../../../organise/Images/newsletters/2024/starting-a-first-draft-03.webp)
 
 1. **I didn’t make my word count again because [insert reason here].**
 

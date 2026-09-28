@@ -2,7 +2,9 @@
 title: Master Your Calendar
 description: Prioritise your Priorities.
 date: 2023-08-01
+created: 2023-08-01
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -47,13 +49,13 @@ Disclaimer: We’re in dreamland here, okay? We’re gonna make our dream week w
 
 1. Start with a blank canvas:
 
-![](/organise/images/newsletters/2023/master-your-calendar-01.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-01.webp)
 
 1. Add in your non-negotiables.
 
 Don’t add work in yet, though. There’s time for that later. Non-negotiables are things like a doctor’s appointment, picking the kids up from school, meals, and sleep.
 
-![](/organise/images/newsletters/2023/master-your-calendar-02.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-02.webp)
 
 1. Add in your priorities.
 
@@ -63,7 +65,7 @@ If it’s to get in shape, add in your gym sessions. Put in as many as you’d i
 
 For me, *Writing* and *Gym* are really important. As is *Friend Time*.
 
-![](/organise/images/newsletters/2023/master-your-calendar-03.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-03.webp)
 
 *This is where you can start choosing fun colours and making it pretty.*
 
@@ -75,7 +77,7 @@ If you’re like most of us, you have to work. We aren’t all in a position whe
 
 Add in the hours you have to spend at work. For some of us, that’ll completely mess up our entire week:
 
-![](/organise/images/newsletters/2023/master-your-calendar-04.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-04.webp)
 
 *Yup, that looks like a stressful week.*
 
@@ -85,7 +87,7 @@ This means that suddenly your evenings and early mornings are crammed with your 
 
 If you’re lucky enough to work from home or have a job where you can choose your own hours, you might be able to schedule your work hours around your priorities in a way that doesn’t completely raze the playing field.
 
-![](/organise/images/newsletters/2023/master-your-calendar-05.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-05.webp)
 
 ## 🃏 Shuffling Time
 
@@ -111,7 +113,7 @@ You get more quality work done when you’re rested and leading with joy, so tak
 
 For interest, this was my week last week:
 
-![](/organise/images/newsletters/2023/master-your-calendar-06.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-06.webp)
 
 *Wednesday night I got carried away editing and couldn’t tear myself from my laptop.*
 
@@ -125,11 +127,11 @@ But I’m gonna take it easy on myself. I got a lot done last week. So what if I
 
 Thanks to Dave for sending this photo back with the bins removed. Made me laugh.
 
-![](/organise/images/newsletters/2023/master-your-calendar-07.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-07.webp)
 
 ## 📖 Shout Out to: The Swift and the Harrier
 
-![](/organise/images/newsletters/2023/master-your-calendar-08.webp)
+![](../../../../../organise/Images/newsletters/2023/master-your-calendar-08.webp)
 
 Really enjoyed this book! As I wrote in my [Goodreads review](https://www.goodreads.com/emersonblackwrites):
 

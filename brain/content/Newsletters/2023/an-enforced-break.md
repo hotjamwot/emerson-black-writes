@@ -2,7 +2,9 @@
 title: An Enforced Break
 description: How a simple accident can lead to loads of free time
 date: 2023-10-25
+created: 2023-10-25
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -23,7 +25,7 @@ This, I later found out, means that the battery short-circuited the logic board.
 
 Not ideal.
 
-![](/organise/images/newsletters/2023/an-enforced-break-01.webp)
+![](../../../../../organise/Images/newsletters/2023/an-enforced-break-01.webp)
 
 *My workspace prior to the incident. Look how close that water bottle is … playing with fire, I was.*
 

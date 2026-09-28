@@ -2,7 +2,9 @@
 title: Dominate Multiple Projects with Crop Rotation
 description: (without sounding like a productivity bro) You can DO WAY MORE.
 date: 2023-05-23
+created: 2023-05-23
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post

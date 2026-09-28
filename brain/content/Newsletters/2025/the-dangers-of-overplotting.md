@@ -2,7 +2,9 @@
 title: The Dangers of Overplotting
 description: "Or: How I wrote a Truly Terrible First Draft"
 date: 2025-02-14
+created: 2025-02-14
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post

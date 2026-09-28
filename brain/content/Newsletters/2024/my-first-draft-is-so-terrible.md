@@ -2,7 +2,9 @@
 title: My first draft is so terrible I’m considering giving up writing books
 description: All that work just for the writing to suck?!
 date: 2024-11-14
+created: 2024-11-14
 updated: 2026-09-28
+modified: 2026-09-28
 tags: []
 aliases: []
 type: post
@@ -19,7 +21,7 @@ I’m sitting in a coffee shop on Bethnal Green in London. All around me, creati
 
 I’m totally one of them, right? I fit in. My laptop screen shows screeds of words, a full-length novel, sitting right here on Scrivener. It looks impressive!
 
-![](/organise/images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
+![](../../../../../organise/Images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
 
 But what these cool people don’t know is that I’m an imposter! My novel is *bad*. It’s so bad, in fact, that upon rereading it, I’m wondering if it’s time to give up writing books altogether.
 
