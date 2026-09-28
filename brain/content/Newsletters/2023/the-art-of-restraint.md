@@ -1,15 +1,14 @@
 ---
-title: "The Art of Restraint"
-description: "Whet thy appetite, but no more."
+title: The Art of Restraint
+description: Whet thy appetite, but no more.
 date: 2023-07-18
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:135075091
 ---
-
 We always concentrate on what we read instead of what we *don’t* read.
 
 I hope you’re able to look past the absurdity of that comment for a second and read on so I can explain what I mean.
@@ -87,19 +86,3 @@ While you’re doing this, ask yourself deeper questions: What happens if I remo
 Realising you’ve wasted hours of writing time with superfluous characters or subplots is painful. But it’s the process. You can’t see the true core of your story until you’ve written a bloated, flabby first draft. Don’t beat yourself up about it — move on and recognise that by being brutal and simplifying your story, you’re giving your reader the best possible experience.
 
 They deserve that.
-
-## 🌊 Stormhouse News
-
-- *Seen in Silverbridge Book 2* is sitting on my Google Drive with about 2,500 edit suggestions awaiting my review. I’m getting through them, I promise!
-
-## 📣 Shout Out to Spending Time on Creative Pursuits that Aren’t Career-Related
-
-This last weekend, to celebrate Matariki (Māori New Year here in Aotearoa New Zealand), my lass and I travelled to Raglan, a delightful hippy-ish town on the West Coast. The local roaster charges $3 for coffee, which is amazing.
-
-I dusted off my Fuji XT-3 and snapped 120 photos over the course of a few minutes, then loaded them into After Effects and made this nifty video:
-
-![](../../../organise/Images/newsletters/2023/the-art-of-restraint-01.gif)
-
-It was a pointless task that took a couple of hours, and I ate my dinner one-handed so I could experiment with filters and motion blur and all sorts of nerdy things. All for a 4-second video.
-
-It was fun to create something purely for fun, instead of working toward a larger, future-based goal. Any time spent creating is time well spent.

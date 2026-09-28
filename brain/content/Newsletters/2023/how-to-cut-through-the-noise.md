@@ -1,15 +1,14 @@
 ---
-title: "How to Cut Through the Noise"
-description: "— A bonus newsletter —"
+title: How to Cut Through the Noise
+description: Going viral
 date: 2023-07-26
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:135454971
 ---
-
 Last year, a video came up on my YouTube homepage about a kebab that looked suspiciously like a human shit.
 
 The video was made by a popular YouTuber I’d never heard of, and because it was the first video he’d released in a while, the algorithm was doing its thing and pushing it onto random homepages on the off-chance people wanted to see it.

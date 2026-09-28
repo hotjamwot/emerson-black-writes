@@ -1,22 +1,15 @@
 ---
-title: "What Turns You On?"
-description: "And how the answer can help your writing"
+title: What Turns You On?
+description: And how the answer can help your writing
 date: 2023-08-29
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:136472057
 ---
-
 First things first, let me announce that
-
-## 📖 YOU HEARD IT HERE FIRST IS FREE TODAY
-
-It’s free on random days leading up to the release of Book 2. Today is one of those days!
-
-With that done, let’s proceed to a newsletter all about memories and gratitude.
 
 ## 🕶️ Tint Your Glasses Rose
 
@@ -82,7 +75,7 @@ For most of us, very little of these happy memories will be about the act of wri
 
 Does that mean that writing is less worthy of your time? No, because:
 
-**The release of finished projects is memorable.** Hugely so. Our release for You Heard It Here First was a blast this year (admittedly, I didn’t originally want to do it. I wanted to release it as an ebook only but my pal Sophie pressured me and I’m glad she did).
+**The release of finished projects is memorable.** Hugely so. Our release for A Rockstar Has Exploded was a blast this year (admittedly, I didn’t originally want to do it. I wanted to release it as an ebook only but my pal Sophie pressured me and I’m glad she did).
 
 ![](../../../organise/Images/newsletters/2023/what-turns-you-on-01.webp)
 
@@ -106,34 +99,8 @@ If I want to be a happier writer, I need to collaborate more. And I think a happ
 
 I’d be fascinated to know what your memories are and what lessons you glean from considering the commonalities in your memories, so please get in touch! Hit Reply to this email. I read every reply.
 
-## 🌊 Stormhouse News
-
-**Seen in Silverbridge Book 2** is with select readers!
-
-Let me know if you’d like to read it and I’ll fling you the link for a free download.
-
-## 📣 Shout Out to Great Mystery Collection
-
-I’ve joined a group promotion in hopes of getting **You Heard It Here First** out there.
-
-It really helps if you click this link. There’s a bunch of books here to scroll through, and you might end up really digging something, so why not give it a go?
-
-And, exciting times, you’ll see *You Heard It Here First* there! Wow cool!
-
 ## Second Shout-Out to ‘Jack and Joni’
 
 The film referenced higher up in the newsletter.
 
 [Watch on YouTube](https://www.youtube.com/watch?v=OKMV1xEf5do)
-
----
-
-### Come Along with Stormhouse
-
-✍️ Stormhouse [website](https://www.stormhousepublishing.com/)
-
-✅ Get friends to [subscribe](https://www.stormhousepublishing.com/subscribe) to this newsletter
-
-👯 Stormhouse on [YouTube](https://www.youtube.com/@stormhousebooks). [Instagram](https://www.instagram.com/stormhousepublishing/), [Twitter](https://twitter.com/StormhouseBooks), [Facebook](https://www.facebook.com/profile.php?id=100084851955210).
-
-📚 [You Heard It Here First on Amazon](https://amzn.to/44uTTcm)

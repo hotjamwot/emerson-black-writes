@@ -12,7 +12,7 @@ source: substack:176627320
 
 I write this newsletter today aglow with the celebratory news that a milestone has been reached!
 
-**The third draft of the third** <em>**Seen in Silverbridge**</em>**book is now complete! 🎉🥳🙌**
+The third draft of the third ***Seen in Silverbridge*** book is now complete! 🎉🥳🙌
 
 ![](../../../organise/Images/newsletters/2025/third-draft-is-finished-01.webp)
 
@@ -90,6 +90,6 @@ I’ll likely make changes as she’s reading it and giving feedback, then it’
 
 ### It’s not too far away
 
-I’ll be publishing the book in a few months. It’s almost two years since *You Should Have Said* came out, so I’m really letting the team down. But it’ll be worth it. In the meantime, you can reread Books 1 and 2, brush up on your *Seen in Silverbridge* knowledge.
+I’ll be publishing the book in a few months. It’s almost two years since *An Actress Is Missing* came out, so I’m really letting the team down. But it’ll be worth it. In the meantime, you can reread Books 1 and 2, brush up on your *Seen in Silverbridge* knowledge.
 
 Thank you for coming on the writer’s journey with me! Check in soon x

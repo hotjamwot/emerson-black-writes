@@ -112,4 +112,4 @@ It brings me great pleasure to announce that *Seen in Silverbridge Book 2* is ed
 
 We’ll be publishing it in a couple of months, but before we do, I’d love to extend the opportunity for you to read it first.
 
-If you’re interested in a <em>**FREE**</em> <em>**advanced copy**</em>, hit Reply to this email and write ‘I’m keen to read!’ and I’ll put your email on the list for the ARC (advanced reader copy).
+If you’re interested in a **FREE** **advanced copy**, hit Reply to this email and write ‘I’m keen to read!’ and I’ll put your email on the list for the ARC (advanced reader copy).

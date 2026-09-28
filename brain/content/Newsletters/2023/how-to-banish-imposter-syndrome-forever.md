@@ -1,20 +1,19 @@
 ---
-title: "Banish Imposter Syndrome Forever and Start Feeling Legit"
-description: "Stop asking for permission to take your seat at the table"
+title: Banish Imposter Syndrome Forever and Start Feeling Legit
+description: Stop asking for permission to take your seat at the table
 date: 2023-03-28
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:110872468
 ---
-
 ### 👋 Hello you!
 
 How on earth have they let *you* get away with this?
 
-Why are <em>**you**</em> the one in the hot seat? Doing the thing that you’re doing? Are you even qualified? Do you have the requisite experience?
+Why are **you** the one in the hot seat? Doing the thing that you’re doing? Are you even qualified? Do you have the requisite experience?
 
 You know what? I don’t think you deserve to be here. In fact, I think you should leave. Right now.
 
@@ -141,5 +140,3 @@ My mind has been continuously stretched, challenged and expanded by Tim Urban’
 You might have heard of *[Wait, But Why?](https://waitbutwhy.com/homepage)* a funny and informative blog where Urban dissects all manners of society. He wrote a series of posts about group social dynamics that garnered a bunch of attention, and *What’s Our Problem?* is the long, painfully well-researched, smart book of it.
 
 Hugely good. Hugely recommend.
-
----

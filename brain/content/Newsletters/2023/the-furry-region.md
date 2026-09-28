@@ -1,15 +1,14 @@
 ---
-title: "The Furry Region"
-description: "Rummaging your way through the creative thicket"
+title: The Furry Region
+description: Rummaging your way through the creative thicket
 date: 2023-07-04
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:132675818
 ---
-
 This newsletter isn’t about hairy genitals, I promise.
 
 It’s about running into a funk, or a low point, or a slump, stagnation, rut, lull. A variation on which I have recently been in the thick of on my current writing project.
@@ -54,7 +53,7 @@ It seems there’s always a slump before a climb. Our mission is simple: brave o
 
 In The Furry Region, it’s incredibly easy to take your foot off the pedal. When my phone alarm blared me awake at 6:30 am on Monday morning, the last thing I felt like doing was writing. But what did I do?
 
-Well, I’d love to say I got up, brewed coffee and wrote anyway. But in reality, I fell back asleep, jerked awake twenty minutes later, brewed coffee, then spent fifteen minutes reading reviews for the Ōura Ring Gen 3*, then for the Garmin Vivimove Trend watch**, then watched a music video for an obscure Wings song from the 80s because it was in my head.
+Well, I’d love to say I got up, brewed coffee and wrote anyway. But in reality, I fell back asleep, jerked awake twenty minutes later, brewed coffee, then spent fifteen minutes reading reviews for the Ōura Ring Gen 3§, then for the Garmin Vivimove Trend watch§§, then watched a music video for an obscure Wings song from the 80s because it was in my head.
 
 AND THEN I started writing. I got 600 words into it and had to rush to work.
 
@@ -65,12 +64,6 @@ Soon, I know I’ll hit that ‘I’m a Writer and I’m Writing’ incline, and
 ![](../../../organise/Images/newsletters/2023/the-furry-region-04.webp)
 
 *Okay sure, it’s not as flash or charming as Tim Urban’s graphs, but it’s a start*
-
-## 🌊 Stormhouse News
-
-- Emerson Black is in The Furry Region of *Seen in Silverbridge Book 4*
-- Tarryn Thomas, our editor, is almost finished editing *Seen in Silverbridge Book 2*
-- New Zealand is cold and rainy but we’re through the winter solstice!
 
 ## 📣 Shout Out to: [The Second Sight of Zachary Cloudesley](https://amzn.to/3raJJyy) by Sean Lusk
 
@@ -84,6 +77,6 @@ The Second Sight of Zachary Cloudesley is Sean Lusk’s first novel - what a leg
 
 ---
 
-* My [Ōura ring](https://ouraring.com/) (gen 2) is one of my favourite accessories. It’s a smart ring that measures heart rate, heart rate variability, and body temperature while the wearer sleeps. It provides a treasure trove of data that only nerds like me could ever find interesting.
+§ My [Ōura ring](https://ouraring.com/) (gen 2) is one of my favourite accessories. It’s a smart ring that measures heart rate, heart rate variability, and body temperature while the wearer sleeps. It provides a treasure trove of data that only nerds like me could ever find interesting.
 
-** I currently have a [Garmin Vivomove Sport watch](https://amzn.to/3PFuvvC) that tracks my heart rate. Yeah, I know, who needs two devices to track their heart rate? I love data, what can I say? This watch is an analog-digital hybrid, so I get the data but also avoid looking like a yuppie.
+§§ I currently have a [Garmin Vivomove Sport watch](https://amzn.to/3PFuvvC) that tracks my heart rate. Yeah, I know, who needs two devices to track their heart rate? I love data, what can I say? This watch is an analog-digital hybrid, so I get the data but also avoid looking like a yuppie.

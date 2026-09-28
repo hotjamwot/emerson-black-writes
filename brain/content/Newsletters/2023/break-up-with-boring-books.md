@@ -1,24 +1,21 @@
 ---
-title: "Breaking Up with Boring Books"
-description: "The sunk cost fallacy is ruining your reading (and maybe your life)"
+title: Breaking Up with Boring Books
+description: The sunk cost fallacy is ruining your reading (and maybe your life)
 date: 2023-02-28
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:105268274
 ---
-
 ### 👋 Good day, book fan!
 
 Recently, some friends and I attended the epic three-day music festival Splore.
 
 ![https://images.squarespace-cdn.com/content/v1/56fad64c1d07c0c393d860e7/1652330948239-4QQ1ZZRNSJJG6Z93PWJK/Splore+Panorama.jpg?format=2500w](../../../organise/Images/newsletters/2023/break-up-with-boring-books-01.webp)
 
-It <em>**poured**</em> with rain on the first night. The next day, tents had flooded and the entire place had turned into a bog.
-
-![](../../../organise/Images/newsletters/2023/break-up-with-boring-books-02.webp)
+It **poured** with rain on the first night. The next day, tents had flooded and the entire place had turned into a bog.
 
 It was battle.
 
@@ -60,7 +57,7 @@ Splore ended up being hugely fun.
 
 I mean, it **sucked** on Friday night when the temperature dropped severely and all my clothes (and my Kobo) got soaked. But the next day, the sun did its best to poke through the clouds and things got better. I spent my final day swimming and eating chips while listening to live music, having a gorgeous time.
 
-Here’s another thing… While writing this newsletter, I searched Goodreads for *The Final Gambit* and saw that it’s actually the *third* book *The Inheritance Games* trilogy. I haven’t even read the first two. I mean, the clue is in the name—<em>The **Final** Gambit</em>—but I just dove in without checking. It’s no wonder I’m not digging it.
+Here’s another thing… While writing this newsletter, I searched Goodreads for *The Final Gambit* and saw that it’s actually the *third* book *The Inheritance Games* trilogy. I haven’t even read the first two. I mean, the clue is in the name—The **Final** Gambit—but I just dove in without checking. It’s no wonder I’m not digging it.
 
 What can we learn from any of this? I suppose, like all things, balance is key. Yes, you should be ruthless in your pursuits. At the same time, you should also have patience and persistence. You could end up basking in the sunshine eating fries and drinking coffee like me on the last day of Splore.
 
@@ -73,5 +70,3 @@ This last week, I read [Tomorrow And Tomorrow And Tomorrow by Gabrielle Zevin](h
 Zevin captures a particular atmosphere of friendship and relationships between young people, explores how our relationships can change and evolve over time, and articulates complex feelings that feel both universal and unique.
 
 Absolutely highly recommended, especially if you like John Green, Sally Rooney and Taylor Jenkins Reid.
-
----

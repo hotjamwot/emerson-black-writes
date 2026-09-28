@@ -1,15 +1,14 @@
 ---
-title: "Keep, Keep, Keep Writing"
-description: "Even When You Don't Want To"
+title: Keep, Keep, Keep Writing
+description: Even When You Don't Want To
 date: 2023-06-20
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:128930404
 ---
-
 Hello all you beautiful readers and writers!
 
 In the last two weeks, I’ve written ~1750 words a day.
@@ -55,25 +54,20 @@ Let’s start with the most well-worn and most useful technique:
   The idea of a ‘sanctuary’ brings to mind a photograph of my little sister. While I was having lunch, I opened my Photos app and saw a blast from the past: a photograph of my [now very successful](https://www.smartcompany.com.au/marketing/ai-disrupt-transform-marketing-women-business-leaders-weigh-in/) little sister squeezed into the gap in a cane table between the glass top and a shelf. It reminded me that Lana loved squeezing herself into weird places, like the bottom of the kitchen pantry or the gap behind the bookshelf. If feeling cosy helps you write, then wrap yourself up. Write from bed (I do!). If your sanctuary is a busy cafe, then find a local cafe you like and write there every day.
   
   ![](../../../organise/Images/newsletters/2023/keep-keep-keep-writing-04.webp)
-4. **Petrol (or** <em>**Gas**</em>**if you’re in the States)**
+1. **Petrol (or** **Gas** if you’re in the States)
   Eating well and exercising helps you get a good night’s sleep, and sleeping helps your creativity. If you can’t do this, then stock up on coffee (I do!) and cut down on McDonald’s. If you need a block of chocolate to hit your word count, then you know? Do it. You can hit the gym when you’ve finished your draft.
-5. **Be a Sponge**
+2. **Be a Sponge**
   Find inspiration in anything and everything. Read up a storm. Watch films. Read articles. The one place I very rarely find inspiration is social media—one interesting tidbit is not worth the risk of losing yourself in a bottomless scroll. Even seeing a random photo today led to some inspiration in this newsletter (see point 3).
-6. **Get a Crew, or a Buddy**
+3. **Get a Crew, or a Buddy**
   ’Community’ is a pretty hot word. I’d love to be part of a writing community—in fact, the whole reason I started Stormhouse was so I could find one—but it’s easier said than done. If you’re not big on Facebook groups or subreddits and you don’t have a writer’s group in your life, find someone who can help keep you accountable. Tell your best friend, or your sibling, or your mum, that you’re gonna write a book. Ask them to hit you up regularly for updates. That’ll kick you up the arse and make sure you stick to your deadlines. One writing community I *am*big on is [NaNoWriMo](https://nanowrimo.org/) (National Novel Writing Month, where thousands of people from around the world attempt to write 50,000 words in November). This year, I’ll put a call out and we can do it together, what do you reckon? Daily check-ins, group motivation, it’ll be a blast.
-7. **Lose Yourself in the Music Juju**
+4. **Lose Yourself in the Music Juju**
   Get some headphones and lose yourself in thrash metal. Or movie soundtracks. If you want some added Nerd Points, be like Nicholas Heering (author of the third *Seen* book) and listen to ‘[Hogwarts Ambience](https://youtu.be/BQrxsyGTztM)’. My writing music changes depending on the project, but lately has been a lot of [Dan Romer](https://open.spotify.com/artist/5ppJZFMF0gAfrHfZTGuHe4?si=eUjrmOQzRtaCofmW0oRGPw). Listening to music can get you in the zone as well as turning time into a sexy, slick slide, allowing you to fully lose yourself.
-8. **Buy Yourself Stuff**
+5. **Buy Yourself Stuff**
   I split my books into parts. Five parts per book, about 20k words each. When I finish a part, I celebrate. It can be in the form of a gift to myself (I recently bought a very bougie exercise belt from Lululemon) or even a flabby day (I just gorged myself on an entire large pizza and garlic bread for lunch because I finished Part II today!). It’s important to reward yourself. Treat yourself like you would your own kid or pet. Positive reinforcement.
 
 With this arsenal of tips, you can’t lose. I guarantee if you utilise at least half of the above techniques, you’ll write more, and the more you write, the better your writing will get.
 
 Have any more tips? Hit me with them.
-
-## 🌊 Stormhouse News
-
-- Tarryn Thomas, our editor in South Africa, has been chugging through the edit of *Seen in Silverbridge Book 2* despite random blackouts in her town. Thanks Tarryn and kia kaha (stay strong)!
-- With the release of *[A Rockstar Has Exploded](https://www.amazon.com/gp/product/B0BTML7L86)***,** we’re getting in touch with reviewers and publicity gurus to see how we can improve our outreach. If you have any ideas or suggestions about how we can harness the young adult mystery audience, we’d love to hear from you! Just reply to this email.
 
 ## 📣 Shout out to Exhalation by Ted Chiang
 

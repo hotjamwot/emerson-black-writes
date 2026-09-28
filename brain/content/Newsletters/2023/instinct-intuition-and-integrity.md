@@ -56,7 +56,7 @@ Of course, we’ll try and get our money back, but we aren’t confident.
 
 Cutting corners is a stupid thing to do, basically always.
 
-Whether you’re in construction, investing, education or book publishing, the desire to speed up the process is tempting. Many times during the writing and publishing process of *You Heard It Here First*, I wanted to cut corners.
+Whether you’re in construction, investing, education or book publishing, the desire to speed up the process is tempting. Many times during the writing and publishing process of *A Rockstar Has Exploded*, I wanted to cut corners.
 
 Did I *really* have to rewrite the book for the *fifth* time just because one of my friends had found an inconsistency in a subplot?
 
@@ -116,7 +116,7 @@ Let me repeat:
 
 Book 2 in the *Seen in Silverbridge* series comes out November 2nd!
 
-If you haven’t yet read *You Heard It Here First,* [check it out here](https://www.amazon.com.au/dp/B0BTML7L86).
+If you haven’t yet read *A Rockstar Has Exploded,* [check it out here](https://www.amazon.com.au/dp/B0BTML7L86).
 
 ## 📣 Shout Out to: The Thursday Murder Club by Richard Osman
 

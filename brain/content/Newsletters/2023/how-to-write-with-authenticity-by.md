@@ -1,15 +1,14 @@
 ---
-title: "How to Write With Authenticity by Turning On Your Flame"
-description: "Follow your instincts and write like you mean it"
+title: How to Write With Authenticity by Turning On Your Flame
+description: Follow your instincts and write like you mean it
 date: 2023-04-25
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:116205279
 ---
-
 Today I want to talk about **instincts**. How to recognise them, how to follow them, and what to do when you recognise you *haven’t* followed them.
 
 Let’s start with the last idea.
@@ -29,9 +28,9 @@ When this happens, we’ve got two choices:
 1. Attempt to make it work.
 2. Backtrack to when your story made sense, which means you have to delete the stuff that doesn’t work, which means you lose a bunch of writing time.
 
-I’ve tried option 1 enough to know that it leads to a *lot* more time wasted in the long run. Trust me — option 2 is the way. What you need to do when we find yourself down a rabbit hole is: <em>**Get out of the rabbit hole.**</em> Chalk up the wasted time as a loss, and go back to when your story made sense.
+I’ve tried option 1 enough to know that it leads to a *lot* more time wasted in the long run. Trust me — option 2 is the way. What you need to do when we find yourself down a rabbit hole is: **Get out of the rabbit hole.** Chalk up the wasted time as a loss, and go back to when your story made sense.
 
-Don’t slog through it. If it feels wrong, it is. Once you’ve backed up, change your mindset from ‘<em>I really want the story to do **this**’, to ‘My job is to reveal the shape the story already wants to take.’</em>.
+Don’t slog through it. If it feels wrong, it is. Once you’ve backed up, change your mindset from ‘I really want the story to do **this**’, to ‘My job is to reveal the shape the story already wants to take.’.
 
 ### 🔥 The Flame
 
@@ -94,5 +93,3 @@ Eleanor Catton is a Kiwi writer who *won the Booker Prize* for her book The Lumi
 [Birnam Wood](https://amzn.to/3N53ZdM) is her latest book, released ten years hence, and I really dug it. There’s a lot of dialogue discussing political ideologies, left vs. right, and quite a few icky characters, but they’re wrapped up in a fun multi-viewpoint thriller.
 
 ![](../../../organise/Images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)
-
----

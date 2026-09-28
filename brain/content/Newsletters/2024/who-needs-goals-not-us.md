@@ -1,15 +1,14 @@
 ---
-title: "Who Needs Goals? Not Us."
-description: "Why finding your Horizon Direction is more important than measurable goals"
+title: Who Needs Goals? Not Us.
+description: Why finding your Horizon Direction is more important than measurable goals
 date: 2024-01-02
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:140113126
 ---
-
 ## 🥳 HAPPY NEW YEAR!
 
 What are your writing and reading goals for the year?
@@ -110,7 +109,7 @@ In lieu of specific writing goals, I have three pretty great phrases that, when 
 
 All in one sentence, my Horizon Direction is:
 
-> <em>**I want to be a prolific, collaborative writer who helps other writers.**</em>
+> **I want to be a prolific, collaborative writer who helps other writers.**
 
 That is a succinct and appealing affirmation. I can write it on a Post-it note and stick it above my laptop station, or write it on the front page of my journal, or set an alarm on my phone that reminds me of it every week.
 
@@ -127,21 +126,3 @@ Those are my admittedly ambitious goals. Like I say, I’m not gonna beat myself
 So, that’s me.
 
 Now, what is your Horizon Direction and what are your writing goals?
-
-## 🌊 Stormhouse News
-
-I’m writing an adventure romance novel. I’ve had a blast plotting the outline and creating the characters (using my incredible [Character Sheet](https://open.substack.com/pub/stormhouse/p/how-to-build-a-human?r=1s8xdo&showWelcome=true)), and setting up a timeline. This week I finished expanding on the chapter outlines.
-
-My outline document is 40 pages long and 24,000 words. It’s the longest and most in-depth outline I’ve ever written so I’m hoping it makes writing the first draft a breeze.
-
-Here’s a sneak peek of the characters:
-
-![](../../../organise/Images/newsletters/2024/who-needs-goals-not-us-02.webp)
-
-*All these images are AI-generated. It’s a fantastic way to procrastinate from writing.*
-
-If you dig the look of the Character Sheet (which has a lot more info on it), check out the post [How To Build A Human](https://open.substack.com/pub/stormhouse/p/how-to-build-a-human?r=1s8xdo&showWelcome=true):
-
-[How To Build a Human](https://stormhouse.substack.com/p/how-to-build-a-human)
-
----

@@ -18,7 +18,7 @@ The days are starting to warm up here in London, and we are losing our minds. Th
 
 Of course I haven’t! I’m about 90% of the way through the second pass of the draft. I love it too much—finishing would mean I’d have to say goodbye to it and move on, so I’m eager to elongate this part of the process as much as possible…
 
-Alongside writing the new book, I’ve been working on redesigning the covers for the first two books, *You Heard It Here First* and *You Should Have Said*, and I thought it would be fun to show you a peek behind the curtain of that process.
+Alongside writing the new book, I’ve been working on redesigning the covers for the first two books (under their original names), *You Heard It Here First* and *You Should Have Said*, and I thought it would be fun to show you a peek behind the curtain of that process.
 
 ## What was wrong with the old covers?
 

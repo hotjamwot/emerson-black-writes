@@ -1,20 +1,19 @@
 ---
-title: "5 Ways to Sweeten Up Unlikeable Characters"
-description: "Transform your lead character from Arsehole to Heartthrob"
+title: 5 Ways to Sweeten Up Unlikeable Characters
+description: Transform your lead character from Arsehole to Heartthrob
 date: 2023-05-09
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:119391612
 ---
-
 “I hate Luce. She’s so annoying to read about.”
 “Luce is like … super annoying. I kinda wanna hit her.”
 “Man, Luce gets on my tits. She makes me want to put the book down.”
 
-<em>**Emerson sprinkles some magic dust on the manuscript**</em>
+**Emerson sprinkles some magic dust on the manuscript**
 
 “Luce is hilarious!”
 “Luce is probably my favourite character to read in the book.”
@@ -28,17 +27,17 @@ For the first few drafts, I received the feedback every author in their right mi
 
 Ouch.
 
-If your reader doesn’t like one of your leading characters, they struggle to connect with them, which means they struggle to feel empathy for them, which means they struggle to <em>**feel**</em> anything while reading your book.
+If your reader doesn’t like one of your leading characters, they struggle to connect with them, which means they struggle to feel empathy for them, which means they struggle to **feel** anything while reading your book.
 
 That result is the exact opposite of what we’re trying to achieve as writers.
 
 Once I received this feedback more than three times in various ways, I decided I needed to drill down and find what was wrong with the character in question.
 
-It didn’t take me too long to figure it out. The lead character in the <em>**Seen in Silverbridge**</em> series is Lucinda Sharp, or ‘Luce’. She’s rich, thin, blonde, white, and acts like an entitled bitch. In short, an arsehole. And arseholes are <em>**very**</em> easy to dislike.
+It didn’t take me too long to figure it out. The lead character in the **Seen in Silverbridge** series is Lucinda Sharp, or ‘Luce’. She’s rich, thin, blonde, white, and acts like an entitled bitch. In short, an arsehole. And arseholes are **very** easy to dislike.
 
 But I couldn’t accept that. I didn’t see the annoying traits about Luce when I was writing her. I *feel* for her. I want her to be better. I want her to have a good life. How can I help my readers see her the way I see her?
 
-After trying a few different things and reading about authors who’d struggled with similar issues, I finally cracked it. And now, people dig Luce and are excited to go along with her and Huds in their adventure of You Heard It Here First.
+After trying a few different things and reading about authors who’d struggled with similar issues, I finally cracked it. And now, people dig Luce and are excited to go along with her and Huds in their adventure of A Rockstar Has Exploded.
 
 Here are some actionable steps you can take if you’ve found yourself in a similar boat. I recommend experimenting with each of the following ideas by writing a short scene about your unlikeable main character and seeing if it feels right.
 
@@ -71,18 +70,6 @@ If none of the above work, and your Arsehole Character is still unlikeable and g
 - Richard Papen in *The Secret History*
 
 Go forth, experiment! Make your Arsehole Character more likable, or at least more readable. If you have any ideas or examples you’d like to share, reply to this email and let me know.
-
-## 🌊 Stormhouse News
-
-[A Rockstar Has Exploded](https://www.amazon.com/gp/product/B0BTML7L86) is officially out in the world!
-
-All the hard work of writing, re-writing, editing, formatting, and publishing has been worth it, and now the book is out in the world!
-
-![](../../../organise/Images/newsletters/2023/5-ways-to-sweeten-up-unlikeable-characters-01.webp)
-
-*Lana Weal beta read YHIHF and has been one of its most vocal supporters — thanks Lana!! x*
-
-**Seen in Silverbridge #2** is now with its editor! Tarryn Thomas is returning to edit the second book in the series and is currently toiling away, spotting all of Emerson’s mistakes.
 
 ## 📣 A shout-out to something I’m digging
 

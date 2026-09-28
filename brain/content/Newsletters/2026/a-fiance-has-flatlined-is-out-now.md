@@ -1,15 +1,14 @@
 ---
-title: "A Fiancé Has Flatlined is out now!"
-description: "My new book, the third in the series, is being heralded as the best so far."
+title: A Fiancé Has Flatlined is out now!
+description: My new book, the third in the series, is being heralded as the best so far.
 date: 2026-06-30
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:204112343
 ---
-
 The third Seen in Silverbridge book is now available for purchase on Kindle and in paperback!! Magnificently exciting.
 
 ![](../../../organise/Images/newsletters/2026/a-fiance-has-flatlined-is-out-now-01.webp)

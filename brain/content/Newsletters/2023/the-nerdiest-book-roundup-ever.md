@@ -120,7 +120,7 @@ They’re all available to buy on [Amazon](https://www.amazon.com/author/emerson
 
 A hearty, *hearty* debt of gratitude goes to you if you’ve purchased any of these titles. It’s my first year of publishing and it’s been a year of non-stop learning but also staggering just how much more information there is out there yet to learn.
 
-<em>**ONWARDS TO 2024!!**</em>
+**ONWARDS TO 2024!!**
 
 ## 🌊 Stormhouse News
 

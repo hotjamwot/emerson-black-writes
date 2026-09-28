@@ -10,7 +10,7 @@ publish: true
 source: substack:139016955
 ---
 
-For more than two years I’ve been writing within a single universe: the *Seen in Silverbridge* series. I spent eighteen months writing *You Heard It Here First*, the first book, and then the last year writing *You Should Have Said.*
+For more than two years I’ve been writing within a single universe: the *Seen in Silverbridge* series. I spent eighteen months writing *A Rockstar Has Exploded*, the first book, and then the last year writing *An Actress Is Missing.*
 
 I’ve been spending so much time thinking about and writing from the perspectives of the characters of Luce, Huds, Faven and Rodney that they feel like real people to me now. It’s immensely gratifying.
 
@@ -18,7 +18,7 @@ Now, with the second book in the series published widely and making loads and lo
 
 ![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-01.webp)
 
-*You Should Have Said* is available to buy on [Amazon](https://www.amazon.com/dp/B0CJ5Z85S4) and [Kobo](https://www.kobo.com/gb/en/ebook/you-should-have-said) (Barnes & Noble, Google Books, and Apple Books to come soon).
+*An Actress Is Missing* is available to buy on [Amazon](https://www.amazon.com/dp/B0CJ5Z85S4) and [Kobo](https://www.kobo.com/gb/en/ebook/you-should-have-said) (Barnes & Noble, Google Books, and Apple Books to come soon).
 
 *Not 100% accurate†
 
@@ -28,7 +28,7 @@ Now, with the second book in the series published widely and making loads and lo
 
 ### 1. You Must Love Your Characters
 
-A common piece of feedback I’ve heard about You Heard It Here First is that the main character of Luce Sharp is mega annoying.
+A common piece of feedback I’ve heard about A Rockstar Has Exploded is that the main character of Luce Sharp is mega annoying.
 
 Luce is overly confident (bordering on arrogance), comes from a wealthy family, and oftens lacks empathy. Those are three ingredients for an unlikeable character. In the book, she’s still at university and has never really had to work a day in her life. She dates a handsome football star and often ignores her best friend’s feedback.
 
@@ -40,13 +40,13 @@ I’m happy to report that other readers love her like I do and don’t find her
 
 *These images were made by AI: Luce, Huds, Faven, and Rodney. The Seen team!*
 
-Throughout writing *You Should Have Said*, I was never bored with the characters. Sometimes, the timidity of Faven irked me, and sometimes Huds’s cowardice in the face of dealing with Luce frustrated me, but these are important character traits. It’s part of their character growth.
+Throughout writing *An Actress Is Missing*, I was never bored with the characters. Sometimes, the timidity of Faven irked me, and sometimes Huds’s cowardice in the face of dealing with Luce frustrated me, but these are important character traits. It’s part of their character growth.
 
 ### 2. You Must Know Your World
 
 The *Seen in Silverbridge* series is set in a fictional New Zealand city called Silverbridge. In the first book, I’d throw out place names and locations willy-nilly, not giving too much thought to ever having to revisit them.
 
-Luckily, I had the good sense to jot down the names in a Google Sheet as I went. This meant with You Should Have Said, I was able to revisit this spreadsheet, add to it and alter it, and end up with a fairly hefty list of places.
+Luckily, I had the good sense to jot down the names in a Google Sheet as I went. This meant with An Actress Is Missing, I was able to revisit this spreadsheet, add to it and alter it, and end up with a fairly hefty list of places.
 
 ![](../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-03.webp)
 
@@ -76,7 +76,7 @@ You read that correctly: I have *three* accountability checkers in place to ensu
 
 ### 4. It Gets So Much Easier
 
-Writing *You Heard It Here First* took a year and a half, go-to-whoa. The actual drafting process took a fraction of that time. After three and a half months of writing every day, I had a decent 90,000-word manuscript.
+Writing *A Rockstar Has Exploded* took a year and a half, go-to-whoa. The actual drafting process took a fraction of that time. After three and a half months of writing every day, I had a decent 90,000-word manuscript.
 
 Then came the rewriting. Reading the book, making notes, and seeing the glaring plot holes brought on exhaustion. However, I persevered.
 
@@ -129,7 +129,7 @@ Then, you know, make it all right again, if you’re into happy endings.
 
 ## 🌊 Stormhouse News
 
-As I’ve mentioned, *You Should Have Said* is available now.
+As I’ve mentioned, *An Actress Is Missing* is available now.
 
 Get it on [Amazon](https://www.amazon.com/dp/B0CJ5Z85S4) and [Kobo](https://www.kobo.com/gb/en/ebook/you-should-have-said).
 

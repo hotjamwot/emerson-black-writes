@@ -1,15 +1,14 @@
 ---
 title: "Emotional Gutting 101: Your Guide to Breaking Reader Hearts"
-description: "Learn the secret sauce that turns stoic readers into blubbering messes"
+description: Learn the secret sauce that turns stoic readers into blubbering messes
 date: 2023-03-14
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:108237352
 ---
-
 ### 👋 Hello beautiful person who gets this newsletter!
 
 When was the last time you cried in a book? Have you **ever** cried in a book?
@@ -58,13 +57,13 @@ Try this.
 
 When you’re writing a confrontation scene, or a scene that deals with high conflict, try your best to turn your head off. Write from instinct rather than intellect, allowing your characters' authentic fears and vulnerabilities to surface naturally. Forget vocabulary or syntax—just see what your characters say. Once you’ve gone deep into the scene, ask yourself: what is this character afraid of? What Glaring Fear is at the core of this argument?
 
-Chances are, it’ll be a universal fear. <em>**I’m afraid you’ll leave me and I’ll be alone. I’m afraid you’ll think I’m weak. I’m afraid society will judge me if they knew my true feelings. I’m afraid I’m not the person I want to be.**</em>
+Chances are, it’ll be a universal fear. **I’m afraid you’ll leave me and I’ll be alone. I’m afraid you’ll think I’m weak. I’m afraid society will judge me if they knew my true feelings. I’m afraid I’m not the person I want to be.**
 
 In *Iron Giant*, Hogarth Hughes is scared to lose his new friend, the Iron Giant.
 
 In that *Fresh Prince* episode, Will is afraid to admit that he still needs his father’s love but will never have it.
 
-In <em>Carrie Soto is Back**…**</em> well, maybe I’ll let you read it.
+In Carrie Soto is Back**…** well, maybe I’ll let you read it.
 
 ### 🐣 Don’t Hurt My Sweet Innocent Baby
 
@@ -118,12 +117,10 @@ Bam, I’m bawling. How about you?
 
 ### 📣 Currently Listening to: **Project Hail Mary** on Audiobook
 
-While I’m biking to work or walking to a cafe, or when I’m at the gym pumping my guns, I’ve been listening to the ten hour audiobook of Andy Weir’s <em>**[Project Hail Mary](https://amzn.to/423cZ8t)**</em>.
+While I’m biking to work or walking to a cafe, or when I’m at the gym pumping my guns, I’ve been listening to the ten hour audiobook of Andy Weir’s **[Project Hail Mary](https://amzn.to/423cZ8t)**.
 
 It’s narrated by Ray Porter, who does a magnificent job with so many accents (even a New Zealand one—yay!). I’d forgotten how often the book makes me laugh, and I’ve unexpectedly teared up about a dozen times in the first half.
 
 ![](../../../organise/Images/newsletters/2023/a-guaranteed-way-to-make-your-readers-05.webp)
 
-<em>**GOODREADS BEST SCIENCE FICTION WINNER 2021**</em>
-
----
+**GOODREADS BEST SCIENCE FICTION WINNER 2021**

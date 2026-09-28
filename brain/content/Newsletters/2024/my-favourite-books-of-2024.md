@@ -1,15 +1,14 @@
 ---
-title: "My favourite books of 2024"
-description: "If you're looking for your next read, you're in luck"
+title: My favourite books of 2024
+description: If you're looking for your next read, you're in luck
 date: 2024-12-25
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:153534209
 ---
-
 It’s time for the annual round-up!
 
 How many books did you read this year? How many books did you *want* to read this year?

@@ -1,15 +1,14 @@
 ---
-title: "The Art of Not Feeling Guilty"
-description: "My highly scientific method for justifying joy in a productive life."
+title: The Art of Not Feeling Guilty
+description: My highly scientific method for justifying joy in a productive life.
 date: 2023-01-31
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:99709581
 ---
-
 ### 👋 Hello wordnerd!
 
 Recently, I’ve been trapped in my editing dungeon. No windows and no sunlight—only my trusty computer screen to keep me company. The blue light has transformed my delicious summer brownness into a sickly pallor, almost like an anti-tan.
@@ -42,11 +41,11 @@ Worse, these popular goals have been widely purported to leave one with a feelin
 
 Beware those who chase:
 
-**Fame. Money. Board sex appeal.**
+**Fame. Money. Broad sex appeal.**
 
 Okay, maybe not that last one. Chasing broad sex appeal sounds like a worthy venture.
 
-How do we avoid pursuing achievements that won’t make us happy? Unfortunately, it’s unavoidable. We are fallible and basically dumb, and the sheer amount of stimulus out there has convinced us that we all <em>**need**</em> to attain as much as we possibly can.
+How do we avoid pursuing achievements that won’t make us happy? Unfortunately, it’s unavoidable. We are fallible and basically dumb, and the sheer amount of stimulus out there has convinced us that we all **need** to attain as much as we possibly can.
 
 And while we all understand we shouldn’t spend our entire lives amassing fame, or money, or sex appeal, I think we all agree that it’s healthy to desire a little bit of these things.
 
@@ -84,7 +83,7 @@ I’m not that guy.
 
 As much as I want to write books and make films—and as strenuous and consuming as these vocations are—I also want to look back and think, **I made time for friends. I stopped working at a reasonable hour some days. I laughed a lot and spent too much money on bubble tea.**
 
-Whenever I feel like bailing on a meal with a friend, I think about those poor dying people and their regret, and I think, <em>**Ew I don’t want to be like them.**</em>
+Whenever I feel like bailing on a meal with a friend, I think about those poor dying people and their regret, and I think, **Ew I don’t want to be like them.**
 
 That’s how I justify having bubble tea every night.
 

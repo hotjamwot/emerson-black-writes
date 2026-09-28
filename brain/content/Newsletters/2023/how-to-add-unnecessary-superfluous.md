@@ -1,15 +1,14 @@
 ---
-title: "When Wandering Off-Path Enhances Your Story"
-description: "Why Narrative Rabbit Holes Enrich Your Fiction"
+title: When Wandering Off-Path Enhances Your Story
+description: Why Narrative Rabbit Holes Enrich Your Fiction
 date: 2023-04-11
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:112943710
 ---
-
 ### 👋 Hello Writer!
 
 Stephen King is amazing.

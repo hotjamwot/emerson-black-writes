@@ -1,15 +1,14 @@
 ---
-title: "How to Write a Screenplay"
-description: "Four Questions to Ask Yourself Before Starting A Script"
+title: How to Write a Screenplay
+description: Four Questions to Ask Yourself Before Starting A Script
 date: 2024-01-30
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:141154947
 ---
-
 Hola, my fellow readers and writers!
 
 I’m writing this newsletter from the rocky, sun-coated shores of Lanzarote in the Canary Islands. I have taken myself away on holiday for a much-needed break following an epic five-week writing sprint.
@@ -143,20 +142,6 @@ As Blaise Pascal said in one of my all-time favourite quotes,
 
 The point is, it takes time to be concise. And I would argue that it takes more than time, it takes impressive strength to *restrain yourself*. We all want the world to know how brilliant we are, but in a screenplay, you are only as brilliant as your ability to collaborate.
 
-## 🌊 Stormhouse News
-
-I have been so busy writing the screenplays for this streaming series that I haven’t been writing as much prose as I want. I’m still actively writing the first draft of the adventure romance set in Portugal, but I’m averaging five hundred words a day, which puts me far behind my preferred schedule.
-
-But please, allow me to impress you.
-
-In two weeks, Chye-Ling and I wrote an eighty-page outline for the series.
-
-In just the last *twelve days*, we wrote ONE HUNDRED AND THIRTY pages of screenplay. That is more than a feature film’s worth.
-
-Six episodes, almost a dozen main characters and too many subplots.
-
-Now it’s time for us to do the hard part and rewrite.
-
 ## 📣 Shout Out to: Writer’s Routine Podcast
 
 ![](../../../organise/Images/newsletters/2024/how-to-write-a-screenplay-08.webp)
@@ -166,5 +151,3 @@ Writer’s Routine is a wonderful podcast that I’ve spent many hours listening
 Dan interviews authors and asks them specifics about their writing life, down to the font they use. The conversations inevitably go deeper than that and this week I loved listening to the episode with Terry Hayes, the author of I Am Pilgrim and the much anticipated The Year of the Locust which released this month.
 
 Available wherever you listen to your podcasts.
-
----

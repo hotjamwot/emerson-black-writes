@@ -1,20 +1,19 @@
 ---
-title: "How To Build a Human"
-description: "My Guide to Creating Convincing Characters using a Nerdy Spreadsheet"
+title: How To Build a Human
+description: My Guide to Creating Convincing Characters using a Nerdy Spreadsheet
 date: 2023-06-06
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:126105974
 ---
-
 Hello my beautiful friends!
 
 I hope you’ve been well over the last fortnight. Firstly I want to welcome all of the new subscribers to the Stormhouse letter who are here thanks to downloading *A Student Has Drowned* (now available in paperback). I’m so glad you’re here!
 
-Last weekend we had a launch party for the first Stormhouse book to hit the interweb waves, *You Heard It Here First.*
+Last weekend we had a launch party for the first Stormhouse book to hit the interweb waves, *A Rockstar Has Exploded.*
 
 ![](../../../organise/Images/newsletters/2023/how-to-build-a-human-01.webp)
 
@@ -30,7 +29,7 @@ Last weekend we had a launch party for the first Stormhouse book to hit the inte
 
 It was a blast. Special thanks to Sophie for convincing me to do the work involved in getting the paperback to the world, and to Julia for organising a wine hook-up… There is a slight chance we over-indulged, but it was worth it to celebrate!
 
-In the last newsletter, I posted this image:
+### Check out my character board
 
 ![](../../../organise/Images/newsletters/2023/how-to-build-a-human-07.webp)
 
@@ -90,11 +89,11 @@ Once you’ve got the faces in place, it’s time to move on to the harder part.
 
 ### 🎻 Who Is This Person?
 
-There are a bunch of variables that make up a person’s character, and you can split them up into two categories: **Material** and**Intangible**<em>**.**</em>
+There are a bunch of variables that make up a person’s character, and you can split them up into two categories: **Material** and **Intangible**.
 
-Favourite sport, favourite food, age, distinguishing physical traits…. These can all be measured. But how does someone react when they’re cornered? How does somebody deal with bad news? What’s a formative memory from their childhood? Those are just as important, maybe more so, and a lot harder to pin down.
+Favourite sport, favA Rockstar Has Explodednguishing physical traits…. These can all be measured. But how does someone react when they’re cornered? How does somebody deal with bad news? What’s a formative memory from their childhood? Those are just as important, maybe more so, and a lot harder to pin down.
 
-This is where you stretch your creative muscle. And don’t just write down the first thing you think of. Really consider every one of these variables because they all contribute to making your character feel more like your <em>Character**,**</em> with a capital C and in italics. They become themselves.
+This is where you stretch your creative muscle. And don’t just write down the first thing you think of. Really consider every one of these variables because they all contribute to making your character feel more like your Character**,** with a capital C and in italics. They become themselves.
 
 A lot of the time, the character will dictate their likes and dislikes and formative experiences for you. It just … makes sense. That’s a treat when that happens. But most of the time, it’s up to you to comb through your breadth of experiences and knowledge about how people work and choose what feels like for your character.
 
@@ -111,19 +110,3 @@ That looks like a daunting list, I know! But once you start, it is fun. If you s
 If I go through all of these steps and fill out all of those details for each main character in a book I’m writing, I fly through the draft. I can open my spreadsheet whenever I need a refresher, and there is everything I could ever need. Getting to know the amorphous characters inside your head becomes easy once you’ve done this exercise.
 
 Go forth and make your own character sheet!
-
-## 🌊 Stormhouse News
-
-- *[A Rockstar Has Exploded](https://www.amazon.com/gp/product/B0BTML7L86)*<https://amzn.to/43lskBy>is available as an ebook or paperback
-- *[A Student Has Drowned](https://BookHip.com/GRTVZNA)* is available as a free download
-- *Seen in Silverbridge Book 2* is being edited by the wonderful Tarryn Thomas in South Africa
-
-## 📣 Shout Out to: Leonardo.ai
-
-I’ve been using Leonardo AI image generation for a bunch of character and mood images. It’s wild what AI can do, and I’m an obvious adherent for using AI to elevate and speed up your process.
-
-![](../../../organise/Images/newsletters/2023/how-to-build-a-human-14.webp)
-
-Leonardo AI is entirely free (you get 150 tokens that refresh every 24 hours) and there’s a great community of people who have put in countless hours of experimentation to discover the best prompts and engines that you can use to create art.
-
-If you’re like me and *seeing* your characters helps you connect (even if the AI’s efforts don’t 100% reflect what you have in your head), then go get amongst. Disclaimer: It’s addictive and distracting, and can often become a procrastination crutch.

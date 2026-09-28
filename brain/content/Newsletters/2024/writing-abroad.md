@@ -1,15 +1,14 @@
 ---
-title: "Overplotting a novel's outline"
-description: "Writing abroad; the most privileged life one can imagine"
+title: Overplotting a novel's outline
+description: Writing abroad; the most privileged life one can imagine
 date: 2024-07-17
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:146625348
 ---
-
 Hello, you wonderful reader!
 
 I hope the last month has been fruitful and/or relaxing for you. I’ve been head down with writing every morning but despite the hours I’ve spent working, progress has felt incremental.
@@ -79,5 +78,3 @@ Every time I read a Stephen King novel, I’m struck by the ease of his prose. T
 Perhaps the most interesting thing about Stephen King's books is the meandering storytelling. The plot is simple, yet it takes dozens of pages to progress through the core storyline. More interestingly, it never feels slow or boring because the writing is just so *fun*. Every scene is entertaining in and of itself, meaning I’m never thinking, ‘Okay, I get it, can we move on to the next important plot point, please?’
 
 It’s a really fun book to read.
-
----

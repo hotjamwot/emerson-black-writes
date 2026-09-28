@@ -1,15 +1,14 @@
 ---
-title: "The Seen Team is Back!"
-description: "And I want you to be the first to know"
+title: The Seen Team is Back!
+description: And I want you to be the first to know
 date: 2023-09-27
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:137356419
 ---
-
 Hello you!
 
 Today is a special day. There’s a delicious crackling fizzle in the air, can you feel it?
@@ -18,11 +17,11 @@ It’s a *revealing* kind of day, don’t you think?
 
 ## 🎩 Introducing: Seen in Silverbridge #2
 
-![](../../../organise/Images/newsletters/2023/the-seen-team-is-back-01.webp)
+![](https://m.media-amazon.com/images/I/81b4-IEpj+L._SL1500_.jpg)
 
-<em>**[YOU SHOULD HAVE SAID](https://amzn.asia/d/7Vg6bSy)**</em> **by Emerson Black**
+**[An Actress Is Missing](https://amzn.asia/d/7Vg6bSy)** **by Emerson Black**
 
-The sequel to *You Heard It Here First*.
+The sequel to *A Rockstar Has Exploded*.
 
 Luce and Huds are back with a new case to solve and this time they’ve got help. The team has grown by two, bringing the *Seen in Silverbridge* team to four.
 
@@ -65,15 +64,3 @@ What are some of the things you thought would be difficult but you eventually ov
 I know living in London will come with some additional challenges I’m yet to meet, but all I have to do is remember what I’ve already achieved and remind myself of my resilience.
 
 P.S. *If you’re an author or aspiring author living in London, please get in touch. Hit Reply to this email and let’s go get a coffee.*
-
-## 🌊 Stormhouse News
-
-[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86) is free on Amazon Kindle today!
-
-## 📣 A special welcome to:
-
-Everyone who downloaded *A Student Has Drowned* these last few days. I’d like to extend the warmest of welcomes to you.
-
-Thank you for being part of the Stormhouse crew. Please reach out to let me know what you thought of the book and, if you’re quick, I hope you can get a free copy of *[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86).*
-
----

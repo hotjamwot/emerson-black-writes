@@ -12,7 +12,7 @@ source: substack:136921106
 
 Before we start:
 
-<em>**Seen in Silverbridge Book 2**</em>**(the sequel to [You Heard It Here First](https://www.goodreads.com/book/show/107526648-you-heard-it-here-first)), is with Advanced Readers. If you’d like to read it for free, hit Reply and let me know!**
+**Seen in Silverbridge Book 2**(the sequel to [A Rockstar Has Exploded](https://www.goodreads.com/book/show/107526648-you-heard-it-here-first)), is with Advanced Readers. If you’d like to read it for free, hit Reply and let me know!
 
 Yesterday I braved the rain and scuttled to the village to meet a writer friend for brunch. She recently started a Masters and is loving learning specifics about the craft of writing. We discussed a lesson she’d learned about ‘third person limited’ over our eggs benedict and spicy chicken pizza (I know, who gets a pizza for breakfast? I was as shocked as you).
 
@@ -62,9 +62,9 @@ Examples: *Harry Potter* by J.K. Rowling, *Educated* by Tara Westover, *Little F
 
 Special mention: *The Remains of the Day* by Kazuo Ishiguro (unreliable narrator).
 
-Very special mention: *[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86)*[by Emerson Black](https://www.amazon.com.au/dp/B0BTML7L86) (possibly the best book of the year).
+Very special mention: *[A Rockstar Has Exploded](https://www.amazon.com.au/dp/B0BTML7L86)*[by Emerson Black](https://www.amazon.com.au/dp/B0BTML7L86) (possibly the best book of the year).
 
-1. **First Person - Your Reader is** <em>**Inside**</em> **Your Protagonist**
+1. **First Person - Your Reader is** **Inside** **Your Protagonist**
 
 ![](../../../organise/Images/newsletters/2023/your-readers-invisible-eye-04.webp)
 
@@ -84,7 +84,7 @@ There are a bunch of things to consider when choosing your point of view. Here a
 
 1. **Do I want to use the POV as an extra ‘tool’?**
   Do you want to play with your readers’ expectations and experience by giving them biased or limited information? Or do you want your reader’s mind camera to be completely free of obfuscation, so they know that what they’re seeing is real? Basically, do you want your readers to trust what they’re reading? If so, maybe go for Third Person or Omniscient. If you wanna play, consider First Person.
-2. **Do I want my reader to** <em>**feel**</em>**my story, or** <em>**view**</em>**my story?**
+2. **Do I want my reader to** **feel** my story, or **view** my story?
   Third Person Limited allows your readers to intimately experience your character’s thoughts and feelings, whereas Omniscient is more like watching them do their thing. First Person is even more engaging, but if your character is too different from your reader, you run the risk of alienating them a bit.
 3. **How important is suspense and tension?**
   It’s useful to compare the feeling of watching a movie to playing with a virtual reality headset. When you’re watching a movie, you can see the killer waiting behind the door, so every step your character makes toward the door heightens the tension. When you’re playing the game, you *are* the character walking to the door, so it’s more of a surprise when the killer jumps out.

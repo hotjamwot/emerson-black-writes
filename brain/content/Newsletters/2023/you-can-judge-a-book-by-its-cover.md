@@ -1,15 +1,14 @@
 ---
-title: "Your Cover's Job (And How to Nail It)"
-description: "Gut vs. Brain? Wine-fuelled decisions? It's all in here, baby."
+title: Your Cover's Job (And How to Nail It)
+description: Gut vs. Brain? Wine-fuelled decisions? It's all in here, baby.
 date: 2023-02-12
-updated:
+updated: 2026-02-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:102506972
 ---
-
 ### 👋 Hello, beautiful person!
 
 Is there anything better than reading during a storm? While a torrential downpour has covered our city lately, I’ve kept my windows open and have been reading for hours on my bed.
@@ -32,7 +31,7 @@ We drank a lot of red wine and I bored her to tears with my thoughts and concern
 
 A few clicks and a short form later, and we were in business.
 
-I had a lot of fun chatting back and forth with them about the tone, world, characters and plot of *[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86)*. Two weeks later, three design ideas arrived in my inbox.
+I had a lot of fun chatting back and forth with them about the tone, world, characters and plot of *[You Heard It Here First](https://www.amazon.com.au/dp/B0BTML7L86)*(now renamed to A Rockstar Has Exploded). Two weeks later, three design ideas arrived in my inbox.
 
 ![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-01.webp)
 
@@ -69,7 +68,7 @@ In each book in this series, we’re gonna have a small object that alludes to t
 1. **You have to engage two parts of yourself. Your gut and your brain.**
   Let your gut speak to you first. Imagine you’re a passerby and the cover catches your eye from a bookshop window. Or you’re a hungry reader scrolling through the Amazon store.
 2. **Find some comparable covers.**
-  What books and authors are you aligning yourself with? What do your favourite covers in your genre look like? Go for a fun trawl through some online book shops and make an image board. #inspo #pinterest #coverdesign. It’s a great starting point for your designer to get into the right space.
+  What books and authors are you aligning yourself with? What do your favourite covers in your genre look like? Go for a fun trawl through some online book shops and make an image board. It’s a great starting point for your designer to get into the right space.
 3. **Be open to being surprised.**
   You might have a concrete idea of how you want your cover to look. You might have been dreaming of this for a long time. I feel you. But book cover designers, if they’re good, are clued up when it comes to what works. If they’re making suggestions, do yourself a favour and strongly consider them.
 4. **Your cover has ONE job: intrigue a potential reader enough to want to know more.** Your cover isn't just pretty; it's a silent salesperson. It needs to seduce readers from across a crowded room (or a crowded Amazon page) and whisper 'You *need* this story.'
@@ -80,18 +79,8 @@ Designing a cover is a battle of art and commerce, instinct and analysis. But re
 
 ![](../../../organise/Images/newsletters/2023/you-can-judge-a-book-by-its-cover-04.webp)
 
-I <em>**highly**</em> recommend this book if you’re a fan of mystery fiction. I read it in two days despite being swamped with work.
+I **highly** recommend this book if you’re a fan of mystery fiction. I read it in two days despite being swamped with work.
 
 It’s about an ex-con who embarks on a journey into his past to find his favourite teacher who mysteriously disappeared.
 
 It’s a mystery told through transcribed voice recordings. The voice of the protagonist is so earnest that I fell in love with him after five pages. Apart from being a page-turning mystery that sets up revelation after revelation (the last couple of chapters had me laughing in awe at how clever this author is), the human relationships are touching and engaging.
-
----
-
-## Links
-
-✍️ My [website](https://www.emersonblackwrites.com/)
-
-📸 My [Instagram](https://www.instagram.com/emerson.black.writes/) and [Facebook](https://www.facebook.com/emersonblackwrites/)
-
-📚 [Silverbridge series on Amazon](https://www.amazon.com/dp/B0BTMLMNJF?binding=kindle_edition&ref_=ast_author_bsi)

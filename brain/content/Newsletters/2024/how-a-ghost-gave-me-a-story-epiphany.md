@@ -1,15 +1,14 @@
 ---
-title: "How a Ghost Gave Me a Story Epiphany"
-description: "Unveiling the Core of Your Story"
+title: How a Ghost Gave Me a Story Epiphany
+description: Unveiling the Core of Your Story
 date: 2024-05-08
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:144297995
 ---
-
 Have you ever surprised yourself by what you’ve written? I do it all the time.
 
 It’s not like I reread some of my writing later and think, ‘Oh wow, I’m so smart and funny!’ … actually, from time to time I *do* do that, but most of the time I think, ‘Huh. This story is *actually* about a completely different thing than I thought.’
@@ -94,13 +93,3 @@ We shot it! Not only did I get the privilege of co-writing it, but I also co-dir
 The shoot went great. It was exhausting and intense, like all shoots are, and we had to rewrite a bunch of scenes on the fly because … well, because that’s always the case.
 
 But I’m back in London now and I’m able to concentrate on writing again.
-
-Secondly, let’s address the newsletter’s slightly different new identity.
-
-It’s now called ‘Emerson Black Writes’ instead of ‘Stormhouse Books’. A new face, a new set of clothes, but the same heart and soul.
-
-Why? Stormhouse is the publishing company through which I publish my books, whereas Emerson Black is my pen name. I realised that this newsletter comes primarily from me, and in it I like to be personal, so I felt it should come from a person and not a business.
-
-So, welcome again, to *Emerson Black Writes*. Thanks for reading and being part of my writing journey. The best part of this newsletter is receiving replies. I read every single one and I will always reply, so if you’ve ever gotten in touch and I haven’t respond, it’s because of a glitch. Hit me up on [Instagram](https://www.amazon.com/author/emersonblack) instead.
-
-Looking forward to hearing from you!

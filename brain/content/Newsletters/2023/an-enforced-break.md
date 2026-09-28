@@ -90,7 +90,7 @@ Oh, and insurance. Have insurance.
 
 ## 🌊 Stormhouse News
 
-You Should Have Said, the second book in the Seen in Silverbridge series, will be released in only two weeks - 5th November 2023.
+An Actress Is Missing, the second book in the Seen in Silverbridge series, will be released in only two weeks - 5th November 2023.
 
 ![](../../../organise/Images/newsletters/2023/an-enforced-break-02.webp)
 

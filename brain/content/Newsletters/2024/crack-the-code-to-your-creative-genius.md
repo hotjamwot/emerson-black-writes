@@ -127,7 +127,7 @@ Okay, so now I have four words that represent my core creative traits. So what?
 
 Well, I lean into them. I frame myself as an optimistic, responsive, witty and provocative person who likes to make optimistic, responsive, witty and provocative work.
 
-Whenever a project presents itself, I take a second to think: <em>**Does this project align with my core creative traits?**</em>
+Whenever a project presents itself, I take a second to think: **Does this project align with my core creative traits?**
 
 Not only did I find the activity fun, I found it a profound experiment of self-discovery. It was a guided reflection of my career to date, and I feel like I got some clarity about who I am and what I want to continue putting my energies into. I’m going to use the four words as a sort of career compass from now on.
 

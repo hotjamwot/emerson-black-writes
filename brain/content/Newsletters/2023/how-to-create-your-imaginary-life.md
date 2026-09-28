@@ -14,9 +14,9 @@ source: substack:138650849
 
 *Look at this happy author with his books!*
 
-First things first, *You Should Have Said* is officially out!
+First things first, *An Actress Is Missing* is officially out!
 
-It’s slightly bigger than *You Heard It Here First* and so far, the reviews from early readers are that it’s a lot more fun (and Luce is less annoying).
+It’s slightly bigger than *A Rockstar Has Exploded* and so far, the reviews from early readers are that it’s a lot more fun (and Luce is less annoying).
 
 With that out of the way, let’s get into the writing lesson of the fortnight.
 
@@ -40,7 +40,7 @@ I complained a lot. Then I’d apologise for complaining and try my best to be p
 
 The thing about ‘being positive’ is that it’s a mental trick that works mayyyybe half the time. It’s not a silver bullet solution. Simply choosing to be happy doesn’t mean you’re suddenly cured of all sorrow.
 
-I wasn’t writing. I wasn’t able to market my upcoming release (*You Should Have Said* - [available now!](https://www.amazon.com/dp/B0CJ5Z85S4)). I wasn’t able to sleep properly.
+I wasn’t writing. I wasn’t able to market my upcoming release (*An Actress Is Missing* - [available now!](https://www.amazon.com/dp/B0CJ5Z85S4)). I wasn’t able to sleep properly.
 
 Then, I figured out a brain hack that kicked me back into action.
 
@@ -120,7 +120,7 @@ The Seen in Silverbridge series has grown by one more!
 
 ## 📣 Shout Out to my pal Kendyl
 
-Kendyl’s a friend of mine who recently finished reading *You Heard It Here First*. We had brunch together on Sunday morning and she told me all her favourite parts.
+Kendyl’s a friend of mine who recently finished reading *A Rockstar Has Exploded*. We had brunch together on Sunday morning and she told me all her favourite parts.
 
 It made me so excited to hear about the story and characters from another perspective. It really made it feel like a real thing. Which, of course it is, but it’s easy to think of our work as somehow ‘lesser than’ when seen in the wild.
 

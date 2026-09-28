@@ -1,15 +1,14 @@
 ---
-title: "Dominate Multiple Projects with Crop Rotation"
-description: "(without sounding like a productivity bro) You can DO WAY MORE."
+title: Dominate Multiple Projects with Crop Rotation
+description: (without sounding like a productivity bro) You can DO WAY MORE.
 date: 2023-05-23
-updated:
+updated: 2026-09-28
 tags: []
 aliases: []
 type: post
 publish: true
 source: substack:122930720
 ---
-
 Hello writers and readers!
 
 I’m often told that I have a high creative output. It’s true — I’ve been lucky to write and direct films, and now am publishing books — and I’d like to share one of my techniques for how I balance multiple projects while avoiding burnout.
@@ -66,18 +65,3 @@ So, how can you achieve crop rotation in your writing practice? Here are some ac
 I know it seems nuts, but it works. You might think you’ll burn out, but I guarantee you’ll find yourself more engaged and enlivened for each phase of the process. The more you do, the more you want to do, and the easier it becomes. That’s not just some woo-woo nonsense; I’m speaking anecdotally from my real-life experience.
 
 Go forth and rotate your crops! Replenish your soil’s nutrients! Multiply your yield!
-
-## 🌊 Stormhouse News
-
-- *[A Rockstar Has Exploded](https://www.amazon.com/gp/product/B0BTML7L86)* is now out and available in 30,000+ outlets around the world! Have a cheeky Google and order a few for your family and friends.
-- *Seen in Silverbridge* Book 4 is fully outlined. After I’m happy with the beats and I know who the main characters are, I make a character sheet and try to get to know them as well as I can. Here’s a cheeky peek at the character sheet:
-  
-  ![](../../../organise/Images/newsletters/2023/dominate-multiple-projects-with-crop-01.webp)
-  
-  *This is a very fun part of the process for me and makes writing a first draft 10,000x easier*
-
-If you haven’t already you can download the free ebook novella of **A Student Has Drowned** here:
-
-If you’re feeling generous, how about leaving a review on [Amazon](https://amzn.to/3pPYaav) or [Goodreads](https://www.goodreads.com/book/show/107526648-you-heard-it-here-first) for one of our books?
-
----

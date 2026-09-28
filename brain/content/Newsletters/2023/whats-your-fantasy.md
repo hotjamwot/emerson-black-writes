@@ -24,7 +24,7 @@ And thought about it.
 
 And couldn’t come up with anything. At all.
 
-This worried me because all of the books thus far have a telltale theme and symbol. For You Heard It Here First, it’s the guitar pick. You Should Have Said has the mysterious ‘token’. And the third book will have … okay, I’m not going to spoil it just yet, but it will have something related to the murder weapon on the cover.
+This worried me because all of the books thus far have a telltale theme and symbol. For A Rockstar Has Exploded, it’s the guitar pick. An Actress Is Missing has the mysterious ‘token’. And the third book will have … okay, I’m not going to spoil it just yet, but it will have something related to the murder weapon on the cover.
 
 But the fourth book stumped me. I tried to think about specific locations in the story, and about the way the victim dies, and if there were any kind of telltale totems or items that would stand as a visual symbol.
 
@@ -64,7 +64,7 @@ These stories have dozens of universal fantasies, but when considered together, 
 
 > A group of people come together, unlikely friendships are formed, and together they pursue a common goal.
 
-That’s exactly what happens in *You Heard It Here First*. And the more I think about it, the more I realise that the theme of ‘unlikely friends pursue a common goal’ is the main driving fantasy of my life.
+That’s exactly what happens in *A Rockstar Has Exploded*. And the more I think about it, the more I realise that the theme of ‘unlikely friends pursue a common goal’ is the main driving fantasy of my life.
 
 In my other career, I make films. What I love most about making films isn’t the money (money is often absent in my projects) or the catering (although this can be a great perk), but it’s the camaraderie and togetherness that comes from a group of people mucking in and working together.
 
@@ -98,7 +98,7 @@ That’s your new North Star. Follow it and make a great story!
 
 - As mentioned, I finished the first official draft of Book 4 in the *Seen in Silverbridge* series. This won’t be released for a long time, though, so don’t get too excited.
 - I’ve outlined a romance set in Portugal about a therapist and a gangster. It will be a Silverbridge standalone and most likely a short novel (I’m thinking 50-70k words). Will hopefully do a scene-by-scene over the next week and start drafting before Christmas.
-- *You Should Have Said* is in the hands of readers! I’ve been very touched by people sending me photos of their paperback copies with the garishly dentist-white pages. I wish I had chosen cream paper instead of white… Next time!
+- *An Actress Is Missing* is in the hands of readers! I’ve been very touched by people sending me photos of their paperback copies with the garishly dentist-white pages. I wish I had chosen cream paper instead of white… Next time!
 
 ![](../../../organise/Images/newsletters/2023/whats-your-fantasy-07.webp)
 
