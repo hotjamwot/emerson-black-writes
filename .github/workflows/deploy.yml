@@ -50,6 +50,10 @@ jobs:
           cp -R brain/public/. _site/brain/
           # Remove duplicate CNAME created by Quartz inside /brain/
           rm -f _site/brain/CNAME
+          # Disable Jekyll processing. Pages "Source" MUST be "GitHub Actions";
+          # this file is belt-and-braces so the artifact can never be chewed up
+          # by the legacy Jekyll pipeline if it is ever served from a branch.
+          touch _site/.nojekyll
 
       - name: Guard checks
         run: |
@@ -65,6 +69,22 @@ jobs:
             echo "::error::Guard failure: _site/brain/index.html missing! Deployment aborted."
             exit 1
           fi
+          if [ ! -f "_site/.nojekyll" ]; then
+            echo "::error::Guard failure: _site/.nojekyll missing! Deployment aborted."
+            exit 1
+          fi
+          # Content guard: an empty garden must never look like a successful build.
+          PAGE_COUNT=$(find _site/brain/newsletters -name '*.html' -type f 2>/dev/null | wc -l | tr -d ' ')
+          if [ "$PAGE_COUNT" -lt 1 ]; then
+            echo "::error::Guard failure: no Quartz newsletter pages in _site/brain/newsletters/! Deployment aborted."
+            exit 1
+          fi
+          IMG_COUNT=$(find _site/brain/organise/images -type f 2>/dev/null | wc -l | tr -d ' ')
+          if [ "$IMG_COUNT" -lt 1 ]; then
+            echo "::error::Guard failure: no newsletter images in _site/brain/organise/images/! Deployment aborted."
+            exit 1
+          fi
+          echo "Guard: $PAGE_COUNT newsletter pages and $IMG_COUNT image files staged."
           echo "All safety guard checks passed."
 
       - name: Upload artifact
@@ -75,3 +95,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Post-deploy smoke test. Non-fatal: it never unships a good build, but it
+      # shouts loudly if the live /brain/ is not the Quartz output. The classic
+      # failure it catches: Settings -> Pages -> Source set to "Deploy from a
+      # branch", where the platform's Jekyll build overwrites this deployment.
+      - name: Smoke test live site
+        if: always()
+        run: |
+          URL="https://www.emersonblackwrites.com/brain/"
+          for attempt in 1 2 3 4 5 6; do
+            BODY=$(curl -sS -m 20 -H 'Cache-Control: no-cache' "${URL}?smoke=${attempt}-${RANDOM}" || true)
+            if printf '%s' "$BODY" | grep -q 'id="quartz-root"'; then
+              echo "OK: ${URL} is serving the Quartz build (attempt ${attempt})."
+              exit 0
+            fi
+            echo "Attempt ${attempt}: Quartz markers not found yet; retrying in 15s..."
+            sleep 15
+          done
+          echo "::warning::${URL} does not look like the Quartz build."
+          echo "::warning::Fix: repo Settings -> Pages -> Build and deployment -> Source = 'GitHub Actions'."
+          echo "::warning::If Source is 'Deploy from a branch', GitHub's own Jekyll build overwrites every deploy-pages artifact."
+          exit 0
