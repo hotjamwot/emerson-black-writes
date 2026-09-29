@@ -15,7 +15,7 @@ I don’t have an addictive personality. Yet for the last few months, I have bee
 
 So, despite having three half-written newsletters sitting in my Drafts folder, I thought this month I’d tell you about Juju, my tray-based time-tracking app that does nothing for my writing career except potentially hinder it by sucking up every spare minute I have.
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-01.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-01.webp)
 
 *Friends, meet Juju*
 
@@ -33,15 +33,15 @@ As the doc grew in length, I realised that I’d accrued a lot of data almost by
 
 So I migrated the entire document to Google Sheets.
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-02.gif)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-02.gif)
 
 And used the data to make some cute charts:
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-03.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-03.webp)
 
 This year, I made even cuter charts:
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-04.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-04.webp)
 
 ## Where the madness came
 
@@ -63,7 +63,7 @@ Within a day, I had a half-working app. I searched for ‘meditating’ icons an
 
 It worked! I could click a Start Session and whatever project I was about to work on, and it would create a timestamp. When I was in a session, the little meditating icon got cute floating ‘juju balls’ over their head. Then when I was done, I hit End Session and a notes field pops up:
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-05.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-05.webp)
 
 I write in what I worked on, hit Save, and boom! The Session is added to a CSV file that’s kept in a hidden folder.
 
@@ -71,11 +71,11 @@ Over the next week, I built the dashboard that showed simple graphs based on my 
 
 Next, I built a Sessions tab in my dashboard that showed the session data:
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-06.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-06.webp)
 
 And finally, I built a Projects tab where I could add/edit/delete my projects, including changing the colour in the graphs.
 
-![](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-07.webp)
+![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-07.webp)
 
 As I used it, I smoothed out the kinks and added extra bells and whistles as I saw fit. After a month, Juju was damn near perfect.
 
@@ -109,6 +109,6 @@ And with that, I will finish this session.
 
 *Alright, Alright, Alright: The Oral History of Dazed and Confused*
 
-![Alright, Alright, Alright: The Oral History of Richard Linklater's Dazed and Confused : Maerz, Melissa: Amazon.co.uk: Books](../../../../../organise/Images/newsletters/2025/ive-wasted-weeks-on-an-app-building-08.webp)
+![Alright, Alright, Alright: The Oral History of Richard Linklater's Dazed and Confused : Maerz, Melissa: Amazon.co.uk: Books](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-08.webp)
 
 I listened to this on Spotify and LOVED IT! Listening to anecdotes from the director, cast and crew about making one of my favourite films was my happy place. Highly recommended for any Dazed fans.

@@ -83,11 +83,11 @@ The way Robert made jokes about his situation made him seem like an upbeat sort 
 
 During my trip, I came across countless points of inspiration: scenery that evoked a certain feeling in me that I wanted to capture in a story, interactions I noted down to be recreated in words, and random thoughts and feelings about life that’ll no doubt find their way into whatever I’m writing.
 
-![](../../../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-01.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-01.webp)
 
 At 6:30 a.m., I drove past these giant wind turbines. They rose out of the mist like Leviathans and made me want to write a sci-fi story about gigantic creatures.
 
-![](../../../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-02.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-02.webp)
 
 This is the view from New Plymouth, one of the towns I stayed in. On one side, you have islands and the ocean, and on the other, you have snow-capped Mount Taranaki (known for gracing the background of *The Last Samurai* with Tom Cruise, doubling as Mount Fuji).
 
@@ -95,7 +95,7 @@ I considered how, after living in the township for a month, the spectacular view
 
 All sorts of random ideas followed.
 
-![](../../../../../organise/Images/newsletters/2023/the-surprisingly-simple-way-to-get-03.webp)
+![](/organise/images/newsletters/2023/the-surprisingly-simple-way-to-get-03.webp)
 
 I rode a $1 electric train with my mum and stepdad, purely because we were walking by and decided to give it a go. I made a quick note about it because it’s a setting I’d never considered before: a tourist mini-train. Surely a fun adventure scene could happen there, right? There was even a spooky tunnel.
 

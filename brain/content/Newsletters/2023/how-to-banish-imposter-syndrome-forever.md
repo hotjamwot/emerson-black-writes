@@ -29,7 +29,7 @@ Yucky. What a scary thought. And guess what? Nobody’s thinking it, except mayb
 
 This shit is nothing new. It’s annoying, and it’s pervasive, and it can stop you from enjoying yourself in whatever your chosen field is.
 
-![Avoid The Office GIF](../../../../../organise/Images/newsletters/2023/how-to-banish-imposter-syndrome-forever-01.gif)
+![Avoid The Office GIF](/organise/images/newsletters/2023/how-to-banish-imposter-syndrome-forever-01.gif)
 
 Imposter syndrome is that nagging feeling that you don't belong or that you're not good enough. It's the voice in your head that says you're a fraud, that you're not a "real" writer, and that sooner or later, everyone will figure it out and you’ll be humiliated.
 
@@ -39,7 +39,7 @@ First, let's acknowledge that imposter syndrome is a common experience, especial
 
 *Clance and Imes (1978)* were the first to describe imposter syndrome and [conducted a study that found that it is more common among high-achieving women](https://psycnet.apa.org/record/1979-26502-001). Doesn’t surprise me. There’s a lot of indirect (and sometimes direct) pressure that says only straight white dudes with degrees are allowed to do anything cool.
 
-![before sunrise GIF](../../../../../organise/Images/newsletters/2023/how-to-banish-imposter-syndrome-forever-02.gif)
+![before sunrise GIF](/organise/images/newsletters/2023/how-to-banish-imposter-syndrome-forever-02.gif)
 
 Have you seen *Before Sunrise*? It’s a 90s talky romance film. I first watched it when I was a teenager, and there’s a thought from Hawke’s character that really struck me:
 
@@ -137,7 +137,7 @@ You deserve to enjoy your writing time. You’re creating stories where before t
 
 My mind has been continuously stretched, challenged and expanded by Tim Urban’s book *[What’s Our Problem?](https://amzn.to/40lE2dO)*
 
-![](../../../../../organise/Images/newsletters/2023/how-to-banish-imposter-syndrome-forever-03.webp)
+![](/organise/images/newsletters/2023/how-to-banish-imposter-syndrome-forever-03.webp)
 
 You might have heard of *[Wait, But Why?](https://waitbutwhy.com/homepage)* a funny and informative blog where Urban dissects all manners of society. He wrote a series of posts about group social dynamics that garnered a bunch of attention, and *What’s Our Problem?* is the long, painfully well-researched, smart book of it.
 

@@ -25,7 +25,7 @@ Alongside writing the new book, I’ve been working on redesigning the covers fo
 
 To be honest, the books didn’t really *need* new covers, but a consistent piece of feedback I’ve received since the release of *You Heard It Here First* back in May 2023 is that the covers didn’t fully capture the energy of the books. Here are the original covers:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-01.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-01.webp)
 
 They look great, right? I dig them.
 
@@ -35,11 +35,11 @@ The process of getting these covers made was lengthy and involved myriad decisio
 
 Here’s a great image from that post which shows how many iterations of the cover we went through before settling on the final cover:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-02.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-02.webp)
 
 *After receiving these original concepts, I went with the middle option and we went further into ideating:*
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-03.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-03.webp)
 
 Yeah. That’s a lot of work for the poor designer.
 
@@ -61,13 +61,13 @@ When you think about mystery covers, there are a few different styles. I looked 
 
 These books have bright covers with simple illustrations—they denote light, quirky types of books like these:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-04.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-04.webp)
 
 At first, I felt like this vibe fit the *Seen* series really well. I thought’ I’d experiment with some concepts myself. I spent hours collecting references and experimenting with AI images and Photoshop.
 
 Here are some of my concepts:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-05.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-05.webp)
 
 I sent a bunch of my favourites some friends and the feedback was a clear:
 
@@ -81,7 +81,7 @@ So, I moved on.
 
 This style is popular among Young Adult books. It’s like this:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-06.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-06.webp)
 
 You know the vibe. Lots of red and white and faceless images of ‘victims’.
 
@@ -89,7 +89,7 @@ This time, instead of jumping in and ideating on my own, I talked to a friend wh
 
 After sketching a couple of dozen concepts, I came up with two main ideas—a dark one and a light one—and moved to Photoshop:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-07.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-07.webp)
 
 I put these two ideas on Instagram and held a poll, and the results were … inconclusive. 50-50. Neither of them felt like the book.
 
@@ -97,7 +97,7 @@ So, after resisting the final style of mystery books, I pushed myself to conside
 
 ## 3. Dark, silhouetted and sans-serify
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-08.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-08.webp)
 
 Classic, right? Like … uninspiring. Middle of the road. When I look at these covers, I see dark, gritty, airport books. Is that what I’ve written?
 

@@ -13,11 +13,11 @@ source: substack:204112343
 ---
 The third Seen in Silverbridge book is now available for purchase on Kindle and in paperback!! Magnificently exciting.
 
-![](../../../../../organise/Images/newsletters/2026/a-fiance-has-flatlined-is-out-now-01.webp)
+![](/organise/images/newsletters/2026/a-fiance-has-flatlined-is-out-now-01.webp)
 
 *A Fiancé Has Flatlined* has already been called the best book of the series, and in an attempt to convince you to buy it, I want to share a review:
 
-![](../../../../../organise/Images/newsletters/2026/a-fiance-has-flatlined-is-out-now-02.webp)
+![](/organise/images/newsletters/2026/a-fiance-has-flatlined-is-out-now-02.webp)
 
 How amazing is that? To be clear, I do not know this person at all. I use a NetGalley-esque service to make my books available to reviewers ahead of release, and this was their genuine review without any arm-twisting from me. I was *stoked*!
 

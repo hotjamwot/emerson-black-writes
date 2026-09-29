@@ -21,7 +21,7 @@ I’m sitting in a coffee shop on Bethnal Green in London. All around me, creati
 
 I’m totally one of them, right? I fit in. My laptop screen shows screeds of words, a full-length novel, sitting right here on Scrivener. It looks impressive!
 
-![](../../../../../organise/Images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
+![](/organise/images/newsletters/2024/my-first-draft-is-so-terrible-im-01.webp)
 
 But what these cool people don’t know is that I’m an imposter! My novel is *bad*. It’s so bad, in fact, that upon rereading it, I’m wondering if it’s time to give up writing books altogether.
 

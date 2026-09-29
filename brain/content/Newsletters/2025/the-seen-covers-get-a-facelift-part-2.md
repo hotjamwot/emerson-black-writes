@@ -23,7 +23,7 @@ Last month, I told you about how I'm redesigning the covers for Seen in Silverbr
 
 ### Which to choose?
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-01.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-01.webp)
 
 Instinct told me that the first style fit the book’s *feeling* in my mind. The second one feels like how I think other people see the book. And the third option, though it’s great, felt way too dark.
 
@@ -39,13 +39,13 @@ Now, the design company I chose are friendly and cheap-ish, but in terms of desi
 
 The initial design they turned over made me feel kinda sad.
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-02.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-02.webp)
 
 It looks like a lovely emotional drama for teenagers, set over the course of a summer at a beach. Totally not what I was going for. I sent them a lengthy email detailing a laundry list of change requests. The main thing being: can it feel more like a mystery? I suggested we put them in a city.
 
 I got this back:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-03.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-03.webp)
 
 Now, there’s a specific feeling you get when you've got high expectations about a book cover, and after waiting a further week for changes, you receive a draft that doesn't come anywhere close to them. The cover of your book is a visual representation of the story and characters you’ve spent hours with. It’s close to your heart. And this attempt at a cover just … didn’t feel like my book.
 
@@ -53,7 +53,7 @@ The problem is: I’m not a professional designer. I’m not an aesthete. I don�
 
 Despite that, the good people at this design company stuck it out. Over the course of two months, we went back and forth, and the design slowly morphed into something I didn’t despise.
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-04.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-04.webp)
 
 You can see the progression:
 
@@ -79,7 +79,7 @@ I was limited on what I could change, but I’m happy with where I got to.
 3. **The mist** I cut the characters out and added some mist behind them, layering in different versions of smoke and giving it a slightly blue-ish hue.
 4. **The lights and contrast** I made the top third and the lower part of the image completely black, making the title pop. And then I had some fun lightening the image around the lights on the bridge.
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-05.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-05.webp)
 
 Overall, I’m reasonably happy with it. To me, it says mystery, and it says there are two characters — a male and female.
 
@@ -103,23 +103,23 @@ When it came time to get the second cover redesigned, I knew what I wanted.
 
 These are the iterations over the course of a few weeks back and forth:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-06.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-06.webp)
 
 Once we got to the blue and yellow version, I was happy enough to move onto adjusting the design myself, where I changed it to:
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-07.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-07.webp)
 
 ### The new covers are complete!
 
 And now, finally, the covers are done. I’ve uploaded them to the [Amazon](https://www.amazon.com/stores/author/B0C2NPQDVM) store (ebook version and paperback), and even though they’re not the most incredible covers I’ve ever seen in my life, I’m happy with how they look together.
 
-![](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-08.webp)
+![](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-08.webp)
 
 Phew, now the covers are done, I can get back to focusing on writing the books…
 
 ## 👩‍🏫 What I’m Reading: The Midnight Feast by Lucy Foley
 
-![The Midnight Feast by Lucy Foley | Goodreads](../../../../../organise/Images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-09.webp)
+![The Midnight Feast by Lucy Foley | Goodreads](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-09.webp)
 
 Considering how much I love mystery, I'm not having a very good time with this book. It feels like it's taking forever to read because the characters' voices seem strangely juvenile and overly naïve. The connections between the characters are intriguing though and while I find the prose a little bit bloated, I'm excited to see how it all comes together.
 

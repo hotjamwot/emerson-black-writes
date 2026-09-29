@@ -19,7 +19,7 @@ I hadn’t trained. A quick Google shows you should start training for a half ma
 
 But thanks to my three-month New Zealand trip film *Camp Be Better,* I didn’t train. Instead, I went for a five-kilometre run last week, ate some pasta the night before, and told myself I’d stop running if I felt like I was risking injury. Ego be damned!
 
-![](../../../../../organise/Images/newsletters/2024/my-legs-hurt-01.webp)
+![](/organise/images/newsletters/2024/my-legs-hurt-01.webp)
 
 But hey, I did it. I finished it. Not a bad time, either — 2 hours and 10 minutes! I was stoked. The final stretch was *gruelling*. A proper unfun time.
 

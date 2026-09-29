@@ -15,7 +15,7 @@ source: substack:105268274
 
 Recently, some friends and I attended the epic three-day music festival Splore.
 
-![https://images.squarespace-cdn.com/content/v1/56fad64c1d07c0c393d860e7/1652330948239-4QQ1ZZRNSJJG6Z93PWJK/Splore+Panorama.jpg?format=2500w](../../../../../organise/Images/newsletters/2023/break-up-with-boring-books-01.webp)
+![https://images.squarespace-cdn.com/content/v1/56fad64c1d07c0c393d860e7/1652330948239-4QQ1ZZRNSJJG6Z93PWJK/Splore+Panorama.jpg?format=2500w](/organise/images/newsletters/2023/break-up-with-boring-books-01.webp)
 
 It **poured** with rain on the first night. The next day, tents had flooded and the entire place had turned into a bog.
 
@@ -67,7 +67,7 @@ What can we learn from any of this? I suppose, like all things, balance is key. 
 
 This last week, I read [Tomorrow And Tomorrow And Tomorrow by Gabrielle Zevin](https://amzn.to/3XUZBQw) and holy shit, it’s *really* great.
 
-![](../../../../../organise/Images/newsletters/2023/break-up-with-boring-books-03.webp)
+![](/organise/images/newsletters/2023/break-up-with-boring-books-03.webp)
 
 Zevin captures a particular atmosphere of friendship and relationships between young people, explores how our relationships can change and evolve over time, and articulates complex feelings that feel both universal and unique.
 

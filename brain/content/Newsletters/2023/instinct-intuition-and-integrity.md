@@ -103,7 +103,7 @@ Let me repeat:
 
 ## 📣 Shout Out to: The Thursday Murder Club by Richard Osman
 
-![](../../../../../organise/Images/newsletters/2023/instinct-intuition-and-integrity-04.webp)
+![](/organise/images/newsletters/2023/instinct-intuition-and-integrity-04.webp)
 
 I couldn’t put this down. A friend of mine recommended it. She said she loves the characters so much and she was excited for the upcoming release of the fourth book in the series. So, I bought the first book (released back in the Covid days of 2020) and read it in two days.
 

@@ -37,7 +37,7 @@ Despite all this, I still really dig her. I like writing her dialogue and all of
 
 I’m happy to report that other readers love her like I do and don’t find her annoying. So, I haven’t decided to go back and make any significant changes to make her more pallatable. And even if everybody hated her, I still don’t think I would. I don’t think I *could* change her, actually.
 
-![](../../../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-02.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-02.webp)
 
 *These images were made by AI: Luce, Huds, Faven, and Rodney. The Seen team!*
 
@@ -49,7 +49,7 @@ The *Seen in Silverbridge* series is set in a fictional New Zealand city called 
 
 Luckily, I had the good sense to jot down the names in a Google Sheet as I went. This meant with An Actress Is Missing, I was able to revisit this spreadsheet, add to it and alter it, and end up with a fairly hefty list of places.
 
-![](../../../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-03.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-03.webp)
 
 *Spoilers obscured for Book 2*
 
@@ -102,7 +102,7 @@ With the second book, the process was *so much faster and easier*.
 
 I knew the characters deeper. I knew the world better. I knew that most of the words I wrote in my first draft would be replaced in later drafts, so I could take the handbrake off and go for it. The feedback was equally helpful, but it was easier to take. No exhaustion!
 
-![](../../../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-04.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-04.webp)
 
 As you can see above in my nerdy time (I track the ‘writing phases’ of each of my works), I managed to finish a workable draft, get it beta reader, make more changes, edit and format and release the book in under a year.
 
@@ -130,7 +130,7 @@ Then, you know, make it all right again, if you’re into happy endings.
 
 ## 📣 Shout Out to: The Winter Rose by Jennifer Donnelly
 
-![](../../../../../organise/Images/newsletters/2023/5-lessons-i-learned-writing-my-first-05.webp)
+![](/organise/images/newsletters/2023/5-lessons-i-learned-writing-my-first-05.webp)
 
 I’ve been obsessed with this book since I started it. It’s the second book in the series and it packs as much of a punch as its predecessor The Tea Rose.
 

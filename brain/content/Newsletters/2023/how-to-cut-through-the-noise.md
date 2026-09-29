@@ -25,7 +25,7 @@ And I loved it.
 
 I was in Sydney at the time, scoping the city as a potential next home base. My days were full of meetings, explorations, and general hangouts with friends to see the city. Basically, I was too busy to watch a 25-minute video about a shit-kebab, but I did it anyway.
 
-![](../../../../../organise/Images/newsletters/2023/how-to-cut-through-the-noise-01.webp)
+![](/organise/images/newsletters/2023/how-to-cut-through-the-noise-01.webp)
 
 *Here I am in Sydney. Really wish I had moved those rubbish bins for this photo…*
 
@@ -47,7 +47,7 @@ How can we cut through the noise?
 
 The majority of us won’t enjoy the astronomical success of YouTube or TikTok stars. Some of these teenage kids are making millions of dollars doing pranks or [pretending to be video game characters](https://edition.cnn.com/videos/us/2023/07/25/npc-streaming-trend-robots-orig-js-sc.cnn) controlled by viewers.
 
-![](../../../../../organise/Images/newsletters/2023/how-to-cut-through-the-noise-02.webp)
+![](/organise/images/newsletters/2023/how-to-cut-through-the-noise-02.webp)
 
 *For real, it’s a thing.*
 

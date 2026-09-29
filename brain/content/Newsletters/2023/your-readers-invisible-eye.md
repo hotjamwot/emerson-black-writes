@@ -27,7 +27,7 @@ Okay so there are basically four main ones (there’s kinda five but the fifth o
 
 1. **The Omniscient Everywhereman**
 
-![](../../../../../organise/Images/newsletters/2023/your-readers-invisible-eye-01.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-01.webp)
 
 *The all-seeing, all-knowing presence*
 
@@ -39,7 +39,7 @@ Examples: *A Man Called Ove* by Fredrick Backman (proof that omniscient doesn’
 
 1. **Third Person (Objective) – The Fly on the Wall**
 
-![](../../../../../organise/Images/newsletters/2023/your-readers-invisible-eye-02.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-02.webp)
 
 *Perched, watching, reporting back to the reader*
 
@@ -49,7 +49,7 @@ Examples: *The Goldfinch* by Donna Tartt, *The Girl on the Train* by Paula Hawki
 
 1. **Third Person Close (Limited) – Angel on Your Character’s Shoulder**
 
-![](../../../../../organise/Images/newsletters/2023/your-readers-invisible-eye-03.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-03.webp)
 
 *The Angel on your Character’s Shoulder*
 
@@ -63,7 +63,7 @@ Very special mention: *[A Rockstar Has Exploded](https://www.amazon.com.au/dp/B0
 
 1. **First Person - Your Reader is** **Inside** **Your Protagonist**
 
-![](../../../../../organise/Images/newsletters/2023/your-readers-invisible-eye-04.webp)
+![](/organise/images/newsletters/2023/your-readers-invisible-eye-04.webp)
 
 *Right up close and personal*
 

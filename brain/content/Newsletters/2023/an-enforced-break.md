@@ -25,7 +25,7 @@ This, I later found out, means that the battery short-circuited the logic board.
 
 Not ideal.
 
-![](../../../../../organise/Images/newsletters/2023/an-enforced-break-01.webp)
+![](/organise/images/newsletters/2023/an-enforced-break-01.webp)
 
 *My workspace prior to the incident. Look how close that water bottle is … playing with fire, I was.*
 

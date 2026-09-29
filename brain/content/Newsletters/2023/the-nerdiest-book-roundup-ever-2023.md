@@ -25,7 +25,7 @@ Wait, don’t they? Do you? I do. I’ve tracked what I read on [Goodreads](http
 
 Now, my favourite tool for tracking what I read is a simple Google Sheets spreadsheet.
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-01.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-01.webp)
 
 *Originally built by Brock Roberts who I found through a YouTube video.*
 
@@ -47,7 +47,7 @@ Apart from my goal of reading fifty books, I set myself a separate *Pages Read* 
 
 But never worry, your trusty nerd has a trick up his sleeve. I use Calibre, an app to organize my ebooks:
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-02.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-02.webp)
 
 *Calibre. My preferred way of organising my ebook library.*
 
@@ -65,7 +65,7 @@ Tracking is good. But the greatest thing about is the CHARTS.
 
 ## 👸🏼 Pretty as a Picture
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-03.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-03.webp)
 
 *OH YEAH THAT FEELS GOOD*
 
@@ -73,19 +73,19 @@ Whenever I start a new book, I enter its details into the *Tracker* sheet. When 
 
 As the books stack up through the year, I get this lovely Gantt chart:
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-04.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-04.webp)
 
 *Gantt charts are a great way to visualisetimeliness*
 
 The graphs fill up the further through the year and the more books I complete.
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-05.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-05.webp)
 
 I track quite a few metrics that don’t matter too much. But I refer to the sheet for some metrics to police my book choice. Due to living in the West and the power structures that be, the majority of books on my *To Read* list are written by white authors and published in the United States of America.
 
 Nothing *wrong* with that, exactly, but there’s a lot to say for reading books by a diverse range of authors from different countries and backgrounds. So, there’s a column for *Author Gender* and *Author Nationality* (not ethnicity).
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-06.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-06.webp)
 
 *Note the bottom left, Author Gender graph*
 
@@ -109,7 +109,7 @@ Add books to the *Tracker* sheet, and if a genre, publisher or country isn’t a
 
 ## 📣 Shout Out to: Big Beacon by Alan Partridge.
 
-![](../../../../../organise/Images/newsletters/2023/the-nerdiest-book-roundup-ever-08.webp)
+![](/organise/images/newsletters/2023/the-nerdiest-book-roundup-ever-08.webp)
 
 *Funniest audiobook/book I’ve ever listened to/read*
 

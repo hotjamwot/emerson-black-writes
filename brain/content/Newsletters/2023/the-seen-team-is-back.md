@@ -45,7 +45,7 @@ I’m glad you asked.
 
 Stormhouse has moved to London!
 
-![](../../../../../organise/Images/newsletters/2023/the-seen-team-is-back-02.webp)
+![](/organise/images/newsletters/2023/the-seen-team-is-back-02.webp)
 
 I’ve never lived abroad. It’s something I always wanted to do but for whatever reason, I let the opportunity pass me by. Meanwhile, a bunch of my friends moved to various cities around the world and have been having the time of their lives.
 

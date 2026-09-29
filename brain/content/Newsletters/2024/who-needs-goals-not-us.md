@@ -41,7 +41,7 @@ I want you to picture your time on Earth as a gigantic desert. And you, right no
 
 It can be as hot as you want it to be. There can be dunes if you like. Maybe a few cacti, shrubbery, a family of scorpions, an oasis here or there … it’s *your* desert.
 
-![](../../../../../organise/Images/newsletters/2024/who-needs-goals-not-us-01.webp)
+![](/organise/images/newsletters/2024/who-needs-goals-not-us-01.webp)
 
 You are heading toward a destination on the horizon. You don’t know exactly what it is, whether a city or village or even a seaside shanty town. But you know that once you get there, the journey is over.
 

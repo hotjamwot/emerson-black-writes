@@ -21,7 +21,7 @@ Then, I hired a car and drove down the North Island to visit friends and family 
 
 Finally, I joined up with my key collaborators back in Auckland for some release parties for our TV show.
 
-![](../../../../../organise/Images/newsletters/2024/crack-the-code-to-your-creative-genius-01.webp)
+![](/organise/images/newsletters/2024/crack-the-code-to-your-creative-genius-01.webp)
 
 *We dressed up like camp counsellors because the show is called Camp Be Better…*
 
@@ -152,7 +152,7 @@ I look forward to hearing what you find out — let me know by replying to this 
 
 [Camp Be Better](https://www.tvnz.co.nz/shows/camp-be-better) is a six-part comedy show made in New Zealand, co-written, co-directed and edited by me (under a different name).
 
-![](../../../../../organise/Images/newsletters/2024/crack-the-code-to-your-creative-genius-02.webp)
+![](/organise/images/newsletters/2024/crack-the-code-to-your-creative-genius-02.webp)
 
 For those of you who are living in New Zealand, show [Camp Be Better](https://www.tvnz.co.nz/shows/camp-be-better) is available now to watch on TVNZ+. It’s also screening on TV2 on Friday nights.
 

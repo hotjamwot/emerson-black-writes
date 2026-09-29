@@ -18,7 +18,7 @@ First, I apologise for no newsletter last month. There's no excuse. I was simply
 Also:
 ## I made a film!
 
-![](../../../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-01.webp)
+![](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-01.webp)
 
 The film is tentatively titled *Not Looking For Anything Right Now*, although I've already had feedback from more than one person that the name being too long. What do you think?
 
@@ -76,7 +76,7 @@ Stefan and I met up with Minty for coffee and after barely five minutes of talki
 
 ## Read Throughs and Rewrites
 
-![](../../../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-02.webp)
+![](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-02.webp)
 
 Korban, Minty and I met up in Victoria Park to talk through the script. They were strangers to each other, so I gave them two minutes to fire questions at each other, and then we got down to work. We read the script aloud, beginning to end, then discussed how we felt. I asked Korban and Minty the following questions:
 
@@ -131,4 +131,4 @@ It’s our book club book and so far, it’s very interesting. It’s a great co
 
 The story centres around a married couple whose political viewpoints are diametrically opposed. Juicy stuff!
 
-![Who Wants to Live Forever: A BBC Radio 2 Book Club Pick: Amazon.co.uk: Thomas Uose, Hanna: 9781840918458: Books](../../../../../organise/Images/newsletters/2025/using-actors-to-improve-your-writing-03.webp)
+![Who Wants to Live Forever: A BBC Radio 2 Book Club Pick: Amazon.co.uk: Thomas Uose, Hanna: 9781840918458: Books](/organise/images/newsletters/2025/using-actors-to-improve-your-writing-03.webp)
