@@ -17,7 +17,7 @@ configuration:
     cdnCaching: true
     typography:
       header: Jost
-      body: Source Sans Pro
+      body: Source Serif 4
       code: IBM Plex Mono
     colors:
       lightMode:
@@ -26,9 +26,9 @@ configuration:
         gray: "#6B7A91"
         darkgray: "#111F2E"
         dark: "#0B1926"
-        secondary: "#E31C3D"
-        tertiary: "#84a59d"
-        highlight: rgba(227, 28, 61, 0.12)
+        secondary: "#CA2626"
+        tertiary: "#CA2626"
+        highlight: rgba(202, 38, 38, 0.12)
         textHighlight: "#fff23688"
       darkMode:
         light: "#060D14"
@@ -36,9 +36,9 @@ configuration:
         gray: "#6B7A91"
         darkgray: "#A8B5C9"
         dark: "#F0F4F8"
-        secondary: "#FF3B4A"
-        tertiary: "#84a59d"
-        highlight: rgba(227, 28, 61, 0.18)
+        secondary: "#E63A3A"
+        tertiary: "#E63A3A"
+        highlight: rgba(230, 58, 58, 0.18)
         textHighlight: "#b3aa0288"
 plugins:
   - source: "@quartz-community/created-modified-date"
@@ -84,7 +84,7 @@ plugins:
     enabled: true
     order: 50
     layout:
-      position: right
+      position: left
       priority: 30
   - source: "@quartz-community/crawl-links"
     enabled: true
@@ -116,7 +116,10 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: default
+      # `emerson` is our own theme: @quartz-themes/default plus the brand
+      # overlay registered in quartz/theme/emerson.ts (loaded via quartz.ts).
+      # Do not change this to `default` — the accent would go Obsidian violet.
+      theme: emerson
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: false
@@ -167,6 +170,23 @@ plugins:
       folderDefaultState: collapsed
       folderClickBehavior: link
       useSavedState: true
+      filterFn: (node) => node.slugSegment !== "tags"
+      mapFn: |
+        (node) => {
+          if (!node.slugSegment && Array.isArray(node.children)) {
+            const i = node.children.findIndex((c) => c && c.slugSegment === "newsletters");
+            if (i >= 0) {
+              const nl = node.children[i];
+              node.children.splice(i, 1);
+              if (nl && Array.isArray(nl.children)) node.children.push(...nl.children);
+            }
+          }
+          return node;
+        }
+      order:
+        - filter
+        - map
+        - sort
     layout:
       position: left
       priority: 50
@@ -174,16 +194,22 @@ plugins:
     enabled: true
     options:
       localGraph:
-        depth: 1
-        showTags: false
+        depth: 2
+        showTags: true
         focusOnHover: true
-        fontSize: 0.7
+        fontSize: 0.8
+        repelForce: 0.6
+        centerForce: 0.4
+        linkDistance: 40
       globalGraph:
-        showTags: false
+        showTags: true
         focusOnHover: true
-        fontSize: 0.7
+        fontSize: 0.8
+        repelForce: 0.6
+        centerForce: 0.4
+        linkDistance: 40
     layout:
-      position: right
+      position: afterBody
       priority: 10
   - source: "@quartz-community/search"
     enabled: true
@@ -196,8 +222,8 @@ plugins:
   - source: "@quartz-community/backlinks"
     enabled: true
     layout:
-      position: right
-      priority: 50
+      position: left
+      priority: 40
   - source: "@quartz-community/article-title"
     enabled: true
     layout:
@@ -209,12 +235,12 @@ plugins:
       position: beforeBody
       priority: 20
   - source: "@quartz-community/tag-list"
-    enabled: false
+    enabled: true
     layout:
       position: beforeBody
       priority: 30
   - source: "@quartz-community/page-title"
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 10
@@ -232,6 +258,11 @@ plugins:
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
     enabled: true
+    options:
+      spacerSymbol: "/"
+      rootName: "✦"
+      resolveFrontmatterTitle: true
+      showCurrentPage: true
     layout:
       position: beforeBody
       priority: 5
@@ -312,7 +343,11 @@ layout:
         beforeBody: []
         left: []
         right: []
-    content: {}
+    content:
+      exclude:
+        - backlinks
+      positions:
+        right: []
     folder:
       exclude:
         - reader-mode

@@ -5,7 +5,7 @@
 //
 //  Mirrors the storefront (EBW website/style.css):
 //    navy   #060D14 / #0B1926 / #111F2E
-//    crimson #E31C3D   cream #F0F4F8   mist #A8B5C9   steel #6B7A91
+//    crimson #CA2626 light · #E63A3A dark   cream #F0F4F8   mist #A8B5C9   steel #6B7A91
 //    Jost display type · film-grain overlay · hairline rules · card lift
 //
 //  This file is appended AFTER `@layer quartz-base` (see
@@ -22,7 +22,7 @@
 // a palette change there flows through automatically.
 :root {
   --eb-accent: var(--secondary);
-  --eb-accent-bright: #b81232;
+  --eb-accent-bright: #a81f1f;
   --eb-radius: 4px;
   --eb-radius-lg: 10px;
   --eb-display: "Jost", "Century Gothic", "Avant Garde", "Futura", system-ui, sans-serif;
@@ -36,12 +36,12 @@
   --eb-surface-strong: rgba(17, 31, 46, 0.07);
   --eb-grain-opacity: 0.1;
   --eb-grain-blend: multiply;
-  --eb-glow: rgba(227, 28, 61, 0.07);
+  --eb-glow: rgba(202, 38, 38, 0.07);
   --eb-glow-alt: rgba(132, 165, 157, 0.06);
 }
 
 :root[saved-theme="dark"] {
-  --eb-accent-bright: #ff3b4a;
+  --eb-accent-bright: #ff5b5b;
   --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
   --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
   --eb-line: rgba(240, 244, 248, 0.09);
@@ -50,14 +50,14 @@
   --eb-surface-strong: rgba(255, 255, 255, 0.055);
   --eb-grain-opacity: 0.22;
   --eb-grain-blend: overlay;
-  --eb-glow: rgba(227, 28, 61, 0.16);
+  --eb-glow: rgba(230, 58, 58, 0.16);
   --eb-glow-alt: rgba(132, 165, 157, 0.1);
 }
 
 // Pre-hydration fallback: respect the OS before the darkmode toggle runs.
 @media (prefers-color-scheme: dark) {
   :root:not([saved-theme="light"]) {
-    --eb-accent-bright: #ff3b4a;
+    --eb-accent-bright: #ff5b5b;
     --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
     --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
     --eb-line: rgba(240, 244, 248, 0.09);
@@ -66,7 +66,7 @@
     --eb-surface-strong: rgba(255, 255, 255, 0.055);
     --eb-grain-opacity: 0.22;
     --eb-grain-blend: overlay;
-    --eb-glow: rgba(227, 28, 61, 0.16);
+    --eb-glow: rgba(230, 58, 58, 0.16);
     --eb-glow-alt: rgba(132, 165, 157, 0.1);
   }
 }
@@ -433,6 +433,39 @@ p.content-meta {
   height: 230px;
 }
 
+// S2 · Full-width graph section at the foot of every post — the star of the
+// show, not a sidebar thumbnail. The Graph component renders both the local
+// graph and the global-graph popup trigger inside .graph.
+.after-body-graph {
+  margin: 3rem 0 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--eb-line);
+
+  > h3 {
+    font-size: 0.72rem;
+    letter-spacing: var(--eb-tracking);
+    text-transform: uppercase;
+    color: var(--gray);
+    margin: 0 0 1rem;
+  }
+
+  .graph {
+    margin: 0;
+  }
+
+  .graph-outer {
+    height: clamp(380px, 55vh, 560px);
+  }
+
+  .graph-container {
+    border: 1px solid var(--eb-line);
+    border-radius: var(--eb-radius-lg);
+    background: var(--eb-surface);
+    overflow: hidden;
+    box-shadow: var(--eb-shadow);
+  }
+}
+
 .graph-container {
   border: 1px solid var(--eb-line);
   border-radius: var(--eb-radius-lg);
@@ -653,9 +686,11 @@ hr::after {
 }
 
 // ── 5. Reading experience ──────────────────────────────────────────────────
+// S6 · Writerly serif body — Source Serif 4 (optical sizing, true italics).
 .markdown-preview-view.markdown-rendered {
-  font-size: 1.03rem;
-  line-height: 1.78;
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 1.06rem;
+  line-height: 1.82;
 
   p {
     margin: 0 0 1.2rem;
@@ -703,7 +738,7 @@ hr::after {
   a {
     color: var(--eb-accent);
     text-decoration: underline;
-    text-decoration-color: rgba(227, 28, 61, 0.35);
+    text-decoration-color: rgba(202, 38, 38, 0.35);
     text-underline-offset: 0.18em;
     text-decoration-thickness: 1px;
     transition:
