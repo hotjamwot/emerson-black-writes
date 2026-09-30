@@ -9,4 +9,4 @@ publish: true
 
 All newsletters from Emerson Black — craft, career, publishing, and life as an author.
 
-_Back to [[index|Emerson's Desk]] · [[About|about the author]]._
+_Back to [[index|The Brain]] · [[About|about the author]]._
