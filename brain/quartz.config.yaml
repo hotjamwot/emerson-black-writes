@@ -1,13 +1,19 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: The Brain
-  pageTitleSuffix: "Emerson Black Writes"
+  # S10 (§18): the site is "Emerson's Desk". The *header* shows the short mark
+  # `EBW` — page-title has no options, so that swap lives in custom.scss §4a and
+  # this value stays the site's real name, which is what <title> and the
+  # accessible name of the wordmark link use.
+  pageTitle: "Emerson's Desk"
+  # Leading separator: Head.tsx concatenates suffix straight onto the title, so
+  # without it every tab read "Emerson's DeskEmerson Black Writes".
+  pageTitleSuffix: " · Emerson Black Writes"
   enableSPA: true
   enablePopovers: true
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: emersonblackwrites.com/brain
+  baseUrl: emersonblackwrites.com/desk
   ignorePatterns:
     - private
     - templates
@@ -286,7 +292,7 @@ plugins:
       links:
         Books: https://emersonblackwrites.com/#books
         About: https://emersonblackwrites.com/bio.html
-        Brain: https://emersonblackwrites.com/brain/
+        Desk: https://emersonblackwrites.com/desk/
         Subscribe: https://emersonblackwrites.substack.com/
     layout:
       position: header

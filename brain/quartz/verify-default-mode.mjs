@@ -206,6 +206,100 @@ check(
   "the pre-S9 pinker accent is fully retired",
 )
 
+// ── 5b. the rename must be complete on both halves (S10) ─────────────────────
+// The site is "Emerson's Desk" (§18) and it is served at /desk/. Nothing
+// structurally connects the places that name and that path are written —
+// `quartz.config.yaml`, `content/index.md`, the storefront footer and the deploy
+// workflow — and "The Brain" surviving a whole design pass is what that costs.
+console.log("\nRename — Emerson's Desk at /desk/ (S10)")
+const storefrontIndex = readFileSync(join(brain, "..", "index.html"), "utf8")
+const storefrontBio = readFileSync(join(brain, "..", "bio.html"), "utf8")
+const workflow = readFileSync(join(brain, "..", ".github", "workflows", "deploy.yml"), "utf8")
+const homeSource = readFileSync(join(brain, "content", "index.md"), "utf8")
+const unquote = (s) => (s ?? "").trim().replace(/^["']|["']$/g, "")
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+// (a) The name is stated twice — `cfg.pageTitle` (what the header wordmark link
+// and the <title> fallback use) and the homepage's own frontmatter title. They
+// must agree, or the site is called two different things depending on where you
+// look. This is the guard §19 asked for.
+const cfgTitle = unquote(/^\s*pageTitle:\s*(.+)$/m.exec(config)?.[1])
+const homeTitle = unquote(/^title:\s*(.+)$/m.exec(homeSource)?.[1])
+check(
+  cfgTitle === homeTitle && /Desk/.test(cfgTitle),
+  `pageTitle and content/index.md title agree ("${cfgTitle}" / "${homeTitle}")`,
+)
+
+// (b) No authored page may still say "The Brain". CASE-SENSITIVE on purpose:
+// two live dispatches use the ordinary English words *brainspace* and *change
+// the brain* (§18), so a blind find-and-replace would corrupt published prose.
+const authored = readdirSync(join(brain, "content"), { recursive: true })
+  .map(String)
+  .filter((f) => f.endsWith(".md"))
+const stillBrain = authored.filter((f) =>
+  /The Brain/.test(readFileSync(join(brain, "content", f), "utf8")),
+)
+check(
+  stillBrain.length === 0,
+  `no authored page still says "The Brain"${stillBrain.length ? ` — ${stillBrain.join(", ")}` : ""}`,
+)
+
+// (c) And no *built* page either. A stale name can only reach the output through
+// the config, so this is what catches a pageTitle (or an og-image option) left
+// behind after the content pass looked complete.
+const builtHtml = readdirSync(join(brain, "public"), { recursive: true })
+  .map(String)
+  .filter((f) => f.endsWith(".html"))
+const builtBrain = builtHtml.filter((f) =>
+  /The Brain/.test(readFileSync(join(brain, "public", f), "utf8")),
+)
+check(
+  builtBrain.length === 0,
+  `no built page says "The Brain"${builtBrain.length ? ` — ${builtBrain.slice(0, 3).join(", ")}` : ""}`,
+)
+
+// Head.tsx builds <title> from the *page's* frontmatter title (not cfg.pageTitle),
+// and concatenates the suffix straight onto it, so the separator is asserted
+// rather than assumed: without it the tab read "The BrainEmerson Black Writes"
+// for the whole of Arc 1.
+const homeDoc = readFileSync(join(brain, "public", "index.html"), "utf8")
+const homeTabTitle = /<title>([^<]*)<\/title>/.exec(homeDoc)?.[1] ?? ""
+check(
+  new RegExp(`${escapeRe(homeTitle)}\\s*·\\s*Emerson Black Writes`).test(homeTabTitle),
+  `homepage <title> keeps the name and its separator ("${homeTabTitle}")`,
+)
+
+// (d) The slug. `baseUrl` is what every absolute URL is built from (OG cards,
+// canonical link, sitemap), so this is the assertion that the move is real.
+check(/baseUrl:\s*emersonblackwrites\.com\/desk\s*$/m.test(config), "baseUrl is emersonblackwrites.com/desk")
+check(
+  !/emersonblackwrites\.com\/brain\b/.test(config),
+  "no /brain/ URL left in quartz.config.yaml (that is the header nav)",
+)
+
+// (e) The storefront's own two pages must point at the new path.
+for (const [name, html] of [
+  ["index.html", storefrontIndex],
+  ["bio.html", storefrontBio],
+]) {
+  check(/href="desk\/"/.test(html), `storefront ${name} links the Desk at desk/`)
+  check(!/href="brain\//.test(html), `storefront ${name} no longer links brain/`)
+}
+
+// (f) The workflow moves the artifact, and leaves a redirect behind. Note the
+// stub at `_site/brain/index.html` is *intended*, so the guard checks the app
+// paths and the stub's target rather than banning the string "/brain/".
+check(/cp -R brain\/public\/\. _site\/desk\//.test(workflow), "deploy.yml stages the build at _site/desk/")
+check(
+  /_site\/desk\/index\.html/.test(workflow) && !/_site\/brain\/(newsletters|organise)/.test(workflow),
+  "deploy.yml guards check _site/desk/, not the retired paths",
+)
+check(
+  /https:\/\/www\.emersonblackwrites\.com\/desk\//.test(workflow),
+  "deploy.yml smoke-tests the live /desk/",
+)
+check(/url=\/desk\//.test(workflow), "deploy.yml writes the legacy /brain/ stub pointing at /desk/")
+
 console.log("\nTypography (computed style — what the reader actually sees)")
 
 // Cheap static companion to the browser check below: it documents the layer
@@ -438,6 +532,17 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     out.push("navLinks=" + d.querySelectorAll(".page-header footer ul li a").length)
     out.push("navGridArea=" + (nav ? getComputedStyle(nav).gridArea : "ABSENT"))
     out.push("wordmarkInHeader=" + (wm ? "yes" : "no"))
+    // S10: the header paints the short mark EBW while the anchor keeps the
+    // site's full name as its accessible text (see custom.scss 4a).
+    const wmLink = d.querySelector(".page-header .page-title a")
+    out.push("mark=" + (wmLink ? getComputedStyle(wmLink, "::before").content : "ABSENT"))
+    out.push("wmName=" + (wmLink ? wmLink.textContent.trim() : "ABSENT"))
+    // The name must be *present but not painted*: the mark alone would still read
+    // "EBW" if the collapse rule were dropped, and the page would then show the
+    // full name and the mark at once. Assert the collapsed size and that the
+    // painted mark has real width.
+    out.push("wmFontSize=" + (wmLink ? getComputedStyle(wmLink).fontSize : "ABSENT"))
+    out.push("wmW=" + (wmLink ? Math.round(wmLink.getBoundingClientRect().width) : -1))
     out.push("toolbarW=" + (tb ? Math.round(tb.getBoundingClientRect().width) : -1))
     out.push("searchW=" + (search ? Math.round(search.getBoundingClientRect().width) : -1))
     out.push("overflow1920=" + (d.documentElement.scrollWidth > d.documentElement.clientWidth))
@@ -468,6 +573,29 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
   check(Number(hf("searchW")) > 0, `search control is visible in the header (got: ${hf("searchW") ?? "n/a"})`)
   check(hf("overflow1920") === "false", `header causes no overflow at 1920px (got: ${hf("overflow1920") ?? "n/a"})`)
   check(hf("headerFits") === "true", `nav row stays inside the header box (got: ${hf("headerFits") ?? "n/a"})`)
+
+  // ── S10: the wordmark ──────────────────────────────────────────────────────
+  // `page-title` has no options, so the `EBW` mark is a presentational swap over
+  // the site's real name. Assert BOTH halves: a rule that painted "EBW" but also
+  // rewrote the anchor text would look right on screen and read wrong in a screen
+  // reader, and a rule that failed to apply at all leaves the full name visible
+  // (`font-size: 0` never set) — neither shows up in a static check.
+  check(
+    (hf("mark") ?? "").replace(/^["']|["']$/g, "") === "EBW",
+    `header wordmark paints "EBW" (got: ${hf("mark") ?? "n/a"})`,
+  )
+  check(
+    hf("wmName") === cfgTitle,
+    `wordmark link keeps the full site name for assistive tech (got: ${hf("wmName") ?? "n/a"})`,
+  )
+  check(
+    hf("wmFontSize") === "0px",
+    `the full name is kept but not painted (computed size ${hf("wmFontSize") ?? "n/a"}, want 0px)`,
+  )
+  check(
+    Number(hf("wmW")) > 0,
+    `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`,
+  )
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
@@ -639,7 +767,8 @@ for (const [label, opts, expected] of cases) {
 }
 
 if (problems.length) {
-  console.error(`\n✗ ${problems.length} problem(s): the default mode is not as intended.`)
+  console.error(`\n✗ ${problems.length} problem(s): the build is not as intended.`)
   process.exit(1)
 }
 console.log(`\n✓ Default is "${EXPECTED_DEFAULT}", order-independent, toggle visible.`)
+console.log(`✓ Layout, header, fonts, favicon, storefront palette and the S10 rename all hold.`)

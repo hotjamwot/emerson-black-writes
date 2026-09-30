@@ -1,5 +1,5 @@
 ---
-title: The Brain
+title: "Emerson's Desk"
 description: Field notes from a writing life — every Emerson Black newsletter dispatch since 2023, cross-linked and searchable.
 # Anchors this site page to the start of the archive so it never outranks a
 # real dispatch in the "Latest dispatches" list.
@@ -8,7 +8,7 @@ publish: true
 ---
 
 <div class="eb-hero">
-  <p class="eb-kicker">The Brain · Emerson Black Writes</p>
+  <p class="eb-kicker">Emerson's Desk · Emerson Black Writes</p>
   <h1 class="eb-hero-title">Field notes from a writing life</h1>
   <p class="eb-hero-lede">Every newsletter dispatch since January 2023 — craft experiments, deadline failures, drafting diaries and the slow business of finishing books. All of it public, cross-linked, and free to wander.</p>
   <div class="eb-actions">

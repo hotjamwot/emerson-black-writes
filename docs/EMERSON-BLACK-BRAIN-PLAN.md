@@ -1,10 +1,10 @@
 # Emerson Black Brain — Architecture, Spec & Operations Guide
 
-**Status:** Live at `emersonblackwrites.com/brain/` · **Engine:** Quartz v5 · **Date:** 2026-09-28 · **Author:** HayJay + AI assistant
-**Now (2026-09-30):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). **Next: S10 — rename to Emerson's Desk, slug → `/desk/`, storefront as homepage (§19, approved; three steps, starting with the rename).** S3 / S2 / S8 queued behind it.
+**Status:** Live at `emersonblackwrites.com/desk/` · **Engine:** Quartz v5 · **Date:** 2026-09-28 · **Author:** HayJay + AI assistant
+**Now (2026-09-30):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). ✅ **S10 step 1 — the rename (§20):** the site is **Emerson's Desk**, the wordmark reads **`EBW`**, it is served at **`/desk/`**, and `/brain/` redirects. **Next: S10 step 2 — stop duplicating the storefront** (`desk/index` + `desk/about` become one honest landing page; drop the two hand-written breadcrumbs). Then step 3, then S3 / S2 / S8.
 
 
-**Goal:** Write in Obsidian → run `Publish Brain.command` → the newsletter archive is live at **`emersonblackwrites.com/brain/`**, built automatically via GitHub Actions.
+**Goal:** Write in Obsidian → run `Publish Brain.command` → the newsletter archive is live at **`emersonblackwrites.com/desk/`**, built automatically via GitHub Actions.
 
 ---
 
@@ -27,13 +27,14 @@
        │   git push → GitHub Actions builds Quartz & deploys Pages artifact
        ▼
   emersonblackwrites.com/          ← storefront (unchanged)
-  emersonblackwrites.com/brain/    ← digital garden (graph · backlinks · search · full archive)
+  emersonblackwrites.com/desk/     ← Emerson's Desk (graph · backlinks · search · full archive)
 ```
+> The Quartz **source** directory is still `brain/` (§20) — only the served URL moved.
 
 ### Core Architecture Rules
 1. **The Vault is iCloud-synced and unversioned:** Never run `git init` or install `node_modules` inside the vault.
 2. **The Storefront repo holds the code:** Lives at `~/Movies/PROJECTS/Websites/EBW website/`.
-3. **One repo, one domain, subpath routing:** Quartz lives in `brain/` and builds to `brain/public/`. The deploy workflow copies root storefront files and `brain/public/` into `_site/` (with brain at `_site/brain/`).
+3. **One repo, one domain, subpath routing:** Quartz lives in `brain/` and builds to `brain/public/`. The deploy workflow copies root storefront files and `brain/public/` into `_site/` (with the Desk at `_site/desk/`, and a legacy redirect stub at `_site/brain/`).
 4. **Draft Privacy:** Drafts sit in `Newsletters/_drafts/` inside the vault. Rsync `--exclude='_*'` ensures drafts never reach the repository. In addition, Quartz config sets `explicit-publish: true` as a secondary safety net.
 5. **Pages Source must be "GitHub Actions":** Repo → Settings → Pages → Build and deployment → Source = **GitHub Actions**. If it is left on "Deploy from a branch", GitHub runs its own Jekyll build on every push and **overwrites** the `deploy-pages` artifact — the Brain silently reverts to a Jekyll page generated from `brain/README.md`. See §9 Incident I1. The workflow now smoke-tests the live URL after deploying and warns when this happens.
 
@@ -56,7 +57,7 @@
 
 | # | Topic | Decision | Why |
 | --- | --- | --- | --- |
-| D1 | Subpath vs subdomain | **`emersonblackwrites.com/brain/`** | Shares domain authority; one repo; simpler Pages config |
+| D1 | Subpath vs subdomain | **`emersonblackwrites.com/desk/`** *(was `/brain/` until 2026-09-30, §20)* | Shares domain authority; one repo; simpler Pages config |
 | D2 | Vault boundary | **iCloud vault is source of truth; git repo is outside** | Zero risk of node/git/sync corruption in iCloud |
 | D3 | Sync mechanism | **`Publish Brain.command` (one-way rsync)** | Fast, clean, zero overhead; full control over what leaves the vault |
 | D4 | Markdown flavours | **Obsidian-flavoured markdown (OFM)** | Native wikilinks, callouts, embeds; Quartz renders OFM directly |
@@ -70,7 +71,8 @@
 | D12 | Brain homepage | **`content/index.md` is a hand-curated portal** (hero → Start here → archive-by-year → reading trails → books CTA), written as raw HTML inside markdown | A digital garden needs doors, not a directory listing; raw HTML survives Quartz's pipeline and its relative `href`s are auto-resolved into internal links |
 | D13 | Archive dates | **`created:` / `modified:` frontmatter is derived from `date:` / `updated:` by `Publish Brain.command`** | Quartz's `created-modified-date` reads `frontmatter.created`; without it every mirrored note inherited its git commit date, so the whole archive claimed to be published "today" |
 | D14 | Brand layer | **All Brain styling lives in `brain/quartz/styles/custom.scss`** (framework CSS untouched; components configured via `quartz.config.yaml`) | `custom.scss` is appended *after* `@layer quartz-base`, so brand rules win without `!important` and framework updates stay safe |
-| D15 | Storefront ↔ Brain link | **Footer nav row on the storefront (`index.html` + `bio.html`) points to `/brain/`** | First thread of the eventual full integration; left the storefront layout untouched until the index redesign lands |
+| D15 | Storefront ↔ Brain link | **Footer nav row on the storefront (`index.html` + `bio.html`) points to the Desk (`desk/`)** | First thread of the eventual full integration; left the storefront layout untouched until the index redesign lands |
+| D16 | Site name & wordmark *(2026-09-30, §18/§20)* | **Site = "Emerson's Desk"; header wordmark = `EBW`; slug = `/desk/`** | "The Brain" promised a tool and delivered a publication. `EBW` is what a reader already recognises (favicon monogram, storefront signature); "Emerson's Desk" says *writer* where "Posts" says *feed*. The wordmark swap is presentational — `page-title` has no options — so the link keeps the full name for assistive tech |
 
 ---
 
@@ -123,7 +125,7 @@ source: substack:176627320         # numeric part of post_id
    - Runs missing image guard check.
    - Adds `created:` / `modified:` to each note's frontmatter (from `date:` / `updated:`, idempotent) so archive dates and ordering stay truthful.
    - Commits with date stamp and pushes to GitHub.
-4. GitHub Actions builds Quartz and deploys to `emersonblackwrites.com/brain/` in ~1 minute.
+4. GitHub Actions builds Quartz and deploys to `emersonblackwrites.com/desk/` in ~1 minute.
 
 ---
 
@@ -143,7 +145,9 @@ source: substack:176627320         # numeric part of post_id
   - Storefront footer nav row (Books · About · The Brain · Subscribe) added to `index.html` + `bio.html`; © bumped to 2026.
 - [x] **Accent ownership — DONE (2026-09-29 · Change #1 / S5):** The Brain now runs **its own Quartz theme, `emerson`** (`brain/quartz/theme/emerson.ts`). Rather than fighting the Obsidian theme's cascade layer, we append the crimson accent to the theme itself and register it as `emerson` — so links, tags, checkboxes, graph nodes, search highlights and callouts resolve **`#CA2626` light / `#E63A3A` dark at the source**. `node quartz/theme/verify-brand.mjs` proves it against the built CSS, and in-theme assertions fail the build loudly if upstream renames a variable we pin. See §11.
 - [x] **Body serif reaches paragraphs — DONE (2026-09-30, incident I3 / §14):** the last outstanding piece of S6. Root cause was a *sibling* cascade layer — `@quartz-community/quartz-fonts` loads after the theme sheet, so its `@layer quartz-fonts` is appended last and its hardcoded sans `--font-interface` beat our pin inside `@layer obsidian-theme`. Fixed by pinning the font variables **unlayered** in `custom.scss` §1b (serif for body, display for titles) and pinning the chrome to Gabarito in §1c, so the sidebar/TOC/breadcrumbs no longer inherit the reading serif. `verify-default-mode.mjs`'s static text checks are replaced by a **headless-Chrome computed-style assertion** — the old ones stayed green while the page was visibly wrong. Verified by re-introducing the bug.
-- [ ] **Storefront Integration — now tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). What remains is the rename, the slug move, and a genuinely *shared* nav across both halves.ndex page, and a link back to `/` from inside the garden. Currently connected only by the footer nav row (D15).
+- [x] **The rename — DONE (2026-09-30 · S10 step 1 / §20):** the site is **Emerson's Desk**, the header wordmark reads **`EBW`**, it is served at **`/desk/`**, and a hand-written stub at `_site/brain/` redirects the old path. Nine authored lines plus the config block; the Quartz *source* directory stays `brain/`. 16 new guard checks (suite 50 → 68).
+- [ ] **S10 steps 2–3 — next (§19).** Step 2: `desk/index` + `desk/about` stop restating the storefront and become one honest landing page, with the two hand-written `_Back to …_` breadcrumbs dropped (the `breadcrumbs` plugin already renders that trail). Step 3: the storefront keeps books + the Silverbridge note and *features* the Desk; the `THE JOURNALISTS` character cards become a dated, cross-linked post written in the vault.
+- [ ] **Storefront Integration — tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). The rename and the slug move are **done** (§20); what remains is steps 2–3 above and a genuinely *shared* nav across both halves. Currently connected by the storefront footer nav row (D15) and the Desks's own header nav (§17).
 - [ ] **Editorial pass (Arc 2 candidates):**
   - Tag taxonomy: all 50 notes carry `tags: []` — agree a small tag set (craft / process / publishing / mindset) so tag pages and graph clusters become useful.
   - Thematic `[[wikilinks]]` between essays so Backlinks and the graph fill in.
@@ -186,8 +190,11 @@ pkill -f 'http.server 8099'
 # Publish script
 ~/Movies/PROJECTS/Websites/EBW\ website/Publish\ Brain.command
 
-# Is the live Brain actually the Quartz build? (expect a count >= 1)
-curl -s "https://www.emersonblackwrites.com/brain/?smoke=$RANDOM" | grep -c 'id="quartz-root"'
+# Is the live Desk actually the Quartz build? (expect a count >= 1)
+curl -s "https://www.emersonblackwrites.com/desk/?smoke=$RANDOM" | grep -c 'id="quartz-root"'
+
+# The legacy path must redirect rather than 404
+curl -s "https://www.emersonblackwrites.com/brain/" | grep -o 'url=/desk/'
 
 # Inspect recent deploys without the gh CLI (works with no auth)
 curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/runs?per_page=5" \
@@ -235,7 +242,7 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 | S7 | EBW favicon, crimson | Rebuild from **`Emerson Signature square_red.png`** (1280×1280 RGBA monogram) | ✅ **DONE 2026-09-29** — 512×512 tight-cropped RGBA to `brain/quartz/static/icon.png` + `img/favicon.png`; §13 |
 | S8 | Frontmatter-rich header | `Originally published` / `Last updated`; visible tags; breadcrumb starts at year | Local `ContentMeta` override or CSS labels + `tag-list` (on) + breadcrumbs `rootName`/`spacerSymbol` |
 | S9 | Storefront fold-out | ✅ **DONE 2026-09-30** — §15. Homepage wears the same brand: Gabarito display + Lora body + `#E63A3A` accent + new favicon | `style.css` `--font-display`/`--font-body`/`--accent-red*` + Google Fonts `<link>` in `index.html`/`bio.html` + favicon swap |
-| S10 | 🟢 **Rename + integrate** | Site = **Emerson's Desk**, wordmark `EBW`, slug `/desk/`; Desk stops duplicating the storefront; storefront stays homepage and features the writing; characters become a real post | §18–19 — **approved, next** |
+| S10 | 🟢 **Rename done; integration next** | Site = **Emerson's Desk**, wordmark `EBW`, slug `/desk/` — ✅ **step 1 shipped 2026-09-30** (§20). Remaining: Desk stops duplicating the storefront; storefront stays homepage and features the writing; characters become a real post | §18–20 — steps 2–3 **next** |
 
 > **How we work this arc:** one item at a time → edit → `npx quartz build` → eyeball at `localhost:8080` → tick the box → only then move on. (`Preview Brain.command` serves it; see §8 for the zsh comment trap.)
 >
@@ -246,10 +253,12 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 4. ✅ **S9** — storefront accent + favicon. §15.
 > 5. ✅ **S1 + S4** — empty right sidebar collapsed, measure held at ~74 chars. §16. *(S1 was re-scoped: `.page` was already 1500px.)*
 > 6. ✅ **S1a** — header bar: wordmark, four-link nav, search + controls. §17.
-> 7. 🟢 **S10** — rename to Emerson's Desk, slug → `/desk/`, storefront as homepage. §18–19. **Next.**
-> 8. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
-> 9. ⬜ **S2** — graph: taller afterBody instance + homepage feature.
-> 10. ⬜ **S8** — `Originally published` / `Last updated` + visible tags + breadcrumbs from year. Blocked on the tagging pass.
+> 7. ✅ **S10 step 1** — the rename: site name, `EBW` wordmark, slug → `/desk/`, `/brain/` redirect. §20.
+> 8. 🟢 **S10 step 2** — stop duplicating the storefront: `desk/index` + `desk/about` become one honest landing page; drop the two hand-written breadcrumbs. §19. **Next.**
+> 9. ⬜ **S10 step 3** — storefront features the writing; the `THE JOURNALISTS` characters become a dated post written in the vault. §19. *(New writing, not mechanical.)*
+> 10. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
+> 11. ⬜ **S2** — graph: taller afterBody instance + homepage feature.
+> 12. ⬜ **S8** — `Originally published` / `Last updated` + visible tags + breadcrumbs from year. Blocked on the tagging pass.
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -522,7 +531,9 @@ Owner decisions: the name is **"Emerson's Desk"** with an `EBW` wordmark (§18);
 
 ### The three steps
 
-**Step 1 — Rename name, wordmark and slug together.** `pageTitle` → `Emerson's Desk`; `content/index.md` frontmatter `title` + hero kicker; `About.md` prose; the two storefront nav links; the `Brain` nav entry → `Desk`; `baseUrl` → `.../desk`; `_site/brain/` → `_site/desk/` in `deploy.yml` (including the two guard paths and the smoke-test URL); a `.md` redirect stub at `content/brain.md` for `/brain/`. Wordmark → `EBW`.
+**Step 1 — Rename name, wordmark and slug together. ✅ DONE 2026-09-30 — see §20.** `pageTitle` → `Emerson's Desk`; `content/index.md` frontmatter `title` + hero kicker; `About.md` prose; the two storefront nav links; the `Brain` nav entry → `Desk`; `baseUrl` → `.../desk`; `_site/brain/` → `_site/desk/` in `deploy.yml` (including the two guard paths and the smoke-test URL); a redirect stub for `/brain/`. Wordmark → `EBW`.
+
+> ⚠️ **Correction, found by building it (§20):** this paragraph originally specified a *"`.md` redirect stub at `content/brain.md`"*. That is the right tool for a slug change **inside** the build and exactly wrong across a change of the build's own root — an alias page emits under the Quartz output, so with the app at `/desk/` it would have appeared at **`/desk/brain/`**, the wrong side of the move. The stub is written by hand in `deploy.yml` at `_site/brain/index.html` (meta refresh + canonical) and the workflow fails closed unless it points at `/desk/`.
 
 🔴 **Do not** find-and-replace "brain". Two live dispatches use the ordinary English words *brainspace* and *change the brain*; a blanket replace corrupts published prose. Replace the exact phrase only, and read the diff.
 
@@ -540,4 +551,47 @@ Owner decisions: the name is **"Emerson's Desk"** with an `EBW` wordmark (§18);
 - **Leave the `brain/` source directory alone.** Renaming it would touch `npm ci`, both `.command` scripts and every path in this plan for no user-visible gain. The URL is what readers see.
 - **The plan's own filename keeps "BRAIN".** `EMERSON-BLACK-BRAIN-PLAN.md` is a long-lived internal document; renaming it would break the `Publish Brain.command` snapshot and every reference to it. Cheap to do later, no value now.
 
-### Status: **approved, nothing started.** Step 1 next.
+### Status: **step 1 shipped 2026-09-30 (§20).** Steps 2–3 next.
+
+---
+
+## 20. ✅ S10 step 1 — the rename (2026-09-30)
+
+The site is **Emerson's Desk**. The header wordmark reads **`EBW`**. It is served at **`/desk/`**, and `/brain/` redirects. Nine authored lines plus one config block, and the Quartz **source** directory is still `brain/` — exactly as §19 priced it. (`/brain/` was never launched, so there was no link graph to protect; that is the only reason the name and the slug could move in one commit.)
+
+**What changed**
+
+| Where | Change |
+| --- | --- |
+| `brain/quartz.config.yaml` | `pageTitle` → `"Emerson's Desk"`; `pageTitleSuffix` → `" · Emerson Black Writes"`; `baseUrl` → `emersonblackwrites.com/desk`; nav entry `Brain:` → `Desk: …/desk/` |
+| `brain/content/index.md` | frontmatter `title` + hero kicker |
+| `About.md`, `Newsletters/index.md` | prose + the two hand-written `_Back to [[index\|…]]_` link texts |
+| `index.html`, `bio.html` | footer nav link → `desk/` |
+| `brain/quartz/styles/custom.scss` | §4a: the wordmark renders `EBW` |
+| `.github/workflows/deploy.yml` | `_site/brain/` → `_site/desk/`, both guard paths, the smoke-test URL, and the `/brain/` stub |
+
+**Four things that were not obvious until built**
+
+1. **The plan's own redirect sketch was on the wrong side of the move.** §19 specified a `.md` alias stub at `content/brain.md`. `@quartz-community/alias-redirects` emits *inside* the Quartz output, so with the app served from `/desk/` that stub would have appeared at `/desk/brain/` — a redirect at the destination, not at the origin. The old path is now a hand-written `_site/brain/index.html` written by `deploy.yml` (meta refresh to `url=/desk/` plus an absolute `canonical`), and the workflow **fails closed** on it: `grep -q 'url=/desk/' _site/brain/index.html`, where a missing file also fails. Corrected in §19.
+2. **`page-title` has no options, so `EBW` cannot come from config.** The plugin README is explicit ("no configuration options"); it renders `cfg.pageTitle`. The swap is therefore presentational, in `custom.scss` §4a: the anchor is collapsed with `font-size: 0` and the mark is painted by `::before` at `--eb-wordmark-size` (a custom property, so the mark and the h2 cannot drift). The anchor *keeps* "Emerson's Desk" as its text — so the link's accessible name is the real site name and only the glyphs differ. `font-size: 0` rather than `visibility: hidden` because the latter leaves the long text occupying its box.
+3. **The tab title had been glued together all along.** `Head.tsx` does `frontmatter.title + cfg.pageTitleSuffix` with no separator, so every tab in the arc read `The BrainEmerson Black Writes`. `pageTitleSuffix` now opens with `" · "`. Pre-existing, fixed here because the rename is what made it legible. (Also worth knowing: `<title>` comes from the *page's* frontmatter title, not `cfg.pageTitle` — the guard keys off that.)
+4. **`grep` was the wrong tool for the rename, and the plan knew it.** The two dispatches that use the ordinary words *brainspace* and *change the brain* are untouched; the guards scan **case-sensitively** for `The Brain` so a future blanket replace cannot corrupt published prose.
+
+**The guard — 16 new checks, suite 50 → 68** (`node quartz/verify-default-mode.mjs`, exit 1 on regression):
+
+- `pageTitle` and `content/index.md`'s frontmatter `title` **agree**, and the name contains "Desk" — §19's guard (a), so the two statements of the site's name cannot drift apart again.
+- No **authored** page and no **built** page still says "The Brain" (case-sensitive) — guard (b), extended to the output so a stale config option is caught too.
+- Homepage `<title>` keeps the name *and* its separator.
+- `baseUrl` is `…/desk`, and no `/brain/` URL survives in `quartz.config.yaml` (that is the header nav).
+- Both storefront pages link `desk/` and no longer link `brain/`.
+- The workflow stages **and guards** `_site/desk/`, smoke-tests the live `/desk/`, and writes a stub pointing at `/desk/` — guard (c). Leaving the old guard paths would have failed the deploy closed, which is at least loud.
+- Computed-style (headless Chrome): the header **paints** `EBW` (`::before` content), the anchor **keeps** the full name, its computed size is **`0px`** — i.e. the name is present but *not* painted — and the painted mark has real width (**37px**).
+
+**Proven by re-introducing both bugs, not by a green run.** (i) `pageTitle: "The Brain"` → 3 failures, exit 1. (ii) Commenting out `font-size: 0` → the "kept but not painted" check fails at **29.8px** and the mark's width doubles to **178px**, which is what the state *would* have looked like: the full name and `EBW` side by side. That second check exists because the first version of this probe would have passed it — `mark` alone still reads `"EBW"` when the collapse rule is missing. §16's rule, one section on.
+
+**The workflow's own shell was executed, not eyeballed.** The assemble + guard steps were extracted from `deploy.yml`, redirected to a temp `_site`, and run verbatim: 54 newsletter pages and 184 images staged, stub content correct, all guards passed. The `printf` quoting in the stub is the part that most needed that.
+
+**Lesson.** *A plan can be right about the shape of a change and wrong about a path.* §19 predicted a content-alias redirect for `/brain/`; that is the correct tool for a slug change **inside** the build and exactly wrong across a change of the build's own root. And where a framework component offers no configuration, a presentational swap is legitimate — but assert on **both** halves of it (what is painted, what is announced), because either on its own can look correct while being wrong.
+
+**Still open from §19:** step 2 (the two site pages stop restating the storefront; drop the hand-written breadcrumbs) and step 3 (the storefront features the writing; the characters become a real post). Then S3, S2, S8.
+

@@ -1,4 +1,4 @@
-name: Deploy Storefront and Brain to Pages
+name: Deploy Storefront and Desk to Pages
 
 on:
   push:
@@ -42,14 +42,25 @@ jobs:
 
       - name: Assemble site artifact
         run: |
-          mkdir -p _site/brain
+          # S10: the Desk is served at /desk/ (was /brain/). The Quartz SOURCE
+          # directory stays `brain/` — renaming it would touch npm ci, both
+          # .command scripts and every path in the plan for no user-visible gain;
+          # the URL is what readers see.
+          mkdir -p _site/desk
           # Copy storefront root files and directories
           cp index.html bio.html CNAME style.css README.md _site/
           cp -R img _site/
-          # Copy Quartz build output to /brain/
-          cp -R brain/public/. _site/brain/
-          # Remove duplicate CNAME created by Quartz inside /brain/
-          rm -f _site/brain/CNAME
+          # Copy Quartz build output to /desk/
+          cp -R brain/public/. _site/desk/
+          # Remove duplicate CNAME created by Quartz inside /desk/
+          rm -f _site/desk/CNAME
+          # Legacy /brain/ -> /desk/. /brain/ was never launched, so this is
+          # insurance for a bookmark or an external link taken before the move,
+          # and it costs one file. Written here rather than as a content/brain.md
+          # alias because Quartz now BUILDS into /desk/, so an alias page would
+          # emit at /desk/brain/ — the wrong side of the move entirely.
+          mkdir -p _site/brain
+          printf '%s' '<!doctype html><meta charset="utf-8"><title>Moved: Emerson&#8217;s Desk</title><link rel="canonical" href="https://emersonblackwrites.com/desk/"><meta http-equiv="refresh" content="0; url=/desk/"><p>Emerson&#8217;s Desk now lives at <a href="/desk/">/desk/</a>.</p>' > _site/brain/index.html
           # Disable Jekyll processing. Pages "Source" MUST be "GitHub Actions";
           # this file is belt-and-braces so the artifact can never be chewed up
           # by the legacy Jekyll pipeline if it is ever served from a branch.
@@ -67,8 +78,15 @@ jobs:
             echo "::error::Guard failure: _site/CNAME missing! Deployment aborted."
             exit 1
           fi
-          if [ ! -f "_site/brain/index.html" ]; then
-            echo "::error::Guard failure: _site/brain/index.html missing! Deployment aborted."
+          if [ ! -f "_site/desk/index.html" ]; then
+            echo "::error::Guard failure: _site/desk/index.html missing! Deployment aborted."
+            exit 1
+          fi
+          # S10: the legacy /brain/ stub must exist AND point at /desk/, so a
+          # rename can never quietly 404 the old path. grep fails closed on a
+          # missing file, which is the behaviour we want.
+          if ! grep -q 'url=/desk/' _site/brain/index.html; then
+            echo "::error::Guard failure: legacy /brain/ redirect stub missing or not pointing at /desk/! Deployment aborted."
             exit 1
           fi
           if [ ! -f "_site/.nojekyll" ]; then
@@ -76,14 +94,14 @@ jobs:
             exit 1
           fi
           # Content guard: an empty garden must never look like a successful build.
-          PAGE_COUNT=$(find _site/brain/newsletters -name '*.html' -type f 2>/dev/null | wc -l | tr -d ' ')
+          PAGE_COUNT=$(find _site/desk/newsletters -name '*.html' -type f 2>/dev/null | wc -l | tr -d ' ')
           if [ "$PAGE_COUNT" -lt 1 ]; then
-            echo "::error::Guard failure: no Quartz newsletter pages in _site/brain/newsletters/! Deployment aborted."
+            echo "::error::Guard failure: no Quartz newsletter pages in _site/desk/newsletters/! Deployment aborted."
             exit 1
           fi
-          IMG_COUNT=$(find _site/brain/organise/images -type f 2>/dev/null | wc -l | tr -d ' ')
+          IMG_COUNT=$(find _site/desk/organise/images -type f 2>/dev/null | wc -l | tr -d ' ')
           if [ "$IMG_COUNT" -lt 1 ]; then
-            echo "::error::Guard failure: no newsletter images in _site/brain/organise/images/! Deployment aborted."
+            echo "::error::Guard failure: no newsletter images in _site/desk/organise/images/! Deployment aborted."
             exit 1
           fi
           echo "Guard: $PAGE_COUNT newsletter pages and $IMG_COUNT image files staged."
@@ -99,13 +117,13 @@ jobs:
         uses: actions/deploy-pages@v4
 
       # Post-deploy smoke test. Non-fatal: it never unships a good build, but it
-      # shouts loudly if the live /brain/ is not the Quartz output. The classic
+      # shouts loudly if the live /desk/ is not the Quartz output. The classic
       # failure it catches: Settings -> Pages -> Source set to "Deploy from a
       # branch", where the platform's Jekyll build overwrites this deployment.
       - name: Smoke test live site
         if: always()
         run: |
-          URL="https://www.emersonblackwrites.com/brain/"
+          URL="https://www.emersonblackwrites.com/desk/"
           for attempt in 1 2 3 4 5 6; do
             BODY=$(curl -sS -m 20 -H 'Cache-Control: no-cache' "${URL}?smoke=${attempt}-${RANDOM}" || true)
             if printf '%s' "$BODY" | grep -q 'id="quartz-root"'; then

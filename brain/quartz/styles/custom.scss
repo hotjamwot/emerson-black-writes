@@ -235,8 +235,14 @@ h2.page-title,
 
 // Wordmark. The `::after` tick in §4 was written for the sidebar version of this
 // element; it is suppressed here in favour of the nav sitting on the baseline.
+//
+// S10: `--eb-wordmark-size` is the single source of the mark's size. The visible
+// text is no longer this value (`page-title` prints the site's full name); the
+// short mark `EBW` is painted below from the same variable, so the painted mark
+// and the collapsed name cannot drift apart.
 .page > #quartz-body .page-header h2.page-title {
-  font-size: 1.15rem;
+  --eb-wordmark-size: 1.15rem;
+  font-size: var(--eb-wordmark-size);
   margin: 0;
   flex: 0 0 auto;
   letter-spacing: 0.16em;
@@ -245,6 +251,30 @@ h2.page-title,
 
 .page > #quartz-body .page-header h2.page-title::after {
   display: none;
+}
+
+// ── S10: the wordmark reads `EBW` ───────────────────────────────────────────
+// §18 decided the header carries the short mark — the letters of the favicon
+// monogram and the storefront's own signature — while the *site* is "Emerson's
+// Desk". `@quartz-community/page-title` renders `cfg.pageTitle` and its README is
+// explicit that the plugin "has no configuration options", so there is no lever
+// to ask it for a different string. The swap is therefore presentational, which
+// also keeps the outcome honest for assistive tech: the anchor still *says*
+// "Emerson's Desk" (it stays in the accessibility tree and remains the link's
+// accessible name), and only the painted glyphs change.
+//
+// `font-size: 0` on the anchor collapses the long name without taking it out of
+// flow or out of the a11y tree; the pseudo-element then paints the mark at the
+// h2's own size via `--eb-wordmark-size` (which it inherits, as custom
+// properties do). `letter-spacing` and `text-transform` inherit too, so the mark
+// matches the tracked-uppercase register of the rest of the chrome.
+.page > #quartz-body .page-header h2.page-title a {
+  font-size: 0;
+}
+
+.page > #quartz-body .page-header h2.page-title a::before {
+  content: "EBW";
+  font-size: var(--eb-wordmark-size);
 }
 
 // The nav. The `footer` plugin emits `<footer><p>…Quartz…</p><ul><li><a>`;
@@ -351,7 +381,7 @@ h2.page-title,
   }
 
   // The wordmark is `display: none` below 800px — the brand is one tap away via
-  // the Brain link, and at 420px it is the item worth sacrificing.
+  // the Desk link in the nav, and at 420px it is the item worth sacrificing.
   .page > #quartz-body .page-header h2.page-title {
     display: none;
   }

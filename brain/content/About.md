@@ -10,8 +10,8 @@ publish: true
 Emerson Black writes young adult mystery with heart — the *Seen* series and more.
 
 - Main site: [emersonblackwrites.com](https://emersonblackwrites.com)
-- This is the Brain: the full newsletter archive, browsable and searchable.
+- This is Emerson's Desk: the full newsletter archive, browsable and searchable.
 
-_Back to [[index|The Brain]] · browse the [[Newsletters/index|newsletter archive]]._
+_Back to [[index|Emerson's Desk]] · browse the [[Newsletters/index|newsletter archive]]._
 
 © 2026 Emerson Black · Built with [Quartz](https://quartz.jzhao.xyz/)
