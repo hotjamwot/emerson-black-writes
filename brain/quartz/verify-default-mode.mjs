@@ -154,6 +154,53 @@ check(
   "icon.png is optimised (small file, not the 36 KB master)",
 )
 
+// ── 4. the body serif must survive the theme layer ───────────────────────────
+// Regression guard for the "serif on lists but sans in paragraphs" bug. The
+// theme emits `html[saved-theme="…"] body p { font-family: var(--font-interface) }`
+// in @layer obsidian-theme, which outranks our unlayered container rule because
+// it matches `p` directly. The fix is to pin the font variables in the theme's
+// own trailing aspect, so assert they are actually pinned there.
+console.log("\nTypography (body serif vs the theme layer)")
+// Reuse the `css` blob already accumulated from public/static above rather than
+// re-reading the directory.
+check(
+  /html\[saved-theme=["'][a-z]+["']\]\s*body\s+p\s*\{[^}]*font-family\s*:\s*var\(--font-interface\)/.test(
+    css,
+  ),
+  "upstream theme still emits the `body p` font rule (guard premise is current)",
+)
+check(
+  /--font-interface:\s*"?Lora/.test(css),
+  "theme pins --font-interface to Lora, so `body p` renders in the brand serif",
+)
+// Upstream still *declares* a sans --font-interface-obsidian, and that
+// declaration must stay. What matters is that our brand value is declared LAST
+// within the theme's own stylesheet, so it is the one that wins inside
+// @layer obsidian-theme.
+//
+// The ordering is only meaningful WITHIN one stylesheet: `css` above
+// concatenates several files, and the @quartz-fonts layer is a *sibling* layer
+// whose position in that concatenation says nothing about cascade order. So
+// scope this to the single file carrying the obsidian-theme layer.
+const themeSheet = readdirSync(staticDir)
+  .filter((f) => f.endsWith(".css"))
+  .map((f) => ({ f, src: readFileSync(join(staticDir, f), "utf8") }))
+  .find(({ src }) => src.includes("@layer obsidian-theme"))
+check(!!themeSheet, "found the stylesheet carrying @layer obsidian-theme")
+const themeDecls = themeSheet
+  ? [...themeSheet.src.matchAll(/--font-interface:\s*([^;]+);/g)].map((m) => m[1].trim())
+  : []
+const loraAt = themeDecls.findIndex((v) => v.startsWith('"Lora"'))
+check(loraAt !== -1, "theme pins --font-interface to the brand serif")
+check(
+  loraAt !== -1 && !themeDecls.slice(loraAt + 1).some((v) => v.includes("ui-sans-serif")),
+  "within the theme layer, no sans --font-interface is declared after ours",
+)
+check(
+  /--font-monospace:\s*"?IBM Plex Mono/.test(css),
+  "theme pins --font-monospace to IBM Plex Mono",
+)
+
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
 // magenta #E6007E. Swapping in the wrong master is the easiest mistake here and
 // dimension checks cannot catch it, so decode the ink and assert the crimson.

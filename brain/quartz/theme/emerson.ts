@@ -39,6 +39,31 @@ const ACCENT = {
 type Mode = keyof typeof ACCENT
 
 /**
+ * The brand trio, mirroring `quartz/styles/custom.scss` and the storefront's
+ * `style.css`. Declared here as the *source* so the theme layer can resolve its
+ * own font variables to the brand, rather than being overridden from outside.
+ *
+ * This is not a duplicate for convenience. `@quartz-themes/default` emits
+ * `html[saved-theme="…"] body p { font-family: var(--font-interface) }` inside
+ * `@layer obsidian-theme`, and `--font-interface` defaults to the Obsidian sans
+ * stack. That rule targets `p` *directly*, so it beat our unlayered
+ * `.markdown-preview-view` container rule — and because it only names `p`,
+ * `ol li` kept the serif while every paragraph turned sans. Pinning
+ * `--font-interface` / `--font-text` / `--font-default` in the theme's own
+ * trailing aspect makes that rule emit Lora, which fixes every consumer at
+ * once instead of patching the symptom.
+ *
+ * Keep these three stacks in step with custom.scss (`--eb-display` /
+ * `--eb-serif` / `--eb-mono`) and style.css. Old faces are kept as fallbacks so
+ * a blocked request degrades to the previous look rather than to Times.
+ */
+const FONTS = {
+  display: '"Gabarito", "Century Gothic", "Avant Garde", Futura, system-ui, sans-serif',
+  serif: '"Lora", Georgia, "Times New Roman", serif',
+  mono: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
+} as const
+
+/**
  * The aspect @quartz-themes/core emits last (its `ASPECT_ORDER` ends at
  * `misc`). Appending there puts the overlay after every other declaration in
  * the theme layer at equal specificity.
@@ -127,6 +152,21 @@ ${scope} {
   --color-purple-rgb: ${rgb};
   --color-pink: ${accent};
   --color-pink-rgb: ${rgb};
+
+  /* Typography (S6). The theme layer's own "body p { font-family:
+     var(--font-interface) }" resolves through these, so pinning them here makes
+     the theme emit the brand faces directly. --font-default-obsidian is left
+     alone: it is the upstream fallback, and anything that still reads it will
+     now chain through the brand --font-default set just above it. */
+  --font-default: ${FONTS.serif};
+  --font-text: ${FONTS.serif};
+  --font-interface: ${FONTS.serif};
+  --font-monospace-default: ${FONTS.mono};
+  --font-monospace: ${FONTS.mono};
+  --bodyFont: ${FONTS.serif};
+  --headerFont: ${FONTS.display};
+  --titleFont: ${FONTS.display};
+  --codeFont: ${FONTS.mono};
 }`
 }
 
