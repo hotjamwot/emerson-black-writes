@@ -26,6 +26,7 @@ import { readFileSync, readdirSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import vm from "node:vm"
+import zlib from "node:zlib"
 
 const brain = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 
@@ -119,6 +120,119 @@ check(/useThemeFonts:\s*false/.test(config), "quartz-fonts has `useThemeFonts: f
 check(
   /header:\s*Gabarito[\s\S]*body:\s*Lora/.test(config),
   "core `theme.typography` is Gabarito + Lora",
+)
+
+// ── 3. the favicon must be the crimson monogram ──────────────────────────────
+console.log("\nFavicon (S7)")
+// Decompose the icon's own IHDR to confirm real dimensions without an image lib.
+function pngSize(file) {
+  const b = readFileSync(file)
+  return { w: b.readUInt32BE(16), h: b.readUInt32BE(20), colourType: b[25] }
+}
+const iconPath = join(brain, "quartz", "static", "icon.png")
+const icon = pngSize(iconPath)
+check(icon.w === icon.h, `icon.png is square (${icon.w}x${icon.h})`)
+check(
+  icon.w >= 180,
+  `icon.png is at least 180px (got ${icon.w}) — 16px tabs need a large source to downscale from`,
+)
+check(
+  icon.colourType === 6,
+  `icon.png keeps its alpha channel (colour type ${icon.colourType}, want 6/RGBA)`,
+)
+
+// The old default icon was a palette PNG (colour type 3) and 200px; a regression
+// back to either is the most likely way this silently undoes.
+const storefrontIcon = join(brain, "..", "img", "favicon.png")
+const sIcon = pngSize(storefrontIcon)
+check(
+  sIcon.w === icon.w && sIcon.h === icon.h,
+  `storefront favicon matches the Brain icon (${sIcon.w} vs ${icon.w})`,
+)
+check(
+  readFileSync(iconPath).length < 20000,
+  "icon.png is optimised (small file, not the 36 KB master)",
+)
+
+// The branding folder also ships `EBW icon.png`, which is the SAME monogram in
+// magenta #E6007E. Swapping in the wrong master is the easiest mistake here and
+// dimension checks cannot catch it, so decode the ink and assert the crimson.
+function dominantInk(file) {
+  const b = readFileSync(file)
+  let p = 8
+  let w, h, ct
+  const idat = []
+  while (p < b.length) {
+    const len = b.readUInt32BE(p)
+    const t = b.toString("ascii", p + 4, p + 8)
+    if (t === "IHDR") {
+      w = b.readUInt32BE(p + 8)
+      h = b.readUInt32BE(p + 12)
+      ct = b[p + 17]
+    }
+    if (t === "IDAT") idat.push(b.subarray(p + 8, p + 8 + len))
+    if (t === "IEND") break
+    p += 12 + len
+  }
+  if (ct !== 6) return null
+  const ch = 4
+  const raw = zlib.inflateSync(Buffer.concat(idat))
+  const stride = w * ch
+  const out = Buffer.alloc(h * stride)
+  let o = 0
+  let ro = 0
+  for (let y = 0; y < h; y++) {
+    const f = raw[ro++]
+    const line = raw.subarray(ro, ro + stride)
+    ro += stride
+    for (let x = 0; x < stride; x++) {
+      const a = x >= ch ? out[o + x - ch] : 0
+      const bb = y > 0 ? out[o - stride + x] : 0
+      const c = x >= ch && y > 0 ? out[o - stride + x - ch] : 0
+      let v = line[x]
+      if (f === 1) v += a
+      else if (f === 2) v += bb
+      else if (f === 3) v += (a + bb) >> 1
+      else if (f === 4) {
+        const pa = Math.abs(bb - c)
+        const pb = Math.abs(a - c)
+        const pc = Math.abs(a + bb - 2 * c)
+        v += pa <= pb && pa <= pc ? a : pb <= pc ? bb : c
+      }
+      out[o + x] = v & 255
+    }
+    o += stride
+  }
+  const counts = new Map()
+  for (let i = 0; i < w * h; i++) {
+    const r = out[i * 4],
+      g = out[i * 4 + 1],
+      bl = out[i * 4 + 2],
+      a = out[i * 4 + 3]
+    if (a < 250) continue
+    const k = (r << 16) | (g << 8) | bl
+    counts.set(k, (counts.get(k) || 0) + 1)
+  }
+  const [best, n] = [...counts.entries()].sort((x, y) => y[1] - x[1])[0] ?? [0, 0]
+  const hex =
+    "#" +
+    [(best >> 16) & 255, (best >> 8) & 255, best & 255]
+      .map((v) => v.toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase()
+  return { hex, n, total: w * h }
+}
+
+const ink = dominantInk(iconPath)
+// The light-mode brand accent. Exact, because the source is a flat fill.
+check(ink !== null, "icon.png is RGBA and decodable")
+check(
+  ink && ink.hex === "#CA2626",
+  `icon.png ink is the brand crimson #CA2626${ink ? ` (found ${ink.hex})` : ""}`,
+)
+check(
+  ink && ink.n / ink.total > 0.2,
+  `the monogram is actually present (${ink ? ((ink.n / ink.total) * 100).toFixed(1) : 0}% opaque)`,
 )
 
 // ── 2. the seed IIFE must be present in the built prescript ────────────────────
