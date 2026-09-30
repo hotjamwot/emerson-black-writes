@@ -199,6 +199,68 @@ h2.page-title,
   min-width: 0;
 }
 
+// S4 + S1 — reclaim the empty right sidebar, and spend it where it helps.
+//
+// The default frame always renders `<div class="right sidebar">`, even when the
+// page has no right-hand components (quartz.config.yaml sets `right: []` for
+// content pages). The div is still a 320px grid column, so it silently ate a
+// third of the reading width while displaying nothing: article measured 802px
+// of a 1500px shell. `.page` was ALREADY 1500px — the plan's "page ~1500px max"
+// target was satisfied before we started, so widening `.page` was never the
+// lever. The lever was this empty column.
+//
+// We collapse the column to two tracks and give the space to the explorer
+// (320 -> 420px), which is where more width is genuinely useful. The reading
+// measure stays near 800px / ~76 characters: that is the top of the comfortable
+// reading range for Lora, and pushing the centre to 1100-1200px would give
+// ~110 characters per line, well past where the eye loses the return sweep.
+// Wider *shell*, held *measure* — the roomy feel without the long line.
+//
+// `:empty` (not `:not(:has(> *))`) is the load-bearing part. A `:has()` nested
+// inside a `:not()` inside a `:has()` is INVALID CSS — Chrome rejects the whole
+// selector, so the rule is dropped silently and you get a 320px hole with no
+// error anywhere. `:has(> .sidebar.right:empty)` is a single level and matches
+// only a sidebar with no children, so a page that DOES have right-hand
+// components keeps its column and still lays out correctly. Verified in
+// Chrome: `matches(":has(> .sidebar.right:empty)")` → true, and
+// `:has(> .sidebar.right:not(:empty))` → false on this page.
+//
+// The `min-width: 1200px` guard is equally load-bearing. The base rules that
+// collapse the grid to a single stacked column live inside `@media (max-width:
+// 800px)` / `(min-width:800px) and (max-width:1200px)`; an unlayered rule like
+// this one beats them regardless of width, so applying it everywhere pinned a
+// 420px left track even at a 420px viewport — measured overflow, two 420px
+// columns in a 420px window. Scoping to wide viewports lets the base media
+// queries own small screens and lets this own the desktop shell.
+@media (min-width: 1200px) {
+  .page > #quartz-body:has(> .sidebar.right:empty) {
+    grid-template:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer"
+      / 420px auto;
+  }
+}
+
+.page > #quartz-body > .sidebar.right:empty {
+  display: none;
+}
+
+// Hold the reading measure. Collapsing the column widened the centre from 850
+// to 1075px, which pushed paragraphs to 98 characters per line — past the point
+// where the eye reliably finds the start of the next line. So the reclaimed
+// width is NOT given to the text: the content column is capped at 780px and
+// centred, and the extra room becomes gutter. 780px / 10.53px-per-ch ≈ 76
+// characters, the top of the comfortable range for Lora at 16.96px.
+//
+// `.page article` rather than a bare `article` so this applies to the reading
+// column and not to sidebars or the footer. `margin-inline: auto` re-centres it,
+// because the grid track is now much wider than the text.
+.page article {
+  max-width: 780px;
+  margin-inline: auto;
+}
+
 // Left sidebar wordmark
 h2.page-title {
   font-size: 1.02rem;

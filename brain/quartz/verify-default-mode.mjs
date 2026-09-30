@@ -353,6 +353,67 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
       `${label} stay on the display face (got: ${field(name) ?? "n/a"})`,
     )
   }
+
+  // ── S4 + S1: no empty right sidebar, and a held reading measure ────────────
+  // Both are computed-layout facts, so both need the browser; a static grep of
+  // the stylesheet would happily pass while the page overflows, which is exactly
+  // what happened while developing this (see the comments in custom.scss §4).
+  //
+  // The assertion that matters most is `chars`. The default frame ALWAYS renders
+  // `<div class="right sidebar">`, even with `right: []`, and it stayed a live
+  // 320px grid track — a third of the shell spent on an empty box. Collapsing it
+  // widened the centre, which then had to be re-capped, and the number that
+  // actually governs readability is characters per line, not pixels. Assert the
+  // 45–90 band rather than an exact width: it fails for a missing column, for a
+  // regressed cap, and for a future font change that re-measures differently.
+  const lay = await computedInBrowser(
+    "newsletters/2023/5-lessons-i-learned-writing-my-first-book.html",
+    `
+    const d = f.contentDocument
+    const rs = d.querySelector(".sidebar.right")
+    const bd = d.querySelector("#quartz-body")
+    out.push("rightKids=" + (rs ? rs.children.length : -1))
+    out.push("rightDisplay=" + (rs ? getComputedStyle(rs).display : "absent"))
+    out.push("cols=" + (bd ? getComputedStyle(bd).gridTemplateColumns : "?"))
+    const p = d.querySelector("article p")
+    if (p) {
+      const st = getComputedStyle(p)
+      const probe = d.createElement("div")
+      probe.style.cssText = "position:absolute;visibility:hidden;width:10ch"
+      probe.style.font = st.font
+      d.body.append(probe)
+      const perCh = probe.getBoundingClientRect().width / 10
+      probe.remove()
+      out.push("paraW=" + Math.round(p.getBoundingClientRect().width))
+      out.push("chars=" + Math.round(p.getBoundingClientRect().width / perCh))
+    }
+    out.push("overflow=" + (d.documentElement.scrollWidth > d.documentElement.clientWidth))
+  `,
+  )
+  const lf = (name) => {
+    const hit = (lay ?? "").split(" || ").find((s) => s.startsWith(name + "="))
+    return hit ? hit.slice(name.length + 1) : null
+  }
+  check(lf("rightKids") === "0", `right sidebar renders no phantom column (kids: ${lf("rightKids") ?? "n/a"})`)
+  check(lf("rightDisplay") === "none", `empty right sidebar is display:none (got: ${lf("rightDisplay") ?? "n/a"})`)
+  const chars = Number(lf("chars"))
+  // Assert the TRACK COUNT, not just the empty/hidden state. Reverting the grid
+  // rule to `:not(:empty)` leaves the sidebar `display:none` via its own rule and
+  // the measure at 67 chars — every other check still passes, while the layout is
+  // in fact the old 3-track one. That regression was caught only by counting
+  // tracks, which is why this check exists and why `chars` alone was not enough.
+  const trackCount = lf("cols")
+    ? lf("cols").trim().split(/\s+/).length
+    : null
+  check(
+    trackCount === 2,
+    `shell collapses to 2 grid tracks, not 3 (got: ${trackCount ?? "n/a"} — "${lf("cols") ?? "?"}")`,
+  )
+  check(
+    lf("chars") !== null && chars >= 45 && chars <= 90,
+    `reading measure holds 45-90 chars/line (got: ${lf("chars") ?? "n/a"})`,
+  )
+  check(lf("overflow") === "false", `no horizontal overflow at 1920px (got: ${lf("overflow") ?? "n/a"})`)
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
