@@ -1,7 +1,7 @@
 # Emerson Black Brain — Architecture, Spec & Operations Guide
 
 **Status:** Live at `emersonblackwrites.com/brain/` · **Engine:** Quartz v5 · **Date:** 2026-09-28 · **Author:** HayJay + AI assistant
-**Now (2026-09-30):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). **Next: S1 / S1a / S2 / S3 / S4 / S8.**
+**Now (2026-09-30):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). **Next: S10 — rename to Emerson's Desk, slug → `/desk/`, storefront as homepage (§19, approved; three steps, starting with the rename).** S3 / S2 / S8 queued behind it.
 
 
 **Goal:** Write in Obsidian → run `Publish Brain.command` → the newsletter archive is live at **`emersonblackwrites.com/brain/`**, built automatically via GitHub Actions.
@@ -143,7 +143,7 @@ source: substack:176627320         # numeric part of post_id
   - Storefront footer nav row (Books · About · The Brain · Subscribe) added to `index.html` + `bio.html`; © bumped to 2026.
 - [x] **Accent ownership — DONE (2026-09-29 · Change #1 / S5):** The Brain now runs **its own Quartz theme, `emerson`** (`brain/quartz/theme/emerson.ts`). Rather than fighting the Obsidian theme's cascade layer, we append the crimson accent to the theme itself and register it as `emerson` — so links, tags, checkboxes, graph nodes, search highlights and callouts resolve **`#CA2626` light / `#E63A3A` dark at the source**. `node quartz/theme/verify-brand.mjs` proves it against the built CSS, and in-theme assertions fail the build loudly if upstream renames a variable we pin. See §11.
 - [x] **Body serif reaches paragraphs — DONE (2026-09-30, incident I3 / §14):** the last outstanding piece of S6. Root cause was a *sibling* cascade layer — `@quartz-community/quartz-fonts` loads after the theme sheet, so its `@layer quartz-fonts` is appended last and its hardcoded sans `--font-interface` beat our pin inside `@layer obsidian-theme`. Fixed by pinning the font variables **unlayered** in `custom.scss` §1b (serif for body, display for titles) and pinning the chrome to Gabarito in §1c, so the sidebar/TOC/breadcrumbs no longer inherit the reading serif. `verify-default-mode.mjs`'s static text checks are replaced by a **headless-Chrome computed-style assertion** — the old ones stayed green while the page was visibly wrong. Verified by re-introducing the bug.
-- [ ] **Storefront Integration (next milestone):** Merge the storefront and the Brain into one shell — shared header/nav across `/` and `/brain/`, brain-aware index page, and a link back to `/` from inside the garden. Currently connected only by the footer nav row (D15).
+- [ ] **Storefront Integration — now tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). What remains is the rename, the slug move, and a genuinely *shared* nav across both halves.ndex page, and a link back to `/` from inside the garden. Currently connected only by the footer nav row (D15).
 - [ ] **Editorial pass (Arc 2 candidates):**
   - Tag taxonomy: all 50 notes carry `tags: []` — agree a small tag set (craft / process / publishing / mindset) so tag pages and graph clusters become useful.
   - Thematic `[[wikilinks]]` between essays so Backlinks and the graph fill in.
@@ -225,30 +225,31 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 
 | # | Item | Target state | Levers |
 | --- | --- | --- | --- |
-| S1 | Wider master body | sspaeti-like measure (~1100–1200px centre; page ~1500px max) | `custom.scss` override of `.page` + `.center`/`article` max-widths |
-| S1a | Header w/ navlinks + search | `EBW` wordmark top-left; links: Books · About · Brain · Subscribe; search in header-right toolbar | `page-title` → `header` pos + footer `links` → header nav (custom CSS) + search/darkmode/reader-mode in header toolbar group |
+| S1 | Wider master body | ⚠️ **RE-SCOPED — DONE 2026-09-30.** The target was stale: `.page` was *already* 1500px. The real constraint was an empty 320px right-sidebar track. Now: 2 tracks / 420px explorer / article held at 780px ≈ **74 chars**. **See §16** |
+| S1a | Header w/ navlinks + search | ✅ **DONE 2026-09-30** — wordmark + Books·About·Brain·Subscribe + search/dark/reader in the `header` slot. Nav is the `footer` plugin repurposed; no new component. **See §17** |
 | S2 | Graph everywhere, larger | Local graph bottom of every post (afterBody, taller); global graph as hero/secondary feature on index | `graph` second instance `afterBody` + `.graph-outer` height + homepage `global-graph` embed section |
 | S3 | Left sidebar cleanup | Drop `THE BRAIN` title; TOC + backlinks above `The Archive`; remove `Newsletter archive` parent node | `page-title` → header, `table-of-contents`+`backlinks` → left, explorer `filterFn` hides `newsletters/index` |
-| S4 | Kill right sidebar | All secondary info left | `table-of-contents`, `backlinks`, `graph(right)` → left/afterBody; `byPageType.content.positions.right: []` |
+| S4 | Kill right sidebar | All secondary info left | ✅ **DONE 2026-09-30, folded into S1** — collapsed to 2 grid tracks, since every right sidebar in the build is empty. **See §16** |
 | S5 | Crimson links | **`#CA2626` light / `#E63A3A` dark**, no purple anywhere | ✅ **DONE** — owned `emerson` theme, §11 |
 | S6 | Display + body fonts | **Gabarito** titles · **Lora** body (supersedes the Source Serif 4 shortlist) | ✅ **DONE 2026-09-30** — storefront fonts shipped with S6; the Brain's body serif needed a second pass after a sibling-layer defeat. Fixed unlayered in `custom.scss` §1b, chrome pinned to display in §1c, guarded by a computed-style check. **See §14** |
 | S7 | EBW favicon, crimson | Rebuild from **`Emerson Signature square_red.png`** (1280×1280 RGBA monogram) | ✅ **DONE 2026-09-29** — 512×512 tight-cropped RGBA to `brain/quartz/static/icon.png` + `img/favicon.png`; §13 |
 | S8 | Frontmatter-rich header | `Originally published` / `Last updated`; visible tags; breadcrumb starts at year | Local `ContentMeta` override or CSS labels + `tag-list` (on) + breadcrumbs `rootName`/`spacerSymbol` |
-| S9 | Storefront fold-out | Homepage wears the same brand: Gabarito display + Lora body + `#E63A3A` accent + new favicon | `style.css` `--font-display`/`--font-body`/`--accent-red*` + Google Fonts `<link>` in `index.html`/`bio.html` + favicon swap |
+| S9 | Storefront fold-out | ✅ **DONE 2026-09-30** — §15. Homepage wears the same brand: Gabarito display + Lora body + `#E63A3A` accent + new favicon | `style.css` `--font-display`/`--font-body`/`--accent-red*` + Google Fonts `<link>` in `index.html`/`bio.html` + favicon swap |
+| S10 | 🟢 **Rename + integrate** | Site = **Emerson's Desk**, wordmark `EBW`, slug `/desk/`; Desk stops duplicating the storefront; storefront stays homepage and features the writing; characters become a real post | §18–19 — **approved, next** |
 
 > **How we work this arc:** one item at a time → edit → `npx quartz build` → eyeball at `localhost:8080` → tick the box → only then move on. (`Preview Brain.command` serves it; see §8 for the zsh comment trap.)
 >
-> **Execution order:**
-> 1. ✅ **S5** — crimson accent Brain-wide: resolved 2026-09-29 by the owned `emerson` theme (§11). The config/`custom.scss`/`callouts.scss` edits from the first pass all remain.
-> 2. ✅ **S6** — Gabarito + Lora, both halves. Resolved 2026-09-30: the storefront shipped with it, and the Brain's body serif took a second pass (§14 — it had been losing to the `@layer quartz-fonts` sibling layer).
-> 3. ✅ **S7** — crimson EBW monogram favicon on both halves. Shipped 2026-09-29; see §13.
-> 4. ⬜ **S9** — storefront fold-out: *fonts already done in S6* — remaining is the accent (`--accent-red*` → `#E63A3A`) + favicon swap.
-> 5. ⬜ **S1** — wider master body (~1100–1200px centre; page ~1500px max).
-> 6. ⬜ **S1a** — header: EBW wordmark, Books · About · Brain · Subscribe, search.
-> 7. ⬜ **S2** — graph: taller afterBody instance + homepage feature.
-> 8. ⬜ **S3** — left sidebar cleanup + explorer `Newsletter archive` parent node.
-> 9. ⬜ **S4** — kill right sidebar (may fold into S1).
-> 10. ⬜ **S8** — `Originally published` / `Last updated` + visible tags + breadcrumbs from year (blocked on the tagging pass).
+> **Execution order** (this list is the live one; the Arc 2 table above is the catalogue):
+> 1. ✅ **S5** — crimson accent, owned by the `emerson` theme. §11.
+> 2. ✅ **S6** — Gabarito + Lora, both halves. §14 (the body serif took a second pass).
+> 3. ✅ **S7** — EBW monogram favicon on both halves. §13.
+> 4. ✅ **S9** — storefront accent + favicon. §15.
+> 5. ✅ **S1 + S4** — empty right sidebar collapsed, measure held at ~74 chars. §16. *(S1 was re-scoped: `.page` was already 1500px.)*
+> 6. ✅ **S1a** — header bar: wordmark, four-link nav, search + controls. §17.
+> 7. 🟢 **S10** — rename to Emerson's Desk, slug → `/desk/`, storefront as homepage. §18–19. **Next.**
+> 8. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
+> 9. ⬜ **S2** — graph: taller afterBody instance + homepage feature.
+> 10. ⬜ **S8** — `Originally published` / `Last updated` + visible tags + breadcrumbs from year. Blocked on the tagging pass.
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -260,7 +261,7 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 >
 > **Verified:** `node quartz/verify-default-mode.mjs` — 8 checks, exit 1 on regression. It asserts the toggle is not hidden, that the seed reached the built `prescript.js`, and runs the two real scripts in **both** orders across four scenarios (first visit on light OS, first visit on dark OS, returning-light, returning-dark). It tests the *sources* rather than the minified bundle on purpose — order-independence is a property of the two scripts, and esbuild's re-wrapping makes the built file brittle to slice. OS-following was achievable but is explicitly *not* wanted: a first visit always gets dark, and only an explicit toggle moves it.
 
-**Intent.** The storefront sells a moody, cinematic mystery series: near-black navy, crimson accents, film grain, geometric uppercase display type, generous negative space. The Brain keeps that mood while becoming a *reading room*, not a billboard. Film grain (`film_grain.webp`, 0.22 dark / 0.10 light), crimson and the display face carry across; body copy is **Lora** (a reading serif — Gabarito at paragraph length is punishing); article headings are **not** uppercased (50+ dispatches in caps would shout, so structure labels carry the caps); and both palettes are first-class — light is "warm paper" (multiply grain, softer glow) so daylight readers are not punished.
+**Intent.** The storefront sells a moody, cinematic mystery series: near-black navy, crimson accents, film grain, geometric uppercase display type, generous negative space. The Desk keeps that mood while becoming a *reading room*, not a billboard. Film grain (`film_grain.webp`, 0.22 dark / 0.10 light), crimson and the display face carry across; body copy is **Lora** (a reading serif — Gabarito at paragraph length is punishing); article headings are **not** uppercased (50+ dispatches in caps would shout, so structure labels carry the caps); and both palettes are first-class — light is "warm paper" (multiply grain, softer glow) so daylight readers are not punished.
 
 **How the CSS wins without `!important`:** `componentResources.ts` wraps the framework stylesheet in `@layer quartz-base` and appends `custom.scss` outside it — unlayered rules beat layered ones. The Obsidian theme is a *separate, higher* layer; see §11.
 
@@ -269,7 +270,7 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 2. Colour/typography tokens → `quartz.config.yaml` (`configuration.theme`) → `custom.scss`; brand accent → `quartz/theme/emerson.ts` (§11).
 3. Component behaviour → `quartz.config.yaml` (`plugins[].options`, `layout.byPageType`).
 4. Structure/hooks → `quartz/components/frames/*` (a `full-width` and a `minimal` frame already exist).
-5. Deepest lever (not yet used): a local component or frame for a shared header/nav — the path to full storefront integration.
+5. A local component or frame for a **shared** header/nav across both halves — still unused. S1a solved the Desk's header by reusing an existing plugin (§17); a genuinely shared one is the next step if the two surfaces should ever render nav from one source.
 
 ---
 
@@ -422,3 +423,121 @@ Because it is dark-only, `--accent-red` is pinned to the dark value at the top l
 
 **Lesson.** *Shared brand ≠ shared file.* The two halves are genuinely separate codebases that must look identical, and no amount of care inside either one protects the pair. When one file restates another's values, that relationship is a fact worth encoding as an assertion — otherwise it silently rots the first time someone edits only one side.
 
+## 16. ✅ S1 + S4 — the empty sidebar, and a measure on purpose (2026-09-30)
+
+S1 was specified as "wider master body (~1100–1100px centre; page ~1500px max)". Measuring before editing found **two of those three targets already true**: `.page` was already `max-width: 1500px`. The plan had been written against a remembered default, not the built stylesheet.
+
+What was actually constraining the reading column was a **phantom grid track**. The default frame always renders `<div class="right sidebar">` — unconditionally, even when `quartz.config.yaml` sets `right: []`. It was `display:flex; visibility:visible` with **zero children**, still occupying a live 320px track. A third of a 1500px shell spent on an empty box.
+
+**Before → after (measured @1920px, headless Chrome):**
+
+| | before | after |
+|---|---|---|
+| grid tracks | `320px 850px 320px` | `420px 1075px` |
+| empty right track | 320px | 0 (`display:none`) |
+| explorer | 320px | 420px |
+| article | 802px | 780px |
+| **chars/line** | **76** | **74** |
+
+**The centre got wider and the text deliberately did not.** Removing the empty track widened the centre to 1075px, which pushed paragraphs to **98 characters per line** — well past where the eye reliably finds the start of the next line. So the reclaimed width is capped back out: `.page article { max-width: 780px; margin-inline: auto }`, and the surplus becomes gutter. 780 / 10.53px-per-ch ≈ **74 chars**. S1's stated 1100–1200px target would have been ~110 chars. **Wider shell, held measure** — the roomy feel without the long line. (This is the §10 intent, "a reading room, not a billboard", taken literally enough to contradict the plan's own numbers.)
+
+**Three bugs, each found by measuring rather than reading.** None of these produced an error, a stack trace, or a build failure:
+1. **Nested `:has()` is invalid CSS.** `:has(> .sidebar.right:not(:has(> *)))` — a `:has()` inside a `:not()` inside a `:has()` — is rejected wholesale by Chrome, so the rule was **silently dropped** while a sibling rule kept `display:none` on the sidebar. Result: a 320px hole, no diagnostic anywhere. `:has(> .sidebar.right:empty)` is a single level and works. Found by asking Chrome `matches()` and reading the returned `SyntaxError`.
+2. **The unlayered rule beat the base media queries at *every* width.** `custom.scss` is unlayered, so it outranks the framework's `@media (max-width:800px)` / `(min-width:800px) and (max-width:1200px)` collapsing rules regardless of specificity. Applied globally, the 420px left track survived down to a 420px viewport — measured as `420px 420px`, i.e. horizontal overflow on a phone. Fixed by scoping to `@media (min-width: 1200px)`, letting the base queries own small screens. Verified at 1920/1280/1024/420: no overflow at any width.
+3. **The first guard did not fail when it should have.** `chars` alone was not a sufficient assertion — reverting the grid rule to `:not(:empty)` left the sidebar hidden by its own rule and the measure at **67 chars**, comfortably inside the 45–90 band, so all four original checks passed on a genuinely regressed layout. The check that actually catches it is the **track count** (2, not 3), added after this was caught. The lesson from §14 again, one layer down: *a check that has never been seen to fail is not yet a check.*
+
+**The guard.** Five new computed-layout checks in `verify-default-mode.mjs` (§ S1/S4 block), reusing the existing browser probe: no phantom children, `display:none`, **exactly 2 tracks**, 45–90 chars/line, no horizontal overflow. The measure is asserted as a *band*, not a pixel value, so it survives a future font change. Suite is now **42/42**.
+
+**Lesson.** *Measure the thing before you change it, and re-measure after — but also test that the test fails.* S1 was a no-op as written, and would have been "completed" with an honest-looking green build. The plan is a design document written from memory; the built stylesheet is the fact. When they disagree, build the argument from measurement — and when a guard is new, **prove it goes red** before trusting it.
+
+## 17. ✅ S1a — the header bar, and a specificity fight (2026-09-30)
+
+Target: `EBW` wordmark top-left, links Books · About · Brain · Subscribe, search top-right — one band across the top of the shell, like the storefront.
+
+**Almost no new code.** The `header` is a first-class layout position alongside `left`/`right`/`beforeBody`, so this is a config move: `page-title` and the `footer` plugin from `left`/`footer` into `header`, plus `search`/`darkmode`/`reader-mode`. The nav itself is the **`footer` plugin reused** — it already renders `links` as `<ul><li><a>`, exactly the markup a nav wants, so writing a component would have been busywork. Its "Created with Quartz v5 © 2026" line is the one thing unwanted; `custom.scss` hides `header > footer > p` and nothing else.
+
+**That reuse is also the whole difficulty.** Because the nav *is* a `<footer>`, it inherits every rule aimed at the real page footer:
+- base: `.page > #quartz-body footer { grid-area: grid-footer; min-width: 100%; margin-inline: auto }`
+- Obsidian theme: `@media (min-width:1200px) { .page>#quartz-body footer { min-width/max-width: calc(100% - 3rem); padding-inline: 1.5rem } }`
+
+**The theme rule wins, and no amount of care in `custom.scss` beats it** — it selects on an **ID**. `#quartz-body` outranks any number of class selectors, so a class-only reset loses on specificity no matter how many classes are stacked. Computed `min-width` stayed `calc(100% - 48px)` while the authored value was `0`. §11 called the theme a "separate, higher layer", and it is also simply more specific; the two are independent problems and only the second one bit here.
+
+**How it was found.** Not by reading the stylesheet — `grep` for `100% - 48px` across every emitted `.css` and `.js` returned *nothing at all*. A `getComputedStyle` said `calc(100% - 48px)`; the authored rule said `0`. Scanning `document.styleSheets` for matching rules found only the losing one, because the winner was in a stylesheet my scan skipped. The string was written as `3rem` in source and only computed to `48px` — searching the build for the *computed* value found it immediately. **Search for the value the browser reports, not the value you wrote.**
+
+**Two more silent failures on the way, both invisible to a green build:**
+- `.page > #quartz-body > .page-header` never matched — `.page-header` is nested inside `.center`, not a direct child. An entire revision of the section was applying to nothing.
+- The toolbar collapsed to **zero width** (`left === right === 1875`) rather than overflowing, because the loader's inline `flex-grow: 1` fought `margin-left: auto`. Search and both toggles were simply *absent from the page* while it rendered perfectly. Nothing errors when a flex child vanishes.
+
+**Result, measured 1920 → 360px:** no horizontal overflow at any of ten widths, nav shrinks and wraps (282px → 312px as space tightens), toolbar holds 167px, wordmark hides below 800px. Reading measure untouched at 74 chars.
+
+**The guard.** Eight new checks: 4 links present, wordmark in the header, **`min-width` computed to `0px`** (not merely authored that way), `grid-area: auto`, toolbar width > 0, search width > 0, no overflow, and the nav contained by the header box. Suite is **50/50**. **Proven by reverting the ID from the selectors**: four checks go red, reporting `calc(100% - 48px)` and `overflow: true`, and the script exits 1.
+
+**Lesson.** *A reset only resets what it outranks.* Overriding a stylesheet is not about specificity or layers in the abstract — it is about matching the thing that is actually beating you, here an ID selector inherited from an element you reused for a different purpose. And when computed style disagrees with authored style, **the computed value is the only thing that exists** — grep the build for what the browser says, not for what you wrote.
+
+## 18. ✅ DECIDED — "Emerson's Desk" (2026-09-30)
+
+Owner: *"Something about the language 'The Brain' just doesn't sit right with me — it never has."* Agreed, and the reason is in the inventory below. **Decision: the site is "Emerson's Desk"; the header wordmark is `EBW`.** Implementation is §19.
+
+**What it actually is.** A hub for everything Emerson Black writes that **isn't fiction**: newsletter dispatches, craft notes, thoughts, links. The name should describe *what it is*, not a metaphor for it. "The Brain" promises a second brain — a tool, a system, a workspace. What is actually here is a **publication**: a writer's non-fiction shelf. The mismatch is why the name never settled.
+
+**The blast radius, which is small:**
+
+| Where | Occurrences | Cost to change |
+|---|---|---|
+| `quartz.config.yaml` `pageTitle` | 1 | one line |
+| `content/index.md` frontmatter `title` + hero kicker | 2 | two lines |
+| `About.md` prose ("This is the Brain") | 1 | reword |
+| `About.md` + `Newsletters/index.md` breadcrumb link text | 2 | two lines |
+| storefront `index.html` + `bio.html` nav link | 2 | two lines |
+| already-generated `public/` HTML | 58 | **regenerated, not edited** |
+| `Newsletters/2023/how-to-banish-imposter-syndrome-forever.md`, `2025/the-dangers-of-overplotting.md` | 2 | **none — see below** |
+
+**Nine authored lines total.** The 58 in `public/` are build output, replaced by rebuilding. The two "brain" hits inside actual dispatches are the ordinary English words *brainspace* and *change the brain* — **must not be touched**. A blind find-and-replace would corrupt published prose; this is the single most important warning in the section.
+
+**Why the two-part name.** `EBW` in the header (already the favicon monogram and the storefront's signature — the thing a reader actually recognises), **"Emerson's Desk"** for the site itself: warm, human, unmistakably *a writer's* rather than a system's, and it matches the near-black/navy, crimson, film-grain register where "Brain" never did. It says *writer* where "Posts" says *feed*, and it survives being read aloud, which `EBW` does not — worth it for a name that lives in a `<title>`.
+
+**Alternatives considered and why not:**
+- **EBW Posts** — accurate but reads like a CMS project name; "posts" undersells a curated dispatch archive.
+- **Dispatches** — collides with the existing "Latest dispatches" panel and the per-year archives; would confuse navigation.
+- **The Notebook / Field Notes** — "field notes" is already the homepage description and reads like unfinished drafts.
+- **Non-Fiction / The Archive** — describes a category, not a place. Fails the "where do I go to read him" test.
+
+**Also worth fixing at the same time:** `brain/content/Newsletters/index.md` and `About.md` use a hand-written breadcrumb (`_Back to [[index|The Brain]]_`) that duplicates what the `breadcrumbs` plugin already renders (`rootName: "✦"`). Two breadcrumb systems, one of them a string to hand-edit on every future rename. Folded into §19 step 2.
+
+
+## 19. 🟢 S10 — the rename to `/desk/`, and the storefront as homepage (2026-09-30 · **APPROVED, not yet started**)
+
+Owner decisions: the name is **"Emerson's Desk"** with an `EBW` wordmark (§18); the slug becomes **`/desk/`**; the Desk's `index`/`about` stop duplicating the storefront; the storefront stays the homepage and features the writing.
+
+**`/brain/` has never been launched**, so there is no link graph to protect — the one real cost of moving the slug is gone. It was always a **subpath**, not a subdomain, so nothing at `brain.emersonblackwrites.com` exists or needs redirecting. Three steps, each independently shippable, so a bad step never strands the site half-renamed.
+
+### Is the slug move expensive? **No — priced from the repo, not estimated**
+
+- **Every content link is relative.** Grepping `emersonblackwrites.com/brain`, `](/brain` and `"brain/` across `brain/content/**.md` returns **nothing**. Quartz resolves links from the file tree, so none of the 50+ dispatches needs touching.
+- **The slug is a build-output path, not a source path.** `deploy.yml` assembles `_site/brain/` by copying `brain/public/` into it. The Quartz *source* directory stays `brain/` permanently — only the destination folder and `baseUrl` change.
+- **Redirects are available** via `@quartz-community/alias-redirects` (installed, enabled), so `/brain/` can still resolve rather than 404 — cheap insurance, and the only reason to bother given nothing has shipped.
+- **Five files reference the path**, two of them comments: `deploy.yml`, `Publish Brain.command`, `index.html`, `bio.html`, `quartz.config.yaml`.
+
+**Recommendation: merge the old steps 1 and 3.** They were separate only to protect external links, and there are none. Renaming the name and the slug together is one coherent change instead of two commits that rename the same thing twice — and it is easier to review and revert as a unit. This is *why* doing the naming first would have been worth it even with links in play.
+
+### The three steps
+
+**Step 1 — Rename name, wordmark and slug together.** `pageTitle` → `Emerson's Desk`; `content/index.md` frontmatter `title` + hero kicker; `About.md` prose; the two storefront nav links; the `Brain` nav entry → `Desk`; `baseUrl` → `.../desk`; `_site/brain/` → `_site/desk/` in `deploy.yml` (including the two guard paths and the smoke-test URL); a `.md` redirect stub at `content/brain.md` for `/brain/`. Wordmark → `EBW`.
+
+🔴 **Do not** find-and-replace "brain". Two live dispatches use the ordinary English words *brainspace* and *change the brain*; a blanket replace corrupts published prose. Replace the exact phrase only, and read the diff.
+
+*Guards:* (a) `pageTitle` and `content/index.md`'s frontmatter `title` must agree, so name and wordmark cannot drift apart again; (b) assert no authored page still says "The Brain"; (c) `deploy.yml` guards must check `_site/desk/index.html` — the existing ones check `_site/brain/`, so leaving them would have made them **fail closed and block the deploy**, which is at least loud.
+
+**Step 2 — Stop duplicating the storefront.** `desk/index` and `desk/about` restate what the storefront already says, and are weak enough to read as an oversight. Replace with a short, honest landing page: forward into the archive, back to the storefront for books and bio. Drop the hand-written `_Back to [[index|…]]_` breadcrumbs at the same time — the `breadcrumbs` plugin already renders a trail, so these are a second, hand-maintained breadcrumb system that must be edited on every future rename. Keep `bio.html` as a thin redirect rather than deleting it; a homepage pointing at a page that has gone is worse than the duplication.
+
+**Step 3 — Storefront features the writing; the characters become a real post.** The homepage keeps books + a little on the Silverbridge world + a prominent link into the Desk. The characters section (`THE JOURNALISTS` — Luce, Huds, Faven, Rodney) becomes **a dated, cross-linked post inside the Desk** rather than a storefront widget.
+*Why:* a character card on a homepage is marketing that expires; the same words as a post are content that compounds — and the Desk is where writing lives.
+*Note:* this is **new writing**, so it is the one step that is not purely mechanical. Draft it as a note in the vault so `Publish Brain.command` picks it up like any other dispatch, rather than hand-placing it in `content/`.
+
+### Boundaries worth keeping
+
+- **The storefront is the homepage; the Desk is not.** Two surfaces, one brand. Someone arriving to buy *Seen in Silverbridge* must land on the shop; integration comes from the storefront *featuring* the Desk, not from merging them.
+- **Leave the `brain/` source directory alone.** Renaming it would touch `npm ci`, both `.command` scripts and every path in this plan for no user-visible gain. The URL is what readers see.
+- **The plan's own filename keeps "BRAIN".** `EMERSON-BLACK-BRAIN-PLAN.md` is a long-lived internal document; renaming it would break the `Publish Brain.command` snapshot and every reference to it. Cheap to do later, no value now.
+
+### Status: **approved, nothing started.** Step 1 next.
