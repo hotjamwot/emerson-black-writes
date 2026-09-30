@@ -168,6 +168,44 @@ check(
 // appended last, so it wins on order regardless of specificity — no static
 // grep over one file can see a competing sibling layer. Only a real cascade
 // evaluation can.
+// ── 5. the two halves must not drift apart (S9) ──────────────────────────────
+// The storefront and the Brain are separate files with separate palettes, and
+// nothing but a human noticing a colour mismatch keeps them aligned. S9 realigned
+// `--accent-red` on the storefront (it was still #E31C3D, a pinker red predating
+// the Brain's palette), so assert the agreement here.
+console.log("\nStorefront ↔ Brain brand agreement")
+const storefrontCss = readFileSync(join(brain, "..", "style.css"), "utf8")
+const emersonTheme = readFileSync(join(brain, "quartz", "theme", "emerson.ts"), "utf8")
+
+// Parse the Brain's ACCENT map rather than hardcoding, so this keeps working if
+// the brand colour is ever changed in emerson.ts (the single source of truth).
+const themeAccent = Object.fromEntries(
+  [...emersonTheme.matchAll(/(light|dark):\s*"(#[0-9A-Fa-f]{6})"/g)].map((m) => [m[1], m[2].toUpperCase()]),
+)
+const storeAccent = /--accent-red:\s*(#[0-9A-Fa-f]{6})/.exec(storefrontCss)?.[1].toUpperCase()
+const storeBright = /--accent-red-bright:\s*(#[0-9A-Fa-f]{6})/.exec(storefrontCss)?.[1].toUpperCase()
+
+check(!!themeAccent.dark && !!storeAccent, "both halves declare an accent")
+check(
+  storeAccent === themeAccent.dark,
+  `storefront accent matches the Brain's dark accent (${storeAccent} vs ${themeAccent.dark})`,
+)
+// The storefront is dark-only — no prefers-color-scheme, no colour-scheme switch,
+// no data-theme — so it must carry the DARK accent, not the light one. This is
+// the assertion that stops someone "fixing" it to #CA2626 by eye.
+check(
+  storeAccent !== themeAccent.light,
+  "storefront uses the dark accent (it has no light mode to sit against)",
+)
+check(
+  !!storeBright && storeBright !== storeAccent,
+  `storefront hover tint is distinct from the base accent (${storeBright})`,
+)
+check(
+  !/#E31C3D|#FF3B4A/i.test(storefrontCss.replace(/Was #E31C3D[^\n]*/, "")),
+  "the pre-S9 pinker accent is fully retired",
+)
+
 console.log("\nTypography (computed style — what the reader actually sees)")
 
 // Cheap static companion to the browser check below: it documents the layer

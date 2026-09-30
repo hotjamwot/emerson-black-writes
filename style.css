@@ -20,11 +20,18 @@
     --bg-deep: #060D14;
     --bg-primary: #0B1926;
     --bg-secondary: #111F2E;
-    --accent-red: #E31C3D;
-    --accent-red-bright: #FF3B4A;
     --text-primary: #F0F4F8;
     --text-secondary: #A8B5C9;
     --text-muted: #6B7A91;
+
+    /* Accent — S9. Was #E31C3D, a pinker red that predated the Brain's palette.
+       The storefront is dark-only (no light mode, no color-scheme switch), so it
+       carries the Brain's DARK accent: #E63A3A, with the Brain's dark hover
+       #EC585F as the bright tint. This is the same colour the Brain resolves
+       from ACCENT in brain/quartz/theme/emerson.ts — change one, change both;
+       verify-default-mode.mjs now asserts the two files agree. */
+    --accent-red: #E63A3A;
+    --accent-red-bright: #EC585F;
     
     /* Spacing */
     --space-sm: 0.5rem;
