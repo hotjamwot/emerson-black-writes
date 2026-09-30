@@ -194,7 +194,185 @@ h2.page-title,
   font-weight: 600;
 }
 
-// ── 4. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
+// ── 4a. S1a: the header bar (wordmark · nav · search + controls) ────────────
+// The header slot is a full-width grid row above the shell (`grid-header`), so
+// it spans both the sidebar and the content column. That is what lets the
+// wordmark sit top-left and the toolbar top-right on one line, with the nav
+// between them — the storefront's shape rather than a sidebar stack.
+//
+// Selector notes — both of these were silent no-ops at first, and they are the
+// whole reason this section took several passes.
+//
+// 1. NOT `.page > #quartz-body > .page-header`: `.page-header` is nested inside
+//    `.center`, not a direct child of `#quartz-body`, so the direct-child chain
+//    never matched.
+// 2. The ID `#quartz-body` is REQUIRED, not decorative. The Obsidian theme
+//    stylesheet carries
+//      `@media (min-width:1200px) { .page>#quartz-body .center,
+//         .page>#quartz-body footer { min-width: calc(100% - 3rem);
+//         max-width: calc(100% - 3rem); padding-inline: 1.5rem } }`
+//    which matches the nav footer, because the nav *is* a `<footer>`. An ID
+//    selector outranks any number of class selectors, so a class-only rule here
+//    loses no matter how specific — computed `min-width` stayed
+//    `calc(100% - 48px)` while the authored value was `0`, and the row
+//    overflowed at every width. Carrying the same ID is what lets the reset
+//    below actually apply.
+//
+// Descendant selectors elsewhere, and the box model is handled explicitly.
+.page > #quartz-body .page-header {
+  margin: 0 0 0.5rem;
+  border-bottom: 1px solid var(--eb-line);
+}
+
+.page > #quartz-body .page-header > header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 1rem 0 0.9rem;
+  min-height: 0;
+}
+
+// Wordmark. The `::after` tick in §4 was written for the sidebar version of this
+// element; it is suppressed here in favour of the nav sitting on the baseline.
+.page > #quartz-body .page-header h2.page-title {
+  font-size: 1.15rem;
+  margin: 0;
+  flex: 0 0 auto;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page > #quartz-body .page-header h2.page-title::after {
+  display: none;
+}
+
+// The nav. The `footer` plugin emits `<footer><p>…Quartz…</p><ul><li><a>`;
+// only the <p> is hidden, so the upstream attribution goes and the links stay.
+//
+// The base stylesheet has a blanket `.page > #quartz-body footer { grid-area:
+// grid-footer; min-width: 100%; margin-inline: auto }` intended for the real
+// page footer, and the Obsidian theme adds `min-width/max-width:
+// calc(100% - 3rem); padding-inline: 1.5rem` for the same element. It matches
+// this one too, because the nav *is* a `<footer>`. All of it is reset here:
+// `grid-area: auto` because the nav is a flex row rather than a grid area, and
+// the width/margin/padding resets so it can actually shrink to its links.
+.page > #quartz-body .page-header header > footer {
+  grid-area: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  margin: 0;
+  padding: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+.page > #quartz-body .page-header header > footer > p {
+  display: none;
+}
+
+// The nav list itself must also be allowed to shrink and wrap. A `ul` is a flex
+// item here, so it inherits `min-width: auto` and refuses to go below its
+// min-content width — which at desktop is all four links on one line. That is
+// what pushed the row past the viewport at 1440/1280/1024/900 even after the
+// footer was fixed. `min-width: 0` + `flex-wrap` lets the links reflow.
+.page > #quartz-body .page-header header > footer > ul {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.35rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  list-style: none;
+}
+
+.page > #quartz-body .page-header header > footer > ul > li > a {
+  font-family: var(--eb-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.page > #quartz-body .page-header header > footer > ul > li > a:hover {
+  color: var(--eb-accent);
+}
+
+// Toolbar (search + darkmode + reader-mode) pushed to the right edge.
+//
+// The `toolbar` GROUP is flattened by the loader into a `.flex-component` with
+// inline `flex-grow`/`order` styles — it does NOT keep a `.toolbar` class, so
+// styling `.toolbar` here would have been a silent no-op. Select the wrapper by
+// position instead.
+//
+// `flex: 0 0 auto` is deliberate. The inline style sets `flex-grow: 1` with
+// `flex-basis: auto`; combined with this rule's `margin-left: auto` the wrapper
+// collapsed to **zero width** (measured `left === right === 1875` at 1920px) —
+// the search button and both toggles were being squeezed out of existence
+// rather than overflowing. `0 0 auto` sizes it to its content and leaves
+// `margin-left: auto` to do the pushing.
+.page > #quartz-body .page-header > header > .flex-component {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+// ── 4a-bis. Header on narrow screens ───────────────────────────────────────
+// At 420px the wordmark, four nav links and the three toolbar controls cannot
+// share one line: the row is a single non-wrapping flex container, so it
+// measured 420px of content in a 420px viewport and the document overflowed
+// horizontally (measured `overflow: true`, a regression against the S1a build).
+// Two fixes, both needed: let the nav WRAP rather than force the row wider than
+// the window, and let the wordmark shrink out of the way first — it is the only
+// item that is not a control.
+@media (max-width: 800px) {
+  .page > #quartz-body .page-header {
+    margin-bottom: 0.4rem;
+  }
+
+  .page > #quartz-body .page-header > header {
+    flex-wrap: wrap;
+    row-gap: 0.6rem;
+  }
+
+  .page > #quartz-body .page-header header > footer > ul {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  // The wordmark is `display: none` below 800px — the brand is one tap away via
+  // the Brain link, and at 420px it is the item worth sacrificing.
+  .page > #quartz-body .page-header h2.page-title {
+    display: none;
+  }
+
+  .page > #quartz-body .page-header header > footer {
+    flex: 1 1 auto;
+    // Flex items default to `min-width: auto`, which refuses to shrink below
+    // their content's intrinsic width. That made the nav footer a hard 420px
+    // inside a 388px content box (16px padding either side), pushing the
+    // document 24px past the viewport at EVERY width — measured identically at
+    // 800, 420 and 360px, which is what gave it away as a min-width bug rather
+    // than a wrapping one. `min-width: 0` lets the ul below actually wrap.
+    min-width: 0;
+  }
+
+  .page > #quartz-body .page-header header > footer > ul {
+    min-width: 0;
+  }
+}
+
+// ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
 #quartz-body .center {
   min-width: 0;
 }

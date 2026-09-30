@@ -242,8 +242,8 @@ plugins:
   - source: "@quartz-community/search"
     enabled: true
     layout:
-      position: left
-      priority: 20
+      position: header
+      priority: 25
       group: toolbar
       groupOptions:
         grow: true
@@ -267,21 +267,40 @@ plugins:
     layout:
       position: beforeBody
       priority: 30
+  # ── S1a: the header bar ────────────────────────────────────────────────────
+  # The wordmark moves out of the left sidebar and into the header slot, so the
+  # nav row and the site identity share one band across the top of the shell.
   - source: "@quartz-community/page-title"
-    enabled: false
+    enabled: true
     layout:
-      position: left
+      position: header
       priority: 10
+  # Footer repurposed as the nav: the plugin already renders `links` as a
+  # <ul><li><a> list, which is exactly the markup a nav wants, so there is no
+  # reason to write a component. It also emits a "Created with Quartz v4 © year"
+  # <p>, which is upstream attribution we do not want on this site — custom.scss
+  # §5 hides `header > footer > p` and nothing else, so the links still render.
+  - source: "@quartz-community/footer"
+    enabled: true
+    options:
+      links:
+        Books: https://emersonblackwrites.com/#books
+        About: https://emersonblackwrites.com/bio.html
+        Brain: https://emersonblackwrites.com/brain/
+        Subscribe: https://emersonblackwrites.substack.com/
+    layout:
+      position: header
+      priority: 20
   - source: "@quartz-community/darkmode"
     enabled: true
     layout:
-      position: left
+      position: header
       priority: 30
       group: toolbar
   - source: "@quartz-community/reader-mode"
     enabled: true
     layout:
-      position: left
+      position: header
       priority: 35
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
@@ -303,15 +322,6 @@ plugins:
     layout:
       position: afterBody
       priority: 10
-  - source: "@quartz-community/footer"
-    enabled: false
-    options:
-      links:
-        Emerson Black Writes: https://emersonblackwrites.com
-        Newsletter: https://emersonblackwrites.substack.com/
-    layout:
-      position: footer
-      priority: 50
   - source: "@quartz-community/recent-notes"
     enabled: true
     options:

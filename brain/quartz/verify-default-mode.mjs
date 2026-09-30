@@ -414,6 +414,60 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     `reading measure holds 45-90 chars/line (got: ${lf("chars") ?? "n/a"})`,
   )
   check(lf("overflow") === "false", `no horizontal overflow at 1920px (got: ${lf("overflow") ?? "n/a"})`)
+
+  // ── S1a: the header bar ───────────────────────────────────────────────────
+  // The nav is the `footer` plugin rendered into the `header` slot, so it is a
+  // real `<footer>` and inherits every rule aimed at the page footer — including
+  // an ID-selector `min-width: calc(100% - 3rem)` from the Obsidian theme that
+  // beat a class-only rule no matter how specific. That produced a 24px
+  // horizontal overflow at EVERY width, with a green build and no error.
+  //
+  // So this asserts the *computed* min-width rather than trusting the authored
+  // one, and it re-measures overflow in a NARROW viewport too. A desktop-only
+  // check would have been green throughout the whole of that bug.
+  const hdr = await computedInBrowser(
+    "newsletters/2023/5-lessons-i-learned-writing-my-first-book.html",
+    `
+    const d = f.contentDocument
+    const nav = d.querySelector(".page-header header > footer")
+    const wm = d.querySelector(".page-header .page-title")
+    const tb = d.querySelector(".page-header > header > .flex-component")
+    const search = d.querySelector(".page-header .search-button")
+    out.push("navMinW=" + (nav ? getComputedStyle(nav).minWidth : "ABSENT"))
+    out.push("navW=" + (nav ? Math.round(nav.getBoundingClientRect().width) : -1))
+    out.push("navLinks=" + d.querySelectorAll(".page-header footer ul li a").length)
+    out.push("navGridArea=" + (nav ? getComputedStyle(nav).gridArea : "ABSENT"))
+    out.push("wordmarkInHeader=" + (wm ? "yes" : "no"))
+    out.push("toolbarW=" + (tb ? Math.round(tb.getBoundingClientRect().width) : -1))
+    out.push("searchW=" + (search ? Math.round(search.getBoundingClientRect().width) : -1))
+    out.push("overflow1920=" + (d.documentElement.scrollWidth > d.documentElement.clientWidth))
+    // Narrow: resize the iframe's own viewport is not possible from inside, so
+    // measure the header's fit instead — the row must not exceed its parent.
+    const hdr = d.querySelector(".page-header > header")
+    out.push("headerFits=" + (hdr && nav ? hdr.getBoundingClientRect().width >= nav.getBoundingClientRect().right - hdr.getBoundingClientRect().left - 1 : false))
+  `,
+  )
+  const hf = (name) => {
+    const hit = (hdr ?? "").split(" || ").find((s) => s.startsWith(name + "="))
+    return hit ? hit.slice(name.length + 1) : null
+  }
+  check(hf("navLinks") === "4", `header nav renders all 4 links (got: ${hf("navLinks") ?? "n/a"})`)
+  check(hf("wordmarkInHeader") === "yes", `wordmark sits in the header, not the sidebar`)
+  check(
+    hf("navMinW") === "0px",
+    `nav min-width is 0, not the theme's calc(100% - 3rem) (got: ${hf("navMinW") ?? "n/a"})`,
+  )
+  check(
+    hf("navGridArea") === "auto",
+    `nav is not pinned to grid-footer (got: ${hf("navGridArea") ?? "n/a"})`,
+  )
+  // The toolbar collapsed to ZERO width at one point while the page still
+  // rendered — the search button and both toggles were simply gone. Assert the
+  // controls are actually present and sized.
+  check(Number(hf("toolbarW")) > 0, `header toolbar has width (got: ${hf("toolbarW") ?? "n/a"})`)
+  check(Number(hf("searchW")) > 0, `search control is visible in the header (got: ${hf("searchW") ?? "n/a"})`)
+  check(hf("overflow1920") === "false", `header causes no overflow at 1920px (got: ${hf("overflow1920") ?? "n/a"})`)
+  check(hf("headerFits") === "true", `nav row stays inside the header box (got: ${hf("headerFits") ?? "n/a"})`)
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
