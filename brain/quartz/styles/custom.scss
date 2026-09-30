@@ -238,10 +238,8 @@ p.content-meta {
   max-width: none;
 }
 
-// Sidebar control buttons (search · dark mode · reader mode)
-.search-button,
-.darkmode,
-.readermode {
+// Search draws a real inline <svg>, so a surface pill is safe on it.
+.search-button {
   border: 1px solid var(--eb-line);
   border-radius: var(--eb-radius);
   background: var(--eb-surface);
@@ -255,6 +253,25 @@ p.content-meta {
     color: var(--eb-accent);
     border-color: var(--eb-accent);
     background: var(--eb-surface-strong);
+  }
+}
+
+// Dark mode + reader mode are different: the theme hides their real <svg>
+// (`button.darkmode > svg { display: none !important }`) and paints the glyph
+// with `background: var(--quartz-icon-color)` + `mask-image`. That background
+// *is* the icon, and the mask also clips any border or pill we add. Styling
+// them like `.search-button` therefore replaced the icon with a ~3% tint and
+// made the controls invisible. So: no background, no border here — only the
+// icon colour, which flows through --icon-color -> --quartz-icon-color.
+.darkmode,
+.readermode {
+  --icon-color: var(--darkgray);
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease;
+
+  &:hover {
+    --icon-color: var(--eb-accent);
   }
 }
 
