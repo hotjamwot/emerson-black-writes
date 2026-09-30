@@ -21,6 +21,17 @@ CONTENT="$REPO/brain/content"
   --exclude='.DS_Store' --exclude='_*' \
   "$IMAGES/" "$CONTENT/organise/images/newsletters/" || exit 1
 
+# 2b. Snapshot the implementation plan into the repo, so its history is in git.
+#     The plan lives in the vault (not a git repo) and is the source of truth for
+#     every future session — but that also meant no diff, no rollback, no record
+#     of who changed what. Mirroring it here puts it under the same git history as
+#     the code it describes. Goes to docs/, NOT content/ — this is not a note to
+#     publish, and putting it in content/ would render it as a Brain page.
+#     Vault stays authoritative; this copy is a one-way snapshot, refreshed on publish.
+mkdir -p "$REPO/docs" || exit 1
+/usr/bin/rsync -a \
+  "$VAULT/EMERSON-BLACK-BRAIN-PLAN.md" "$REPO/docs/EMERSON-BLACK-BRAIN-PLAN.md" || exit 1
+
 # 3. Rewrite vault-relative image paths to absolute content-root paths with lowercase 'images'.
 #    Vault notes sit 5 levels below the vault root:
 #      Newsletters/<year>/<slug>.md → ../../../../../organise/Images/…
