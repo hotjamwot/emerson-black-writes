@@ -42,6 +42,54 @@
   --eb-glow-alt: rgba(132, 165, 157, 0.06);
 }
 
+// ── 1c. Chrome keeps the display face ────────────────────────────────────────
+// §1b repoints `--font-interface` at the reading serif, which is correct for
+// article copy but wrong for navigation: the Obsidian theme drives the explorer,
+// TOC, backlinks and search from the same variables, so they inherited Lora as
+// a side effect. Before §1b they rendered in the system sans stack (inherited,
+// never designed). Pin them to the display face so chrome is a deliberate
+// choice rather than a fallback — Gabarito is the storefront's label face, and
+// this matches the tracked-uppercase section labels above.
+.explorer a.nav-file-title.tree-item-self,
+.toc .toc-content a,
+.backlinks ul a,
+.recent-notes ul a,
+.breadcrumb-element a,
+.breadcrumb-element span,
+.search-button,
+.tags .tag,
+ul.tags a {
+  font-family: var(--eb-display);
+}
+
+// ── 1b. Brand font variables, at the winning layer ───────────────────────────
+// S6 follow-up. Pinning the theme's own `--font-interface` in
+// `quartz/theme/emerson.ts` was correct but ineffective: the theme lives in
+// `@layer obsidian-theme`, and `@quartz-community/quartz-fonts` emits its own
+// top-level `@layer quartz-fonts` in a stylesheet that loads AFTER it. A layer
+// declared later is appended later, so `quartz-fonts` sits at the END of the
+// layer list and wins on order regardless of specificity or load order. It
+// hardcodes `--font-interface: ui-sans-serif, …`, which is what turned body
+// paragraphs sans while `ol li` kept the serif (`body p` is the only rule the
+// Obsidian theme points at that variable).
+//
+// `custom.scss` is appended outside every layer, so an unlayered `:root` here
+// outranks all of them. This is deliberately the *variable* and not a
+// `body p { font-family }` rule: one declaration repairs every consumer
+// (theme `body p`, Quartz core's `--bodyFont` chain, and the plugin's own
+// `--font-text`) instead of patching the symptom. See §14.
+:root {
+  --font-interface: var(--eb-serif);
+  --font-text: var(--eb-serif);
+  --font-default: var(--eb-serif);
+  --bodyFont: var(--eb-serif);
+  --titleFont: var(--eb-display);
+  --headerFont: var(--eb-display);
+  --codeFont: var(--eb-mono);
+  --font-monospace: var(--eb-mono);
+  --font-monospace-default: var(--eb-mono);
+}
+
 :root[saved-theme="dark"] {
   --eb-accent-bright: #ff5b5b;
   --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
@@ -304,6 +352,7 @@ p.content-meta {
 
 .explorer a.nav-file-title.tree-item-self {
   display: block;
+  // Chrome font pinned in §1c.
   padding: 0.22rem 0.5rem 0.22rem 0.55rem;
   border-left: 2px solid transparent;
   border-radius: 0 var(--eb-radius) var(--eb-radius) 0;

@@ -22,7 +22,9 @@
  *
  * Exit 0 = default correct in any order, toggle intact. Exit 1 = regression.
  */
-import { readFileSync, readdirSync } from "node:fs"
+import { execFile } from "node:child_process"
+import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs"
+import { createConnection } from "node:net"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import vm from "node:vm"
@@ -154,52 +156,166 @@ check(
   "icon.png is optimised (small file, not the 36 KB master)",
 )
 
-// ── 4. the body serif must survive the theme layer ───────────────────────────
-// Regression guard for the "serif on lists but sans in paragraphs" bug. The
-// theme emits `html[saved-theme="…"] body p { font-family: var(--font-interface) }`
-// in @layer obsidian-theme, which outranks our unlayered container rule because
-// it matches `p` directly. The fix is to pin the font variables in the theme's
-// own trailing aspect, so assert they are actually pinned there.
-console.log("\nTypography (body serif vs the theme layer)")
-// Reuse the `css` blob already accumulated from public/static above rather than
-// re-reading the directory.
-check(
-  /html\[saved-theme=["'][a-z]+["']\]\s*body\s+p\s*\{[^}]*font-family\s*:\s*var\(--font-interface\)/.test(
-    css,
-  ),
-  "upstream theme still emits the `body p` font rule (guard premise is current)",
-)
-check(
-  /--font-interface:\s*"?Lora/.test(css),
-  "theme pins --font-interface to Lora, so `body p` renders in the brand serif",
-)
-// Upstream still *declares* a sans --font-interface-obsidian, and that
-// declaration must stay. What matters is that our brand value is declared LAST
-// within the theme's own stylesheet, so it is the one that wins inside
-// @layer obsidian-theme.
+// ── 4. the brand faces must actually RENDER (computed style, not source text) ─
+// Regression guard for the "serif on lists but sans in paragraphs" bug (S6/§14).
 //
-// The ordering is only meaningful WITHIN one stylesheet: `css` above
-// concatenates several files, and the @quartz-fonts layer is a *sibling* layer
-// whose position in that concatenation says nothing about cascade order. So
-// scope this to the single file carrying the obsidian-theme layer.
-const themeSheet = readdirSync(staticDir)
+// This section is a *computed-style* check on purpose. The previous version
+// asserted on the text of the built CSS and stayed green through the entire
+// period when paragraphs rendered sans: pinning `--font-interface` inside
+// `@layer obsidian-theme` is genuinely correct and genuinely insufficient,
+// because `@quartz-community/quartz-fonts` emits its own top-level
+// `@layer quartz-fonts` in a *later* stylesheet. A later-declared layer is
+// appended last, so it wins on order regardless of specificity — no static
+// grep over one file can see a competing sibling layer. Only a real cascade
+// evaluation can.
+console.log("\nTypography (computed style — what the reader actually sees)")
+
+// Cheap static companion to the browser check below: it documents the layer
+// order that caused the bug, so the *reason* is visible in the output even
+// when the browser probe is skipped. `quartz-fonts` must not end up declaring
+// `--font-interface` in a layer that sorts after the one custom.scss escapes.
+const layerSheets = readdirSync(staticDir)
   .filter((f) => f.endsWith(".css"))
   .map((f) => ({ f, src: readFileSync(join(staticDir, f), "utf8") }))
-  .find(({ src }) => src.includes("@layer obsidian-theme"))
-check(!!themeSheet, "found the stylesheet carrying @layer obsidian-theme")
-const themeDecls = themeSheet
-  ? [...themeSheet.src.matchAll(/--font-interface:\s*([^;]+);/g)].map((m) => m[1].trim())
-  : []
-const loraAt = themeDecls.findIndex((v) => v.startsWith('"Lora"'))
-check(loraAt !== -1, "theme pins --font-interface to the brand serif")
+const fontsLayer = layerSheets.find(({ src }) => src.includes("@layer quartz-fonts"))
 check(
-  loraAt !== -1 && !themeDecls.slice(loraAt + 1).some((v) => v.includes("ui-sans-serif")),
-  "within the theme layer, no sans --font-interface is declared after ours",
+  !!fontsLayer && /--font-interface:\s*ui-sans-serif/.test(fontsLayer.src),
+  "known cause still present: @layer quartz-fonts hardcodes a sans --font-interface",
 )
+const indexCss = join(brain, "public", readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f)))
+const indexSrc = existsSync(indexCss) ? readFileSync(indexCss, "utf8") : ""
 check(
-  /--font-monospace:\s*"?IBM Plex Mono/.test(css),
-  "theme pins --font-monospace to IBM Plex Mono",
+  /:root\{--font-interface:var\(--eb-serif\)/.test(indexSrc),
+  "custom.scss pins --font-interface unlayered (outranks every @layer)",
 )
+
+// Serve public/ so the probe page and the article share an origin (same-origin
+// is required to read the iframe's document).
+const CHROME_CANDIDATES = [
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "/Applications/Chromium.app/Contents/MacOS/Chromium",
+  "/usr/bin/google-chrome",
+  "/usr/bin/chromium",
+]
+
+function findChrome() {
+  for (const p of CHROME_CANDIDATES) if (existsSync(p)) return p
+  return null
+}
+
+/** True when something is already listening on the probe origin's port. */
+function isPortUp(base) {
+  const { hostname, port } = new URL(base)
+  return new Promise((res) => {
+    const s = createConnection({ host: hostname, port: Number(port) })
+    const done = (ok) => {
+      s.destroy()
+      res(ok)
+    }
+    s.on("connect", () => done(true))
+    s.on("error", () => done(false))
+    setTimeout(() => done(false), 500)
+  })
+}
+
+const execFileSyncAsync = (cmd, args) =>
+  new Promise((res) => {
+    execFile(cmd, args, { maxBuffer: 64 * 1024 * 1024 }, (err, stdout) => res({ stdout: stdout ?? "" }))
+  })
+
+/**
+ * Evaluate a probe function inside a real browser against one built page and
+ * return whatever it wrote to `document.title`.
+ *
+ * The page is loaded in an iframe from a tiny generated probe document so that
+ * `contentDocument` is readable; computed styles are then read from the live
+ * cascade. `virtual-time-budget` lets the webfonts and scripts settle without
+ * us needing a display.
+ */
+async function computedInBrowser(pageRelPath, probeBody) {
+  const chrome = findChrome()
+  if (!chrome) return null
+  const probePath = join(brain, "public", "__verify_probe.html")
+  writeFileSync(
+    probePath,
+    `<!doctype html><meta charset="utf-8"><title>pending</title>
+<iframe id="f" src="${pageRelPath}" style="width:1400px;height:900px"></iframe>
+<script>
+const f = document.getElementById("f")
+f.onload = () => setTimeout(() => {
+  const out = []
+  try { ${probeBody} } catch (e) { out.push("PROBE ERROR: " + e.message) }
+  document.title = out.join(" || ")
+}, 1800)
+<\/script>`,
+  )
+  try {
+    const { stdout } = await execFileSyncAsync(chrome, [
+      "--headless=new",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--virtual-time-budget=9000",
+      "--dump-dom",
+      `${PROBE_BASE}/__verify_probe.html`,
+    ])
+    const m = /<title>([^<]*)<\/title>/.exec(stdout)
+    return m ? m[1] : null
+  } finally {
+    rmSync(probePath, { force: true })
+  }
+}
+
+const PROBE_BASE = process.env.EB_VERIFY_BASE ?? "http://localhost:8099"
+
+if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
+  console.log(
+    `  ! skipping computed-style check — need Chrome and a server on ${PROBE_BASE}.\n` +
+      `    Serve it with:  cd brain/public && python3 -m http.server 8099`,
+  )
+} else {
+  const probe = await computedInBrowser(
+    "newsletters/2023/5-lessons-i-learned-writing-my-first-book.html",
+    `
+    const d = f.contentDocument
+    const ff = (sel) => { const e = d.querySelector(sel); return e ? getComputedStyle(e).fontFamily : "MISSING" }
+    out.push("p=" + ff("article p"))
+    out.push("li=" + ff("article li"))
+    out.push("h1=" + ff("h1.article-title"))
+    out.push("explorer=" + ff(".explorer a.nav-file-title.tree-item-self"))
+    out.push("toc=" + ff(".toc .toc-content a"))
+    out.push("breadcrumb=" + ff(".breadcrumb-element"))
+  `,
+  )
+  const field = (name) => {
+    const hit = (probe ?? "").split(" || ").find((s) => s.startsWith(name + "="))
+    return hit ? hit.slice(name.length + 1) : null
+  }
+  const isSerif = (v) => !!v && /^"?Lora"?/.test(v.trim())
+  const isDisplay = (v) => !!v && /^"?Gabarito"?/.test(v.trim())
+
+  check(field("p") !== null, `computed-style probe ran (${probe ? "browser ok" : "no output"})`)
+  check(
+    isSerif(field("p")),
+    `body paragraphs render in Lora (got: ${field("p") ?? "n/a"})`,
+  )
+  check(isSerif(field("li")), `list items render in Lora (got: ${field("li") ?? "n/a"})`)
+  check(
+    isDisplay(field("h1")),
+    `article titles render in Gabarito (got: ${field("h1") ?? "n/a"})`,
+  )
+  // The serif variable is inherited by the theme's UI, so the chrome must be
+  // pinned to the display face explicitly or the whole sidebar turns to Lora.
+  for (const [name, label] of [
+    ["explorer", "explorer links"],
+    ["toc", "table-of-contents links"],
+    ["breadcrumb", "breadcrumbs"],
+  ]) {
+    check(
+      isDisplay(field(name)),
+      `${label} stay on the display face (got: ${field(name) ?? "n/a"})`,
+    )
+  }
+}
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
 // magenta #E6007E. Swapping in the wrong master is the easiest mistake here and
