@@ -16,8 +16,14 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Jost
-      body: Source Serif 4
+      # S6 typography — shared with the storefront (style.css) so the two
+      # halves read as one site. This block is Quartz CORE's font config and
+      # is the one that actually emitted the Google Fonts <link>; the
+      # @quartz-community/quartz-fonts plugin emits a second, separate sheet.
+      # Both are set to the same three faces deliberately: the plugin cannot be
+      # relied on alone, and core's cannot be switched off. See §12.
+      header: Gabarito
+      body: Lora
       code: IBM Plex Mono
     colors:
       lightMode:
@@ -113,6 +119,28 @@ plugins:
     order: 92
   - source: "@quartz-community/quartz-fonts"
     enabled: true
+    options:
+      # S6 typography. The display/body/serif faces are shared with the
+      # storefront (see style.css) so the two halves read as one site.
+      #
+      # `useThemeFonts: false` is REQUIRED, not optional. The plugin defaults it
+      # to true, which makes it load the theme's own font sheet; without this
+      # line the build emits TWO Google Fonts links per page — ours plus a
+      # hardcoded off-brand default (Schibsted Grotesk / Source Sans Pro /
+      # IBM Plex Mono) from the plugin's QUARTZ_DEFAULT_* constants. Setting
+      # header/body/code alone does not remove that second sheet.
+      useThemeFonts: false
+      fontOrigin: googleFonts
+      header:
+        name: Gabarito
+        weights: [400, 500, 600, 700]
+      body:
+        name: Lora
+        weights: [400, 600]
+        includeItalic: true
+      code:
+        name: IBM Plex Mono
+        weights: [400, 600]
   - source: "@quartz-themes/core"
     enabled: true
     options:

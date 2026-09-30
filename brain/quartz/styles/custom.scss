@@ -6,7 +6,8 @@
 //  Mirrors the storefront (EBW website/style.css):
 //    navy   #060D14 / #0B1926 / #111F2E
 //    crimson #CA2626 light · #E63A3A dark   cream #F0F4F8   mist #A8B5C9   steel #6B7A91
-//    Jost display type · film-grain overlay · hairline rules · card lift
+//    Gabarito display type · Lora reading serif · film-grain overlay
+//    hairline rules · card lift
 //
 //  This file is appended AFTER `@layer quartz-base` (see
 //  quartz/plugins/emitters/componentResources.ts), so plain selectors here
@@ -25,7 +26,8 @@
   --eb-accent-bright: #a81f1f;
   --eb-radius: 4px;
   --eb-radius-lg: 10px;
-  --eb-display: "Jost", "Century Gothic", "Avant Garde", "Futura", system-ui, sans-serif;
+  --eb-display: "Gabarito", "Century Gothic", "Avant Garde", "Futura", system-ui, sans-serif;
+  --eb-serif: "Lora", Georgia, "Times New Roman", serif;
   --eb-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --eb-tracking: 0.16em;
   --eb-shadow: 0 20px 40px -26px rgba(6, 13, 20, 0.45);
@@ -115,7 +117,7 @@ html {
 }
 
 // ── 3. Typography ──────────────────────────────────────────────────────────
-// Display face (Jost ≈ the storefront's Century Gothic) carries the small
+// Display face (Gabarito ≈ the storefront's Century Gothic) carries the small
 // structural labels; long-form headings stay sentence case for readability.
 h1,
 h2,
@@ -703,9 +705,9 @@ hr::after {
 }
 
 // ── 5. Reading experience ──────────────────────────────────────────────────
-// S6 · Writerly serif body — Source Serif 4 (optical sizing, true italics).
+// S6 · Writerly serif body — Lora (optical sizing, true italics).
 .markdown-preview-view.markdown-rendered {
-  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-family: var(--eb-serif);
   font-size: 1.06rem;
   line-height: 1.82;
 

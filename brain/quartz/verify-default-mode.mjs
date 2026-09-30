@@ -84,6 +84,43 @@ check(
   "icon colour is set via --icon-color (survives the mask)",
 )
 
+// ── 2. the font pipeline must stay on-brand and non-duplicated ───────────────
+console.log("\nFont pipeline (S6)")
+const page = readFileSync(join(brain, "public", "index.html"), "utf8")
+const sheets = [...page.matchAll(/href="(https:\/\/fonts\.googleapis\.com\/css2[^"]*)"/g)].map(
+  (m) => decodeURIComponent(m[1].replace(/&amp;/g, "&")),
+)
+
+// Off-brand families: the plugin's hardcoded QUARTZ_DEFAULT_* set (Schibsted
+// Grotesk / Source Sans Pro) and the pre-S6 faces (Jost / Source Serif 4).
+// Any of these means a second emitter is still writing a stylesheet.
+const OFF_BRAND = ["Schibsted Grotesk", "Source Sans Pro", "Jost", "Source Serif 4"]
+const offBrandInSheets = OFF_BRAND.filter((f) => sheets.some((s) => s.includes(f)))
+check(
+  offBrandInSheets.length === 0,
+  `no off-brand families in font links${offBrandInSheets.length ? ` — found: ${offBrandInSheets.join(", ")}` : ""}`,
+)
+
+// Two Google Fonts links are expected (Quartz core `theme.typography` and the
+// quartz-fonts plugin each emit one and neither can be switched off), but both
+// must request the same brand faces. A third would mean a new emitter appeared.
+check(sheets.length <= 2, `at most 2 font stylesheets (got ${sheets.length})`)
+const FAMILIES = ["Gabarito", "Lora", "IBM Plex Mono"]
+const wrongFaces = sheets.filter((s) => !FAMILIES.every((f) => s.includes(f)))
+check(
+  wrongFaces.length === 0,
+  `every font link requests Gabarito + Lora + IBM Plex Mono${wrongFaces.length ? `\n      off: ${wrongFaces.join("\n      off: ")}` : ""}`,
+)
+
+// `useThemeFonts: false` is what stops the plugin falling back to the theme's
+// registry. Assert it in config too, so the intent survives a re-read.
+const config = readFileSync(join(brain, "quartz.config.yaml"), "utf8")
+check(/useThemeFonts:\s*false/.test(config), "quartz-fonts has `useThemeFonts: false`")
+check(
+  /header:\s*Gabarito[\s\S]*body:\s*Lora/.test(config),
+  "core `theme.typography` is Gabarito + Lora",
+)
+
 // ── 2. the seed IIFE must be present in the built prescript ────────────────────
 console.log("\nSeed script shipped")
 const prescripts = readdirSync(join(brain, "public")).filter((f) => /^prescript.*\.js$/.test(f))

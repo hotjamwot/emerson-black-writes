@@ -4,9 +4,17 @@
    ============================================ */
 
 :root {
-    /* Typography */
-    --font-display: "Century Gothic", "Avant Garde", "Futura", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    /* Typography
+       Gabarito (display) + Lora (reading serif) are the shared brand faces —
+       they are the same two the Brain loads (brain/quartz.config.yaml
+       `theme.typography` + the quartz-fonts plugin), so the storefront and the
+       garden read as one site. Loaded once from Google Fonts in each page's
+       <head>; see the preconnect tags there. The old stacks stay in place as
+       fallbacks, so a blocked or slow font request degrades to the previous
+       look rather than to Times New Roman. */
+    --font-display: "Gabarito", "Century Gothic", "Avant Garde", "Futura", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: "Lora", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     
     /* Colors - Dark Moody Mystery with Warmth */
     --bg-deep: #060D14;
