@@ -1,7 +1,7 @@
 # Emerson Black Brain — Architecture, Spec & Operations Guide
 
 **Status:** Live at `emersonblackwrites.com/desk/` · **Engine:** Quartz v5 · **Date:** 2026-09-28 · **Author:** HayJay + AI assistant
-**Now (2026-10-01):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). ✅ **S10 step 1 — the rename (§20):** the site is **Emerson's Desk**, the wordmark reads **`EBW`**, it is served at **`/desk/`**, and `/brain/` redirects. **Next: the tags/folders/graph spine (§22) — read all 50 posts, agree the taxonomy, then fill the links; today the graph is 8 edges across 54 notes, 79% isolated. Then S10 step 3, then the LLM tagging workflow (§22.2), then post-header dates once the `updated:` data is sorted (§22.3).**
+**Now (2026-10-01):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). ✅ **S10 step 1 — the rename (§20):** the site is **Emerson's Desk**, the wordmark reads **`EBW`**, it is served at **`/desk/`**, and `/brain/` redirects. **Next: the tags/folders/graph spine (§22) — read all 50 posts, agree the taxonomy, then fill the links; today the graph is 8 edges across 54 notes, 79% isolated. Then the CSS/plugin prune (§24.1), post-header dates (D18/§22.3), S10 step 3, and the LLM tagging workflow (§22.2).**
 
 
 **Goal:** Write in Obsidian → run `Publish Brain.command` → the newsletter archive is live at **`emersonblackwrites.com/desk/`**, built automatically via GitHub Actions.
@@ -74,6 +74,7 @@
 | D15 | Storefront ↔ Brain link | **Footer nav row on the storefront (`index.html` + `bio.html`) points to the Desk (`desk/`)** | First thread of the eventual full integration; left the storefront layout untouched until the index redesign lands |
 | D16 | Site name & wordmark *(2026-10-01, §18/§20)* | **Site = "Emerson's Desk"; header wordmark = `EBW`; slug = `/desk/`** | "The Brain" promised a tool and delivered a publication. `EBW` is what a reader already recognises (favicon monogram, storefront signature); "Emerson's Desk" says *writer* where "Posts" says *feed*. The wordmark swap is presentational — `page-title` has no options — so the link keeps the full name for assistive tech |
 | D17 | No About page; no hand-written breadcrumbs *(2026-10-01, §21/§23)* | **The Desk has no About page** (the bio is the storefront's) and **breadcrumbs are never hand-written again**; the plugin's trail stands for now | The house/storefront and the study room/Desk are one build with a door between them, not two sites. Full reasoning and the open breadcrumb question in §23 |
+| D18 | `updated:` is a real editorial date *(2026-10-01, §22.3)* | **Never normalise or auto-stamp `updated:`.** 49 notes share `updated: 2026-09-28` because the whole archive was cleaned by hand in one day. Posts render **`Originally published {created} • Updated {modified}`** and a **client-computed** "Recently updated" badge fires when `modified` is within 3 months | A shared date across every note is the signature of a batch edit, not a broken migration. The badge is *meant* to mark the whole archive until 2026-12-28, and will differentiate as the Desk is worked on. It is derived, never stored — a stored flag would be frozen at build time and would mix system state into the tag taxonomy |
 
 ---
 
@@ -148,6 +149,8 @@ source: substack:176627320         # numeric part of post_id
 - [x] **Body serif reaches paragraphs — DONE (2026-09-30, incident I3 / §14):** the last outstanding piece of S6. Root cause was a *sibling* cascade layer — `@quartz-community/quartz-fonts` loads after the theme sheet, so its `@layer quartz-fonts` is appended last and its hardcoded sans `--font-interface` beat our pin inside `@layer obsidian-theme`. Fixed by pinning the font variables **unlayered** in `custom.scss` §1b (serif for body, display for titles) and pinning the chrome to Gabarito in §1c, so the sidebar/TOC/breadcrumbs no longer inherit the reading serif. `verify-default-mode.mjs`'s static text checks are replaced by a **headless-Chrome computed-style assertion** — the old ones stayed green while the page was visibly wrong. Verified by re-introducing the bug.
 - [x] **The rename — DONE (2026-10-01 · S10 step 1 / §20):** the site is **Emerson's Desk**, the header wordmark reads **`EBW`**, it is served at **`/desk/`**, and a hand-written stub at `_site/brain/` redirects the old path. Nine authored lines plus the config block; the Quartz *source* directory stays `brain/`. 16 new guard checks (suite 50 → 68). **Note:** `Newsletters/index.md` lives in the *vault*, so its rename had to be made there — the repo copy is rsync'd over on every publish (this bit once; see §20).
 - [x] **Stop duplicating the storefront — DONE (2026-10-01 · S10 step 2 / §21):** `brain/content/About.md` is **deleted** — the Desk is a shelf, the bio is the house's job — and `content/index.md` is now a thin landing page: what the Desk is, *Browse the archive*, *Back to the main site*, and the generated 5 newest dispatches. The curated hero pitch, four "start here" doors, four year cards, four reading trails and the books CTA are gone, along with both hand-written `_Back to …_` breadcrumbs. **7 new guard checks** (suite 68 → 77).
+- [ ] **Post header dates + "Recently updated" badge (D18, §22.3).** `Originally published {created} • Updated {modified}` at the top of every post, plus a **client-computed** badge when `modified` is within 3 months. Unblocked: the `updated:` values are real editorial dates (49 notes share 2026-09-28 because the archive was cleaned by hand in one day) and the badge is *meant* to fire across the archive until 2026-12-28.
+- [ ] **Prune the orphaned `eb-*` brand CSS (new, §24.1).** 15 of the 20 brand classes in `brain/quartz/styles/custom.scss` are unreferenced since the landing page was thinned in §21 — measured at 0 occurrences across all 355 built pages. HayJay: *"It's super important that you keep me updated with any findings like this… we want to keep this repo clean and the workflow immaculate."* Also fold in the three enabled-but-inert plugins in §24.1.
 - [ ] **S10 step 3 — the storefront features the writing. (§19)** The homepage keeps books + the Silverbridge note and links prominently into the Desk. **`THE JOURNALISTS` stays a storefront section — HayJay's call, 2026-10-01:** no post is written for it; it is dealt with separately later.
 - [ ] **Tags, folders and the graph — the spine of the Desk (new, §22).** The premise: *the way the ideas link is the important way to look at this Desk.* Today the graph is nearly empty — **8 link edges across 54 published notes, 43 notes (79%) fully isolated** (measured from `public/static/contentIndex.json`, §22.1). Sequence: (1) read all 50 posts properly and agree a small tag taxonomy (craft / process / publishing / mindset); (2) retire the year folders once tags carry the navigation; (3) fill in the `[[wikilinks]]`. Folded in from the old editorial-pass item; supersedes it.
 - [ ] **LLM-assisted tagging, aliases and related links — after the above (new, §22.2).** Once the taxonomy exists and the posts have been read, design prompts + a workflow to run new post copy through an LLM and emit `tags`, `aliases` and candidate `[[wikilinks]]` for review. Deliberately sequenced *after* the human pass: the prompts need the tag vocabulary and the shape of real links to aim at, and a taxonomy invented by a model is a taxonomy nobody owns.
@@ -262,10 +265,11 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 9. ⬜ **S10 step 3** — the storefront features the writing. `THE JOURNALISTS` stays a storefront section, not a post. §19.
 > 10. 🟢 **Tags → folders → graph** — the spine of the Desk. Read all 50 posts, agree the tag taxonomy, then retire the year folders and fill in the links. **8 edges / 54 notes, 79% isolated today.** §22. **Next, and the biggest remaining piece.**
 > 11. ⬜ **LLM-assisted tags, aliases & related links** — prompts + workflow, designed *after* the human pass. §22.2.
-> 12. ⬜ **Post header dates + "Recently updated"** — S8; needs the `updated:` data decision in §22.3 first.
-> 13. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
-> 14. ⬜ **S2** — graph: taller afterBody instance + homepage feature. *Now blocked behind item 10 — the graph has almost nothing to draw (8 edges).*
-> 15. ⬜ **S8** — visible tags + breadcrumbs from year. *Breadcrumbs are now in question — see D17; tags wait on item 10.*
+> 12. ⬜ **Post header dates + "Recently updated" badge** — D18/§22.3. Unblocked; `updated:` is a real editorial date. Badge is client-computed, fires archive-wide until 2026-12-28, then differentiates.
+> 13. ⬜ **Prune orphaned `eb-*` CSS + 3 inert plugins** — §24.1. Measured, low risk, keeps the repo lean.
+> 14. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
+> 15. ⬜ **S2** — graph: taller afterBody instance + homepage feature. *Now blocked behind item 10 — the graph has almost nothing to draw (8 edges).*
+> 16. ⬜ **S8** — visible tags + breadcrumbs from year. *Breadcrumbs are now in question — see D17; tags wait on item 10.*
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -631,7 +635,7 @@ The site is **Emerson's Desk**. The header wordmark reads **`EBW`**. It is serve
 
 **§20's vault-mirror lesson repeated immediately.** The archive-index edit was made in the vault, and the first verify run failed on it — `brain/content/Newsletters/index.md` still held the old text until the mirror ran. Same trap, same detector; the fix is the same (edit the vault, mirror, rebuild). The *guard* caught it before anything was pushed.
 
-**Also: 15 of the 20 `eb-*` brand classes are now unreferenced** (`eb-hero`, `eb-kicker`, `eb-hero-title`, `eb-hero-lede`, `eb-section`, `eb-section-title`, `eb-grid`, `eb-card`, `eb-card-kicker`, `eb-card-title`, `eb-card-text`, `eb-count`, `eb-cta`, `eb-trail`, `eb-year`). They are **left in `custom.scss` for now** — inert, and git holds them if the doors ever come back — but they are dead weight, and the next tidy pass should measure before deleting. (§16's rule: the list above *is* the measurement.)
+**Also: 15 of the 20 `eb-*` brand classes are now unreferenced** (`eb-hero`, `eb-kicker`, `eb-hero-title`, `eb-hero-lede`, `eb-section`, `eb-section-title`, `eb-grid`, `eb-card`, `eb-card-kicker`, `eb-card-title`, `eb-card-text`, `eb-count`, `eb-cta`, `eb-trail`, `eb-year`) — 0 occurrences across all 355 built pages. They are **left in `custom.scss` for now** and filed as **F1 in §24.1** for a dedicated prune, on HayJay's standing ask to keep the repo lean rather than deleting ~200 lines of visual vocabulary inside a content commit.
 
 **Still open from §19:** step 2 (the two site pages stop restating the storefront; drop the hand-written breadcrumbs) and step 3 (the storefront features the writing; the characters become a real post). Then S3, S2, S8.
 
@@ -675,18 +679,23 @@ So the graph — the thing the whole design leans on — currently draws **56 no
 
 The ordering of 4 is deliberate: prompts need the tag vocabulary and the shape of real links to aim at. A taxonomy invented by a model is a taxonomy nobody owns, and the review cost lands on the same person either way — better to aim it at work that already exists.
 
-### 22.3 Post header dates — and a data problem found while checking
+### 22.3 Post header dates + the "Recently updated" badge
 
 Requested: *"At the beginning of every post, I want the frontmatter to say 'Originally published <date> • Updated <date>', and if a post has been updated in the last 3 months, it has a 'Recently updated' tag."*
 
-The **mechanism** is easy — `created:` / `modified:` are already derived by `Publish Brain.command` (D13) and `content-meta` renders `<time>`; a small local component can print the pair. **The data is not ready, though:**
+**The `updated:` dates are deliberate and meaningful — do not normalise them.** 49 of the 51 archived notes carry `updated: 2026-09-28`, and that is because HayJay went through the entire post history **in one day** (2026-09-28), stripping cruft and stale references from every note and marking each one updated by hand. A shared date here is the *signature of a batch edit*, not evidence of a botched migration. These values will spread out as the Desk is worked on.
 
-- **52 of the 53 published notes carry `updated: 2026-09-28`** — one value on every one. It is a **migration artefact**, not an editorial date, and two independent checks say so: `Substack-export/posts.csv` has **no `updated` column** (`post_id, post_date, is_published, email_sent_at, inbox_sent_at, type, audience, title, subtitle, podcast_url`), and `git log -S'updated: 2026-09-28'` lands on `3128f95` — *"Quartz v5 scaffold + 49 newsletters mirrored (Phase 4)", 2026-09-28*.
-- Only two notes differ: `2023/you-can-judge-a-book-by-its-cover.md`, and one draft.
+> ⚠️ **Correction (2026-10-01).** §22.3 first shipped claiming this was a **migration artefact**, on two pieces of evidence: `Substack-export/posts.csv` has no `updated` column, and `git log -S'updated: 2026-09-28'` lands on `3128f95` *"Quartz v5 scaffold + 49 newsletters mirrored (Phase 4)"*. Both are true and **neither is exculpatory**: the mirror commit on the 28th simply *copied* files that had already been edited that day, and the dates came from the vault — which is exactly where the cleanup happened. I had a coincidence and wrote it as a proven cause. See the lesson in §24.2.
 
-So shipping the header as-is would print **"Updated 28 September 2026" on 52 posts** — true but meaningless — and a "recently updated" rule would fire on **almost the entire archive**. A badge that marks everything marks nothing.
+**What this means for the badge:** it fires on the whole archive until **2026-12-28**, then starts differentiating — which is the intent. *"In three months the badge won't fire on all of the posts, so it's more of a mission for the future."* Worth saying plainly at launch, so a reader who sees it everywhere in October knows it is a marker of the site-wide cleanup pass, not a bug.
 
-**Recommendation, for a decision before S8:** clear the mechanical `updated:` values so the field means *"last editorial revision"* (trivially reversible — it is a single constant), and print **"Updated" only when it differs from the publication date**. On the badge itself: prefer a **client-computed one** (a few lines reading `modified` against `Date.now()`) over a build-time flag, which stays frozen until the next publish, and over a real tag, which would mix system state into the editorial taxonomy being designed in §22.2.
+**Build notes:**
+- **Mechanism:** `created:` / `modified:` are already derived by `Publish Brain.command` (D13) and `content-meta` renders `<time>`; a small local component prints the pair. Renders as **`Originally published {created} • Updated {modified}`**.
+- **Compute the badge on the client**, not at build time — a build-time flag is frozen until the next publish, so in three months it would be quietly wrong. A few lines comparing `modified` against `Date.now()` cannot go stale.
+- **Not a real tag.** A stored `recently-updated` tag would mix system state into the editorial taxonomy §22.2 is designing, and would need rebuilding each time it expires. Derive it; store nothing.
+- **Open micro-decision:** for a note published and never touched since, `created == modified`. Printing the same date twice reads like a bug, so the component should collapse to just *Originally published {date}* in that case. Trivially reversible if the other behaviour is preferred.
+
+---
 
 ---
 
@@ -695,3 +704,35 @@ So shipping the header as-is would print **"Updated 28 September 2026" on 52 pos
 | # | Decision | Why |
 | --- | --- | --- |
 | D17 | **The Desk has no About page**, and **breadcrumbs are never hand-written again.** The `breadcrumbs` plugin stays for now | The Desk is a shelf; the bio is the storefront's. Hand-written breadcrumbs are a second breadcrumb system that must be re-edited on every rename — it already cost one silent revert (§20). The plugin's trail (`✦ / Newsletter Archive / 2025 / …`) is generated and free. **Open question:** HayJay's instinct is that breadcrumbs are not needed at all once folders go (revisit with §22.2 step 3). Two things argue for keeping it until then: it is the only way *up* from a post to its year, and `showCurrentPage: true` currently repeats the article title directly beneath the `<h1>` — the one part of it that is plainly redundant, and the first thing to drop if it stays. |
+
+## 24. Findings log — cruft & opportunities (opened 2026-10-01)
+
+HayJay: *"It's super important that you keep me updated with any findings like this because it gives an opportunity to get leaner code and clear out unneeded cruft. Let's add this as a task to review; we want to keep this repo clean and the workflow immaculate."*
+
+**This section exists so that finding no longer depends on it coming up in conversation.** Every observation of the shape *"this is dead / this could be leaner / this is wrong but harmless"* gets logged here with its **measurement**, not its impression. The measure is the point — §16's rule is that an unmeasured claim about cruft is indistinguishable from a guess, and a guess is how a needed rule gets deleted. Review it whenever a step ships.
+
+### 24.1 Open — measured, actionable
+
+| # | Finding | Measurement | Where | Status |
+| --- | --- | --- | --- | --- |
+| F1 | **15 of 20 `eb-*` brand classes are now unreferenced** — orphaned since §21 thinned the landing page | 0 occurrences across all 355 built pages | `brain/quartz/styles/custom.scss` | ⬜ open — prune, then re-run the suite (§16: prove the build still passes) |
+| F2 | `canvas-page` plugin enabled with **no `.canvas` files anywhere** | 0 files in the vault; no `/canvas` route in `public/` | `quartz.config.yaml:192` | ⬜ open — disable |
+| F3 | `bases-page` plugin enabled with **no `.base` files anywhere** | 0 files in the vault; no `/bases` output | `quartz.config.yaml:350` | ⬜ open — disable |
+| F4 | `obsidian-plugin-excalidraw` enabled with **no drawings** | 0 `.excalidraw` files in vault or content | `quartz.config.yaml:371` | ⬜ open — disable |
+
+**The 15 dead classes (F1):** `eb-hero`, `eb-kicker`, `eb-hero-title`, `eb-hero-lede`, `eb-section`, `eb-section-title`, `eb-grid`, `eb-card`, `eb-card-kicker`, `eb-card-title`, `eb-card-text`, `eb-count`, `eb-cta`, `eb-trail`, `eb-year`. Still in use: `eb-actions`, `eb-btn`, `eb-btn--primary`, `eb-btn--quiet`, `eb-fine`.
+
+### 24.2 Checked and dismissed — recorded so they are not re-investigated
+
+| # | Hypothesis | Verdict |
+| --- | --- | --- |
+| F5 | `updated: 2026-09-28` on 49 notes is a **migration artefact** | ❌ **Wrong, and I asserted it anyway.** The evidence was circumstantial and consistent with the truth: the CSV has no `updated` column (the dates came from the vault), and the mirror commit on the 28th *copied* files already edited that day. **Lesson: two findings that agree with a hypothesis are not two findings — check whether the hypothesis is even in contention before writing it as a conclusion, and never recommend destroying data on circumstantial evidence.** The dates are hand-set editorial revisions (D18). |
+| F6 | `unicode-bidi` wrapping rules may be dead in the storefront CSS | ❌ Dismissed — 0 occurrences in `style.css`, `index.html`, `bio.html`. Never existed. |
+| F7 | `ox-hugo` and `roam` plugins are enabled and unused | ❌ Dismissed — both are already `enabled: false`. A grep for `source:` lines is not a grep for `enabled: true`. |
+| F8 | Content contains Hugo `{{< >}}` shortcodes | ❌ Dismissed — the only match was a **binary `.webp`** (grep matching binary noise), not markdown. |
+
+### 24.3 Standing rules
+
+- **Measure before claiming.** Every row above carries a count and a command that reproduces it.
+- **Never delete a rule on a hunch.** F5 nearly cost a day of genuine editorial dates. If a finding says "this is unused", it must show the *zero*.
+- **Log the dismissed ones too.** F6–F8 cost five minutes and save the next session from re-running them.
