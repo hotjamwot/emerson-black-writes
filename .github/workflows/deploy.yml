@@ -50,6 +50,13 @@ jobs:
           # Copy storefront root files and directories
           cp index.html bio.html CNAME style.css README.md _site/
           cp -R img _site/
+          # S11 §11.3b: render the storefront's "Latest" desk picks.
+          # MUST run AFTER the cp above, and MUST operate on the _site COPY —
+          # never on the source index.html. Rendering the source would bake a
+          # snapshot of "latest" into a committed file, which is precisely the
+          # hand-maintained-list rot we avoided for the sitemap. The script is
+          # idempotent, so a no-op rebuild is a clean pass rather than a failure.
+          node brain/scripts/render-desk-picks.mjs brain brain/public _site/index.html
           # S11 §11.3: post dates for the storefront's "From the Desk" section.
           # MUST RUN BEFORE the Quartz copy below. Upstream's contentIndex.json
           # deletes the date on purpose, so this writes a separate purpose-built
@@ -181,6 +188,37 @@ jobs:
             console.log(`Guard: ${p.length} dated posts, newest ${dates[0]}, oldest ${dates[dates.length-1]}.`);
           '
           echo "All safety guard checks passed."
+          # S11 §11.3b: the Desk section must be RENDERED, not a stub. A
+          # placeholder surviving into the artifact would ship a section that
+          # says "Browse all {{DESK_COUNT}} notes" — visibly broken, and the
+          # kind of thing that reaches production because nobody looks at the
+          # bottom of the homepage.
+          if grep -q '{{DESK_COUNT}}' _site/index.html; then
+            echo "::error::Guard failure: {{DESK_COUNT}} placeholder shipped to production! Deployment aborted."
+            exit 1
+          fi
+          PICK_COUNT=$(grep -c 'class="desk-pick"' _site/index.html || true)
+          if [ "$PICK_COUNT" -ne 6 ]; then
+            echo "::error::Guard failure: expected 6 desk picks (3 curated + 3 latest), found $PICK_COUNT! Deployment aborted."
+            exit 1
+          fi
+          LATEST_COUNT=$(python3 -c "
+import re
+h = open('_site/index.html').read()
+m = re.search(r'id=\"desk-latest\"(.*?)</div>', h, re.S)
+print(len(re.findall(r'class=\"desk-pick\"', m.group(1))) if m else 0)
+")
+          if [ "$LATEST_COUNT" -ne 3 ]; then
+            echo "::error::Guard failure: expected 3 generated latest picks, found $LATEST_COUNT! Deployment aborted."
+            exit 1
+          fi
+          # Every pick must be a real, reachable Desk URL.
+          BROKEN=$(grep -oE 'class="desk-pick" href="[^"]*"' _site/index.html | grep -cE 'href="/desk/newsletters/[0-9]{4}/' || true)
+          if [ "$BROKEN" -ne 6 ]; then
+            echo "::error::Guard failure: only $BROKEN/6 desk picks point at a dated post URL! Deployment aborted."
+            exit 1
+          fi
+          echo "Guard: 6 desk picks rendered (3 curated + $LATEST_COUNT latest), no placeholders."
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

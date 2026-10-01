@@ -610,6 +610,139 @@ footer { padding: var(--space-xl) 0; text-align: center; border-top: 1px solid r
 footer p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 footer a { color: var(--accent-red); }
 
+/* ============================================
+   From the Desk — S11 §11.3b
+   The storefront sells books; this section is the
+   evidence a PERSON wrote them. Reuses the full-bleed
+   treatment from .characters so it reads as part of the
+   same page, but with a quieter background — this is
+   reading material, not sales material, and it should
+   not compete with the books above it.
+   ============================================ */
+.desk-picks {
+    padding: clamp(3rem, 6vw, 5rem) var(--space-lg);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 40%),
+        var(--bg-primary);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    position: relative;
+}
+
+.desk-picks h2 {
+    text-align: center;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    letter-spacing: 0.25em;
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.desk-picks-intro {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xl);
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* The two group labels. Small, quiet, mono — structure, not content. */
+.desk-picks-sub {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    font-weight: 400;
+    margin-bottom: var(--space-lg);
+}
+
+/* A hairline either side of the label, so the two groups read as a pair
+   without needing a heavy divider block. */
+.desk-picks-sub::before,
+.desk-picks-sub::after {
+    content: "";
+    display: inline-block;
+    width: clamp(1rem, 4vw, 3rem);
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    vertical-align: middle;
+    margin: 0 var(--space-md);
+}
+
+.desk-picks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-lg);
+    max-width: 1100px;
+    margin: 0 auto var(--space-2xl);
+}
+
+.desk-pick {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: rgba(255, 255, 255, 0.02);
+    /* Matches the existing card borders exactly (see .character-card,
+       `rgba(255, 255, 255, 0.1)`). An earlier draft reached for a
+       `--border-color` token, which this stylesheet does not define — the
+       fallback made it *look* right while being a value nothing else uses. */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    color: inherit;
+    /* The lift mirrors .book so the two sections feel like one design system. */
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.desk-pick:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-red);
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+}
+
+.desk-pick-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.desk-pick-title {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+
+.desk-pick:hover .desk-pick-title { color: var(--accent-red-bright); }
+
+.desk-pick-desc {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.desk-picks-more {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.desk-picks-more a { letter-spacing: 0.04em; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .desk-picks-grid { grid-template-columns: 1fr; }
+    .desk-picks-sub::before, .desk-picks-sub::after { width: 1rem; }
+}
+
 /* Footer nav — the thread between the storefront and The Brain */
 footer .footer-nav {
     margin-top: var(--space-md);
