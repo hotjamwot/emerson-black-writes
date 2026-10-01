@@ -61,6 +61,12 @@ jobs:
           # emit at /desk/brain/ — the wrong side of the move entirely.
           mkdir -p _site/brain
           printf '%s' '<!doctype html><meta charset="utf-8"><title>Moved: Emerson&#8217;s Desk</title><link rel="canonical" href="https://emersonblackwrites.com/desk/"><meta http-equiv="refresh" content="0; url=/desk/"><p>Emerson&#8217;s Desk now lives at <a href="/desk/">/desk/</a>.</p>' > _site/brain/index.html
+          # S11 §11.3: post dates for the storefront's "From the Desk" section.
+          # Upstream's contentIndex.json deletes the date on purpose, so this
+          # writes a separate purpose-built file. Reads FRONTMATTER, not the
+          # rendered <time datetime>: that attribute is parsed as UTC midnight
+          # and so reads a day EARLIER than the date shown on the page.
+          node brain/scripts/export-post-dates.mjs brain brain/public
           # S11 §11.1: sitemap + robots.txt. Generated from the ASSEMBLED _site
           # tree (not hand-maintained) so it can never disagree with what was
           # actually shipped — a stale sitemap is worse than none, and the site
@@ -143,6 +149,30 @@ jobs:
             exit 1
           fi
           echo "Guard: sitemap lists $SITEMAP_POSTS posts; meta + og + canonical present on both storefront pages."
+          # S11 §11.3: the date export must be non-trivial AND correctly ordered.
+          # Existence alone proves nothing — an empty array or an unsorted list
+          # would both pass a file-exists check and both break the storefront's
+          # "latest posts" strip silently. Parsed with node because jq is not
+          # guaranteed on the runner image.
+          if [ ! -s "_site/desk/static/postDates.json" ]; then
+            echo "::error::Guard failure: _site/desk/static/postDates.json missing or empty! Deployment aborted."
+            exit 1
+          fi
+          node -e '
+            const fs = require("fs");
+            const p = JSON.parse(fs.readFileSync("_site/desk/static/postDates.json", "utf8"));
+            if (!Array.isArray(p)) { console.error("::error::postDates.json is not an array"); process.exit(1); }
+            if (p.length < 40) { console.error(`::error::only ${p.length} posts dated (expected 49)`); process.exit(1); }
+            const bad = p.filter((x) => !/^\d{4}-\d{2}-\d{2}$/.test(x.date || ""));
+            if (bad.length) { console.error(`::error::${bad.length} entries have a malformed date`); process.exit(1); }
+            const dates = p.map((x) => x.date);
+            const sorted = [...dates].sort().reverse();
+            if (JSON.stringify(dates) !== JSON.stringify(sorted)) {
+              console.error("::error::postDates.json is not newest-first");
+              process.exit(1);
+            }
+            console.log(`Guard: ${p.length} dated posts, newest ${dates[0]}, oldest ${dates[dates.length-1]}.`);
+          '
           echo "All safety guard checks passed."
 
       - name: Upload artifact
