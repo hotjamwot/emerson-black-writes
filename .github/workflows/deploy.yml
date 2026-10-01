@@ -202,14 +202,20 @@ jobs:
             echo "::error::Guard failure: expected 6 desk picks (3 curated + 3 latest), found $PICK_COUNT! Deployment aborted."
             exit 1
           fi
-          LATEST_COUNT=$(python3 -c "
-import re
-h = open('_site/index.html').read()
-m = re.search(r'id=\"desk-latest\"(.*?)</div>', h, re.S)
-print(len(re.findall(r'class=\"desk-pick\"', m.group(1))) if m else 0)
-")
+          # Exactly 3 of those must be GENERATED (inside #desk-latest); the other
+          # 3 are the hand-written curated trio. Counting within the container is
+          # done with sed/grep rather than python: python3 is NOT guaranteed to be
+          # on the runner image, and depending on it was the cause of a failed
+          # deploy. Keeping the workflow to bash + node + coreutils means one
+          # fewer thing that differs between a Mac and the runner.
+          LATEST_COUNT=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -c 'class="desk-pick"' || true)
           if [ "$LATEST_COUNT" -ne 3 ]; then
             echo "::error::Guard failure: expected 3 generated latest picks, found $LATEST_COUNT! Deployment aborted."
+            exit 1
+          fi
+          # The curated trio must also be present and hand-written (3 of the 6).
+          if [ $((PICK_COUNT - LATEST_COUNT)) -ne 3 ]; then
+            echo "::error::Guard failure: expected 3 curated picks, found $((PICK_COUNT - LATEST_COUNT))! Deployment aborted."
             exit 1
           fi
           # Every pick must be a real, reachable Desk URL.
