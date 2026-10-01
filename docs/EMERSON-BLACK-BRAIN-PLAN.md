@@ -139,20 +139,29 @@ node quartz/theme/verify-brand.mjs
 
 The storefront is two static files, **zero `<script>` tags**, 9.6KB + 20KB. Sections: hero → books → series hook → free novella (Substack iframe) → characters → author → footer. **The Desk is linked in the footer only** — 49 posts of craft writing are invisible until a visitor scrolls to the bottom.
 
-### 🔴 11.1 First: nobody can find the site (measured, unfixed)
+### ✅ 11.1 Make the site findable — DONE 2026-10-01
 
-Found while checking analytics, and almost certainly **why it feels like nobody reads it** — bigger than any design question:
+Found while checking analytics, and almost certainly **why it felt like nobody reads it** — bigger than any design question. Measured before/after:
 
-| Check | Storefront `/` | Desk `/desk/` |
+| Check | Before | After |
 |---|---|---|
-| `meta description` | ❌ **none** | ✅ |
-| `og:` tags | ❌ **none** | ✅ |
-| `sitemap.xml` | ❌ **404** | ❌ **404** |
-| `robots.txt` | ❌ **404** | ❌ **404** |
+| `meta description` on `/` | ❌ none | ✅ search copy |
+| `og:` / `twitter:` tags on `/` | ❌ none | ✅ social copy |
+| canonical URL | ❌ none | ✅ both pages |
+| `sitemap.xml` | ❌ 404 | ✅ **62 URLs** (49 posts + 9 tag pages + 4 site pages) |
+| `robots.txt` | ❌ 404 | ✅ |
 
-The homepage has **no meta description and no Open Graph tags**, so when the site is shared on social or in a newsletter the link renders as bare text with nothing to entice a click. There is no sitemap, so search engines are left to crawl blind.
+**Copy decisions (HayJay's drafts, split by moment).** Search `description` gets the concrete pitch + free entry point; **og:description gets the emotional hook** ("Friendship is survival. Love complicates justice…"). Same page, two audiences — a searcher wants to know what it is, a social click wants to want it. `og:title` drops "warm, witty" because at preview size those adjectives eat the characters needed for the series name; the tone does the work in the description instead. OG image = `cover_fiance_has_flatlined.webp` (Book 3), changeable later.
 
-**Recommendation:** sitemap + robots.txt first (mechanical, no decisions), then a real homepage meta description and OG card. **Do this before any S11 design work** — it is the highest-leverage item here and it is not a design decision at all.
+**The sitemap is generated, not committed** (`brain/scripts/generate-sitemap.mjs`, runs in `deploy.yml` after Quartz is assembled). **Reason:** 49 posts that change on every publish would rot a hand-written list, and "it's still there, it must be fine" is precisely how the `writing-abroad` link text and the vacuous yellow guard both went unnoticed. It is generated from the **actual `_site` tree**, so it cannot disagree with what shipped.
+
+Two decisions worth keeping:
+- **Clean URLs, no `.html`.** Pages serves both `/desk/tags/process` and `/desk/tags/process.html`, but Quartz's own internal links are extensionless, so the `.html` form would advertise a second address for the same page and split crawl signals. *(Verified against live Pages — the local Python server 404s on clean URLs, which is why this was checked for real rather than assumed.)*
+- **Thin folder pages excluded** (`/desk/newsletters/`, `/desk/2023/` etc.) and the `/brain/` redirect is not listed. Both are duplicate/redirect URLs, not content.
+
+**Guarded in `deploy.yml`**, and each guard was **proven red by removing the thing it checks** (the F13 lesson applied forward — a check that cannot fail is worse than none). Including a *count* guard: a `sitemap.xml` containing one URL is technically valid and completely useless, so the deploy aborts if fewer than 40 posts are listed.
+
+**Not done:** a separate Books page. HayJay prefers the single flowing homepage — agreed, since the books are one short section mid-page and a second page would add a hop for no gain. The Books/Newsletter metas were therefore not used.
 
 ### 11.2 Analytics (blocked on setup)
 
@@ -192,8 +201,8 @@ A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→
 
 ## 12. Roadmap
 
-**Now — make the site findable (11.1):** sitemap · robots.txt · homepage meta description · OG card.
-**Next:** analytics setup (11.2) → date export (§10) → "From the Desk" (11.3) → header link (11.4) → craft→books bridge (11.6).
+**Now:** analytics setup (11.2) → date export (§10) → "From the Desk" (11.3) → header link (11.4) → craft→books bridge (11.6).
+**Also open:** submit the new sitemap in Google Search Console — it exists but nothing has told Google it does.
 **Then:** tag constellation (11.5) · backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune · series order (11.7).
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 

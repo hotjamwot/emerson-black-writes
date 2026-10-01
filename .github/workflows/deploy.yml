@@ -61,6 +61,11 @@ jobs:
           # emit at /desk/brain/ — the wrong side of the move entirely.
           mkdir -p _site/brain
           printf '%s' '<!doctype html><meta charset="utf-8"><title>Moved: Emerson&#8217;s Desk</title><link rel="canonical" href="https://emersonblackwrites.com/desk/"><meta http-equiv="refresh" content="0; url=/desk/"><p>Emerson&#8217;s Desk now lives at <a href="/desk/">/desk/</a>.</p>' > _site/brain/index.html
+          # S11 §11.1: sitemap + robots.txt. Generated from the ASSEMBLED _site
+          # tree (not hand-maintained) so it can never disagree with what was
+          # actually shipped — a stale sitemap is worse than none, and the site
+          # had none at all until now. Must run after Quartz is copied in.
+          node brain/scripts/generate-sitemap.mjs _site
           # Disable Jekyll processing. Pages "Source" MUST be "GitHub Actions";
           # this file is belt-and-braces so the artifact can never be chewed up
           # by the legacy Jekyll pipeline if it is ever served from a branch.
@@ -105,6 +110,39 @@ jobs:
             exit 1
           fi
           echo "Guard: $PAGE_COUNT newsletter pages and $IMG_COUNT image files staged."
+          # S11 §11.1: findability guards. The storefront shipped for years with
+          # no meta description, no og: tags, no sitemap and no robots.txt — the
+          # likely reason the site looked unread. These assert they exist, so the
+          # fix cannot silently regress the way the yellow-highlight guard did
+          # (see the F13 lesson: a check that cannot fail is worse than none).
+          for f in sitemap.xml robots.txt; do
+            if [ ! -s "_site/$f" ]; then
+              echo "::error::Guard failure: _site/$f missing or empty! Deployment aborted."
+              exit 1
+            fi
+          done
+          for f in index.html bio.html; do
+            if ! grep -q '<meta name="description"' "_site/$f"; then
+              echo "::error::Guard failure: _site/$f has no meta description! Deployment aborted."
+              exit 1
+            fi
+            if ! grep -q 'property="og:title"' "_site/$f"; then
+              echo "::error::Guard failure: _site/$f has no og:title! Deployment aborted."
+              exit 1
+            fi
+            if ! grep -q 'rel="canonical"' "_site/$f"; then
+              echo "::error::Guard failure: _site/$f has no canonical URL! Deployment aborted."
+              exit 1
+            fi
+          done
+          # The sitemap must actually list the archive, not just exist. A
+          # sitemap.xml containing one URL is technically valid and useless.
+          SITEMAP_POSTS=$(grep -c '/desk/newsletters/' _site/sitemap.xml || true)
+          if [ "$SITEMAP_POSTS" -lt 40 ]; then
+            echo "::error::Guard failure: sitemap lists only $SITEMAP_POSTS posts (expected 49)! Deployment aborted."
+            exit 1
+          fi
+          echo "Guard: sitemap lists $SITEMAP_POSTS posts; meta + og + canonical present on both storefront pages."
           echo "All safety guard checks passed."
 
       - name: Upload artifact
