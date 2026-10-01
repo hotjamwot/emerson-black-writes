@@ -126,6 +126,8 @@ node quartz/theme/verify-brand.mjs
 - *After fixing one unpinned token, enumerate the rest — the bug class is "the token nobody looked at", and it does not come alone.*
 - *Log the dismissed options too. Five minutes saves the next session from re-running them.*
 - *A tidy layout decision can hide the feature that makes the links worth having.*
+- *A guard that cannot fail is worse than no guard — it looks like protection.* (Hit three times: the original yellow check, then two unreachable assertions in the sitemap script I wrote days after.)
+- **I6 (new, 2026-10-01): the sitemap shipped listing every post twice.** Quartz emits `Newsletters/` and `newsletters/` on a case-sensitive filesystem; macOS merges them, so **the bug cannot be reproduced locally at all.** Two failed deploys followed. Rule: test path logic against a *simulated case-sensitive tree*, never the working copy.
 
 ## 10. Where the Desk stands (measured 2026-10-01)
 
@@ -162,6 +164,23 @@ Two decisions worth keeping:
 **Guarded in `deploy.yml`**, and each guard was **proven red by removing the thing it checks** (the F13 lesson applied forward — a check that cannot fail is worse than none). Including a *count* guard: a `sitemap.xml` containing one URL is technically valid and completely useless, so the deploy aborts if fewer than 40 posts are listed.
 
 **Not done:** a separate Books page. HayJay prefers the single flowing homepage — agreed, since the books are one short section mid-page and a second page would add a hop for no gain. The Books/Newsletter metas were therefore not used.
+
+#### ⚠️ The case-variant trap — two failed deploys, and the lesson is bigger than the fix
+
+Quartz emits the archive **twice under different casing on a case-sensitive filesystem**: `Newsletters/` (the content folder's own name, holding folder/year index pages) and `newsletters/` (the slug it links to, holding the posts). Pages serves both.
+
+**macOS cannot reproduce this.** A case-insensitive filesystem merges the two directories, so the working copy looks fine and the duplicate only ever appears in Linux CI. This is the first bug in this project that was *structurally invisible* from the dev machine.
+
+Sequence, because the wrong turns are the useful part:
+1. First deploy of the sitemap shipped **112 URLs — every post listed twice** (50 capitalised + 49 lowercase). Caught by *resolving the URLs in the live sitemap*, not by reading the file.
+2. Added a duplicate guard → **deploy failed.** The guard normalised case, which made both spellings collide, and CI legitimately produced duplicates. My first hypothesis (lowercase-only regexes in the thin-page filters) was **wrong** — fixing it changed nothing.
+3. Real cause: the guard treated a *case fold* as fatal. Both spellings are the same page, so the correct response is to **dedupe**, not abort.
+
+**Also removed: both in-script guards, as dead code.** Once `urlFor()` lowercases unconditionally and the list is `Set`-deduped, "no duplicates" and "no uppercase paths" are *provably unreachable*. They looked like safety nets while being incapable of failing — **the F13 trap again, in miniature, written by me two days after learning it.** The honest guarantees are the `Set` dedupe and the deploy's independent `SITEMAP_POSTS` count guard, which *can* fail and has been proven red.
+
+**The durable rule:** anything touching these paths must be tested against a **simulated case-sensitive tree**, never the working copy. macOS will keep telling you everything is fine.
+
+**Verified live after the final deploy:** 61 URLs, no uppercase, no duplicates, 404 excluded, and a sample of URLs all returning **200**.
 
 ### 11.2 Analytics (blocked on setup)
 
