@@ -145,6 +145,16 @@ ${scope} {
      back to the true accent so links match the storefront token exactly. Hover
      still uses --color-accent-2, which stays a brighter crimson. */
   --text-accent: var(--color-accent);
+  /* S10 · --tertiary owned. Quartz's base stylesheet reads this variable in
+     three places: ::selection (a 60% wash), the search-hit .highlight
+     background, and a:hover (color: var(--tertiary)) behind a 0.2s color
+     transition. Upstream Obsidian declares --tertiary as a yellow-amber, and
+     the overlay never pinned it — so the site showed an orange-yellow selection
+     and search highlight (unreadable under the crimson tag pills) and every
+     link/button faded to amber on hover (the "jarring flicker"). One variable,
+     three symptoms, so it is fixed once here rather than patched per-symptom.
+     Collapsing it onto the accent makes selection and hover read as brand. */
+  --tertiary: var(--color-accent);
   /* Palette slots that can surface as Obsidian violet / magenta (code tokens,
      canvas, sync avatars, the "example" callout). Collapsed onto the brand
      accent so no off-brand hue can leak into the reading room. */

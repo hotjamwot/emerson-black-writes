@@ -5,7 +5,7 @@ date: 2025-06-24
 created: 2025-06-24
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [systems]
+tags: [systems, mindset]
 aliases: []
 type: post
 publish: true

@@ -420,7 +420,20 @@ const tagOf = new Map(
   ]),
 )
 const untagged = [...tagOf].filter(([, t]) => t.length === 0).map(([f]) => f)
-const multiTagged = [...tagOf].filter(([, t]) => t.length > 1).map(([f]) => f)
+// One tag is the default, and a second (bridging) tag is deliberate and good —
+// it is what connects two spheres on the tag graph. What must not happen is a
+// post that lists everything and therefore belongs nowhere, or a ninth tag. So
+// the bound is 1-3, not exactly 1.
+const overTagged = [...tagOf].filter(([, t]) => t.length > 3).map(([f, t]) => `${f} (${t.length})`)
+const bridges = [...tagOf].filter(([, t]) => t.length === 2).length
+check(
+  overTagged.length === 0,
+  `no post carries more than 3 tags (a post that lists everything belongs nowhere)${overTagged.length ? ` — ${overTagged.slice(0, 3).join(", ")}` : ""}`,
+)
+check(
+  bridges > 0,
+  `bridging second tags are in use (${bridges} posts cross a sphere boundary) — this is what makes the tag graph a graph`,
+)
 const offVocabulary = [...tagOf]
   .flatMap(([f, t]) => t.filter((x) => !TAXONOMY.includes(x)).map((x) => `${f} (${x})`))
 check(
@@ -428,13 +441,16 @@ check(
   `every one of the ${noteFiles.length} published posts carries a tag${untagged.length ? ` — untagged: ${untagged.slice(0, 3).join(", ")}` : ""}`,
 )
 check(
-  multiTagged.length === 0,
-  `no post carries more than one tag today${multiTagged.length ? ` — ${multiTagged.slice(0, 3).join(", ")}` : ""} (2-3 is allowed going forward; see §25.5)`,
-)
-check(
   offVocabulary.length === 0,
   `no post invents a tag outside the 8 spheres${offVocabulary.length ? ` — ${offVocabulary.slice(0, 3).join(", ")}` : ""}`,
 )
+// The trail is gone (S10): a second, folder-shaped navigation model sitting
+// above the title, repeating the current page. Locked off so it cannot creep
+// back with the plugin re-enabled.
+const anyBreadcrumb = builtHtml.some((f) =>
+  /class="[^"]*breadcrumb/.test(readFileSync(join(brain, "public", f), "utf8")),
+)
+check(!anyBreadcrumb, "no built page renders a breadcrumb trail (breadcrumbs are disabled, §25.2)")
 // The taxonomy only earns its keep if the pages it promises actually exist.
 // FLAT output, not `tags/<tag>/index.html`: Quartz emits `tags/process.html`.
 // (Asserting the directory form here is the §17 trap again — the build is the fact.)
@@ -587,10 +603,10 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
   )
   // The serif variable is inherited by the theme's UI, so the chrome must be
   // pinned to the display face explicitly or the whole sidebar turns to Lora.
+  // (Breadcrumbs dropped out of this list in S10 — the trail is disabled, §25.2.)
   for (const [name, label] of [
     ["explorer", "explorer links"],
     ["toc", "table-of-contents links"],
-    ["breadcrumb", "breadcrumbs"],
   ]) {
     check(
       isDisplay(field(name)),

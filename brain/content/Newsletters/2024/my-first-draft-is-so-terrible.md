@@ -5,7 +5,7 @@ date: 2024-11-14
 created: 2024-11-14
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [process]
+tags: [process, mindset]
 aliases: []
 type: post
 publish: true

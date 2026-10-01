@@ -5,7 +5,7 @@ date: 2023-03-14
 created: 2023-03-14
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [craft-character]
+tags: [craft-character, reading]
 aliases: []
 type: post
 publish: true

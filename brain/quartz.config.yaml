@@ -228,7 +228,13 @@ plugins:
     enabled: true
     options:
       localGraph:
-        depth: 2
+        # S10 · show the WHOLE Desk graph on every page, not just the current
+        # post's 2-hop neighbourhood. The tags (8 spheres) and wikilinks are the
+        # navigation now, so the local graph's job is the *map*: you should be
+        # able to see where a post sits in the whole body of work, with the
+        # current node already highlighted in the accent. A high depth means
+        # "show everything reachable" — the current post is the one in accent.
+        depth: 100
         showTags: true
         focusOnHover: true
         fontSize: 0.8
@@ -309,13 +315,15 @@ plugins:
       position: header
       priority: 35
       group: toolbar
+  # S10 · breadcrumbs removed. The trail was `✦ / Newsletter Archive / 2025 /
+  # <title>` — a folder-shaped way round a site that now navigates by tag
+  # (§25) and by graph. It also sat ABOVE the post title, repeating the very
+  # page you are on (`showCurrentPage: true`) and adding a second, older
+  # navigation model beside the tags. Now that the year folders are no longer
+  # how you move around, the trail has nothing left to say. Re-enable the plugin
+  # if the folders ever come back as navigation.
   - source: "@quartz-community/breadcrumbs"
-    enabled: true
-    options:
-      spacerSymbol: "/"
-      rootName: "✦"
-      resolveFrontmatterTitle: true
-      showCurrentPage: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 5

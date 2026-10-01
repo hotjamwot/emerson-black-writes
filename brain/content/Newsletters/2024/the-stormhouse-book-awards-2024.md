@@ -5,7 +5,7 @@ date: 2024-01-16
 created: 2024-01-16
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [reading]
+tags: [reading, news]
 aliases: []
 type: post
 publish: true

@@ -149,8 +149,17 @@ body::after {
 }
 
 ::selection {
-  background: var(--eb-accent);
-  color: #fff;
+  background: color-mix(in srgb, var(--eb-accent) 22%, transparent);
+  color: var(--eb-dark);
+}
+
+/* S10 · the search-hit wash. The theme now pins --tertiary to the accent, but a
+   60%-accent highlight is a loud pink slab under a whole line of text. Drop it
+   to a quiet tint: still unmistakably "this matched", still readable. */
+.highlight {
+  background: color-mix(in srgb, var(--eb-accent) 16%, transparent);
+  color: inherit;
+  border-radius: 3px;
 }
 
 html {
@@ -768,41 +777,17 @@ p.content-meta {
 }
 
 .graph-outer {
-  height: 230px;
+  /* S10 · taller, to breathe. Was a flat 230px thumbnail; the graph is the point
+     of the Desk, and 8-90 edges need room to be legible. Clamped so a short
+     window still shows a real graph. */
+  height: clamp(360px, 52vh, 560px);
 }
 
-// S2 · Full-width graph section at the foot of every post — the star of the
-// show, not a sidebar thumbnail. The Graph component renders both the local
-// graph and the global-graph popup trigger inside .graph.
-.after-body-graph {
-  margin: 3rem 0 1rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--eb-line);
-
-  > h3 {
-    font-size: 0.72rem;
-    letter-spacing: var(--eb-tracking);
-    text-transform: uppercase;
-    color: var(--gray);
-    margin: 0 0 1rem;
-  }
-
-  .graph {
-    margin: 0;
-  }
-
-  .graph-outer {
-    height: clamp(380px, 55vh, 560px);
-  }
-
-  .graph-container {
-    border: 1px solid var(--eb-line);
-    border-radius: var(--eb-radius-lg);
-    background: var(--eb-surface);
-    overflow: hidden;
-    box-shadow: var(--eb-shadow);
-  }
-}
+// NOTE: a former `.after-body-graph { … }` block (with its own `.graph-outer`
+// height) lived here and was removed 2026-10-01 — the graph plugin never emits
+// that class, so it was 0-occurrence dead CSS shadowing the real `.graph-outer`
+// above. The graph sits in `.page-footer`; its container is styled by the
+// `.graph-container` rule that follows. See plan §24.1 F5.
 
 .graph-container {
   border: 1px solid var(--eb-line);

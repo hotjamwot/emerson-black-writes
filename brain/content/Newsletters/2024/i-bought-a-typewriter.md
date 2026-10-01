@@ -5,7 +5,7 @@ date: 2024-12-16
 created: 2024-12-16
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [systems]
+tags: [systems, news]
 aliases: []
 type: post
 publish: true
