@@ -5,7 +5,7 @@ date: 2023-03-28
 created: 2023-03-28
 updated: 2026-09-28
 modified: 2026-09-28
-tags: []
+tags: [mindset]
 aliases: []
 type: post
 publish: true

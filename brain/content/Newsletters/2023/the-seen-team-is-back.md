@@ -5,7 +5,7 @@ date: 2023-09-27
 created: 2023-09-27
 updated: 2026-09-28
 modified: 2026-09-28
-tags: []
+tags: [news]
 aliases: []
 type: post
 publish: true

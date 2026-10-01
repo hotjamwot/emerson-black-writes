@@ -381,6 +381,75 @@ check(
   `the Desk does not restate the storefront bio${bioProse ? ` ("${bioProse.slice(0, 44)}…")` : ""}`,
 )
 
+// ── 5d. the tag taxonomy holds (S10 §25) ────────────────────────────────────
+// Eight spheres were read out of all 49 posts and signed off (§25.3). Two things
+// can then happen to them silently: a new post ships with `tags: []` (or invents
+// a ninth tag, which mints a near-empty page and fragments the vocabulary), or a
+// tag page stops being generated. Both are invisible in a green build, so they
+// are asserted here. The vocabulary is deliberately a fixed set — a tag earns its
+// place at 3+ posts, not at 1.
+console.log("\nTag taxonomy — 8 spheres, one tag per post (§25)")
+const TAXONOMY = [
+  "process",
+  "mindset",
+  "craft-plot",
+  "craft-character",
+  "systems",
+  "reading",
+  "bookcraft",
+  "news",
+]
+const frontmatterTag = (src) => {
+  const fm = src.split("---")[1] ?? ""
+  const m = /^tags:\s*\[(.*?)\]\s*$/m.exec(fm)
+  if (m) return m[1].split(",").map((s) => s.trim()).filter(Boolean)
+  const block = /^tags:\s*\n((?:\s*-\s*.+\n?)+)/m.exec(fm)
+  return block ? block[1].split("\n").map((l) => l.replace(/^\s*-\s*/, "").trim()).filter(Boolean) : []
+}
+// `readdirSync(..., {recursive:true})` yields POSIX separators on macOS, and the
+// vault mirror is flat under `Newsletters/`. `index.md` is the archive landing
+// page, not a post — it is a navigation surface and carries no topic, so it is
+// excluded (a folder index has no subject to categorise).
+const noteFiles = authored.filter(
+  (f) => f.startsWith("Newsletters/") && !f.includes("_drafts") && !f.endsWith("/index.md"),
+)
+const tagOf = new Map(
+  noteFiles.map((f) => [
+    f,
+    frontmatterTag(readFileSync(join(brain, "content", f), "utf8")),
+  ]),
+)
+const untagged = [...tagOf].filter(([, t]) => t.length === 0).map(([f]) => f)
+const multiTagged = [...tagOf].filter(([, t]) => t.length > 1).map(([f]) => f)
+const offVocabulary = [...tagOf]
+  .flatMap(([f, t]) => t.filter((x) => !TAXONOMY.includes(x)).map((x) => `${f} (${x})`))
+check(
+  untagged.length === 0,
+  `every one of the ${noteFiles.length} published posts carries a tag${untagged.length ? ` — untagged: ${untagged.slice(0, 3).join(", ")}` : ""}`,
+)
+check(
+  multiTagged.length === 0,
+  `no post carries more than one tag today${multiTagged.length ? ` — ${multiTagged.slice(0, 3).join(", ")}` : ""} (2-3 is allowed going forward; see §25.5)`,
+)
+check(
+  offVocabulary.length === 0,
+  `no post invents a tag outside the 8 spheres${offVocabulary.length ? ` — ${offVocabulary.slice(0, 3).join(", ")}` : ""}`,
+)
+// The taxonomy only earns its keep if the pages it promises actually exist.
+// FLAT output, not `tags/<tag>/index.html`: Quartz emits `tags/process.html`.
+// (Asserting the directory form here is the §17 trap again — the build is the fact.)
+const missingTagPages = TAXONOMY.filter((t) => !existsSync(join(brain, "public", "tags", `${t}.html`)))
+check(
+  missingTagPages.length === 0,
+  `all 8 tag pages are generated${missingTagPages.length ? ` — missing: /tags/${missingTagPages.join(", /tags/")}` : ""}`,
+)
+// And a tag must be *findable* on the post, not just present in the frontmatter.
+const samplePost = readFileSync(join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"), "utf8")
+check(
+  /class="tags"[\s\S]{0,200}href="[^"]*tags\/craft-plot"/.test(samplePost),
+  "a post renders its tag as a pill linking to its tag page",
+)
+
 console.log("\nTypography (computed style — what the reader actually sees)")
 
 // Cheap static companion to the browser check below: it documents the layer

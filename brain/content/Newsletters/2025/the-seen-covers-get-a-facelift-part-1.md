@@ -5,7 +5,7 @@ date: 2025-03-23
 created: 2025-03-23
 updated: 2026-09-28
 modified: 2026-09-28
-tags: []
+tags: [bookcraft]
 aliases: []
 type: post
 publish: true

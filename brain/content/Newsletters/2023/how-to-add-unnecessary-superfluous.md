@@ -5,7 +5,7 @@ date: 2023-04-11
 created: 2023-04-11
 updated: 2026-09-28
 modified: 2026-09-28
-tags: []
+tags: [craft-plot]
 aliases: []
 type: post
 publish: true

@@ -5,7 +5,7 @@ date: 2025-08-15
 created: 2025-08-15
 updated: 2026-09-28
 modified: 2026-09-28
-tags: []
+tags: [craft-character]
 aliases: []
 type: post
 publish: true
