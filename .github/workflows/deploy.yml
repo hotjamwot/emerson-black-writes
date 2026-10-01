@@ -50,6 +50,19 @@ jobs:
           # Copy storefront root files and directories
           cp index.html bio.html CNAME style.css README.md _site/
           cp -R img _site/
+          # S11 §11.3: post dates for the storefront's "From the Desk" section.
+          # MUST RUN BEFORE the Quartz copy below. Upstream's contentIndex.json
+          # deletes the date on purpose, so this writes a separate purpose-built
+          # file — and it lands in brain/public/static/, which is only copied into
+          # _site/desk/ by the very next command. Generating it afterwards wrote
+          # the file to a directory that had already been copied, and it silently
+          # never reached the artifact.
+          #
+          # It reads FRONTMATTER, not the rendered <time datetime>: that attribute
+          # is parsed as UTC midnight and so reads a day EARLIER than the date
+          # shown on the page (frontmatter 2025-02-14 renders as Feb 14 while
+          # datetime="2025-02-13T21:00Z").
+          node brain/scripts/export-post-dates.mjs brain brain/public
           # Copy Quartz build output to /desk/
           cp -R brain/public/. _site/desk/
           # Remove duplicate CNAME created by Quartz inside /desk/
@@ -61,12 +74,6 @@ jobs:
           # emit at /desk/brain/ — the wrong side of the move entirely.
           mkdir -p _site/brain
           printf '%s' '<!doctype html><meta charset="utf-8"><title>Moved: Emerson&#8217;s Desk</title><link rel="canonical" href="https://emersonblackwrites.com/desk/"><meta http-equiv="refresh" content="0; url=/desk/"><p>Emerson&#8217;s Desk now lives at <a href="/desk/">/desk/</a>.</p>' > _site/brain/index.html
-          # S11 §11.3: post dates for the storefront's "From the Desk" section.
-          # Upstream's contentIndex.json deletes the date on purpose, so this
-          # writes a separate purpose-built file. Reads FRONTMATTER, not the
-          # rendered <time datetime>: that attribute is parsed as UTC midnight
-          # and so reads a day EARLIER than the date shown on the page.
-          node brain/scripts/export-post-dates.mjs brain brain/public
           # S11 §11.1: sitemap + robots.txt. Generated from the ASSEMBLED _site
           # tree (not hand-maintained) so it can never disagree with what was
           # actually shipped — a stale sitemap is worse than none, and the site
