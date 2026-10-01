@@ -268,7 +268,8 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 12. ✅ **Post header dates + "Recently updated" badge** — D18/§26, §27. Live, deduped against content-meta (§27.3).
 > 13. ✅ **Prune orphaned CSS + inert plugins** — §24.1 F1-F4 (the dead `.after-body-graph` block, F5, removed en route).
 > 14. ✅ **Bridging second tags** — 18 posts now cross a sphere boundary (§26).
-> 15. ✅ **Yellow highlight eliminated** — `--textHighlight` pinned, F11 (§27.1).
+> 15. ✅ **Yellow highlight eliminated** — `--textHighlight`, F11/F13. Needed the unlayered `custom.scss` override, not the theme overlay (§27.1).
+> 15.1. ✅ **Guard made falsifiable** — the §27.1 check passed *vacuously*; it now reads the built stylesheet and both halves are proven red. Suite **91**.
 > 16. 🟡 **Red-on-red active sidebar item** — F12: a specificity loss, not a colour bug. Fix with the sidebar width, below.
 > 17. ⬜ **Narrow the left sidebar** (S3) — `body` grid is upstream's `320px auto 320px` and is **not overridden** anywhere in `custom.scss`. One-line grid override + re-check the reading measure. Pairs with F12.
 > 18. 🟢 **S2 graph** — whole-map view live (§26). Remaining: permanent links + reliable tag hover (§27.5) — **both blocked on item 10**, since with 8 edges there is nothing to show and the design question only exists at ~90.
@@ -738,6 +739,7 @@ HayJay: *"It's super important that you keep me updated with any findings like t
 | F10 | Content contains Hugo `{{< >}}` shortcodes | ❌ Dismissed — the only match was a **binary `.webp`** (grep matching binary noise), not markdown. |
 | F11 | The "orange-yellow" on tags was one bug | ⚠️ **It was two, one variable apart.** §26 pinned `--tertiary` (selection + search + link hover). The *yellow* the tags were showing is a different token: `--textHighlight`, upstream `#fff23688`, consumed by `.text-highlight`. Pinned in §27. **Lesson: after fixing one unpinned token, enumerate the rest — the class is "the token nobody looked at", and it does not arrive alone.** |
 | F12 | The active explorer item is styled red-on-red in `custom.scss` | ❌ **Not our rule.** Ours is crimson on `--eb-surface` (near-transparent navy) = correct. The theme layer's `.active` wins on specificity and paints `--nav-item-background-active: var(--highlight)` = crimson at 12%. So crimson text lands on a crimson wash. **A specificity loss, not a colour choice** — fix by raising our specificity or pinning the theme var, not by changing colours. |
+| F13 | The `--textHighlight` pin in the theme overlay killed the yellow | ❌ **The pin never took effect, and the guard that "proved" it could not fail.** Two independent mistakes.<br>**1. Wrong layer.** The declared order is `@layer quartz-base, obsidian-theme, …` — `quartz-base` comes **first**, so it wins at equal specificity. Quartz's own `quartz-base` also declares `--textHighlight: #fff23688`, which beat the overlay. **An overlay can only win where nobody else is speaking**; `--tertiary` escaped by luck (nothing in `quartz-base` declared it), which is exactly why the overlay approach *looked* sound.<br>**2. A vacuous guard.** The check grepped `public/index.html` for the yellow hex — but `index.html` **does not contain the theme variables at all** (they live in the emitted CSS bundle). "No yellow found" was trivially true, so the check passed while the yellow was still being served. The replacement reads the real stylesheet and asserts both the presence of the upstream token (so the check *can* fail) and the presence of the unlayered override. Both proven red by deletion.<br>**Lessons: (a) pinning a token is not proof it is pinned — read the built stylesheet; (b) a guard that cannot fail is worse than no guard, because it converts an unverified claim into false assurance.** The real fix is the unlayered `.text-highlight { … }` rule in `custom.scss`, which outranks every layer. |
 
 ### 24.3 Standing rules
 
@@ -899,11 +901,20 @@ The Obsidian base declares `--tertiary` as a yellow-amber, and the brand overlay
 
 Reported after §26 shipped. Five items; **three were the same class of bug as `--tertiary`, and one was a duplicate.** The graph requests (always-visible links, reliable tag hover) are logged in §27.5 as *deliberately not done* — they are behaviour changes to a D3 component, not styling.
 
-### 27.1 The yellow was `--textHighlight`: the last unpinned palette slot
+### 27.1 The yellow was `--textHighlight` — and fixing it took **two** corrections
 
-Same failure mode as `--tertiary`, one variable over. Obsidian ships `--textHighlight` as **bright yellow** (`#fff23688` light, `#b3aa0288` dark), consumed by `.text-highlight{background-color: var(--textHighlight)}` — so any highlighted run, **and any tag pill sitting inside one**, wore a yellow slab. The overlay never pinned it. Now pinned to a 22% accent tint.
+Same failure mode as `--tertiary`, one variable over. Obsidian ships `--textHighlight` as **bright yellow** (`#fff23688` light, `#b3aa0288` dark), consumed by `.text-highlight{background-color: var(--textHighlight)}` — so any highlighted run, **and any tag pill sitting inside one**, wore a yellow slab.
 
-This completes the palette: `--accent`, `--secondary`, `--tertiary`, `--textHighlight` all owned, so no upstream hue can reach the reading room. **Lesson reinforced:** *after fixing one unpinned token, enumerate the rest and check each — the bug class is "the token nobody looked at", and it does not come alone.*
+The first attempt pinned it in the theme overlay. **That did not work**, and it is worth recording exactly why, because the reason generalises:
+
+1. **Wrong layer.** The declared order is `@layer quartz-base, obsidian-theme, …`. `quartz-base` comes **first**, so it wins at equal specificity — and Quartz's own `quartz-base` *also* declares `--textHighlight: #fff23688`, which beat the overlay. `--tertiary` escaped this only by luck: nothing in `quartz-base` declared it, so the overlay was the sole voice. **An overlay can only win where nobody else is speaking.**
+2. **A guard that could not fail.** The check asserted "no yellow survives" by grepping `public/index.html` — which **does not contain the theme variables at all**; they live in the emitted CSS bundle. "No yellow found" was trivially true, so it passed while the yellow was still being served.
+
+The real fix is an unlayered `.text-highlight { … }` rule in `custom.scss`, which outranks every layer. The replacement guard reads the actual stylesheet and asserts *both* that the upstream yellow token is still present (**so the check can fail**) *and* that the override exists — then both halves were proven red by deleting the rule. Suite **87 → 91**.
+
+**Two lessons, both now load-bearing for the rest of this project:**
+- *Pinning a token is not proof that it is pinned.* Only a check that reads the **built** stylesheet proves it.
+- *A guard that cannot fail is worse than no guard*, because it converts an unverified claim into false assurance — and I shipped a false "verified" claim last turn.
 
 ### 27.2 Red-on-red in the sidebar — a specificity loss, not a theme bug
 

@@ -155,14 +155,21 @@ ${scope} {
      three symptoms, so it is fixed once here rather than patched per-symptom.
      Collapsing it onto the accent makes selection and hover read as brand. */
   --tertiary: var(--color-accent);
-  /* S10 · --textHighlight owned — the LAST unpinned palette slot. Same failure
-     as --tertiary above: the Obsidian base ships this as a bright yellow
-     (#fff23688 light / #b3aa0288 dark) and the overlay never pinned it. It is
-     consumed by .text-highlight{background-color: var(--textHighlight)}, so a
-     highlighted run — or a tag pill sitting inside one — wore a yellow slab.
-     F11. Collapsing it onto the accent finishes the palette: with --accent,
-     --secondary, --tertiary and --textHighlight all owned, no upstream hue can
-     reach the reading room. */
+  /* S10 - --textHighlight: we would like to own this the way we own --tertiary
+     above, but we CANNOT, and the reason is the whole point of this note.
+     Quartz's own quartz-base layer ALSO declares --textHighlight (bright
+     yellow, #fff23688 light / #b3aa0288 dark), and the layer order puts
+     quartz-base FIRST, so it wins at equal specificity. The pin below is
+     therefore INERT for this token: an overlay can only win where nobody else
+     is speaking, and here two speak.
+
+     The tertiary token escaped this only by luck, because nothing in
+     quartz-base declared it, so the overlay was the sole voice. Lesson: pinning
+     a token in the overlay is NOT proof that it is pinned; only a check that
+     reads the BUILT stylesheet proves it.
+
+     The real override is the unlayered .text-highlight rule in custom.scss,
+     which outranks every layer. See F13 in the plan. */
   --textHighlight: color-mix(in srgb, var(--color-accent) 22%, transparent);
   /* Palette slots that can surface as Obsidian violet / magenta (code tokens,
      canvas, sync avatars, the "example" callout). Collapsed onto the brand

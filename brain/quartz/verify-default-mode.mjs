@@ -507,13 +507,28 @@ check(
   /\.content-meta\s+time\s*\{[^}]*display:\s*none/.test(headerCss),
   "the duplicate date is suppressed (content-meta keeps only its reading time)",
 )
-// S10 · the palette is fully owned. --textHighlight was the last unpinned slot
-// and shipped as bright yellow (#fff23688), so any highlighted run — or a tag
-// pill inside one — wore a yellow slab. Assert no upstream yellow survives.
-const themeOut = readFileSync(join(brain, "public", "index.html"), "utf8")
+// S10/F13 · no upstream yellow survives IN THE BUILT STYLESHEET.
+//
+// The first version of this guard grepped `public/index.html`, which does not
+// contain the theme variables at all — they live in the emitted CSS bundle — so
+// "no yellow found" was trivially true and the check passed while the yellow was
+// still being served. A guard that cannot fail is worse than no guard: it
+// converts an unverified claim into a false assurance.
+//
+// Read the actual bundle, and assert the *unlayered* override exists in it —
+// `.text-highlight` in custom.scss is what actually wins the cascade, because
+// quartz-base also declares --textHighlight and comes first in the layer order.
+const allCss = readdirSync(join(brain, "public"))
+  .filter((f) => f.endsWith(".css"))
+  .map((f) => readFileSync(join(brain, "public", f), "utf8"))
+  .join("\n")
 check(
-  !/--textHighlight:\s*#(fff236|b3aa02)/i.test(themeOut),
-  "no upstream yellow highlight token survives in the theme (--textHighlight is pinned to the accent)",
+  allCss.length > 0 && /--textHighlight:\s*#(fff236|b3aa02)/i.test(allCss),
+  "sanity: the upstream yellow token is actually present in the bundle (so this check can fail)",
+)
+check(
+  /\.text-highlight\{[^}]*eb-accent/.test(headerCss),
+  "the yellow highlight is overridden from unlayered custom.css (the only place that beats quartz-base)",
 )
 
 console.log("\nTypography (computed style — what the reader actually sees)")

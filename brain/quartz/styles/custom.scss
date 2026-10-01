@@ -153,11 +153,36 @@ body::after {
   color: var(--eb-dark);
 }
 
-/* S10 · the search-hit wash. The theme now pins --tertiary to the accent, but a
+/* S10 · the search-hit wash. The theme pins --tertiary to the accent, but a
    60%-accent highlight is a loud pink slab under a whole line of text. Drop it
    to a quiet tint: still unmistakably "this matched", still readable. */
 .highlight {
   background: color-mix(in srgb, var(--eb-accent) 16%, transparent);
+  color: inherit;
+  border-radius: 3px;
+}
+
+/* S10 · `--textHighlight` is the LAST yellow in the building, and it needs to be
+   fixed HERE rather than in the theme overlay. This is the correction to §27.1.
+
+   The theme overlay lives in `@layer obsidian-theme`, but the declared layer
+   order is `quartz-base, obsidian-theme, …` — and **quartz-base comes first, so
+   it wins at equal specificity.** Quartz's own `quartz-base` sets
+   `--textHighlight: #fff23688` (bright yellow) on `:root`, which then beat the
+   overlay's pin and left `.text-highlight` painting yellow.
+
+   That is why pinning `--tertiary` in the overlay *seemed* to work: nothing
+   declared it in `quartz-base`, so the overlay was the only voice. This token had
+   two. **An overlay can only win where nobody else is speaking** — so anything
+   `quartz-base` also sets has to be overridden from the unlayered `custom.scss`,
+   which outranks every layer.
+
+   The earlier guard for this passed *vacuously*: it grepped `public/index.html`,
+   which does not contain the theme variables at all (they live in the CSS
+   bundle), so "no yellow found" was trivially true. The replacement guard below
+   reads the actual stylesheet. */
+.text-highlight {
+  background: color-mix(in srgb, var(--eb-accent) 22%, transparent);
   color: inherit;
   border-radius: 3px;
 }
