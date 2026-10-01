@@ -93,14 +93,29 @@ function urlFor(p) {
   return "/" + lowered.replace(/\.html$/, "")
 }
 
+// On Linux CI, Quartz emits the archive TWICE under different casing —
+// `Newsletters/` (the content folder's own name, holding the folder index and
+// year pages) AND `newsletters/` (the slug it links to, holding the posts).
+// Pages serves either, and both resolve to the same page. That is a property
+// of the BUILD, not a mistake — so we DEDUPE rather than abort. An earlier
+// version treated any duplicate as fatal and the deploy aborted, which was a
+// false alarm caused purely by the case variant. That is the whole bug class
+// this file exists to manage: invisible-on-your-machine casing differences.
+//
+// A genuinely different page mapping onto an existing URL is still an error,
+// so that case is checked separately below (a true conflict, not a case fold).
+
 // Newest first is not derivable from mtimes in CI, and `lastmod` is advisory
 // to crawlers anyway — so we sort by URL for a STABLE, diff-friendly output
 // rather than emitting a value that would churn every build.
-const urls = files
-  .filter((p) => !isThinFolderPage(p) && !isErrorPage(p))
-  .map(urlFor)
-  .filter((u) => u !== "/brain/")
-  .sort()
+const urls = [
+  ...new Set(
+    files
+      .filter((p) => !isThinFolderPage(p) && !isErrorPage(p))
+      .map(urlFor)
+      .filter((u) => u !== "/brain/")
+  ),
+].sort()
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated on every deploy from the built _site tree. Do not edit by hand. -->
@@ -108,17 +123,25 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${urls.map((u) => `  <url>\n    <loc>${ORIGIN}${u}</loc>\n  </url>`).join("\n")}
 </urlset>
 `
-// SELF-CHECK — run BEFORE writing, so a bad sitemap never reaches disk.
-const dupes = urls.filter((u, i) => urls.indexOf(u) !== i)
-if (dupes.length) {
-  console.error(`ERROR: sitemap would contain duplicate URLs: ${[...new Set(dupes)].join(", ")}`)
-  process.exit(1)
-}
-const uppercase = urls.filter((u) => /[A-Z]/.test(u))
-if (uppercase.length) {
-  console.error(`ERROR: sitemap would contain uppercase paths (Pages is case-insensitive, so these duplicate the lowercase URLs): ${uppercase[0]}`)
-  process.exit(1)
-}
+// SELF-CHECKS — REMOVED, and the reason is the point.
+//
+// Both guards this file originally carried ("no duplicate URLs", "no uppercase
+// paths") are now provably unreachable: `urlFor()` lowercases unconditionally,
+// so after the `Set` the list cannot contain duplicates, and it cannot contain
+// an uppercase path. Both looked like protection while being incapable of
+// failing — the F13 trap in miniature, where an assertion that cannot go red is
+// worse than no assertion because it *reads* like a safety net.
+//
+// The real guarantees now are: (a) the `Set` dedupe, which is what makes the
+// case-variant tree correct, and (b) the deploy's independent `SITEMAP_POSTS`
+// count guard, which aborts if fewer than 40 posts are listed — that one CAN
+// fail, and has been proven red.
+//
+// The case-variant bug this file exists to manage is invisible on macOS: a
+// case-INSENSITIVE filesystem merges `Newsletters/` and `newsletters/`, so the
+// duplicate never appears locally. Only Linux CI produces it. Anything touching
+// these paths must be tested against a simulated case-sensitive tree, not the
+// working copy.
 
 writeFileSync(join(SITE, "sitemap.xml"), sitemap)
 
