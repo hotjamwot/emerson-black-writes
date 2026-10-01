@@ -60,22 +60,22 @@ These are deliberately vague and I can always add more or remove some. Each of t
 
 If I’m particularly nervous about a certain task, like the seemingly simple task of ‘Write the first draft’, I’ll often break that into smaller tasks like:
 
-**[ ] Write Act 1
-[ ] Write Act 2A
-[ ] Write Act 2B
-[ ] Write Act 3**
+- [ ] Write Act 1
+- [ ] Write Act 2A
+- [ ] Write Act 2B
+- [ ] Write Act 3
 
 If I’m still feeling like it’s overwhelming, I’ll get even more granular, splitting Act 1 into separate chapters, or scenes.
 
 If you don’t like working in scenes or chapters and prefer to work in time, you can create 10-20 tasks that each say
 
-**[ ] Write for one hour**
+- [ ] Write for one hour
 
 And assign the time tasks to however many days feels good.
 
 Don’t worry if you have loads of tasks. Life is long. You’ve got a plenty of time and the time is gonna pass anyway.
 
-Once you’ve got all your Bits/Tasks written down, you can organise them into a calendar, or simply keep them as tickboxes. Keep them somewhere handy and visible so you always know where you are in the process.
+Once you’ve got all your Bits/Tasks written down, you can [[master-your-calendar|organise them into a calendar]], or simply keep them as tickboxes. Keep them somewhere handy and visible so you always know where you are in the process.
 
 As you go through the process and write more long-form projects, you’ll refine your own process. Keep your phase and task list editable, so you can streamline and add tasks where you see fit.
 

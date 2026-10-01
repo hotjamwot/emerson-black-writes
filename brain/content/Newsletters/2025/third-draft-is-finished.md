@@ -39,7 +39,7 @@ First of all, let me give some context. This is the process of how I’ve writte
 
 I’m sure you’ve heard of the **first draft** being called a ‘vomit draft’. You basically vomit everything onto the page, no matter how bad you fear the writing is. Any kind of self-editing slows down the process dramatically and risks curbing your genuine creativity. The more you ease the reins, the greater your chance of having the characters come to life. All tangents and subplots are welcomed!
 
-The **second draft** is where you slice and dice, cutting any unnecessary story beats, subplots, characters, and scenes. This draft is arguably the most enjoyable part of the process, because the core story themes and character changes become apparent, and often surprise you.
+The **second draft** is where you slice and dice, [[the-dangers-of-overplotting|cutting any unnecessary story beats, subplots, characters, and scenes]]. This draft is arguably the most enjoyable part of the process, because the core story themes and character changes become apparent, and often surprise you.
 
 At this stage, I usually have a pretty readable book that I’m happy to pass on to trusted readers. Once I’ve gathered their feedback, I’ll embark on the **third draft**, which is where you prettify the language and further home in on the main journeys of the characters.
 
@@ -47,7 +47,7 @@ Then, you’re left with a pretty decent draft, *almost* ready to go into the wo
 
 ### But this book has been different
 
-You might remember a newsletter I wrote about 1.5 years ago, in which I showed off my gorgeous red-pen-scribbled scene-by-scene in Spain: [[writing-abroad|Writing Abroad]]
+You might remember a newsletter I wrote about 1.5 years ago, in which I showed off my gorgeous red-pen-scribbled scene-by-scene in Spain: [[writing-abroad|Overplotting an Outline]].
 
 I’d printed out a 51-page outline and taken the hard copy away with me to Spain where I sat by the pool and made the final changes before getting into the first draft.
 

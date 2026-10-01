@@ -1,11 +1,13 @@
 ---
-title: Overplotting a novel's outline
+title: Overplotting a Novel's Outline
 description: Writing abroad; the most privileged life one can imagine
 date: 2024-07-17
 created: 2024-07-17
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [craft-plot, process]
+tags:
+  - craft-plot
+  - process
 aliases: []
 type: post
 publish: true
@@ -17,7 +19,7 @@ I hope the last month has been fruitful and/or relaxing for you. I’ve been hea
 
 ### 🏁 The Completion of the Outline
 
-I have finished — or *mostly* finished — the outline for Seen in Silverbridge Book 3. As I ran through in [my last missive](https://emersonblackwrites.substack.com/p/a-peek-behind-the-writers-curtain?r=1s8xdo), the process for restructuring Nicholas’ draft was time-consuming, intensive and very satisfying. After hours spent on Google Sheets swapping scenes around, rewriting mystery and emotional beats, combining chapters and slicing unnecessary subplots, I compiled the chapter outline into Scrivener.
+I have finished — or *mostly* finished — the outline for Seen in Silverbridge Book 3. As I ran through in [[a-peek-behind-the-writers-curtain|my last missive]], the process for restructuring Nicholas’ draft was time-consuming, intensive and very satisfying. After hours spent on Google Sheets swapping scenes around, rewriting mystery and emotional beats, combining chapters and slicing unnecessary subplots, I compiled the chapter outline into Scrivener.
 
 ![](/organise/images/newsletters/2024/writing-abroad-01.webp)
 
@@ -53,7 +55,7 @@ While we were there, we worked our normal full-time jobs. I’m currently editin
 
 Despite the tumultuous emotions I was experiencing due to my day job, I managed to pull the manuscript out of my bag and read by the pool a couple of times. I made notes with a red biro and felt like a real writer. It didn’t take long to read through and I was pleasantly surprised with how boldly the necessary improvements presented themselves to me. There’s something to be said for reading a physical copy of your writing. It felt *easier* in some way. I flicked through pages, crossed lines out, jotted notes in the space between the lines, and felt like a sculptor chipping away at a block of marble.
 
-So how, in an entire week, did I only manage to get through 40% of the outline?
+So how, in an entire week, did I only manage to get through 40% of the outline? It drives home the importance of [[the-art-of-restraint|The Art of Restraint]], and [[the-dangers-of-overplotting|The Dangers of Overplotting]].
 
 ### ⏰ The Realisation of the Trip
 

@@ -51,7 +51,7 @@ Instead of moving ahead with a first draft, I fleshed out the outline … to 51 
 
 ## The ‘Treatment’ problem
 
-I printed out the 51 pages at the Hackney library, feeling like a legitimate writer. Jules and I flew to Málaga and, for a week I sat by the pool, going through the outline with a red pen, refining every beat of every chapter until I’d nailed it. Upon our return to London, I felt ready to start the first draft.
+I printed out the 51 pages at the Hackney library, feeling like a legitimate writer. Jules and I flew to Málaga and, for a week I sat by the pool, [going through the outline with a red pen](writing-abroad), refining every beat of every chapter until I’d nailed it. Upon our return to London, I felt ready to start the first draft.
 
 For three months, I followed a strict routine. Every morning, coffee in hand and headphones on ear, I’d open my Scrivener project. Where usually I’d reread yesterday’s work, this time I simply relied on my outline. It was so detailed! All I had to do was grab my chapter synopsis and build on it, treating every scene like a standalone story.
 
