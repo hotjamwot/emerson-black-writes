@@ -265,11 +265,12 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 9. ⬜ **S10 step 3** — the storefront features the writing. `THE JOURNALISTS` stays a storefront section, not a post. §19.
 > 10. 🟢 **Tags → folders → graph** — the spine of the Desk. **Step 1 DONE: all 49 posts read; an 8-sphere taxonomy + full link proposal is in §25, awaiting sign-off.** Approve it and it applies in one commit. Then retire the year folders, then revisit breadcrumbs. **Biggest remaining piece.**
 > 11. ⬜ **LLM-assisted tags, aliases & related links** — prompts + workflow, designed *after* the human pass. §22.2.
-> 12. ⬜ **Post header dates + "Recently updated" badge** — D18/§22.3. Unblocked; `updated:` is a real editorial date. Badge is client-computed, fires archive-wide until 2026-12-28, then differentiates.
-> 13. ⬜ **Prune orphaned `eb-*` CSS + 3 inert plugins** — §24.1. Measured, low risk, keeps the repo lean.
-> 14. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
-> 15. ⬜ **S2** — graph: taller afterBody instance + homepage feature. *Now blocked behind item 10 — the graph has almost nothing to draw (8 edges).*
-> 16. ⬜ **S8** — visible tags + breadcrumbs from year. *Breadcrumbs are now in question — see D17; tags wait on item 10.*
+> 12. ✅ **Post header dates + "Recently updated" badge** — D18/§26. Live: "Published … • Updated …" + a client-gated pill. Suite guards it.
+> 13. ✅ **Prune orphaned CSS + inert plugins** — §24.1 F1-F4 (the dead `.after-body-graph` block, F5, removed en route).
+> 14. ✅ **Bridging second tags** — 18 posts now cross a sphere boundary (§26).
+> 15. ⬜ **S3** — left sidebar cleanup.
+> 16. 🟢 **S2 graph** — *unblocked and mostly done*: the local graph shows the whole Desk map (depth 100) and is taller (§26). Remaining: confirm the full map reads well once the wikilinks land.
+> 17. ⬜ **S8** — visible tags done (§25); breadcrumb question resolved (removed, §26).
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -726,10 +727,12 @@ HayJay: *"It's super important that you keep me updated with any findings like t
 
 | # | Hypothesis | Verdict |
 | --- | --- | --- |
-| F5 | `updated: 2026-09-28` on 49 notes is a **migration artefact** | ❌ **Wrong, and I asserted it anyway.** The evidence was circumstantial and consistent with the truth: the CSV has no `updated` column (the dates came from the vault), and the mirror commit on the 28th *copied* files already edited that day. **Lesson: two findings that agree with a hypothesis are not two findings — check whether the hypothesis is even in contention before writing it as a conclusion, and never recommend destroying data on circumstantial evidence.** The dates are hand-set editorial revisions (D18). |
-| F6 | `unicode-bidi` wrapping rules may be dead in the storefront CSS | ❌ Dismissed — 0 occurrences in `style.css`, `index.html`, `bio.html`. Never existed. |
-| F7 | `ox-hugo` and `roam` plugins are enabled and unused | ❌ Dismissed — both are already `enabled: false`. A grep for `source:` lines is not a grep for `enabled: true`. |
-| F8 | Content contains Hugo `{{< >}}` shortcodes | ❌ Dismissed — the only match was a **binary `.webp`** (grep matching binary noise), not markdown. |
+| F5 | `.after-body-graph` styles were live | ❌ **Dead** — the graph plugin never emits that class (0 occurrences in every built page), and it carried its own `.graph-outer` height that silently shadowed the real one. Removed 2026-10-01; noted inline in `custom.scss`. |
+| F6 | A local Quartz component can be dropped into the layout by adding a file and a config `source` | ⚠️ **True but non-obvious — it must be a mini-package.** This fork wires layout components through a manifest/package loader, not a bare import. A working local plugin needs: a **directory**, a `package.json` with a `quartz.components` manifest AND a `./components` subpath export, a **pre-compiled `.js`** entry (the loader does a computed `import()` at runtime, so the bundler cannot follow it — a `.ts` entry fails to load), and the component exported as a **constructor** `(opts) => Component` (a bare component throws `Cannot destructure 'fileData' of undefined`). `afterDOMLoaded` must be attached to the component *and* the constructor. Worked example: `quartz/plugins/post-dates/`. |
+| F7 | `updated: 2026-09-28` on 49 notes is a **migration artefact** | ❌ **Wrong, and I asserted it anyway.** The evidence was circumstantial and consistent with the truth: the CSV has no `updated` column (the dates came from the vault), and the mirror commit on the 28th *copied* files already edited that day. **Lesson: two findings that agree with a hypothesis are not two findings — check whether the hypothesis is even in contention before writing it as a conclusion, and never recommend destroying data on circumstantial evidence.** The dates are hand-set editorial revisions (D18). |
+| F8 | `unicode-bidi` wrapping rules may be dead in the storefront CSS | ❌ Dismissed — 0 occurrences in `style.css`, `index.html`, `bio.html`. Never existed. |
+| F9 | `ox-hugo` and `roam` plugins are enabled and unused | ❌ Dismissed — both are already `enabled: false`. A grep for `source:` lines is not a grep for `enabled: true`. |
+| F10 | Content contains Hugo `{{< >}}` shortcodes | ❌ Dismissed — the only match was a **binary `.webp`** (grep matching binary noise), not markdown. |
 
 ### 24.3 Standing rules
 
@@ -837,6 +840,51 @@ Also worth deciding, though it does not block the tags: **`publish: true` exists
 
 **The contested calls** (flagged so they can be argued with, not buried): *Cut Through the Noise* (`mindset` — it's about audience, not craft); *Style vs. Correctness* and *The Art of Restraint* (`process`, not `craft-plot` — they're editing craft, and `process` is the drafting/revision home); *What Turns You On?* (`craft-character` over `reading` — taste *in service of* writing); *Book Awards* (`reading`, not `news` — it's a list, not an announcement).
 - **They do NOT replace dates.** Publication year stays in frontmatter and on the post; the year folders can be retired from *navigation* without touching the *record*.
+---
+
+## 26. ✅ S10 — the post polish pass (2026-10-01)
+
+Six changes in one sitting, because they were all facets of "make the posts read well." The through-line is that **most of what looked like several bugs was one variable.**
+
+### 26.1 The orange-yellow and the flickering button were the same bug
+
+The complaint was two things: an "ugly orange-yellow highlight" on tags, and a "jarring button [that] flickers on hover." They are **one unpinned variable.** Quartz's `base.scss` reads `var(--tertiary)` in exactly three places:
+
+| rule | what the reader saw |
+| --- | --- |
+| `::selection` | a 60% yellow-amber wash over selected text |
+| `.highlight` (search hit) | the same amber behind a matched term |
+| `a:hover { color: var(--tertiary) }` behind `transition: color 0.2s` | links and buttons **fading to amber** — the "flicker" |
+
+The Obsidian base declares `--tertiary` as a yellow-amber, and the brand overlay (D11) pinned the whole accent chain but **not this one**. So the fix was not three patches: `--tertiary: var(--color-accent)` in `emerson.ts`, alongside the accent it already owns. Selection and hover now read as brand. The `::selection` and `.highlight` washes were then softened to a 22%/16% accent tint so a highlight is a tint, not a slab.
+
+**Lesson.** *A theme owns a palette, not just its headline colour.* The accent was pinned in five places and this one was missed; the symptom appeared in three unrelated places, which is exactly what an unpinned variable looks like from the outside.
+
+### 26.2 The graph: the whole Desk, and room to breathe
+
+- `localGraph.depth: 2 → 100` — the local graph now renders the **whole map** on every post instead of the current post's 2-hop neighbourhood. With the current node in the accent, it stops being a widget and becomes "where am I in the body of work."
+- `.graph-outer` height `230px → clamp(360px, 52vh, 560px)`.
+- Removed the **dead `.after-body-graph` block** (F5) — never emitted, and it carried a second `.graph-outer` height that was quietly shadowing the real one. *The tallest-looking graph rule was the one nothing rendered.*
+
+### 26.3 Breadcrumbs removed
+
+`✦ / Newsletter Archive / 2025 / <title>` — a folder-shaped way round a site that now navigates by tag. It also sat *above* the title and repeated the current page (`showCurrentPage: true`). With the year folders no longer being how you move, it had nothing left to say. Plugin disabled, a guard asserts no built page renders one, and the obsolete "breadcrumbs on the display face" font check was dropped rather than left failing.
+
+### 26.4 The post header — a local plugin, and what it cost to learn
+
+`Published <date> • Updated <date>`, plus a **"Recently updated"** pill. Three decisions, two of them from §22.3:
+
+- **Client-computed pill.** A build-time flag is frozen until the next publish, so on 2026-12-29 it would still claim the whole archive was fresh. The pill ships `hidden` and ~4 lines of JS reveal it only when `modified` is genuinely inside 90 days. **It is not a tag** — that would mix system state into the editorial taxonomy.
+- **CSS must not defeat the gate.** The pill's `display: inline-block` out-ranks the UA's `[hidden] { display: none }`, so without an explicit `&[hidden] { display: none }` the pill would light up on every post forever — the precise failure §22.3 exists to prevent. There is a guard for it.
+- **Collapses when `created == modified`**, so a brand-new post doesn't print the same date twice.
+
+**The cost was the wiring.** This fork does not accept a bare local component: layout components load through a manifest/package loader. A working one needs a directory, a `package.json` with a `quartz.components` manifest *and* a `./components` subpath export, a **pre-compiled `.js`** entry (the loader does a computed `import()` at runtime, so the bundler can't follow a `.ts`), and the component exported as a **constructor**. Four wrong turns, all recorded in **F6** with the fix for each, so the next local component is a copy-paste rather than an afternoon. Worth it: the Desk can now own components the upstream plugin set doesn't provide.
+
+### 26.5 Bridging tags
+
+18 posts that genuinely sit on a sphere boundary got a second tag (e.g. *Saying Goodbye* = `process` + `news`; *Emotional Gutting 101* = `craft-character` + `reading`). The guard now bounds posts at **1–3 tags** and *asserts bridges exist* — a taxonomy where nothing crosses a boundary is a folder list with extra steps.
+
+**Suite 77 → 87.** Every new check proven red, including the subtle one (delete the `[hidden]` gate → that check fails).
 - **`breadcrumbs` revisit point** (§22.2 step 3) lands here: once a post's trail can be `tag → post` rather than `folder → year → post`, the breadcrumb's job is done (D17).
 - **Measure before claiming.** Every row above carries a count and a command that reproduces it.
 - **Never delete a rule on a hunch.** F5 nearly cost a day of genuine editorial dates. If a finding says "this is unused", it must show the *zero*.
