@@ -130,6 +130,7 @@ node quartz/theme/verify-brand.mjs
 - **I6 (new, 2026-10-01): the sitemap shipped listing every post twice.** Quartz emits `Newsletters/` and `newsletters/` on a case-sensitive filesystem; macOS merges them, so **the bug cannot be reproduced locally at all.** Two failed deploys followed. Rule: test path logic against a *simulated case-sensitive tree*, never the working copy.
 - **I7 (new, 2026-10-01): a build step that was correct in isolation and wrong in sequence.** The date export ran *after* `brain/public` had already been copied into the artifact, so the file never shipped. Caught by its own guard on the first attempt.
 - **I8 (new, 2026-10-01): the same class again, and a working copy HID it.** `render-desk-picks` ran before the file it reads existed; it passed locally twice because a previous build's output was still sitting there. Only a **fresh `git clone`** exposed it.
+- **I9 (new, 2026-10-01): a guard that reported four failures on a correct file** — the search matched the *comment explaining the fix*. A false FAIL trains you to ignore the audit, and then it waves a real regression through. **A check a comment can break is not a check.**
 - *A step that "works when I run it" is not a step that works. Order matters, and only the assembled artifact can prove it.*
 - **Standing rule after I6/I7/I8: reproduce a deploy from a fresh clone before pushing.** Three of these in a row, all invisible locally.
 
@@ -248,9 +249,49 @@ The three curated picks are all craft-forward, because that is what demonstrates
 
 **Reproducing the deploy from a fresh `git clone` — which is what CI effectively is — was the only thing that exposed it.** That is now the standing rule, after three ordering bugs in a row (I6, I7, I8): *a working copy carries state that hides exactly this class of failure.* Related: I cannot read the Actions log without admin rights, so each failure has to be diagnosed by replicating CI locally — which is only reliable if the clone is clean.
 
-### 11.4 🔵 A real link to the Desk in the header
+### ✅ 11.3c Storefront rehaul — DONE 2026-10-01
 
-One nav item at the top, so visitors see the site has a second half rather than finding it in the footer.
+A visible redesign, not a tidy-up. HayJay approved a full restyle with the series leading and the free novella called out.
+
+**The hero was a launch page that was never decommissioned.** Its `h1` read *"Book 3 is out now!"* with a "NEW BOOK / OUT NOW" badge — a headline with a shelf life, rewritten every few months, each rewrite a chance to forget. It also buried the free novella, the best conversion the site has, in section 4.
+
+| | Before | After |
+|---|---|---|
+| Hero | Dated launch banner | **The series pitch** — expires never |
+| First offer | Book 3, paid | **Book 0, free** |
+| Header | Absolute `<h1>`, not a nav | **Sticky wordmark + Books/Desk/About/Subscribe** |
+| About | `bio.html` stub (2 sentences) | **`#about` section, 3 paragraphs** |
+| Hype | "THE SERIES" / "GET THE FREE NOVELLA" | Sentence case |
+
+**A launch now belongs in the books grid as a badge, never in the `h1`.** Book 3's "Latest" badge is a badge, not a headline.
+
+**`bio.html` was folded in but NOT deleted.** It stays as a redirect: it is a live URL, and an agent may have bookmarked it. A 404 is a worse answer than a jump. Kept `noindex`, excluded from the sitemap, and the deploy guard now *requires* it remain a working redirect.
+
+#### Defects fixed along the way — real bugs, not taste
+
+- **`background-attachment: fixed`** on the hero — a well-known iOS Safari jank and battery trap. Now a static `cover` layer, visually identical.
+- **`:root { font-size: 14px }` at ≤600px** — shrank every rem at once; with already-small body copy, real phone text landed near **11.5px**. Removed. 14px is the floor.
+- **No `:focus-visible` anywhere** — keyboard users had no focus indicator at all.
+- **No `prefers-reduced-motion`** — every hover animation was unconditional.
+- **The `h1–h3` rule uppercased *every* heading.** That is why the page shouted. Uppercasing is now a per-heading decision.
+- **`100vh` on the hero** — includes the mobile address bar, so it always overflows. Now `100dvh` (kept `100vh` on `body`, where `dvh` would reflow the page as the bar hides).
+- Typos in shipped copy: *"engagment"*, *"blows up"*.
+
+**Still zero JavaScript.** The mobile nav drops "Subscribe" rather than becoming a hamburger menu — that would have been the site's first script. Subscribe remains in the footer and About.
+
+**Guards:** findability no longer demands meta/og of a `noindex` redirect, but *does* require it stay a working redirect; every nav anchor is asserted against a real section id (a renamed id produces a nav that silently goes nowhere); the sitemap excludes the stub. All three proven red.
+
+**Live verified:** correct `h1`, 4-link nav, all 5 anchors resolve, 7 sections, free badge present, `bio.html` redirects, sitemap clean.
+
+#### I9 — my own audit lied to me
+
+The first version of the redesign audit reported **four failures on a correct file**: `grep` for `background-attachment: fixed` was matching the *comment explaining the fix*. A false "FAIL" is not a nuisance — it teaches you to ignore the audit, and then it waves a real regression through. Fixed by stripping comments before pattern-matching. The lesson generalises past this project: **a check that a comment can break is not a check.**
+
+### ✅ 11.4 A real link to the Desk in the header — DONE 2026-10-01
+
+Shipped as part of the 11.3c rehaul: a sticky header carrying the wordmark plus Books / Desk / About / Subscribe. Anchors only — no router, no script. The Desk was previously reachable only by scrolling or via the footer, so a visitor had no reason to suspect it existed.
+
+New guard: every nav target is asserted to exist as a section `id`, because a renamed id renders a perfectly normal-looking link that goes nowhere.
 
 ### 11.5 🟢 Tag constellation, not a graph
 
@@ -274,9 +315,9 @@ A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→
 
 ## 12. Roadmap
 
-**Now:** header link to the Desk (11.4) → craft→books bridge (11.6) → tag constellation (11.5) → backlinks.
+**Now:** craft→books bridge (11.6) → tag constellation (11.5) → series reading order (11.7) → "How I Write" (11.8, needs a decision).
 **Also open:** Search Console is live with the sitemap. Analytics stays off — at current traffic levels Plausible's ~$9/month isn't justified, and **Search Console is free and answers the more useful question** (what people search for, and whether they find us). Revisit when traffic justifies it.
-**Then:** tag constellation (11.5) · backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune · series order (11.7).
+**Then:** backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune.
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
 ## 13. Commands
