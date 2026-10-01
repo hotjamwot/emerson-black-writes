@@ -155,6 +155,8 @@ source: substack:176627320         # numeric part of post_id
 - [ ] **Tags, folders and the graph — the spine of the Desk (new, §22).** The premise: *the way the ideas link is the important way to look at this Desk.* Today the graph is nearly empty — **8 link edges across 54 published notes, 43 notes (79%) fully isolated** (measured from `public/static/contentIndex.json`, §22.1). **Step 1 done (2026-10-01): every post read and a taxonomy proposed — 8 spheres, `process` / `mindset` / `craft-plot` / `systems` / `craft-character` / `reading` / `bookcraft` / `news`, with a 2-links-per-post proposal that takes the graph from 8 edges to ~90. Awaiting sign-off on the vocabulary and the four contested calls (§25).** Then: apply, retire the year folders from navigation, revisit breadcrumbs.
 - [ ] **LLM-assisted tagging, aliases and related links — after the above (new, §22.2).** Once the taxonomy exists and the posts have been read, design prompts + a workflow to run new post copy through an LLM and emit `tags`, `aliases` and candidate `[[wikilinks]]` for review. Deliberately sequenced *after* the human pass: the prompts need the tag vocabulary and the shape of real links to aim at, and a taxonomy invented by a model is a taxonomy nobody owns.
 - [ ] **Storefront Integration — tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). The rename and the slug move are **done** (§20); what remains is steps 2–3 above and a genuinely *shared* nav across both halves. Currently connected by the storefront footer nav row (D15) and the Desks's own header nav (§17).
+- [ ] **🔵 S11 — the storefront as a writer's site (§28).** Framing settled: *"a writer's site that happens to sell books"*, aimed at readership → **rights/screen adaptation and an agent**, not at book sales. Picked so far: analytics (28.1), the craft→books bridge (28.6), "From the Desk" high on the page (28.3), a header link to the Desk (28.4), tag constellation rather than graph (28.5). Awaiting a decision on 28.7/28.8. **Blocked on:** emitting `date` into `contentIndex.json` before 28.3.
+- [ ] **Backlinks in the Desk (28.9, promoted from S10):** drop `backlinks` from the `byPageType.content.exclude` list so the wikilinks HayJay just added are discoverable in reverse.
 - [ ] **Editorial pass (Arc 2 candidates):**
   - Tag taxonomy: all 50 notes carry `tags: []` — agree a small tag set (craft / process / publishing / mindset) so tag pages and graph clusters become useful.
   - Thematic `[[wikilinks]]` between essays so Backlinks and the graph fill in.
@@ -940,3 +942,60 @@ The `body` grid is `320px auto 320px` and **is not overridden anywhere in `custo
 
 **Suite 87 → 90.**
 - **Log the dismissed ones too.** F6–F8 cost five minutes and save the next session from re-running them.
+
+---
+
+## 28. 🔵 S11 — the storefront as a writer's site (proposed 2026-10-01, awaiting pick-and-choose)
+
+HayJay's framing: **"a writer's site that happens to sell books."** The books already just link to Amazon, so the storefront is free to lead with the *person*. The long game is not book sales — it is readership → **rights consideration for a screen adaptation, and signing with an agent/manager.** That goal changes the brief: an industry reader wants evidence of range, craft and a body of work, which is precisely what the Desk holds and the storefront currently hides.
+
+**Measured state of the storefront (2026-10-01):** two static HTML files, **zero `<script>` tags**, 9.6KB + 20KB. Sections: hero → books → series hook → free novella (Substack iframe) → characters → author → footer. **The Desk is linked in the footer only** — it is currently a footer afterthought, and 49 posts of craft writing are invisible until a visitor scrolls to the bottom.
+
+### 28.1 🔴 P0 — analytics on the storefront (the blocking item)
+
+The Desk has Plausible (`analytics.provider: plausible`). **The storefront has none** — verified `0` matches live. So there is currently **no way to know whether any of S11 works**: not whether the Desk link gets clicked, not whether adding the Desk helps or hurts book clicks.
+
+**Every other idea in this section is unfalsifiable until this lands.** It is also the cheapest item here (one `<script defer data-domain>` tag). Do it first, then measure the rest.
+
+### 28.2 What the storefront actually needs to measure
+
+Once analytics is on, the questions worth answering are concrete: does the Desk link get clicked at all; does "From the Desk" beat the footer link; which CTA (Amazon vs free novella) earns the clicks; and — the one that matters most — **do readers who arrive from the Desk buy books?** That last one needs a plausible `author`/`referrer` property on the Desk's outbound Amazon links, or a distinct tag on book links from within `/desk/`.
+
+### 28.3 🔵 P1 — "From the Desk" section, placed high
+
+Six hand-picked posts (title, one-line description, date) near the hero — **hand-picked, not an auto-list of 49.** An auto-list is an archive; six is a pitch. It advertises the free content that builds the audience, and it makes the site read as *written by someone*.
+
+⚠️ **Hard dependency — the date field is not currently exported.** Measured from `public/static/contentIndex.json`: the only fields are `slug, filePath, title, links, tags, content`. **There is no date field at all.** Dates *do* exist at build time (`fileData.dates.created/modified`, which is how the `post-dates` plugin works) — they are simply not emitted into the index. So *any* "latest from the Desk" widget needs a small date-emitting addition to the index first. **Fix the export once rather than hand-maintaining a duplicate list on the storefront.** Resolve this before 28.3.
+
+### 28.4 🔵 P1 — a real link to the Desk in the header
+
+One nav item at the top, so visitors see the site has a second half rather than finding it in the footer.
+
+### 28.5 🟢 P2 — the tag constellation (and why not the graph)
+
+HayJay's read: the **tags are the connective tissue** — all 49 posts hang off them — and clicking a tag should land on the Desk's tag page. **Agreed, and this is the right call.** The graph, by contrast, is currently **8 nodes and ~7 edges**: a force graph of a handful of disconnected dots reads as broken, not as a map. Dropping it from the homepage is the right decision *now*, not a compromise — it visualises a network without creating one, and the wikilink pass is what creates it. Revive the full graph on the homepage later, once the link graph is dense enough to be worth looking at.
+
+Instead: a **static tag constellation** — the tags as chips sized by post count, linking to `/desk/tag/<name>`. No JS, no library, uses data that already exists. Cheap, and it signals a connected body of work without the heavy dependency.
+
+*Taxonomy note: measured 2026-10-01 — **8** tags across 49 posts (`process` 14, `mindset` 13, `news` 9, `systems` 7, `reading` 7, `craft-character` 6, `craft-plot` 5, `bookcraft` 4). All 49 posts carry at least one tag; no untagged orphans. HayJay recalled 9 — re-confirm the vocabulary before it goes on the homepage, since it becomes public navigation.*
+
+### 28.6 🔴 P0 (comms) — bridge the craft writing to the books, thematically
+
+The highest-ceiling idea here, and it costs nothing. Posts like *How I Plan My Novel Writing Process*, *The Dangers of Overplotting*, *Sourcing Intrigue for Stories* and *The Art of Restraint* are **literally how a mystery thriller is written.** Right now that connection is invisible.
+
+- On craft posts (and in the Desk sidebar), a line in the vein of *"Want to see these techniques applied? Read A Rock Star Has Exploded."*
+- This turns the newsletter from a side project into a **funnel**, and is the single most on-brief item for the screen-adaptation goal: it demonstrates craft to exactly the reader who buys fiction.
+
+### 28.7 🟢 P2 — series reading order
+
+A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→1→2→3 order with a one-line hook each is cheap and typically lifts completion. Also worth an explicit **"start here"** for the free novella, which is already the natural on-ramp.
+
+### 28.8 🟢 P2 — a unifying "How I Write" page (bigger; needs a decision)
+
+`/` sells books; `/desk/` writes about writing. A page that puts the craft posts **next to the books they produced** is arguably the most honest expression of "one coherent house" — and the page most likely to convert a reader into a buyer, and to interest an agent. Bigger than a nav change; flagged for a decision, not built.
+
+### 28.9 🟢 P2 — backlinks in the Desk (promoted from S10)
+
+`byPageType.content.exclude: [backlinks]` currently suppresses the backlinks panel, so wikilinks are one-way and invisible in reverse. Enabling it gives the links HayJay has just added a visible payoff, and is likely less work than the links themselves.
+
+**Lesson worth recording:** this exclude was set to keep the reading column clean. It succeeded, and then quietly removed the *only* mechanism by which a reader discovers related posts. **A tidy layout decision can hide the feature that makes the links worth having** — re-examine layout suppressions whenever the content strategy changes.
