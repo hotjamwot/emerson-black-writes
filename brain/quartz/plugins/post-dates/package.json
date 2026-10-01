@@ -1,0 +1,29 @@
+{
+  "name": "post-dates",
+  "version": "1.0.0",
+  "description": "Post header: Published/Updated dates + a client-computed 'Recently updated' pill",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "post-dates",
+    "displayName": "Post Dates",
+    "description": "Post header: Published/Updated dates + Recently updated pill",
+    "components": {
+      "PostDates": {
+        "name": "PostDates",
+        "displayName": "Post Dates",
+        "description": "Published/Updated dates with a recently-updated pill",
+        "version": "1.0.0",
+        "defaultPosition": "beforeBody"
+      }
+    }
+  }
+}

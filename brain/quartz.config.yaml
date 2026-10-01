@@ -269,6 +269,13 @@ plugins:
     layout:
       position: beforeBody
       priority: 10
+  - source: "./quartz/plugins/post-dates"
+    enabled: true
+    layout:
+      position: beforeBody
+      # Sits under the title, above the tag pills: Published/Updated first, then
+      # the topics. content-meta (20) and tag-list (30) bracket it at 25.
+      priority: 25
   - source: "@quartz-community/content-meta"
     enabled: true
     layout:

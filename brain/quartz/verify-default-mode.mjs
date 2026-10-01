@@ -466,6 +466,34 @@ check(
   "a post renders its tag as a pill linking to its tag page",
 )
 
+// The post header (S10 / D18): `Published <date> • Updated <date>` plus a
+// client-gated "Recently updated" pill. Two things can break it invisibly —
+// the local plugin failing to load (which is silent; the build just omits the
+// component), or the pill losing its `hidden` gate and firing on every post
+// forever. Both are asserted on the built output.
+const headerPost = readFileSync(join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"), "utf8")
+check(
+  /class="eb-post-dates"/.test(headerPost) && /eb-post-dates__label">Published</.test(headerPost),
+  "a post renders the Published/Updated header",
+)
+check(
+  /class="eb-recently-updated"[^>]*data-modified="\d{4}-\d{2}-\d{2}"[^>]*hidden/.test(headerPost),
+  "the Recently updated pill ships hidden, carrying its date for the client check",
+)
+const headerCss = readFileSync(join(brain, "public", readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f))), "utf8")
+check(
+  /\.eb-recently-updated\[hidden\][^{}]*\{[^}]*display:\s*none/.test(headerCss),
+  "the pill keeps a [hidden] gate in CSS (a bare display rule would light it on every post)",
+)
+const scriptsDir = join(brain, "public", "static", "scripts")
+const scriptBlob = readdirSync(scriptsDir)
+  .map((f) => readFileSync(join(scriptsDir, f), "utf8"))
+  .join("\n")
+check(
+  scriptBlob.includes("data-eb-recently-updated") && scriptBlob.includes("days < 90"),
+  "the client script that reveals the pill is actually shipped",
+)
+
 console.log("\nTypography (computed style — what the reader actually sees)")
 
 // Cheap static companion to the browser check below: it documents the layer

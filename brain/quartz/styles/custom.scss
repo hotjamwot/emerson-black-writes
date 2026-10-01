@@ -893,7 +893,54 @@ hr::after {
   }
 }
 
-// ── 7. Landing-page kit (used by content/index.md) ─────────────────────────
+// ── 7a. Post header — Published / Updated + the "Recently updated" pill ─────
+// S10 / D18. The pill is `hidden` in the markup and revealed by the component's
+// own afterDOMLoaded script, so it must stay hidden until the *client* has
+// checked the date. That is why the `[hidden]` rule is explicit and repeated: a
+// plain `display: inline-block` on the pill would out-rank the UA's
+// `[hidden] { display: none }` and light the pill up unconditionally — i.e. on
+// every post, forever, which is exactly the failure §22.3 is designed to avoid.
+.eb-post-dates {
+  margin: 0 0 0.75rem;
+
+  .eb-post-dates__label {
+    font-family: var(--eb-display);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: var(--eb-tracking);
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  time {
+    font-family: var(--eb-mono);
+    font-size: 0.7rem;
+    color: var(--dark);
+  }
+}
+
+.eb-recently-updated {
+  display: inline-block;
+  margin-left: 0.55rem;
+  padding: 0.08rem 0.5rem;
+  border: 1px solid var(--eb-accent);
+  border-radius: 999px;
+  color: var(--eb-accent);
+  font-family: var(--eb-display);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  vertical-align: 0.08em;
+  white-space: nowrap;
+
+  // The gate. Until the client script removes `hidden`, the pill must not paint.
+  &[hidden] {
+    display: none;
+  }
+}
+
+// ── 7b. Landing-page kit (used by content/index.md) ─────────────────────────
 // The homepage supplies its own <h1> inside the hero, so the duplicate article
 // title (and its meta line) are dropped only on that page. Browsers without
 // `:has()` simply show the extra heading — harmless.
