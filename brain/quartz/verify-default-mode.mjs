@@ -300,6 +300,87 @@ check(
 )
 check(/url=\/desk\//.test(workflow), "deploy.yml writes the legacy /brain/ stub pointing at /desk/")
 
+// ── 5c. the Desk is a room off the house, not a second house (S10 step 2) ────
+// The Desk had its own hero pitch, four "start here" doors, four year cards, four
+// reading trails and an About page restating bio.html — a parallel brand homepage
+// one click from the real one. HayJay's call: the storefront is the house, the
+// Desk is the study room, the posts live inside it. Say what the Desk is *once*,
+// forward into the archive, back out to the house.
+//
+// These assert the contract rather than the prose, so rewording cannot quietly
+// reintroduce a second homepage, and so a hand-typed list of posts cannot creep
+// back in beside the generated one (which is what rots).
+console.log("\nLanding page — a room off the house (S10 step 2)")
+const archiveDoc = readFileSync(join(brain, "public", "newsletters", "index.html"), "utf8")
+
+// (a) The hand-written `_Back to …_` breadcrumbs are gone from both pages that
+// had one. The `breadcrumbs` plugin owns that trail; the hand-written version was
+// a string to re-edit on every rename — which is exactly what bit us in §20.
+//
+// Asserted on the SOURCE and on the *idiom* (`_Back to [[`), not on the words.
+// The first version scanned the built HTML for "Back to" and failed immediately:
+// the landing page has a perfectly legitimate "Back to the main site" button. A
+// check has to name the thing it means (§17), not a phrase it half-remembers.
+const handWrittenCrumbs = authored.filter((f) =>
+  /_Back to \[\[/.test(readFileSync(join(brain, "content", f), "utf8")),
+)
+check(
+  handWrittenCrumbs.length === 0,
+  `no hand-written "_Back to …_" breadcrumb survives in content${handWrittenCrumbs.length ? ` — ${handWrittenCrumbs.join(", ")}` : ""}`,
+)
+
+// (b) No pitch. The hero band, the curated doors, the year cards and the reading
+// trails are all gone: each was a hand-maintained duplicate of something the
+// archive already knows (the explorer lists years, the graph lists connections).
+check(
+  !/class="eb-(hero|kicker|hero-title|hero-lede|trail|year|grid|card)"/.test(homeDoc),
+  "the landing page has no hero pitch, curated doors, year cards or reading trails",
+)
+
+// (c) What it must still do: name the Desk, forward into the archive, and link
+// back to the house. Dropping About removed the only other place the Desk
+// explained itself, so this is the page that has to carry it.
+check(
+  /href="(?:\.\/)*newsletters\/"/.test(homeDoc) && /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
+  "the landing page forwards into the archive and links back to the storefront",
+)
+
+// (d) The recent-posts list is generated, not typed. `recent-notes` is already
+// `afterBody` with limit 5, so the page gets a list that cannot go stale — the
+// property the hand-written doors and year cards did not have.
+const recentItems = (homeDoc.match(/class="recent-li"/g) ?? []).length
+check(
+  /class="recent-notes"/.test(homeDoc) && recentItems === 5,
+  `the landing page lists the newest 5 dispatches, generated (found ${recentItems})`,
+)
+
+// (e) About is deleted by decision, not by accident: no source file, and — the
+// part that actually matters — no dangling `href="about"` anywhere in the output.
+// A link to a page that no longer exists is invisible in a green build.
+check(
+  !existsSync(join(brain, "content", "About.md")),
+  "brain/content/About.md stays deleted (the Desk has no about page of its own)",
+)
+const danglingAbout = builtHtml.filter((f) =>
+  /href="(?:\.\/|\.\.\/)*about\/?"/.test(readFileSync(join(brain, "public", f), "utf8")),
+)
+check(
+  danglingAbout.length === 0,
+  `no built Desk page links to the deleted /about${danglingAbout.length ? ` — ${danglingAbout.slice(0, 3).join(", ")}` : ""}`,
+)
+
+// (f) The storefront owns the bio prose; the Desk must not restate it. Read from
+// bio.html rather than hardcoded, so a future reword of the storefront is caught
+// either way — the §15 lesson, applied to copy instead of a hex.
+const bioProse = (/<div class="bio-text">\s*<p>([\s\S]*?)<\/p>/.exec(storefrontBio)?.[1] ?? "")
+  .replace(/<[^>]+>/g, " ")
+  .replace(/\s+/g, " ")
+  .trim()
+check(
+  bioProse.length > 40 && !homeDoc.includes(bioProse) && !archiveDoc.includes(bioProse),
+  `the Desk does not restate the storefront bio${bioProse ? ` ("${bioProse.slice(0, 44)}…")` : ""}`,
+)
+
 console.log("\nTypography (computed style — what the reader actually sees)")
 
 // Cheap static companion to the browser check below: it documents the layer

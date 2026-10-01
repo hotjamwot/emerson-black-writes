@@ -7,6 +7,4 @@ created: 2023-01-19
 publish: true
 ---
 
-All newsletters from Emerson Black — craft, career, publishing, and life as an author.
-
-_Back to [[index|Emerson's Desk]] · [[About|about the author]]._
+Every dispatch since January 2023, newest first. Search with ⌘K, or follow the graph to wander by idea rather than by date.

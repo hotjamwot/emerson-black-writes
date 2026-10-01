@@ -1,7 +1,7 @@
 # Emerson Black Brain — Architecture, Spec & Operations Guide
 
 **Status:** Live at `emersonblackwrites.com/desk/` · **Engine:** Quartz v5 · **Date:** 2026-09-28 · **Author:** HayJay + AI assistant
-**Now (2026-10-01):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). ✅ **S10 step 1 — the rename (§20):** the site is **Emerson's Desk**, the wordmark reads **`EBW`**, it is served at **`/desk/`**, and `/brain/` redirects. **Next: S10 step 2 — stop duplicating the storefront** (`desk/index` + `desk/about` become one honest landing page; drop the two hand-written breadcrumbs). Then step 3, then S3 / S2 / S8.
+**Now (2026-10-01):** Arc 2 visual pass, one change at a time. ✅ **S5** crimson accent, owned by the Brain's own `emerson` theme (§11). ✅ **Default dark**, toggle kept (§10). ✅ **S7** favicon on both halves (§13). ✅ **S6** complete — the body-serif bug that held this up is fixed and guarded (§14). ✅ **S9** storefront accent + favicon — storefront now carries the Brain's dark accent and the halves are assertion-guarded against drift (§15). ✅ **S1 + S4** layout — the empty right sidebar was eating a third of the shell; collapsed, and the measure deliberately held at ~74 chars rather than widened (§16). ✅ **S1a** header bar — wordmark, four-link nav and search/controls in one top band, rebuilt entirely from existing plugins and config (§17). ✅ **S10 step 1 — the rename (§20):** the site is **Emerson's Desk**, the wordmark reads **`EBW`**, it is served at **`/desk/`**, and `/brain/` redirects. **Next: the tags/folders/graph spine (§22) — read all 50 posts, agree the taxonomy, then fill the links; today the graph is 8 edges across 54 notes, 79% isolated. Then S10 step 3, then the LLM tagging workflow (§22.2), then post-header dates once the `updated:` data is sorted (§22.3).**
 
 
 **Goal:** Write in Obsidian → run `Publish Brain.command` → the newsletter archive is live at **`emersonblackwrites.com/desk/`**, built automatically via GitHub Actions.
@@ -73,6 +73,7 @@
 | D14 | Brand layer | **All Brain styling lives in `brain/quartz/styles/custom.scss`** (framework CSS untouched; components configured via `quartz.config.yaml`) | `custom.scss` is appended *after* `@layer quartz-base`, so brand rules win without `!important` and framework updates stay safe |
 | D15 | Storefront ↔ Brain link | **Footer nav row on the storefront (`index.html` + `bio.html`) points to the Desk (`desk/`)** | First thread of the eventual full integration; left the storefront layout untouched until the index redesign lands |
 | D16 | Site name & wordmark *(2026-10-01, §18/§20)* | **Site = "Emerson's Desk"; header wordmark = `EBW`; slug = `/desk/`** | "The Brain" promised a tool and delivered a publication. `EBW` is what a reader already recognises (favicon monogram, storefront signature); "Emerson's Desk" says *writer* where "Posts" says *feed*. The wordmark swap is presentational — `page-title` has no options — so the link keeps the full name for assistive tech |
+| D17 | No About page; no hand-written breadcrumbs *(2026-10-01, §21/§23)* | **The Desk has no About page** (the bio is the storefront's) and **breadcrumbs are never hand-written again**; the plugin's trail stands for now | The house/storefront and the study room/Desk are one build with a door between them, not two sites. Full reasoning and the open breadcrumb question in §23 |
 
 ---
 
@@ -146,7 +147,10 @@ source: substack:176627320         # numeric part of post_id
 - [x] **Accent ownership — DONE (2026-09-29 · Change #1 / S5):** The Brain now runs **its own Quartz theme, `emerson`** (`brain/quartz/theme/emerson.ts`). Rather than fighting the Obsidian theme's cascade layer, we append the crimson accent to the theme itself and register it as `emerson` — so links, tags, checkboxes, graph nodes, search highlights and callouts resolve **`#CA2626` light / `#E63A3A` dark at the source**. `node quartz/theme/verify-brand.mjs` proves it against the built CSS, and in-theme assertions fail the build loudly if upstream renames a variable we pin. See §11.
 - [x] **Body serif reaches paragraphs — DONE (2026-09-30, incident I3 / §14):** the last outstanding piece of S6. Root cause was a *sibling* cascade layer — `@quartz-community/quartz-fonts` loads after the theme sheet, so its `@layer quartz-fonts` is appended last and its hardcoded sans `--font-interface` beat our pin inside `@layer obsidian-theme`. Fixed by pinning the font variables **unlayered** in `custom.scss` §1b (serif for body, display for titles) and pinning the chrome to Gabarito in §1c, so the sidebar/TOC/breadcrumbs no longer inherit the reading serif. `verify-default-mode.mjs`'s static text checks are replaced by a **headless-Chrome computed-style assertion** — the old ones stayed green while the page was visibly wrong. Verified by re-introducing the bug.
 - [x] **The rename — DONE (2026-10-01 · S10 step 1 / §20):** the site is **Emerson's Desk**, the header wordmark reads **`EBW`**, it is served at **`/desk/`**, and a hand-written stub at `_site/brain/` redirects the old path. Nine authored lines plus the config block; the Quartz *source* directory stays `brain/`. 16 new guard checks (suite 50 → 68). **Note:** `Newsletters/index.md` lives in the *vault*, so its rename had to be made there — the repo copy is rsync'd over on every publish (this bit once; see §20).
-- [ ] **S10 steps 2–3 — next (§19).** Step 2: `desk/index` + `desk/about` stop restating the storefront and become one honest landing page, with the two hand-written `_Back to …_` breadcrumbs dropped (the `breadcrumbs` plugin already renders that trail). Step 3: the storefront keeps books + the Silverbridge note and *features* the Desk; the `THE JOURNALISTS` character cards become a dated, cross-linked post written in the vault.
+- [x] **Stop duplicating the storefront — DONE (2026-10-01 · S10 step 2 / §21):** `brain/content/About.md` is **deleted** — the Desk is a shelf, the bio is the house's job — and `content/index.md` is now a thin landing page: what the Desk is, *Browse the archive*, *Back to the main site*, and the generated 5 newest dispatches. The curated hero pitch, four "start here" doors, four year cards, four reading trails and the books CTA are gone, along with both hand-written `_Back to …_` breadcrumbs. **7 new guard checks** (suite 68 → 77).
+- [ ] **S10 step 3 — the storefront features the writing. (§19)** The homepage keeps books + the Silverbridge note and links prominently into the Desk. **`THE JOURNALISTS` stays a storefront section — HayJay's call, 2026-10-01:** no post is written for it; it is dealt with separately later.
+- [ ] **Tags, folders and the graph — the spine of the Desk (new, §22).** The premise: *the way the ideas link is the important way to look at this Desk.* Today the graph is nearly empty — **8 link edges across 54 published notes, 43 notes (79%) fully isolated** (measured from `public/static/contentIndex.json`, §22.1). Sequence: (1) read all 50 posts properly and agree a small tag taxonomy (craft / process / publishing / mindset); (2) retire the year folders once tags carry the navigation; (3) fill in the `[[wikilinks]]`. Folded in from the old editorial-pass item; supersedes it.
+- [ ] **LLM-assisted tagging, aliases and related links — after the above (new, §22.2).** Once the taxonomy exists and the posts have been read, design prompts + a workflow to run new post copy through an LLM and emit `tags`, `aliases` and candidate `[[wikilinks]]` for review. Deliberately sequenced *after* the human pass: the prompts need the tag vocabulary and the shape of real links to aim at, and a taxonomy invented by a model is a taxonomy nobody owns.
 - [ ] **Storefront Integration — tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). The rename and the slug move are **done** (§20); what remains is steps 2–3 above and a genuinely *shared* nav across both halves. Currently connected by the storefront footer nav row (D15) and the Desks's own header nav (§17).
 - [ ] **Editorial pass (Arc 2 candidates):**
   - Tag taxonomy: all 50 notes carry `tags: []` — agree a small tag set (craft / process / publishing / mindset) so tag pages and graph clusters become useful.
@@ -242,7 +246,7 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 | S7 | EBW favicon, crimson | Rebuild from **`Emerson Signature square_red.png`** (1280×1280 RGBA monogram) | ✅ **DONE 2026-09-29** — 512×512 tight-cropped RGBA to `brain/quartz/static/icon.png` + `img/favicon.png`; §13 |
 | S8 | Frontmatter-rich header | `Originally published` / `Last updated`; visible tags; breadcrumb starts at year | Local `ContentMeta` override or CSS labels + `tag-list` (on) + breadcrumbs `rootName`/`spacerSymbol` |
 | S9 | Storefront fold-out | ✅ **DONE 2026-09-30** — §15. Homepage wears the same brand: Gabarito display + Lora body + `#E63A3A` accent + new favicon | `style.css` `--font-display`/`--font-body`/`--accent-red*` + Google Fonts `<link>` in `index.html`/`bio.html` + favicon swap |
-| S10 | 🟢 **Rename done; integration next** | Site = **Emerson's Desk**, wordmark `EBW`, slug `/desk/` — ✅ **step 1 shipped 2026-10-01** (§20). Remaining: Desk stops duplicating the storefront; storefront stays homepage and features the writing; characters become a real post | §18–20 — steps 2–3 **next** |
+| S10 | 🟢 **Steps 1–2 done; step 3 remains** | Site = **Emerson's Desk**, wordmark `EBW`, slug `/desk/` ✅ (§20) · Desk stops duplicating the storefront ✅ (§21) · remaining: the storefront features the writing; `THE JOURNALISTS` stays a storefront section, no post | §18–22 — step 3 + **tags/graph spine** next |
 
 > **How we work this arc:** one item at a time → edit → `npx quartz build` → eyeball at `localhost:8080` → tick the box → only then move on. (`Preview Brain.command` serves it; see §8 for the zsh comment trap.)
 >
@@ -254,11 +258,14 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 5. ✅ **S1 + S4** — empty right sidebar collapsed, measure held at ~74 chars. §16. *(S1 was re-scoped: `.page` was already 1500px.)*
 > 6. ✅ **S1a** — header bar: wordmark, four-link nav, search + controls. §17.
 > 7. ✅ **S10 step 1** — the rename: site name, `EBW` wordmark, slug → `/desk/`, `/brain/` redirect. §20.
-> 8. 🟢 **S10 step 2** — stop duplicating the storefront: `desk/index` + `desk/about` become one honest landing page; drop the two hand-written breadcrumbs. §19. **Next.**
-> 9. ⬜ **S10 step 3** — storefront features the writing; the `THE JOURNALISTS` characters become a dated post written in the vault. §19. *(New writing, not mechanical.)*
-> 10. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
-> 11. ⬜ **S2** — graph: taller afterBody instance + homepage feature.
-> 12. ⬜ **S8** — `Originally published` / `Last updated` + visible tags + breadcrumbs from year. Blocked on the tagging pass.
+> 8. ✅ **S10 step 2** — stop duplicating the storefront: About deleted, landing page thinned, hand-written breadcrumbs dropped. §21.
+> 9. ⬜ **S10 step 3** — the storefront features the writing. `THE JOURNALISTS` stays a storefront section, not a post. §19.
+> 10. 🟢 **Tags → folders → graph** — the spine of the Desk. Read all 50 posts, agree the tag taxonomy, then retire the year folders and fill in the links. **8 edges / 54 notes, 79% isolated today.** §22. **Next, and the biggest remaining piece.**
+> 11. ⬜ **LLM-assisted tags, aliases & related links** — prompts + workflow, designed *after* the human pass. §22.2.
+> 12. ⬜ **Post header dates + "Recently updated"** — S8; needs the `updated:` data decision in §22.3 first.
+> 13. ⬜ **S3** — left sidebar cleanup; the wordmark has already left the sidebar, so this is mostly finishing that job.
+> 14. ⬜ **S2** — graph: taller afterBody instance + homepage feature. *Now blocked behind item 10 — the graph has almost nothing to draw (8 edges).*
+> 15. ⬜ **S8** — visible tags + breadcrumbs from year. *Breadcrumbs are now in question — see D17; tags wait on item 10.*
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -539,9 +546,11 @@ Owner decisions: the name is **"Emerson's Desk"** with an `EBW` wordmark (§18);
 
 *Guards:* (a) `pageTitle` and `content/index.md`'s frontmatter `title` must agree, so name and wordmark cannot drift apart again; (b) assert no authored page still says "The Brain"; (c) `deploy.yml` guards must check `_site/desk/index.html` — the existing ones check `_site/brain/`, so leaving them would have made them **fail closed and block the deploy**, which is at least loud.
 
-**Step 2 — Stop duplicating the storefront.** `desk/index` and `desk/about` restate what the storefront already says, and are weak enough to read as an oversight. Replace with a short, honest landing page: forward into the archive, back to the storefront for books and bio. Drop the hand-written `_Back to [[index|…]]_` breadcrumbs at the same time — the `breadcrumbs` plugin already renders a trail, so these are a second, hand-maintained breadcrumb system that must be edited on every future rename. Keep `bio.html` as a thin redirect rather than deleting it; a homepage pointing at a page that has gone is worse than the duplication.
+**Step 2 — Stop duplicating the storefront. ✅ DONE 2026-10-01 — see §21.** HayJay's call went further than this section planned: **the Desk has no About page at all** ("we fully lose `brain/about.md` right? The Desk doesn't need its own about page"), and `/desk/` is a **thin landing page** — what the Desk is, *Browse the archive*, *Back to the main site*, and the 5 newest dispatches. House and study room: slight separation, but one build. The hand-written `_Back to [[index|…]]_` breadcrumbs are gone from both pages that had one.
 
-**Step 3 — Storefront features the writing; the characters become a real post.** The homepage keeps books + a little on the Silverbridge world + a prominent link into the Desk. The characters section (`THE JOURNALISTS` — Luce, Huds, Faven, Rodney) becomes **a dated, cross-linked post inside the Desk** rather than a storefront widget.
+**Step 3 — Storefront features the writing. ⬜ not started.** The homepage keeps books + a little on the Silverbridge world + a prominent link into the Desk.
+
+> ⚠️ **Superseded in part, 2026-10-01 (HayJay):** *"let's not write the post for the Journalists. Let's keep it as a section in the index.html and we can deal with it separately later."* So the `THE JOURNALISTS` cards (Luce, Huds, Faven, Rodney) **stay a storefront section** — the reasoning below (a character card on a homepage is marketing that expires; the same words as a post are content that compounds) was sound, but the timing is wrong: the Desk does not yet have the tag taxonomy or the link density to give such a post a home (§22.1). It is deferred, not cancelled.
 *Why:* a character card on a homepage is marketing that expires; the same words as a post are content that compounds — and the Desk is where writing lives.
 *Note:* this is **new writing**, so it is the one step that is not purely mechanical. Draft it as a note in the vault so `Publish Brain.command` picks it up like any other dispatch, rather than hand-placing it in `content/`.
 
@@ -551,7 +560,7 @@ Owner decisions: the name is **"Emerson's Desk"** with an `EBW` wordmark (§18);
 - **Leave the `brain/` source directory alone.** Renaming it would touch `npm ci`, both `.command` scripts and every path in this plan for no user-visible gain. The URL is what readers see.
 - **The plan's own filename keeps "BRAIN".** `EMERSON-BLACK-BRAIN-PLAN.md` is a long-lived internal document; renaming it would break the `Publish Brain.command` snapshot and every reference to it. Cheap to do later, no value now.
 
-### Status: **step 1 shipped 2026-10-01 (§20).** Steps 2–3 next.
+### Status: **steps 1–2 shipped 2026-10-01 (§20, §21).** Step 3 remains.
 
 ---
 
@@ -593,6 +602,96 @@ The site is **Emerson's Desk**. The header wordmark reads **`EBW`**. It is serve
 **The workflow's own shell was executed, not eyeballed.** The assemble + guard steps were extracted from `deploy.yml`, redirected to a temp `_site`, and run verbatim: 54 newsletter pages and 184 images staged, stub content correct, all guards passed. The `printf` quoting in the stub is the part that most needed that.
 
 **Lesson.** *A plan can be right about the shape of a change and wrong about a path.* §19 predicted a content-alias redirect for `/brain/`; that is the correct tool for a slug change **inside** the build and exactly wrong across a change of the build's own root. And where a framework component offers no configuration, a presentational swap is legitimate — but assert on **both** halves of it (what is painted, what is announced), because either on its own can look correct while being wrong.
+---
+
+## 21. ✅ S10 step 2 — the Desk stops duplicating the storefront (2026-10-01)
+
+**The model:** HayJay's words — *"the storefront's index is the house, Desk is the study room, and the posts are inside the study room. So there's slight separation between the house and the room, but they should feel integrated and uniform."* Two consequences, both going further than §19 planned:
+
+1. **The Desk has no About page.** Not a short one, not a thin one — `brain/content/About.md` is **deleted**. A shelf does not have an about page; the author bio is the *house's* job and already lives at `bio.html`, which the Desk's own header nav has always pointed at. Deleting it also removes the only page where the Desk restated the storefront's bio sentence-for-sentence.
+2. **`/desk/` is a thin landing page.** Not "the curated portal, minus the books CTA" — the hero pitch, four *Start here* doors, four year cards and four reading trails are all gone. What remains: one paragraph saying what the Desk is, **Browse the archive**, **Back to the main site**, a ⌘K/graph hint, and the **generated** 5 newest dispatches.
+
+**Why all of that had to go, specifically.** Each block was a *hand-maintained duplicate* of something the archive already knows: the year cards restate the explorer tree, and the reading trails are four hand-made tags — the exact thing §22 replaces with real ones. The doors were the only genuinely original curation, and they were weeks of shelf-keeping for four links. Meanwhile the one thing that *couldn't* rot — the recent list — was already there: `@quartz-community/recent-notes` is `afterBody` with `limit: 5` and `linkToMore: Newsletters/index`, so the page gets its post list generated on every build. **Prefer the generated thing over the curated copy of it, every time.**
+
+**Both hand-written breadcrumbs are gone** (`About.md` and the vault's `Newsletters/index.md`). The `breadcrumbs` plugin renders a real trail; the italic `_Back to …_` lines were a second, string-typed breadcrumb system that had to be hand-edited on every rename — and did bite, in §20.
+
+**The guard — 7 new checks, suite 68 → 77.** They assert the *contract*, not the prose, so rewording cannot quietly rebuild a second homepage:
+- no `_Back to [[` idiom survives anywhere in `content/` (source-level, all files);
+- the landing page carries **no** `eb-hero` / `eb-kicker` / `eb-card` / `eb-trail` / `eb-year` / `eb-grid` / `eb-section` / `eb-cta` markup;
+- it **does** link forward into the archive and back to the storefront;
+- it lists **exactly 5** generated recent items, and no hand-typed `eb-card` list;
+- `content/About.md` stays deleted, and **no built page links to `/about`** (a link to a page that no longer exists is invisible in a green build);
+- neither the landing page nor the archive index contains `bio.html`'s bio prose — **read out of `bio.html` at check time**, not hardcoded, so a future reword of the storefront is caught either way. (§15's lesson, applied to copy instead of a hex.)
+
+**Proven by re-introducing every bug at once,** as §16 insists: re-adding `About.md` + an `href="about"` link + a hero + a card + a `_Back to [[` breadcrumb makes **four** checks go red, each naming the file at fault, and the script exits 1.
+
+**Two of the seven checks were wrong on the first attempt** — worth recording, because both failed *for a good reason*:
+- `!/>Back to/` matched the landing page's own **"Back to the main site"** button. A text match is not a statement of intent; the check now matches the *idiom* (`_Back to [[`) in the **source**. (§17 again: name the thing you mean.)
+- `href="newsletters/"` never matched, because Quartz resolves a content-root-relative link to **`./newsletters/`**. Grep for what the build emits, not what you wrote. (§17's actual lesson.)
+
+**§20's vault-mirror lesson repeated immediately.** The archive-index edit was made in the vault, and the first verify run failed on it — `brain/content/Newsletters/index.md` still held the old text until the mirror ran. Same trap, same detector; the fix is the same (edit the vault, mirror, rebuild). The *guard* caught it before anything was pushed.
+
+**Also: 15 of the 20 `eb-*` brand classes are now unreferenced** (`eb-hero`, `eb-kicker`, `eb-hero-title`, `eb-hero-lede`, `eb-section`, `eb-section-title`, `eb-grid`, `eb-card`, `eb-card-kicker`, `eb-card-title`, `eb-card-text`, `eb-count`, `eb-cta`, `eb-trail`, `eb-year`). They are **left in `custom.scss` for now** — inert, and git holds them if the doors ever come back — but they are dead weight, and the next tidy pass should measure before deleting. (§16's rule: the list above *is* the measurement.)
 
 **Still open from §19:** step 2 (the two site pages stop restating the storefront; drop the hand-written breadcrumbs) and step 3 (the storefront features the writing; the characters become a real post). Then S3, S2, S8.
 
+
+---
+
+## 22. 🟢 Tags, folders and the graph — the spine of the Desk (2026-10-01)
+
+HayJay's premise, which now governs everything left: **"the way the ideas link is the important way to look at this Desk."** Folders (`Newsletters/<year>/`) are an artefact of the Substack export, not an editorial structure; tags plus links are the real navigation, and once they carry it the folders can go.
+
+### 22.1 The measurement that sets the agenda
+
+From the built `public/static/contentIndex.json` (the graph's data source — `slug`, `title`, `tags`, `links` per page):
+
+| | |
+| --- | --- |
+| published notes | **54** |
+| link edges between them | **8** |
+| notes with an outgoing link | **5** |
+| notes with an incoming link | **8** |
+| **fully isolated notes** | **43 (79%)** |
+
+All eight edges:
+
+```
+the-stormhouse-book-awards-2024   →  the-nerdiest-book-roundup-ever-2023
+the-seen-covers-get-a-facelift-1  →  the-seen-covers-get-a-facelift-2
+third-draft-is-finished           →  writing-abroad · how-to-successfully-fail-at-deadlines
+                                     keep-keep-keep-writing · the-furry-region
+my-new-book-is-coming-out         →  the-dangers-of-overplotting
+```
+
+So the graph — the thing the whole design leans on — currently draws **56 nodes and 8 edges**: a field of loose dots. That is not a styling problem, and it is why **S2 (a bigger graph) is blocked behind this item**: a taller graph of nothing is a bigger field of nothing. `tags: []` on every note means the tag axis contributes no edges yet either.
+
+### 22.2 Sequence
+
+1. **Read all 50 posts properly** and agree a small tag taxonomy — the working set is craft / process / publishing / mindset. Four is right at this size; twenty would not be.
+2. **Fill the links.** Thematic `[[wikilinks]]` between essays, chosen by a human who has read them.
+3. **Retire the year folders**, once tags carry navigation. Then revisit the breadcrumbs (D17).
+4. **Then** the LLM workflow — prompts to run new post copy through a model and emit `tags`, `aliases` and candidate `[[wikilinks]]` for review.
+
+The ordering of 4 is deliberate: prompts need the tag vocabulary and the shape of real links to aim at. A taxonomy invented by a model is a taxonomy nobody owns, and the review cost lands on the same person either way — better to aim it at work that already exists.
+
+### 22.3 Post header dates — and a data problem found while checking
+
+Requested: *"At the beginning of every post, I want the frontmatter to say 'Originally published <date> • Updated <date>', and if a post has been updated in the last 3 months, it has a 'Recently updated' tag."*
+
+The **mechanism** is easy — `created:` / `modified:` are already derived by `Publish Brain.command` (D13) and `content-meta` renders `<time>`; a small local component can print the pair. **The data is not ready, though:**
+
+- **52 of the 53 published notes carry `updated: 2026-09-28`** — one value on every one. It is a **migration artefact**, not an editorial date, and two independent checks say so: `Substack-export/posts.csv` has **no `updated` column** (`post_id, post_date, is_published, email_sent_at, inbox_sent_at, type, audience, title, subtitle, podcast_url`), and `git log -S'updated: 2026-09-28'` lands on `3128f95` — *"Quartz v5 scaffold + 49 newsletters mirrored (Phase 4)", 2026-09-28*.
+- Only two notes differ: `2023/you-can-judge-a-book-by-its-cover.md`, and one draft.
+
+So shipping the header as-is would print **"Updated 28 September 2026" on 52 posts** — true but meaningless — and a "recently updated" rule would fire on **almost the entire archive**. A badge that marks everything marks nothing.
+
+**Recommendation, for a decision before S8:** clear the mechanical `updated:` values so the field means *"last editorial revision"* (trivially reversible — it is a single constant), and print **"Updated" only when it differs from the publication date**. On the badge itself: prefer a **client-computed one** (a few lines reading `modified` against `Date.now()`) over a build-time flag, which stays frozen until the next publish, and over a real tag, which would mix system state into the editorial taxonomy being designed in §22.2.
+
+---
+
+## 23. D17 — no hand-written breadcrumbs; the Desk has no About page (2026-10-01)
+
+| # | Decision | Why |
+| --- | --- | --- |
+| D17 | **The Desk has no About page**, and **breadcrumbs are never hand-written again.** The `breadcrumbs` plugin stays for now | The Desk is a shelf; the bio is the storefront's. Hand-written breadcrumbs are a second breadcrumb system that must be re-edited on every rename — it already cost one silent revert (§20). The plugin's trail (`✦ / Newsletter Archive / 2025 / …`) is generated and free. **Open question:** HayJay's instinct is that breadcrumbs are not needed at all once folders go (revisit with §22.2 step 3). Two things argue for keeping it until then: it is the only way *up* from a post to its year, and `showCurrentPage: true` currently repeats the article title directly beneath the `<h1>` — the one part of it that is plainly redundant, and the first thing to drop if it stays. |
