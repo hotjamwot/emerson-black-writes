@@ -44,16 +44,27 @@ function htmlFiles(dir, acc = []) {
 
 const files = htmlFiles(SITE)
 
-/** Pages that must never be advertised to a crawler. */
-const isThinFolderPage = (p) =>
-  /^desk\/newsletters\/(index\.html|\d{4}\/index\.html)$/.test(p) || p === "desk/brain/index.html"
-
 /**
- * The 404 page is NOT a result — listing it invites crawlers to index a page
- * that only exists to say "not here". A first version shipped it (caught by
- * resolving every URL in the live sitemap, not by reading the file).
+ * Pages that must never be advertised to a crawler.
+ *
+ * ⚠️ ALL PATTERNS ARE LOWERCASE-INSENSITIVE, AND THAT IS LOAD-BEARING.
+ * `new RegExp(..., "i")` is not cosmetic here. Quartz emits the folder as
+ * `Newsletters/` on a case-SENSITIVE filesystem (Linux CI) and as
+ * `newsletters/` on macOS, so the SAME pages arrive under different casing
+ * depending on where the build ran. A lowercase-only pattern silently matched
+ * on a Mac and stopped matching in CI, which is how the first fix shipped a
+ * duplicate-laden sitemap and then made the deploy abort on its own guard.
+ * Mirror `urlFor()`, which lowercases first: normalise, THEN match.
  */
-const isErrorPage = (p) => /(^|\/)404\.html$/.test(p) || p === "desk/404/index.html"
+const isThinFolderPage = (p) => {
+  const l = p.toLowerCase()
+  return /^desk\/newsletters\/(index\.html|\d{4}\/index\.html)$/.test(l) || l === "desk/brain/index.html"
+}
+
+const isErrorPage = (p) => {
+  const l = p.toLowerCase()
+  return /(^|\/)404\.html$/.test(l) || l === "desk/404/index.html"
+}
 
 /**
  * Map a built file to its public URL.
