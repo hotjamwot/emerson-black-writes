@@ -129,7 +129,9 @@ node quartz/theme/verify-brand.mjs
 - *A guard that cannot fail is worse than no guard — it looks like protection.* (Hit three times: the original yellow check, then two unreachable assertions in the sitemap script I wrote days after.)
 - **I6 (new, 2026-10-01): the sitemap shipped listing every post twice.** Quartz emits `Newsletters/` and `newsletters/` on a case-sensitive filesystem; macOS merges them, so **the bug cannot be reproduced locally at all.** Two failed deploys followed. Rule: test path logic against a *simulated case-sensitive tree*, never the working copy.
 - **I7 (new, 2026-10-01): a build step that was correct in isolation and wrong in sequence.** The date export ran *after* `brain/public` had already been copied into the artifact, so the file never shipped. Caught by its own guard on the first attempt.
+- **I8 (new, 2026-10-01): the same class again, and a working copy HID it.** `render-desk-picks` ran before the file it reads existed; it passed locally twice because a previous build's output was still sitting there. Only a **fresh `git clone`** exposed it.
 - *A step that "works when I run it" is not a step that works. Order matters, and only the assembled artifact can prove it.*
+- **Standing rule after I6/I7/I8: reproduce a deploy from a fresh clone before pushing.** Three of these in a row, all invisible locally.
 
 ## 10. Where the Desk stands (measured 2026-10-01)
 
@@ -219,11 +221,32 @@ The guard caught it on the first try, which is worth noting: **it is the first c
 
 **Deploy guards** reject an empty, short (<40), unsorted, or malformed-date export — **all four proven red** by constructing each failure.
 
-### 11.3b 🔵 "From the Desk" section — now unblocked
+### ✅ 11.3b "From the Desk" section — DONE 2026-10-01
 
-Six posts (title, one-line description, date) near the hero — **hand-picked, not the auto-listed 49.** An auto-list is an archive; six is a pitch. The data now exists at `/desk/static/postDates.json` (49 entries, 10KB, newest first), so this is a front-end change on the storefront rather than plumbing.
+Placed after the series hook, before the signup: high enough to be seen, but it doesn't outrank the books. Two groups, deliberately:
 
-**Still open for HayJay:** *which* six, and whether they are fixed or rotate. A rotating list stays current with zero upkeep; a fixed one can be curated. Genuinely a judgement call, not a technical one.
+| Group | How | Why |
+|---|---|---|
+| **Start here** (3) | Fixed, hand-chosen | The only part a stranger or agent should land on cold. Proves intent. |
+| **Latest** (3) | Auto-generated from `postDates.json` | Proves the site is alive, with zero upkeep. |
+
+**Random selection was considered for the curated trio and rejected.** A random post can be a perfectly good post that is simply a poor first impression ("How to Cut Through the Noise" has the description *"Going viral"*); it also makes the page unstable, which fights a static, fast, dependency-free design. Random optimises for *not being bad*, never for *being good*.
+
+The three curated picks are all craft-forward, because that is what demonstrates range to an agent: **The Dangers of Overplotting** (failure and self-critique), **How I Plan My Novel Writing Process** (system and discipline), **Sourcing Intrigue for Stories** (technique).
+
+**Rendered server-side at deploy time**, not fetched client-side. The obvious implementation is a `fetch()` on page load — which would add the **first JavaScript to a page that deliberately ships none**, plus a request and a visible reflow, bought for a list of three links. Static HTML means zero JS, no failure mode at runtime, and no layout shift.
+
+- Renders into the **`_site` copy**, never the source `index.html`, so no snapshot of "latest" is ever committed — the same rot we avoided for the sitemap.
+- **Idempotent:** a no-op rebuild is a clean pass, not a failed deploy.
+- **Guards:** exactly 6 picks, exactly 3 generated, all pointing at real dated post URLs, and no `{{DESK_COUNT}}` may reach production. Each proven red.
+
+**Verified live:** 6 picks rendered, both groups correct, all 6 links return 200, 17 CSS rules shipped.
+
+#### I8 — an ordering bug that a working copy *hid*
+
+`render-desk-picks.mjs` reads `postDates.json`, which the Quartz build does not produce. It was placed before the date export, so CI died with `ENOENT`. **It worked locally twice** because `postDates.json` was already sitting in `brain/public/static/` from an earlier build.
+
+**Reproducing the deploy from a fresh `git clone` — which is what CI effectively is — was the only thing that exposed it.** That is now the standing rule, after three ordering bugs in a row (I6, I7, I8): *a working copy carries state that hides exactly this class of failure.* Related: I cannot read the Actions log without admin rights, so each failure has to be diagnosed by replicating CI locally — which is only reliable if the clone is clean.
 
 ### 11.4 🔵 A real link to the Desk in the header
 
@@ -251,7 +274,7 @@ A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→
 
 ## 12. Roadmap
 
-**Now:** "From the Desk" (11.3b) → header link to the Desk (11.4) → craft→books bridge (11.6). Analytics remains deferred (§11.2).
+**Now:** header link to the Desk (11.4) → craft→books bridge (11.6) → tag constellation (11.5) → backlinks.
 **Also open:** Search Console is live with the sitemap. Analytics stays off — at current traffic levels Plausible's ~$9/month isn't justified, and **Search Console is free and answers the more useful question** (what people search for, and whether they find us). Revisit when traffic justifies it.
 **Then:** tag constellation (11.5) · backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune · series order (11.7).
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
