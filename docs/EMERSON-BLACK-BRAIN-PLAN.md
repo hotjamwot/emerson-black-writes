@@ -131,8 +131,10 @@ node quartz/theme/verify-brand.mjs
 - **I7 (new, 2026-10-01): a build step that was correct in isolation and wrong in sequence.** The date export ran *after* `brain/public` had already been copied into the artifact, so the file never shipped. Caught by its own guard on the first attempt.
 - **I8 (new, 2026-10-01): the same class again, and a working copy HID it.** `render-desk-picks` ran before the file it reads existed; it passed locally twice because a previous build's output was still sitting there. Only a **fresh `git clone`** exposed it.
 - **I9 (new, 2026-10-01): a guard that reported four failures on a correct file** — the search matched the *comment explaining the fix*. A false FAIL trains you to ignore the audit, and then it waves a real regression through. **A check a comment can break is not a check.**
+- **I10 (new, 2026-10-01): three visual regressions shipped in the rehaul, all mine, all caught by HayJay looking at the page.** The hero isn't full-width, the vertical rhythm is gone, the prequel cover renders as a strip. In each case the CSS was correct *as written* and the test that passed was one I had designed. **I checked a file, never the page.**
 - *A step that "works when I run it" is not a step that works. Order matters, and only the assembled artifact can prove it.*
 - **Standing rule after I6/I7/I8: reproduce a deploy from a fresh clone before pushing.** Three of these in a row, all invisible locally.
+- **Standing rule after I10: after a visual change, measure the rendered thing** — image dimensions from the file, the DOM from the built artifact, and one real look. Verifying the input file is not verification.
 
 ## 10. Where the Desk stands (measured 2026-10-01)
 
@@ -283,15 +285,91 @@ A visible redesign, not a tidy-up. HayJay approved a full restyle with the serie
 
 **Live verified:** correct `h1`, 4-link nav, all 5 anchors resolve, 7 sections, free badge present, `bio.html` redirects, sitemap clean.
 
-#### I9 — my own audit lied to me
+**I9 — my own audit lied to me**
 
 The first version of the redesign audit reported **four failures on a correct file**: `grep` for `background-attachment: fixed` was matching the *comment explaining the fix*. A false "FAIL" is not a nuisance — it teaches you to ignore the audit, and then it waves a real regression through. Fixed by stripping comments before pattern-matching. The lesson generalises past this project: **a check that a comment can break is not a check.**
+
+**I10 — the rehaul shipped three regressions, because I verified what I *wrote* and not what I *shipped***
+
+11.9.1–11.9.3 are all regressions **I introduced less than an hour earlier**: a full-width hero that isn't full-width, vertical rhythm that vanished, and a book cover that renders as a strip. In every case the CSS I wrote was correct *as written* and the test that passed was one I had designed.
+
+The pattern across all three: **I checked a file, never the page.** `grep -c bleed index.html` returning 0 would have caught the hero in one second. The prequel cover was correct in CSS and correct in the source image (`1280×2048`, exactly 5:8) — it was the *rendered box* that was wrong, which no source-level check can see.
+
+**The standing rule now: after a visual change, measure the rendered thing** — dimensions from the image file, the DOM from the built artifact, and one real look at the page. Verifying the input file is not verification.
 
 ### ✅ 11.4 A real link to the Desk in the header — DONE 2026-10-01
 
 Shipped as part of the 11.3c rehaul: a sticky header carrying the wordmark plus Books / Desk / About / Subscribe. Anchors only — no router, no script. The Desk was previously reachable only by scrolling or via the footer, so a visitor had no reason to suspect it existed.
 
 New guard: every nav target is asserted to exist as a section `id`, because a renamed id renders a perfectly normal-looking link that goes nowhere.
+
+### 🔴 11.9 Post-rehaul defect list — OPEN, triaged 2026-10-01
+
+HayJay's report from using the site after the rehaul. **Every item was reproduced against the live site or the source before being written down**, and the likely cause is recorded where it was diagnosable — so the next pass starts from a cause, not a symptom. Items 1–5 are homepage; 6–8 are the Desk.
+
+#### 🔴 11.9.1 The hero image does not span the full width
+
+**Cause, confirmed.** `.main-content` is `max-width: 1100px`, and `.hero` is a plain child of it. In the rehaul I defined `.bleed` and `.shell` as helpers and then **never applied `.bleed` to any section** — `grep -c bleed index.html` returns **0**. So the hero's background paints inside an 1100px column, and the full-bleed treatment the other sections still carry is why they look right.
+
+**Fix:** put `bleed` on the full-bleed sections (hero, desk, characters, start-reading) and `shell` on their inner content. The hero's `.hero-inner` then needs the padding `.bleed` gives up.
+
+#### 🔴 11.9.2 Content is vertically cramped
+
+**Cause, confirmed.** The rehaul removed `gap: var(--space-2xl)` from `.main-content` when it became a plain block container — but every section depends on that gap for its rhythm, and none supplies its own top margin.
+
+**Fix:** restore a section gap in `.main-content`. Prefer the container gap: it keeps the rhythm in one place rather than 7 hand-set margins that will drift.
+
+#### 🔴 11.9.3 `.prequel-cover img` renders long and skinny
+
+**Cause, confirmed by measuring the source.** The covers are genuinely `1280×2048` and `1600×2560` — a **0.625 ratio, exactly 5:8** — so the files are correct. The CSS asks for `aspect-ratio: 5/8` too, but sets `max-width: 280px` with **no matching height**, inside a `1fr` column ~418px wide. The image is left-aligned in a column twice its width, so it reads as a narrow strip rather than a book.
+
+**Fix:** give the wrapper the width and let the image fill it — or put the ratio on the *container* the way `.book-cover` already does. **Reuse the exact `.book-cover` recipe:** the books grid is already right, and the prequel is the copy that went stale.
+
+#### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
+
+Not yet root-caused; needs a real device pass. Two known suspects already: (a) the header nav has 4 items and only drops "Subscribe" below 700px, so at 701–900px it is at its most crowded; (b) `.series-hook` collapses to one column and the two decorative silhouettes stack *above* the text, pushing the premise below two large images. **Fix the known ones, then look again on a real phone** rather than guessing at more.
+
+#### 🔴 11.9.5 Reconsider `/desk/` — but "copy the content over" is not what it seems
+
+HayJay: *"emersonblackwrites.com/desk/ is pointless — would love to lose it if possible. Or copy over the nice tidy content from `#desk`."*
+
+**`/desk/` cannot simply be removed, and this is worth being explicit about.** `/desk/` is the **Quartz build — all 49 posts**, plus the archive, tag pages and search. It is not a duplicate of the homepage's `#desk` section: that section is **six links**. Removing `/desk/` deletes the writing itself — and every `postDates.json` entry, every sitemap post URL and every desk-pick link points into it.
+
+What is genuinely redundant is that a visitor now meets the Desk **twice**: six highlights on the homepage, then the full archive at `/desk/`. So the real options are:
+
+- **(a) Recommended — keep `/desk/`, fix how it presents.** The homepage section is the shop window; `/desk/` is the stockroom. The problem is the *jump* between them, not the archive. Give `/desk/` the storefront's header (11.9.6) and the redundancy resolves into a front door and a destination.
+- **(b) Merge the highlights into `/desk/`'s index**, dropping the homepage section. Lightens the homepage but sends craft readers one hop deeper — and the homepage section is what proves to a *stranger* that a person writes these books. Not recommended.
+- **(c) Serve the homepage content at `/desk/`, archive the rest under `/desk/archive`.** Possible, but breaks 49 live URLs, the sitemap and every inbound link. **Not recommended** — the same "don't break live URLs" reasoning that kept `bio.html` as a redirect applies with far more force at 49 URLs.
+
+**HayJay to confirm (a) before anything is built.** This is a decision about what the Desk *is*, not a bug.
+
+#### 🟠 11.9.6 Fold the homepage header into the Desk, so the two sites feel like one
+
+**The strongest item on the list, and close to free.** The homepage header (sticky wordmark + Books/Desk/About/Subscribe, over the campus hero) exists in `style.css`; the Desk has its own in `brain/quartz/styles/custom.scss`.
+
+HayJay: *"The header of the homepage on desktop looks brilliant. Would love to fold that exact style to the desk."*
+
+**Cause of the mismatch:** the two headers live in different systems — hand-written CSS versus Quartz components styled through `custom.scss` — so they share a palette but not a layout. The fix is to make the Desk's header *look like* the storefront's (same wordmark treatment, nav and sticky behaviour), **not** to share code across two build systems that do not share a stylesheet.
+
+#### 🟠 11.9.7 The Desk's visual problems
+
+Reported together because they are one pass over `custom.scss`:
+
+| Symptom | Likely cause |
+|---|---|
+| Left column too wide | §4b reclaimed the empty *right* sidebar; the left was never narrowed |
+| Sidebar at the top on mobile, covering content | Desktop grid retained at small widths — needs a single-column breakpoint and `order` |
+| **Tag pills have ugly yellow behind them** | **Almost certainly the theme-layer leak below** — highest-confidence item here |
+| Search bar too narrow | Never resized after the sidebar change |
+| Post body images far too large | No `max-width` on `.content img` — longest-standing of these |
+
+**⚠️ The yellow tags are very likely the same bug as the violet accent, already solved.** The theme lives in `@layer obsidian-theme`, which beats `@layer quartz-base` on *layer order* — so anything Quartz derives from a theme token, including `--tag-color` (`var(--secondary)`, `quartz/util/theme.ts:263`), beats anything written in `custom.scss` regardless of specificity. `custom.scss:60` sets only `font-family` on `.tags .tag`; it never sets a colour, because a colour written there would lose anyway. **Fix it in the theme's own aspect block, exactly as the violet was fixed** — not by escalating the CSS from outside, which would appear to work and silently not be true.
+
+#### 🟢 11.9.8 The Desk wordmark should go to the homepage, not the Desk's index
+
+Clear and correct. The Desk's header wordmark currently links to the Desk's own index; it should go to `/`. The storefront's wordmark goes home, and the two must behave identically or the shared design reads as a coincidence.
+
+**Do this inside the 11.9.6 header work**, not separately — the link target and the visual style are one decision.
 
 ### 11.5 🟢 Tag constellation, not a graph
 
@@ -315,7 +393,7 @@ A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→
 
 ## 12. Roadmap
 
-**Now:** craft→books bridge (11.6) → tag constellation (11.5) → series reading order (11.7) → "How I Write" (11.8, needs a decision).
+**Now: the 11.9 defect list.** 11.9.1–11.9.3 are small and confirmed; 11.9.4 needs a real phone; 11.9.6 (shared header) is the highest-value item. **11.9.5 is a decision, not a bug — needs HayJay's answer first.** Then craft→books bridge (11.6) → tag constellation (11.5).
 **Also open:** Search Console is live with the sitemap. Analytics stays off — at current traffic levels Plausible's ~$9/month isn't justified, and **Search Console is free and answers the more useful question** (what people search for, and whether they find us). Revisit when traffic justifies it.
 **Then:** backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune.
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
