@@ -152,7 +152,7 @@ source: substack:176627320         # numeric part of post_id
 - [ ] **Post header dates + "Recently updated" badge (D18, §22.3).** `Originally published {created} • Updated {modified}` at the top of every post, plus a **client-computed** badge when `modified` is within 3 months. Unblocked: the `updated:` values are real editorial dates (49 notes share 2026-09-28 because the archive was cleaned by hand in one day) and the badge is *meant* to fire across the archive until 2026-12-28.
 - [ ] **Prune the orphaned `eb-*` brand CSS (new, §24.1).** 15 of the 20 brand classes in `brain/quartz/styles/custom.scss` are unreferenced since the landing page was thinned in §21 — measured at 0 occurrences across all 355 built pages. HayJay: *"It's super important that you keep me updated with any findings like this… we want to keep this repo clean and the workflow immaculate."* Also fold in the three enabled-but-inert plugins in §24.1.
 - [ ] **S10 step 3 — the storefront features the writing. (§19)** The homepage keeps books + the Silverbridge note and links prominently into the Desk. **`THE JOURNALISTS` stays a storefront section — HayJay's call, 2026-10-01:** no post is written for it; it is dealt with separately later.
-- [ ] **Tags, folders and the graph — the spine of the Desk (new, §22).** The premise: *the way the ideas link is the important way to look at this Desk.* Today the graph is nearly empty — **8 link edges across 54 published notes, 43 notes (79%) fully isolated** (measured from `public/static/contentIndex.json`, §22.1). Sequence: (1) read all 50 posts properly and agree a small tag taxonomy (craft / process / publishing / mindset); (2) retire the year folders once tags carry the navigation; (3) fill in the `[[wikilinks]]`. Folded in from the old editorial-pass item; supersedes it.
+- [ ] **Tags, folders and the graph — the spine of the Desk (new, §22).** The premise: *the way the ideas link is the important way to look at this Desk.* Today the graph is nearly empty — **8 link edges across 54 published notes, 43 notes (79%) fully isolated** (measured from `public/static/contentIndex.json`, §22.1). **Step 1 done (2026-10-01): every post read and a taxonomy proposed — 8 spheres, `process` / `mindset` / `craft-plot` / `systems` / `craft-character` / `reading` / `bookcraft` / `news`, with a 2-links-per-post proposal that takes the graph from 8 edges to ~90. Awaiting sign-off on the vocabulary and the four contested calls (§25).** Then: apply, retire the year folders from navigation, revisit breadcrumbs.
 - [ ] **LLM-assisted tagging, aliases and related links — after the above (new, §22.2).** Once the taxonomy exists and the posts have been read, design prompts + a workflow to run new post copy through an LLM and emit `tags`, `aliases` and candidate `[[wikilinks]]` for review. Deliberately sequenced *after* the human pass: the prompts need the tag vocabulary and the shape of real links to aim at, and a taxonomy invented by a model is a taxonomy nobody owns.
 - [ ] **Storefront Integration — tracked as S10 (§19).** Originally framed as “merge the storefront and the Brain into one shell, shared header/nav across `/` and `/brain/`”. Refined: the storefront **stays the homepage** and **features** the Desk rather than merging with it, and S1a has already built the Desk's own header bar (§17). The rename and the slug move are **done** (§20); what remains is steps 2–3 above and a genuinely *shared* nav across both halves. Currently connected by the storefront footer nav row (D15) and the Desks's own header nav (§17).
 - [ ] **Editorial pass (Arc 2 candidates):**
@@ -263,7 +263,7 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 7. ✅ **S10 step 1** — the rename: site name, `EBW` wordmark, slug → `/desk/`, `/brain/` redirect. §20.
 > 8. ✅ **S10 step 2** — stop duplicating the storefront: About deleted, landing page thinned, hand-written breadcrumbs dropped. §21.
 > 9. ⬜ **S10 step 3** — the storefront features the writing. `THE JOURNALISTS` stays a storefront section, not a post. §19.
-> 10. 🟢 **Tags → folders → graph** — the spine of the Desk. Read all 50 posts, agree the tag taxonomy, then retire the year folders and fill in the links. **8 edges / 54 notes, 79% isolated today.** §22. **Next, and the biggest remaining piece.**
+> 10. 🟢 **Tags → folders → graph** — the spine of the Desk. **Step 1 DONE: all 49 posts read; an 8-sphere taxonomy + full link proposal is in §25, awaiting sign-off.** Approve it and it applies in one commit. Then retire the year folders, then revisit breadcrumbs. **Biggest remaining piece.**
 > 11. ⬜ **LLM-assisted tags, aliases & related links** — prompts + workflow, designed *after* the human pass. §22.2.
 > 12. ⬜ **Post header dates + "Recently updated" badge** — D18/§22.3. Unblocked; `updated:` is a real editorial date. Badge is client-computed, fires archive-wide until 2026-12-28, then differentiates.
 > 13. ⬜ **Prune orphaned `eb-*` CSS + 3 inert plugins** — §24.1. Measured, low risk, keeps the repo lean.
@@ -733,6 +733,111 @@ HayJay: *"It's super important that you keep me updated with any findings like t
 
 ### 24.3 Standing rules
 
+---
+
+## 25. 🟡 The tag taxonomy — proposed, awaiting HayJay's sign-off (2026-10-01)
+
+**This is step 1 of §22.2, done: all 49 published posts read in full, and the topic spheres that occur naturally in them identified.** The plan had guessed "craft / process / publishing / mindset"; reading the archive produced **eight** cleaner spheres. This section proposes the taxonomy and the first link graph. **Nothing has been applied to the vault yet** — the tags/links land in one commit only after the vocabulary is agreed, per §22.2's own lesson (a taxonomy nobody owns is not a taxonomy).
+
+### 25.1 The eight spheres
+
+| Tag | What it holds | Count |
+| --- | --- | --- |
+| `process` | The drafting lifecycle: starting, first drafts, rewrites, finishing, saying goodbye | 10 |
+| `mindset` | Imposter, guilt, deadlines, instinct, rest, authenticity | 9 |
+| `craft-plot` | Plotting, structure, sourcing ideas, overplotting, screenplay | 6 |
+| `systems` | Workflow & tools: Notion, calendar, goals, ChatGPT, sidequests, crop rotation | 7 |
+| `craft-character` | Building & softening characters, reader emotion, actors | 5 |
+| `reading` | Reading lists, taste, book awards, "what's your fantasy" | 5 |
+| `bookcraft` | Covers & presentation: cover job, facelift parts, reader's genre eye | 4 |
+| `news` | Announcements & milestones: releases, awards, team | 3 |
+
+Each post gets **exactly one** tag (mirroring how a folder used to be a single axis), and the *links* provide the crossing. Double-tagging would muddy the tag pages; the graph is where a post belongs to two worlds at once.
+
+### 25.2 What the tags replace, and what they don't
+
+- **They replace the year folders** for topic navigation. `/newsletters/2025/` becomes a date archive, not the way you find "everything about overplotting" — `/tags/craft-plot/` does that.
+### 25.3 Every post, assigned
+
+Read the table as the argument. Where a post could sit in two spheres, the note says what tipped it.
+
+| Year | Post | Tag | Nearest neighbour(s) — the link proposal |
+| --- | --- | --- | --- |
+| 2023 | 5 Lessons: First Sequel | `process` | Saying Goodbye · Third Draft is Finished |
+| 2023 | Sweeten Up Unlikeable Characters | `craft-character` | How To Build a Human · Emotional Gutting 101 |
+| 2023 | Emotional Gutting 101 | `craft-character` | Your Reader's Invisible Eye · What Turns You On? |
+| 2023 | An Enforced Break | `mindset` | *forced rest, not a system* → Art of Not Feeling Guilty · Master Your Calendar |
+| 2023 | Breaking Up with Boring Books | `reading` | What's Your Fantasy? · Nerdiest Book Roundup |
+| 2023 | Crop Rotation | `systems` | Master Your Calendar · Plan Novel Process on Notion |
+| 2023 | Art of Not Feeling Guilty | `mindset` | Banish Imposter Syndrome · An Enforced Break |
+| 2023 | Wandering Off-Path | `craft-plot` | Sourcing Intrigue · The Art of Restraint |
+| 2023 | Banish Imposter Syndrome | `mindset` | Art of Not Feeling Guilty · Keep, Keep, Keep Writing |
+| 2023 | How To Build a Human | `craft-character` | Sweeten Up Unlikeable Characters · Reader's Invisible Eye |
+| 2023 | Imaginary Life Coach | `mindset` | Authenticity / Turn On Your Flame · Instinct & Intuition |
+| 2023 | Cut Through the Noise | `mindset` | *audience, not craft* → Authenticity · What Turns You On? |
+| 2023 | Authenticity / Turn On Your Flame | `mindset` | Instinct & Intuition · Imaginary Life Coach |
+| 2023 | Instinct, Intuition and Integrity | `mindset` | Authenticity · The Art of Restraint |
+| 2023 | Keep, Keep, Keep Writing | `process` | First Draft Is So Terrible · Banish Imposter Syndrome |
+| 2023 | Master Your Calendar | `systems` | Who Needs Goals? · Crop Rotation |
+| 2023 | Sourcing Intrigue for Stories | `craft-plot` | How a Ghost Gave Me a Story Epiphany · Wandering Off-Path |
+| 2023 | Style vs. Correctness | `process` | *editor's verdict, not a plot idea* → The Art of Restraint · Peek Behind the Curtain |
+| 2023 | The Art of Restraint | `process` | *editing craft* → Style vs. Correctness · Wandering Off-Path |
+| 2023 | The Furry Region | `process` | The Art of Restraint · Imaginary Life Coach |
+| 2023 | Nerdiest Book Roundup 2023 | `reading` | Favourite Books 2024 · Book Awards 2024 |
+| 2023 | The Seen Team is Back! | `news` | New Book is Coming Out · Fiancé Has Flatlined |
+| 2023 | What Turns You On? | `craft-character` | *taste → writing* → Emotional Gutting · What's Your Fantasy? |
+| 2023 | What's Your Fantasy? | `reading` | What Turns You On? · Breaking Up with Boring Books |
+| 2023 | Your Cover's Job | `bookcraft` | Reader's Invisible Eye · Covers Facelift Part 1 |
+| 2023 | Your Reader's Invisible Eye | `bookcraft` | Your Cover's Job · Emotional Gutting 101 |
+| 2024 | Peek Behind the Writer's Curtain | `process` | Saying Goodbye · Style vs. Correctness |
+### 25.4 What it would do to the graph
+
+The point of the whole programme. Measured today: **8 edges, 43 isolated notes (79%)**. The proposal gives every post ~2 outgoing links, so:
+
+| | Today | Proposed |
+| --- | --- | --- |
+| link edges | 8 | **~90** |
+| isolated notes | 43 (79%) | **0** |
+| tag pages | 0 | **8** |
+
+That is the difference between a graph that looks broken and one that looks like a Desk. It also makes `backlinks` (bottom-right of every post) worth reading for the first time.
+
+### 25.5 How it would be applied — and what I need from you
+
+**One commit, vault-first, the same way as every other change.** For each of the 49 posts: add the tag to `tags:` in frontmatter, and insert 2 `[[wikilinks]]` in the body where they genuinely belong in the prose (not dumped at the bottom — a link that reads like furniture is worse than no link). Then rebuild, run the suite, and add a guard that asserts **no note is isolated** so the graph can't silently rot back.
+
+**Before I touch anything, two things:**
+
+1. **Is the vocabulary right?** Eight spheres, each post in exactly one. If `craft-plot` / `craft-character` should be one `craft`, or `bookcraft` should fold into `craft`, say so now — it is trivial to change now and annoying to change after 49 files.
+2. **Are the contested calls right?** The four flagged in §25.3. Those are judgement, not fact.
+
+Also worth deciding, though it does not block the tags: **`publish: true` exists on 49 notes and `type:` is set on all of them** — Quartz's `content-index` and tag pages read `tags:` from frontmatter automatically, so no code change is needed for tags to work. The folders are a *narrative* choice, not a technical dependency — the URL structure survives untouched even after the year folders stop being the way you navigate.
+| 2024 | Crack the Code to Creative Genius | `systems` | *ChatGPT* → App-Building Sidequest · Plan Novel Process |
+| 2024 | How a Ghost Gave Me a Story Epiphany | `craft-plot` | Sourcing Intrigue · What Turns You On? |
+| 2024 | Successfully Fail at Deadlines | `mindset` | Banish Imposter Syndrome · Who Needs Goals? |
+| 2024 | How to Write a Screenplay | `craft-plot` | *format/structure* → Overplotting an Outline · Ghost Epiphany |
+| 2024 | I bought a typewriter! | `systems` | *the tool as delight* → My Legs Hurt · The Furry Region |
+| 2024 | Favourite Books of 2024 | `reading` | Nerdiest Book Roundup · Book Awards 2024 |
+| 2024 | First Draft Is So Terrible | `process` | Starting a First Draft · Dangers of Overplotting |
+| 2024 | My Legs Hurt | `mindset` | I bought a typewriter! · An Enforced Break |
+| 2024 | Saying Goodbye | `process` | Peek Behind the Curtain · Third Draft is Finished |
+| 2024 | Starting a First Draft | `process` | First Draft Is So Terrible · Plan Novel Process |
+| 2024 | Stormhouse Book Awards 2024 | `reading` | *awards, but a reading list* → Nerdiest Book Roundup · Favourite Books 2024 |
+| 2024 | Who Needs Goals? Not Us. | `systems` | Master Your Calendar · Successfully Fail at Deadlines |
+| 2024 | Overplotting a Novel's Outline | `craft-plot` | Dangers of Overplotting · How to Write a Screenplay |
+| 2025 | Plan Novel Process on Notion | `systems` | Starting a First Draft · Crop Rotation |
+| 2025 | App-Building Sidequest | `systems` | Crack the Code to Creative Genius · Master Your Calendar |
+| 2025 | Dangers of Overplotting | `craft-plot` | Overplotting an Outline · First Draft Is So Terrible |
+| 2025 | Covers Facelift Part 1 | `bookcraft` | Your Cover's Job · Covers Facelift Part 2 |
+| 2025 | Covers Facelift Part 2 | `bookcraft` | Covers Facelift Part 1 · Your Cover's Job |
+| 2025 | Third Draft is Finished! | `process` | Saying Goodbye · 5 Lessons: First Sequel |
+| 2025 | Using Actors to Improve Writing | `craft-character` | *acting informs character* → Sweeten Up Unlikeable · How To Build a Human |
+| 2026 | A Fiancé Has Flatlined is out now! | `news` | New Book is Coming Out · Third Draft is Finished |
+| 2026 | My new book is coming out! | `news` | A Fiancé Has Flatlined · The Seen Team is Back! |
+
+**The contested calls** (flagged so they can be argued with, not buried): *Cut Through the Noise* (`mindset` — it's about audience, not craft); *Style vs. Correctness* and *The Art of Restraint* (`process`, not `craft-plot` — they're editing craft, and `process` is the drafting/revision home); *What Turns You On?* (`craft-character` over `reading` — taste *in service of* writing); *Book Awards* (`reading`, not `news` — it's a list, not an announcement).
+- **They do NOT replace dates.** Publication year stays in frontmatter and on the post; the year folders can be retired from *navigation* without touching the *record*.
+- **`breadcrumbs` revisit point** (§22.2 step 3) lands here: once a post's trail can be `tag → post` rather than `folder → year → post`, the breadcrumb's job is done (D17).
 - **Measure before claiming.** Every row above carries a count and a command that reproduces it.
 - **Never delete a rule on a hunch.** F5 nearly cost a day of genuine editorial dates. If a finding says "this is unused", it must show the *zero*.
 - **Log the dismissed ones too.** F6–F8 cost five minutes and save the next session from re-running them.
