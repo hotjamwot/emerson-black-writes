@@ -44,9 +44,16 @@ function htmlFiles(dir, acc = []) {
 
 const files = htmlFiles(SITE)
 
-/** `/desk/newsletters/index.html` and the per-year folders are thin archives. */
+/** Pages that must never be advertised to a crawler. */
 const isThinFolderPage = (p) =>
   /^desk\/newsletters\/(index\.html|\d{4}\/index\.html)$/.test(p) || p === "desk/brain/index.html"
+
+/**
+ * The 404 page is NOT a result — listing it invites crawlers to index a page
+ * that only exists to say "not here". A first version shipped it (caught by
+ * resolving every URL in the live sitemap, not by reading the file).
+ */
+const isErrorPage = (p) => /(^|\/)404\.html$/.test(p) || p === "desk/404/index.html"
 
 /**
  * Map a built file to its public URL.
@@ -54,24 +61,32 @@ const isThinFolderPage = (p) =>
  * Directory indexes become trailing-slash URLs (`/desk/tags/`), matching how
  * Quartz links to folders.
  *
- * Post and tag pages drop the `.html` suffix. This matters: GitHub Pages serves
- * BOTH `/desk/tags/process` and `/desk/tags/process.html`, but Quartz's own
- * internal links are extensionless (verified: `<a href="../../newsletters/2024/
- * writing-abroad">`). Emitting the `.html` form in the sitemap would advertise
- * a second URL for the same page, splitting crawl signals across two addresses.
- * Follow the same form the site's own links already use.
+ * Post and tag pages drop the `.html` suffix. Pages serves BOTH
+ * `/desk/tags/process` and `/desk/tags/process.html`, but Quartz's own
+ * internal links are extensionless (verified live), so the `.html` form would
+ * advertise a second address for the same page and split crawl signals.
+ *
+ * NEWSPLETTER FOLDERS ARE LOWERCASED, and this matters more than it looks.
+ * Quartz emits the directory as `Newsletters/` (capital N) because that is the
+ * content folder's name, while every link it generates is lowercase
+ * `newsletters/`. Pages serves either. A first version listed the capitalised
+ * path too, and the live sitemap shipped **50 `Newsletters/` URLs alongside 49
+ * `newsletters/` ones — every post listed twice**, with crawl signals split
+ * across two addresses. We list only the lowercase form the site's own links
+ * use.
  */
 function urlFor(p) {
-  if (p === "index.html") return "/"
-  if (p.endsWith("/index.html")) return "/" + p.slice(0, -"index.html".length)
-  return "/" + p.replace(/\.html$/, "")
+  const lowered = p.toLowerCase()
+  if (lowered === "index.html") return "/"
+  if (lowered.endsWith("/index.html")) return "/" + lowered.slice(0, -"index.html".length)
+  return "/" + lowered.replace(/\.html$/, "")
 }
 
 // Newest first is not derivable from mtimes in CI, and `lastmod` is advisory
 // to crawlers anyway — so we sort by URL for a STABLE, diff-friendly output
 // rather than emitting a value that would churn every build.
 const urls = files
-  .filter((p) => !isThinFolderPage(p))
+  .filter((p) => !isThinFolderPage(p) && !isErrorPage(p))
   .map(urlFor)
   .filter((u) => u !== "/brain/")
   .sort()
@@ -82,6 +97,18 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${urls.map((u) => `  <url>\n    <loc>${ORIGIN}${u}</loc>\n  </url>`).join("\n")}
 </urlset>
 `
+// SELF-CHECK — run BEFORE writing, so a bad sitemap never reaches disk.
+const dupes = urls.filter((u, i) => urls.indexOf(u) !== i)
+if (dupes.length) {
+  console.error(`ERROR: sitemap would contain duplicate URLs: ${[...new Set(dupes)].join(", ")}`)
+  process.exit(1)
+}
+const uppercase = urls.filter((u) => /[A-Z]/.test(u))
+if (uppercase.length) {
+  console.error(`ERROR: sitemap would contain uppercase paths (Pages is case-insensitive, so these duplicate the lowercase URLs): ${uppercase[0]}`)
+  process.exit(1)
+}
+
 writeFileSync(join(SITE, "sitemap.xml"), sitemap)
 
 const robots = `# Emerson Black — ${ORIGIN}
