@@ -50,18 +50,11 @@ jobs:
           # Copy storefront root files and directories
           cp index.html bio.html CNAME style.css README.md _site/
           cp -R img _site/
-          # S11 §11.3b: render the storefront's "Latest" desk picks.
-          # MUST run AFTER the cp above, and MUST operate on the _site COPY —
-          # never on the source index.html. Rendering the source would bake a
-          # snapshot of "latest" into a committed file, which is precisely the
-          # hand-maintained-list rot we avoided for the sitemap. The script is
-          # idempotent, so a no-op rebuild is a clean pass rather than a failure.
-          node brain/scripts/render-desk-picks.mjs brain brain/public _site/index.html
           # S11 §11.3: post dates for the storefront's "From the Desk" section.
-          # MUST RUN BEFORE the Quartz copy below. Upstream's contentIndex.json
+          # MUST run BEFORE the Quartz copy below. Upstream's contentIndex.json
           # deletes the date on purpose, so this writes a separate purpose-built
           # file — and it lands in brain/public/static/, which is only copied into
-          # _site/desk/ by the very next command. Generating it afterwards wrote
+          # _site/desk/ by a later command. Generating it after that copy wrote
           # the file to a directory that had already been copied, and it silently
           # never reached the artifact.
           #
@@ -70,6 +63,18 @@ jobs:
           # shown on the page (frontmatter 2025-02-14 renders as Feb 14 while
           # datetime="2025-02-13T21:00Z").
           node brain/scripts/export-post-dates.mjs brain brain/public
+          # S11 §11.3b: render the storefront's "Latest" desk picks.
+          # ⚠️ MUST RUN AFTER export-post-dates (above). It READS
+          # brain/public/static/postDates.json, which the Quartz build does not
+          # produce — running it first dies with ENOENT. This shipped once
+          # because postDates.json already existed locally from an earlier build,
+          # so the script appeared to work; only a CLEAN CLONE exposed it. Always
+          # reproduce a deploy from a fresh clone, never from a working copy.
+          #
+          # It operates on the _site COPY, never the source index.html, so no
+          # snapshot of "latest" is ever committed. Idempotent, so a no-op rebuild
+          # is a clean pass rather than a failed deploy.
+          node brain/scripts/render-desk-picks.mjs brain brain/public _site/index.html
           # Copy Quartz build output to /desk/
           cp -R brain/public/. _site/desk/
           # Remove duplicate CNAME created by Quartz inside /desk/
