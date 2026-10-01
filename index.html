@@ -27,79 +27,126 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&display=swap">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="img/favicon.png" type="image/png">
+
+    <!-- S11 §11.4 — the storefront now has a real header. Anchors only: this is a
+         one-page site, and in-page targets work on a static host with no JS, no
+         smooth-scroll library and no router. #books and #desk are the two places
+         a reader actually wants to go; "About" is #about at the foot of the page.
+         All of them EXIST as sections — verified by the §11.5 anchor guard, which
+         fails the deploy if a link points at an id the page does not contain. -->
 </head>
 <body>
-    <main class="main-content">
-<!-- 1. Hero Section - Full screen visual -->
-        <section class="hero-full">
-            <div class="hero-full-content">
-                <div class="hero-book">
-                    <img src="img/covers/cover_fiance_has_flatlined.webp" alt="A Fiancé Has Flatlined - Out Now">
-                    <span class="hero-badge">NEW BOOK<br>OUT NOW</span>
+    <a class="skip-link" href="#books">Skip to the books</a>
+
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="wordmark" href="#top" aria-label="Emerson Black — home">
+                <span class="wordmark-name">Emerson Black</span>
+                <span class="wordmark-series">Seen in Silverbridge</span>
+            </a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="#books">Books</a>
+                <a href="#desk">Desk</a>
+                <a href="#about">About</a>
+                <a href="https://emersonblackwrites.substack.com/" target="_blank" rel="noopener">Subscribe</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content" id="top">
+<!-- 1. HERO — S11 §11.3c. Replaced the "Book 3 is out now!" launch banner.
+
+         WHY THIS IS A REWRITE AND NOT AN EDIT. The old hero's h1 was a dated
+         headline ("Book 3 is out now!") with a "NEW BOOK / OUT NOW" badge. It
+         had to be rewritten every few months, and each rewrite was a chance to
+         forget — a treadmill, not a homepage. It also buried the free novella,
+         which is the single best conversion this site has.
+
+         The new hero leads with the SERIES, which is the thing that does not
+         expire: three books, one premise, and a free entry point that stays
+         current no matter how many books follow. Nothing here needs editing
+         when Book 4 ships. If a future launch should be promoted, it belongs in
+         the books grid as a badge — not in the h1.
+
+         min-height is 100dvh, not 100vh (see style.css): on mobile Safari 100vh
+         includes the address bar, so a 100vh hero always overflows slightly. -->
+        <section class="hero">
+            <div class="hero-inner">
+                <p class="hero-eyebrow">A Seen in Silverbridge novel</p>
+                <h1 class="hero-title">The funniest moment comes<br>right before it all goes wrong.</h1>
+                <p class="hero-sub">
+                    Friendship is survival. Love complicates justice. Four student
+                    journalists take on a town that has spent a very long time
+                    protecting the people who run it.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn-primary btn-lg" href="#start-reading">Start free &mdash; read Book 0</a>
+                    <a class="btn-ghost" href="#books">See the whole series</a>
                 </div>
-                <div class="hero-text">
-                    <h1>Book 3 is out now!</h1>
-                    <p class="tagline">⚽ SILVERBRIDGE ARROWS GOALIE DEAD OF SUSPECT OVERDOSE! ⚽</p>
-                    <p class="series-desc">And Luce's engagement party was going so well...</p>
-                    <div class="hero-buttons">
-                        <a class="btn-primary" href="https://a.co/d/0bxUbDmW" target="_blank">Buy on Amazon</a>
-                        <a class="btn-secondary" href="#books">View The Books</a>
-                    </div>
-                </div>
+                <p class="hero-note">3 books published &middot; a fourth is coming</p>
             </div>
         </section>
 
-        <!-- 2. Books Section -->
+        <!-- 2. BOOKS — #books is the nav's main target and the page's centre of gravity.
+             The four are in reading order, cheapest to most expensive to commit to:
+             Book 0 is free, so the grid is also the funnel. Fixed "engagment" and
+             "blows up" in the old blurbs. -->
         <section id="books" class="books">
-            <h2>THE SERIES</h2>
+            <h2>The series</h2>
             <div class="book-grid">
-                <div class="book prequel">
+                <div class="book book-free">
                     <div class="book-cover">
-                        <img src="img/covers/cover_student_has_drowned.webp" alt="A Student Has Drowned">
+                        <img src="img/covers/cover_student_has_drowned.webp" alt="A Student Has Drowned" loading="lazy" width="500" height="750">
+                        <span class="book-badge">Free</span>
                     </div>
                     <div class="book-content">
-                        <h3><span>Book 0:</span>A Student Has Drowned</h3>
-                        <p>The prequel novella. Begin your journey in Silverbridge with this free introduction.</p>
-                        <a href="#start-reading" class="button">Get Free</a>
+                        <h3><span>Book 0</span>A Student Has Drowned</h3>
+                        <p>The prequel novella, and the easiest place to start. A drowned student, a rowing club with too many secrets, and a paper that should have folded years ago.</p>
+                        <a href="#start-reading" class="button">Get it free</a>
                     </div>
                 </div>
                 <div class="book">
                     <div class="book-cover">
-                        <img src="img/covers/cover_rockstar_has_exploded.webp" alt="A Rock Star Has Exploded">
+                        <img src="img/covers/cover_rockstar_has_exploded.webp" alt="A Rock Star Has Exploded" loading="lazy" width="500" height="750">
                     </div>
                     <div class="book-content">
-                        <h3><span>Book 1:</span>A Rock Star Has Exploded</h3>
-                        <p>Join Luce and Huds on their first accidental murder case, a Swedish rock star who blows up in his hotel suite.</p>
-                        <a href="https://amzn.eu/d/2hPym9v" class="button" target="_blank">Buy Book</a>
+                        <h3><span>Book 1</span>A Rock Star Has Exploded</h3>
+                        <p>Luce and Huds pick up their first accidental murder case: a Swedish rock star who detonates in his own hotel suite.</p>
+                        <a href="https://amzn.eu/d/2hPym9v" class="button" target="_blank" rel="noopener">Buy book</a>
                     </div>
                 </div>
                 <div class="book">
                     <div class="book-cover">
-                        <img src="img/covers/cover_actress_is_missing.webp" alt="An Actress Is Missing">
+                        <img src="img/covers/cover_actress_is_missing.webp" alt="An Actress Is Missing" loading="lazy" width="500" height="750">
                     </div>
                     <div class="book-content">
-                        <h3><span>Book 2:</span>An Actress Is Missing</h3>
-                        <p>Luce, Huds, Faven and Rodney are back! Stella Winston-Frazer, a famous actress, has gone missing...</p>
-                        <a href="https://amzn.eu/d/7QcaE4n" class="button" target="_blank">Buy Book</a>
+                        <h3><span>Book 2</span>An Actress Is Missing</h3>
+                        <p>The whole team returns. Stella Winston-Frazer has gone missing, and the people who want her found are not the people who want her safe.</p>
+                        <a href="https://amzn.eu/d/7QcaE4n" class="button" target="_blank" rel="noopener">Buy book</a>
                     </div>
                 </div>
                 <div class="book">
                     <div class="book-cover">
-                        <img src="img/covers/cover_fiance_has_flatlined.webp" alt="A Fiancé Has Flatlined">
+                        <img src="img/covers/cover_fiance_has_flatlined.webp" alt="A Fiancé Has Flatlined" loading="lazy" width="500" height="750">
+                        <span class="book-badge book-badge-new">Latest</span>
                     </div>
                     <div class="book-content">
-                        <h3><span>Book 3:</span>A Fiancé Has Flatlined</h3>
-                        <p>When the Silverbridge Arrows goalie dies at Luce and Jordan's engagment party, the Seen team take up the case.</p>
-                        <a href="https://a.co/d/0bxUbDmW" class="button" target="_blank">Buy Now</a>
+                        <h3><span>Book 3</span>A Fiancé Has Flatlined</h3>
+                        <p>The Silverbridge Arrows goalkeeper is found dead at Luce's engagement party. The Seen team take the case.</p>
+                        <a href="https://a.co/d/0bxUbDmW" class="button" target="_blank" rel="noopener">Buy book</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. Series Hook Section -->
+        <!-- 3. SERIES HOOK — the premise, immediately after the covers. Substantively
+             unchanged: this was the best writing on the page and it sat in third
+             position behind a launch banner. Now it is the second thing read. The
+             two silhouettes are decorative, so they are aria-hidden — the names are
+             already in the text, and an unlabelled "alt=Luce" repeated the prose. -->
         <section class="series-hook">
             <div class="series-hook-visuals">
-                <img src="img/characters/luce_silhouette.png" alt="Luce" class="hook-character hook-luce">
+                <img src="img/characters/luce_silhouette.png" alt="" class="hook-character hook-luce" loading="lazy" aria-hidden="true">
             </div>
             <div class="series-hook-text">
                 <p>It started with an explosion.</p>
@@ -111,23 +158,25 @@
                 <p class="hook-punchline">In Silverbridge, power protects its own — until four student journalists decide it doesn't have to.</p>
             </div>
             <div class="series-hook-visuals">
-                <img src="img/characters/huds_silhouette.png" alt="Huds" class="hook-character hook-huds">
+                <img src="img/characters/huds_silhouette.png" alt="" class="hook-character hook-huds" loading="lazy" aria-hidden="true">
             </div>
         </section>
 
-        <!-- 4. Start Reading Section -->
+        <!-- 4. START READING — the conversion. Now reached from the hero's primary
+             button, so the free novella is the FIRST thing offered rather than
+             something a visitor had to scroll to discover. -->
         <section id="start-reading" class="start-reading">
-            <h2>GET THE FREE NOVELLA</h2>
+            <h2>Start free</h2>
             <div class="prequel-book">
                 <div class="prequel-cover">
-                    <img src="img/covers/cover_student_has_drowned.webp" alt="A Student Has Drowned">
+                    <img src="img/covers/cover_student_has_drowned.webp" alt="A Student Has Drowned — the free prequel novella" loading="lazy" width="500" height="750">
                 </div>
                 <div class="prequel-content">
                     <h3>A Student Has Drowned</h3>
                     <p class="prequel-subtitle">The mystery that started the Seen in Silverbridge series.</p>
-                    <p>Enter your email and I'll send you the EPUB instantly.</p>
+                    <p>Drop your email and the EPUB lands in your inbox. No drip sequence, no newsletter to escape — just the book.</p>
                     <div class="substack-embed">
-                        <iframe src="https://emersonblackwrites.substack.com/embed" width="480" height="320" style="border: 1px solid #EEE; background: white" frameborder="0" scrolling="no"></iframe>
+                        <iframe src="https://emersonblackwrites.substack.com/embed" title="Subscribe to receive A Student Has Drowned" width="480" height="320" loading="lazy" style="border: 1px solid #EEE; background: white" frameborder="0" scrolling="no"></iframe>
                     </div>
                 </div>
             </div>
@@ -184,33 +233,33 @@
             </p>
         </section>
 
-        <!-- 5. Characters Section -->
+        <!-- 5. CHARACTERS -->
         <section id="characters" class="characters">
-            <h2>THE JOURNALISTS</h2>
+            <h2>The journalists</h2>
             <div class="character-grid">
                 <div class="character-card">
-                    <img src="img/characters/luce_silhouette.png" alt="Luce Sharp">
+                    <img src="img/characters/luce_silhouette.png" alt="Luce Sharp" loading="lazy">
                     <div class="character-card-content">
                         <h3>Luce Sharp <span class="character-age">22</span></h3>
                         <p class="character-desc">Sharp-tongued and ambitious. The engine of the group, torn between love and truth.</p>
                     </div>
                 </div>
                 <div class="character-card">
-                    <img src="img/characters/huds_silhouette.png" alt="Hudson Haile">
+                    <img src="img/characters/huds_silhouette.png" alt="Hudson Haile" loading="lazy">
                     <div class="character-card-content">
                         <h3>Hudson "Huds" Haile <span class="character-age">22</span></h3>
                         <p class="character-desc">Kind and intelligent, but quietly reckless. The moral counterweight to Luce.</p>
                     </div>
                 </div>
                 <div class="character-card">
-                    <img src="img/characters/faven_silhouette.png" alt="Faven Osmun">
+                    <img src="img/characters/faven_silhouette.png" alt="Faven Osmun" loading="lazy">
                     <div class="character-card-content">
                         <h3>Faven Osmun <span class="character-age">19</span></h3>
                         <p class="character-desc">Shy but strategically brilliant. An immigrant student finding her footing.</p>
                     </div>
                 </div>
                 <div class="character-card">
-                    <img src="img/characters/rodney_silhouette.png" alt="Rodney Holliday">
+                    <img src="img/characters/rodney_silhouette.png" alt="Rodney Holliday" loading="lazy">
                     <div class="character-card-content">
                         <h3>Rodney Holliday <span class="character-age">48</span></h3>
                         <p class="character-desc">Veteran investigative journalist. The moral anchor and reluctant adult in the room.</p>
@@ -219,27 +268,50 @@
             </div>
         </section>
 
-        <!-- 6. Author Section -->
-        <section class="author">
-            <img src="img/author/emerson_black_portrait.webp" alt="Emerson Black">
-            <div class="author-bio">
+        <!-- 6. ABOUT — now the destination the nav's "About" points at, absorbing
+             what used to be bio.html.
+
+             WHY bio.html WAS FOLDED IN RATHER THAN KEPT. The old page was two
+             sentences and a portrait, on its own URL, that a visitor had to be
+             told about. It duplicated the author block that already sat at the foot
+             of the homepage, and it was the one page on the site carrying a
+             duplicate canonical/OG block to keep in sync. One page with a real
+             about section beats two pages, one of which is a stub.
+
+             /bio.html is NOT deleted — it still exists as a redirect, because it is
+             a live URL an agent may already have bookmarked and a 404 is a worse
+             answer than a jump. See bio.html.
+             -->
+        <section id="about" class="about">
+            <div class="about-media">
+                <img src="img/author/emerson_black_portrait.webp" alt="Emerson Black" loading="lazy" width="600" height="600">
+            </div>
+            <div class="about-body">
+                <p class="about-eyebrow">About the author</p>
                 <h2>Emerson Black</h2>
-                <p>Emerson Black writes warm, witty mystery thrillers about young journalists uncovering corruption inside elite institutions.</p>
-                <p>Originally from New Zealand, Emerson now lives in London.</p>
-                <a href="https://emersonblackwrites.substack.com/" class="btn-primary" target="_blank">Subscribe</a>
+                <p>Emerson writes warm, witty YA mystery thrillers about young journalists uncovering corruption inside the institutions that are supposed to be running the place. The tone is affectionate rather than cynical: these are books about people who love their town and are willing to be angry on its behalf.</p>
+                <p>Originally from New Zealand, Emerson now lives in London — which is a considerable distance to maintain an accent for, and shows in the dialogue.</p>
+                <p>Beyond the fiction there's <a href="#desk">the Desk</a>, a fortnightly note on what it's like to actually write these things: the plotting, the drafting, the parts that go wrong. If you're interested in the craft rather than the cons, that's the more honest version of this site.</p>
+                <div class="about-actions">
+                    <a class="btn-primary" href="https://emersonblackwrites.substack.com/" target="_blank" rel="noopener">Subscribe</a>
+                    <a class="btn-ghost" href="mailto:emerson.black.writes@gmail.com">Get in touch</a>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Emerson Black.<br>
-            Want to get in touch? I'd love to hear from you. <a href="mailto:emerson.black.writes@gmail.com">Email me</a>.</p>
-        <p class="footer-nav">
-            <a href="#books">The Books</a> &middot;
-            <a href="bio.html">About</a> &middot;
-            <a href="desk/">Emerson's Desk &mdash; newsletter archive</a> &middot;
-            <a href="https://emersonblackwrites.substack.com/" target="_blank">Subscribe</a>
-        </p>
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <p class="footer-wordmark">Emerson Black</p>
+            <p>Want to get in touch? I'd love to hear from you. <a href="mailto:emerson.black.writes@gmail.com">Email me</a>.</p>
+            <p class="footer-nav">
+                <a href="#books">The Books</a> &middot;
+                <a href="#about">About</a> &middot;
+                <a href="desk/">The Desk</a> &middot;
+                <a href="https://emersonblackwrites.substack.com/" target="_blank" rel="noopener">Subscribe</a>
+            </p>
+            <p class="footer-legal">&copy; 2026 Emerson Black. <a href="bio.html">bio.html</a></p>
+        </div>
     </footer>
 </body>
 </html>

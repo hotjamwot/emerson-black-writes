@@ -12,7 +12,9 @@
  *
  * COVERED
  *   /                      storefront homepage
- *   /bio.html              author page
+ *
+ * NOT listed: /bio.html — a redirect stub to /#about, carrying noindex. See
+ * isRedirectStub() below for why a noindex URL must not appear in a sitemap.
  *   /desk/                 Desk landing page
  *   /desk/newsletters/**   every published post
  *   /desk/tags/**          every tag page (real discovery surface)
@@ -67,6 +69,22 @@ const isErrorPage = (p) => {
 }
 
 /**
+ * S11 §11.3c — bio.html is now a redirect stub to the homepage's #about section.
+ *
+ * It is EXCLUDED from the sitemap, and that is not an oversight: the page
+ * carries `<meta name="robots" content="noindex">` and a canonical pointing at
+ * the homepage. Listing a noindex URL in a sitemap is a contradiction — it tells
+ * a crawler "index this" while the page itself says "do not". Google follows
+ * whichever it sees first, and either outcome is a small amount of wasted
+ * crawl budget spent on a page that only exists to hand over.
+ *
+ * The file is deliberately still deployed (a live URL must not become a 404);
+ * it is only kept out of the index. The deploy guard checks that it remains a
+ * working redirect.
+ */
+const isRedirectStub = (p) => p.toLowerCase() === "bio.html"
+
+/**
  * Map a built file to its public URL.
  *
  * Directory indexes become trailing-slash URLs (`/desk/tags/`), matching how
@@ -111,7 +129,7 @@ function urlFor(p) {
 const urls = [
   ...new Set(
     files
-      .filter((p) => !isThinFolderPage(p) && !isErrorPage(p))
+      .filter((p) => !isThinFolderPage(p) && !isErrorPage(p) && !isRedirectStub(p))
       .map(urlFor)
       .filter((u) => u !== "/brain/")
   ),

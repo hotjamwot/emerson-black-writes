@@ -1,6 +1,19 @@
 /* ============================================
-   EMERSON BLACK - YA Mystery Theme
-   Simplified CSS (~400 lines)
+   EMERSON BLACK — storefront
+   Dark, warm, bookish. Rebuilt in S11 §11.3c.
+
+   STRUCTURE
+   1  Tokens        2  Reset & base   3  Header     4  Hero
+   5  Buttons       6  Books          7  Series hook
+   8  Start reading 9  Desk          10 Characters
+   11 About        12 Footer        13 bio.html redirect
+
+   HOUSE RULES
+   - Sections escape .main-content's measure with .bleed and re-centre with
+     .shell, so the full-bleed mechanism exists in one place. The old file did it
+     by hand — width:100vw + negative margin, six times over.
+   - Motion is behind prefers-reduced-motion. The old file animated
+     unconditionally, which is an accessibility bug rather than a preference.
    ============================================ */
 
 :root {
@@ -33,17 +46,29 @@
     --accent-red: #E63A3A;
     --accent-red-bright: #EC585F;
     
+    /* Surfaces, named. The old file wrote rgba(255,255,255,0.1) inline eleven
+       times, plus a --border-color token it never actually defined — a fallback
+       was quietly covering a mistake. */
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --surface: rgba(255, 255, 255, 0.02);
+    --surface-hover: rgba(255, 255, 255, 0.05);
+
     /* Spacing */
+    --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
     --space-lg: 2rem;
     --space-xl: 4rem;
     --space-2xl: 6rem;
+
+    --shell: 1100px;
+    --radius: 10px;
 }
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
 
 body {
     background: var(--bg-deep);
@@ -68,178 +93,294 @@ body::after {
     z-index: 9999;
 }
 
-/* Typography */
+/* Typography. Headings are NOT globally uppercased any more: the old rule here
+   applied text-transform:uppercase to every h1-h3, which is why the page shouted
+   "THE SERIES" and "GET THE FREE NOVELLA". Uppercasing is now an explicit
+   decision per heading, taken in §6, §8 and §11 — and the h1 is a sentence
+   because that is what a pitch is. */
 h1, h2, h3 {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1.2;
+    font-weight: 600;
+    line-height: 1.15;
 }
 
-h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
-h3 { font-size: 1.15rem; }
+/* One focus style sitewide. The old file defined none, so keyboard users had no
+   visible indication of where they were. */
+:focus-visible {
+    outline: 2px solid var(--accent-red-bright);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Keyboard users land here first; sighted users never see it. */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 10000;
+    background: var(--accent-red);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.skip-link:focus { left: 0; color: var(--text-primary); }
+
+/* Motion is a preference, not a default. */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
 
 p { color: var(--text-secondary); margin-bottom: var(--space-md); }
 a { color: var(--accent-red); text-decoration: none; transition: color 0.25s ease; }
 a:hover { color: var(--accent-red-bright); }
 
-/* Layout */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
-}
-
+/* ---------- Layout helpers ----------
+   .main-content holds the page's reading measure. Sections wanting a full-bleed
+   background use .bleed to break out of it and .shell to re-centre their text —
+   so the escape hatch lives in one place instead of being hand-rolled per
+   section, as it was six times over in the old file. */
 .main-content {
     width: 100%;
-    max-width: 1100px;
+    max-width: var(--shell);
     margin: 0 auto;
-    padding: var(--space-2xl) 0;
+    padding: 0 var(--space-lg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xl);
 }
 
-/* Header */
-header {
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    background: linear-gradient(180deg, var(--bg-deep) 0%, transparent 100%);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-}
-
-.header-content { display: flex; justify-content: center; align-items: center; }
-
-header h1 a {
-    font-family: var(--font-display);
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: var(--text-primary);
-    text-decoration: none;
-}
-
-header h1 a:hover { color: var(--accent-red); }
-
-/* Hero Section - Full screen visual */
-.hero-full {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: var(--space-2xl) var(--space-lg);
-    background: linear-gradient(180deg, rgba(2, 8, 16, 0.6) 0%, rgba(11, 25, 38, 0.8) 100%), url("img/hero/silverbridge_campus_night.webp");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    overflow: hidden;
+.bleed {
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    margin-top: -100px;
+    position: relative;
 }
 
-.hero-full-content { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: var(--space-xl); 
-    max-width: 1000px; 
-    width: 100%; 
+.shell {
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
 }
 
-.hero-full .hero-book { position: relative; flex-shrink: 0; }
-
-.hero-full .hero-book img {
-    width: 320px;
-    aspect-ratio: 5 / 8;
-    object-fit: cover;
-    border-radius: 4px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 0 3px var(--accent-red);
-}
-
-.hero-full .hero-badge {
-    position: absolute;
-    top: -15px;
-    right: -30px;
-    background: var(--accent-red);
-    color: var(--text-primary);
-    padding: 12px 16px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+/* Shared section heading, so every section reads as one system. */
+.section-title {
+    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     text-align: center;
-    line-height: 1.3;
-    transform: rotate(8deg);
-    box-shadow: 0 4px 15px rgba(227, 28, 61, 0.5);
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
 }
 
-.hero-full .hero-text { text-align: left; max-width: 500px; }
+/* An anchor target needs its own offset too, because the sticky header is a
+   sibling of these sections rather than an ancestor. */
+#books, #desk, #about, #characters, #start-reading, #top {
+    scroll-margin-top: 5rem;
+}
 
-.hero-full h1 {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin-bottom: var(--space-md);
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+/* ---------- 3. Header ----------
+   Was position:absolute over the hero, a centred <h1>, and not a nav at all —
+   the Desk was reachable only by scrolling or via the footer. Now sticky, with
+   the wordmark and the four places worth going. */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(6, 13, 20, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+}
+
+.site-header-inner {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0.9rem var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+}
+
+.wordmark {
+    display: flex;
+    flex-direction: column;
     line-height: 1.1;
+    color: var(--text-primary);
+}
+.wordmark:hover { color: var(--text-primary); }
+
+.wordmark-name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
 }
 
-.hero-full .tagline { font-size: clamp(1.1rem, 2vw, 1.35rem); color: var(--text-secondary); margin-bottom: var(--space-md); }
-.hero-full .series-desc { font-size: 1.3rem; color: var(--text-primary); margin-bottom: var(--space-lg); font-style: italic; font-weight: 400; letter-spacing: 0.02em; }
-.hero-full .hero-buttons { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+.wordmark-series {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
 
-/* Buttons */
-.btn-primary, .button {
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.9rem, 2.5vw, 2rem);
+}
+
+.site-nav a {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.site-nav a:hover {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-red);
+}
+
+/* ---------- 4. Hero ----------
+   Replaces the "Book 3 is out now!" launch banner, whose h1 was a dated headline
+   that had to be rewritten every few months. This one leads with the series,
+   which is the part that does not expire. */
+.hero {
+    /* 100dvh, NOT 100vh. On mobile Safari 100vh includes the address bar, so a
+       100vh hero always overflows the viewport slightly and janks on load. */
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+    /* background-attachment:fixed is deliberately GONE. The old hero used it,
+       and it is a well-known mobile performance trap — iOS Safari repaints the
+       entire fixed layer on every scroll frame, which stutters and costs
+       battery. A static `cover` layer looks identical. */
+    background:
+        radial-gradient(ellipse at 50% 35%, rgba(230, 58, 58, 0.14), transparent 62%),
+        linear-gradient(180deg, rgba(2, 8, 16, 0.72) 0%, rgba(11, 25, 38, 0.88) 100%),
+        url("img/hero/silverbridge_campus_night.webp") center / cover no-repeat;
+}
+
+.hero-inner { max-width: 46rem; }
+
+.hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent-red);
+    margin-bottom: var(--space-lg);
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-lg);
+    /* Balances the two lines rather than letting the rag decide. */
+    text-wrap: balance;
+}
+
+.hero-sub {
+    font-size: clamp(1.02rem, 1.6vw, 1.18rem);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 34rem;
+    margin: 0 auto var(--space-xl);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
+}
+
+.hero-note {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ---------- 5. Buttons ----------
+   `transition: all` is deliberately NOT used — it animates properties a
+   stylesheet edit can silently start transitioning, and it costs main-thread
+   work. Each button names the two properties it actually changes. */
+.btn-primary, .button, .btn-secondary, .btn-ghost {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.btn-primary, .button {
     background: var(--accent-red);
     color: var(--text-primary);
     padding: 16px 32px;
-    border-radius: 3px;
-    text-decoration: none;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
     border: none;
-    cursor: pointer;
 }
 
-.btn-primary:hover, .button:hover { background: var(--accent-red-bright); transform: translateY(-2px); color: var(--text-primary); }
+.btn-primary:hover, .button:hover {
+    background: var(--accent-red-bright);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+/* .btn-lg for the hero's primary action. The old hero's button was the same
+   size as every other button on the page, so the most important action on the
+   site had no visual priority over a footer link. */
+.btn-lg { padding: 18px 40px; font-size: 0.86rem; }
 
 .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     background: transparent;
     color: var(--text-primary);
     padding: 14px 30px;
-    border-radius: 3px;
-    text-decoration: none;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
     border: 2px solid var(--text-muted);
-    cursor: pointer;
 }
 
 .btn-secondary:hover { border-color: var(--accent-red); color: var(--accent-red); transform: translateY(-2px); }
+
+/* .btn-ghost — a text-weight action for beside a primary. Used in the hero
+   ("See the whole series") and About ("Get in touch"), where a second solid red
+   button would compete with the first. */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 16px 12px;
+    border: none;
+}
+.btn-ghost:hover { color: var(--text-primary); transform: translateY(-2px); }
 
 /* Series Hook */
 .series-hook {
@@ -313,7 +454,8 @@ header h1 a:hover { color: var(--accent-red); }
     object-fit: cover;
     object-position: center center;
     filter: grayscale(100%) contrast(1.05) brightness(0.85);
-    transition: all 0.3s ease;
+    /* Named, not `all`: this element changes only filter and transform. */
+    transition: filter 0.3s ease, transform 0.3s ease;
     transform: translateY(2px);
 }
 
@@ -371,24 +513,22 @@ header h1 a:hover { color: var(--accent-red); }
     line-height: 1.6;
 }
 
-/* Books Section */
+/* ---------- 6. Books ---------- */
 .books { width: 100%; }
 
-.books h2 {
-    text-align: center;
-    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-    letter-spacing: 0.25em;
-    margin-bottom: var(--space-xl);
-    color: var(--text-primary);
-}
+/* The book titles are the point of this section, so they stay sentence case.
+   Only the "Book N" label is uppercased — that is a label, not a headline. */
+.book h3 { font-size: 1.05rem; line-height: 1.4; color: var(--text-primary); text-transform: none; letter-spacing: 0; }
 
-.books h2::after {
-    content: '';
+.book h3 span {
     display: block;
-    width: 50px;
-    height: 2px;
-    background: var(--accent-red);
-    margin: var(--space-md) auto 0;
+    color: var(--accent-red);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-xs);
 }
 
 .book-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-xl); }
@@ -396,31 +536,37 @@ header h1 a:hover { color: var(--accent-red); }
 .book { display: flex; flex-direction: column; transition: transform 0.3s ease; position: relative; }
 .book:hover { transform: translateY(-6px); }
 
-.book.prequel {
-    grid-column: span 1;
-    background: linear-gradient(135deg, rgba(227, 28, 61, 0.08) 0%, rgba(0, 0, 0, 0.2) 100%);
-    border-radius: 8px;
-    padding: var(--space-lg);
-    border: 1px solid rgba(227, 28, 61, 0.3);
-    box-shadow: 0 0 30px rgba(227, 28, 61, 0.15);
-}
+/* The free novella is the funnel, so it is visually marked as the entry point
+   rather than left to be discovered in the copy. Replaces the old `.prequel`
+   treatment, which tinted the whole card and made the free book look like an
+   error state. */
+.book-free .book-cover { box-shadow: 0 0 0 2px var(--accent-red), 0 12px 30px rgba(0, 0, 0, 0.4); }
+.book-free .book-cover img { filter: none; }
 
-.book.prequel:hover { transform: translateY(-8px); box-shadow: 0 0 40px rgba(227, 28, 61, 0.25); }
-
-.book.prequel::before {
-    content: 'FREE';
+.book-badge {
     position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 12px;
+    left: 12px;
     background: var(--accent-red);
     color: var(--text-primary);
-    padding: 4px 16px;
-    font-size: 0.7rem;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 5px 11px;
     border-radius: 3px;
-    z-index: 10;
+}
+
+/* "Latest" is deliberately quieter than "Free": recency is a weak signal and a
+   book is out of date the moment the next one ships, whereas the free book is
+   free forever. */
+.book-badge-new {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .book-cover {
@@ -588,27 +734,82 @@ header h1 a:hover { color: var(--accent-red); }
     max-width: 28ch;
 }
 
-/* Author Section */
-.author {
+/* ---------- 11. About ----------
+   Absorbs what used to be bio.html — a two-sentence stub on its own URL that
+   duplicated the author block already at the foot of the page. The nav's
+   "About" now lands here. */
+.about {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 300px 1fr;
     gap: var(--space-xl);
-    align-items: center;
-    padding: var(--space-xl) var(--space-lg);
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    margin: var(--space-xl) calc(-1 * var(--space-lg));
+    align-items: start;
+    padding: var(--space-2xl) 0;
+    /* No tinted panel: every other section already has a full-bleed
+       background, and a card inside a full-bleed band competes. This one is
+       plain ground so the eye can finally rest. */
 }
 
-.author img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); }
-.author-bio h2 { color: var(--accent-red); font-size: 1.8rem; margin-bottom: var(--space-md); letter-spacing: 0.1em; }
-.author-bio p { font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: var(--space-md); }
-.author-bio .btn-secondary { margin-top: var(--space-sm); }
+.about-media img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
 
-/* Footer */
-footer { padding: var(--space-xl) 0; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.04); }
-footer p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
-footer a { color: var(--accent-red); }
+.about-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+/* The one place the author's name is set large, in sentence case rather than
+   the old all-caps treatment. */
+.about-body h2 {
+    color: var(--text-primary);
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-lg);
+}
+
+.about-body p { font-size: 1rem; line-height: 1.75; margin-bottom: var(--space-md); }
+
+.about-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg);
+}
+
+/* ---------- 12. Footer ---------- */
+.site-footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-deep);
+    padding: var(--space-xl) 0;
+}
+
+.site-footer-inner {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    text-align: center;
+}
+
+.site-footer p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+.footer-wordmark {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
 
 /* ============================================
    From the Desk — S11 §11.3b
@@ -744,7 +945,7 @@ footer a { color: var(--accent-red); }
 }
 
 /* Footer nav — the thread between the storefront and The Brain */
-footer .footer-nav {
+.site-footer .footer-nav {
     margin-top: var(--space-md);
     font-family: var(--font-display);
     font-size: 0.72rem;
@@ -752,8 +953,28 @@ footer .footer-nav {
     text-transform: uppercase;
 }
 
-footer .footer-nav a { color: var(--text-secondary); }
-footer .footer-nav a:hover { color: var(--accent-red); }
+.site-footer .footer-nav a { color: var(--text-secondary); }
+.site-footer .footer-nav a:hover { color: var(--accent-red); }
+
+/* The bio.html link is intentionally quiet: it is a redirect stub, not a
+   destination, and should never compete with the real pages above it. */
+.footer-legal { margin-top: var(--space-md); font-size: 0.75rem; opacity: 0.65; }
+.footer-legal a { color: var(--text-muted); }
+.footer-legal a:hover { color: var(--text-secondary); }
+
+/* ---------- 13. bio.html redirect page ---------- */
+.redirect-page { display: grid; place-items: center; min-height: 100dvh; padding: var(--space-lg); }
+
+.redirect-card {
+    max-width: 30rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+.redirect-card p { margin: 0; }
+.redirect-card .wordmark-name { color: var(--text-primary); margin-bottom: var(--space-sm); }
 
 /* Responsive */
 @media (max-width: 960px) {
@@ -794,8 +1015,8 @@ footer .footer-nav a:hover { color: var(--accent-red); }
     .character-grid { gap: var(--space-lg); }
     .character-card { min-height: 360px; }
     .character-card-content { padding: 1rem; }
-    .author { grid-template-columns: 1fr; text-align: center; }
-    .author img { max-width: 220px; margin: 0 auto; }
+    .about { grid-template-columns: 1fr; }
+    .about-media img { max-width: 220px; }
     
     .prequel-book { grid-template-columns: 1fr; text-align: center; }
     .prequel-cover img { max-width: 200px; margin: 0 auto; display: block; }
@@ -803,13 +1024,35 @@ footer .footer-nav a:hover { color: var(--accent-red); }
 }
 
 @media (max-width: 600px) {
-    :root { font-size: 14px; }
+    /* ⚠️ `:root { font-size: 14px }` is DELIBERATELY GONE. It shrank every rem in
+       the design at once, and because body copy (1.05rem) and the 0.8rem uppercase
+       buttons were already small, real text on a phone landed near 11.5px. Below
+       this width type now shrinks on its own terms — and 14px is already the
+       smallest we should be asking anyone to read. */
     .book-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
     .series-hook-text { padding: 1.25rem; }
+
+/* ---------- Header on small screens ----------
+   The nav must not wrap onto a second line, and the wordmark must not lose its
+   series line — either would push the hero down. So at phone width the wordmark
+   shrinks and the nav's "Subscribe" is dropped from the header. It stays in the
+   footer and in About, so nothing becomes unreachable, and the page still ships
+   zero JavaScript: a hamburger menu would be the first script on the site. */
+@media (max-width: 700px) {
+    .site-header-inner { padding: 0.7rem var(--space-md); gap: var(--space-sm); }
+    .wordmark-name { font-size: 0.95rem; }
+    .wordmark-series { font-size: 0.55rem; }
+    .site-nav { gap: 0.9rem; }
+    .site-nav a { font-size: 0.65rem; letter-spacing: 0.1em; }
+    .site-nav a[href*="substack"] { display: none; }
+    .shell { padding-left: var(--space-md); padding-right: var(--space-md); }
+    .main-content { padding: 0 var(--space-md); }
+    html { scroll-padding-top: 4.5rem; }
+    #books, #desk, #about, #characters, #start-reading, #top { scroll-margin-top: 4rem; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .hero-actions .btn-primary, .hero-actions .btn-ghost { width: 100%; max-width: 300px; }
+}
     .series-hook .hook-highlight { letter-spacing: 0.1em; }
-    .hero-full .hero-buttons { flex-direction: column; width: 100%; max-width: 280px; }
-    .hero-full .hero-buttons .btn-primary, .hero-full .hero-buttons .btn-secondary { width: 100%; text-align: center; }
-    .hero-full .hero-book img { width: 200px; }
     .character-grid { grid-template-columns: 1fr; gap: var(--space-lg); }
     .character-card { min-height: 340px; }
     .character-card img { min-height: 260px; }

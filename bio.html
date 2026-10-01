@@ -3,60 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Emerson Black | YA Mystery Thrillers</title>
-    <!-- S11 §11.1 — same findability fix as the homepage. This page had no
-         description and no og: tags, so sharing it rendered as bare text. -->
-    <meta name="description" content="Emerson Black writes warm, witty YA mystery-thrillers about young journalists exposing corruption in elite institutions. Originally from New Zealand, now living in London.">
-    <link rel="canonical" href="https://emersonblackwrites.com/bio.html">
-    <meta property="og:type" content="profile">
-    <meta property="og:site_name" content="Emerson Black">
-    <meta property="og:title" content="About Emerson Black | Seen in Silverbridge">
-    <meta property="og:description" content="Originally from New Zealand, now living in London. Emerson writes warm, witty YA mystery-thrillers about young journalists exposing corruption in elite institutions.">
-    <meta property="og:url" content="https://emersonblackwrites.com/bio.html">
-    <meta property="og:image" content="https://emersonblackwrites.com/img/covers/cover_fiance_has_flatlined.webp">
-    <meta property="og:image:alt" content="A Fiancé Has Flatlined — Book 3 of the Seen in Silverbridge series.">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About Emerson Black | Seen in Silverbridge">
-    <meta name="twitter:description" content="Originally from New Zealand, now living in London. Emerson writes warm, witty YA mystery-thrillers.">
-    <meta name="twitter:image" content="https://emersonblackwrites.com/img/covers/cover_fiance_has_flatlined.webp">
+    <title>Emerson Black | YA Mystery Thrillers</title>
+    <!-- S11 §11.3c — this page is now a REDIRECT to the homepage's #about section.
+
+         WHY A REDIRECT RATHER THAN A DELETE. The about copy was folded into the
+         homepage (#about), which is where the nav's "About" link points. But
+         /bio.html is a live URL: it is in the sitemap, and an agent or reader may
+         already have it bookmarked or in a query. Deleting it turns a working
+         page into a 404. A redirect answers the same request and lands them
+         exactly where that content now lives.
+
+         A META REFRESH is the only redirect available here — this is a static host
+         on GitHub Pages, with no .htaccess and no server to issue a real 301. So
+         this is a 302-equivalent, not a 301. noindex keeps the duplicate out of
+         search results so it cannot compete with the homepage it points at.
+
+         The <noscript> link matters: a meta refresh that a crawler ignores would
+         otherwise show an empty page with no way out.
+
+         The footer's "bio.html" link is kept deliberately, for the same reason —
+         it is a visible, working escape hatch to this redirect. -->
+    <meta http-equiv="refresh" content="0; url=/#about">
+    <link rel="canonical" href="https://emersonblackwrites.com/#about">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="img/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="img/favicon.png" type="image/png">
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <h1><a href="index.html">Emerson Black</a></h1>
-            </div>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <div class="bio-content">
-            <div class="bio-container">
-                <div class="bio-image">
-                    <img src="img/author/emerson_black_portrait.webp" alt="Emerson Black">
-                </div>
-                <div class="bio-text">
-                    <p>Emerson Black writes warm, witty mystery thrillers about young journalists uncovering corruption inside elite institutions. Originally from New Zealand, Emerson now lives in London.</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Emerson Black.<br>
-            Want to get in touch? I'd love to hear from you. <a href="mailto:emerson.black.writes@gmail.com">Email me</a>.</p>
-        <p class="footer-nav">
-            <a href="index.html#books">The Books</a> &middot;
-            <a href="index.html">Home</a> &middot;
-            <a href="desk/">Emerson's Desk &mdash; newsletter archive</a> &middot;
-            <a href="https://emersonblackwrites.substack.com/" target="_blank">Subscribe</a>
-        </p>
-    </footer>
-
+<body class="redirect-page">
+    <div class="redirect-card">
+        <p class="wordmark-name">Emerson Black</p>
+        <p>This page has moved. Taking you to the about section&hellip;</p>
+        <p><a class="btn-primary" href="/#about">Go there now</a></p>
+        <noscript>
+            <p>If nothing happened, <a href="/#about">click here to read about Emerson Black</a>.</p>
+        </noscript>
+    </div>
 </body>
 </html>
