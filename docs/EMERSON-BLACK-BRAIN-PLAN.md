@@ -265,12 +265,15 @@ curl -s "https://api.github.com/repos/hotjamwot/emerson-black-writes/actions/run
 > 9. ⬜ **S10 step 3** — the storefront features the writing. `THE JOURNALISTS` stays a storefront section, not a post. §19.
 > 10. 🟢 **Tags → folders → graph** — the spine of the Desk. **Step 1 DONE: all 49 posts read; an 8-sphere taxonomy + full link proposal is in §25, awaiting sign-off.** Approve it and it applies in one commit. Then retire the year folders, then revisit breadcrumbs. **Biggest remaining piece.**
 > 11. ⬜ **LLM-assisted tags, aliases & related links** — prompts + workflow, designed *after* the human pass. §22.2.
-> 12. ✅ **Post header dates + "Recently updated" badge** — D18/§26. Live: "Published … • Updated …" + a client-gated pill. Suite guards it.
+> 12. ✅ **Post header dates + "Recently updated" badge** — D18/§26, §27. Live, deduped against content-meta (§27.3).
 > 13. ✅ **Prune orphaned CSS + inert plugins** — §24.1 F1-F4 (the dead `.after-body-graph` block, F5, removed en route).
 > 14. ✅ **Bridging second tags** — 18 posts now cross a sphere boundary (§26).
-> 15. ⬜ **S3** — left sidebar cleanup.
-> 16. 🟢 **S2 graph** — *unblocked and mostly done*: the local graph shows the whole Desk map (depth 100) and is taller (§26). Remaining: confirm the full map reads well once the wikilinks land.
-> 17. ⬜ **S8** — visible tags done (§25); breadcrumb question resolved (removed, §26).
+> 15. ✅ **Yellow highlight eliminated** — `--textHighlight` pinned, F11 (§27.1).
+> 16. 🟡 **Red-on-red active sidebar item** — F12: a specificity loss, not a colour bug. Fix with the sidebar width, below.
+> 17. ⬜ **Narrow the left sidebar** (S3) — `body` grid is upstream's `320px auto 320px` and is **not overridden** anywhere in `custom.scss`. One-line grid override + re-check the reading measure. Pairs with F12.
+> 18. 🟢 **S2 graph** — whole-map view live (§26). Remaining: permanent links + reliable tag hover (§27.5) — **both blocked on item 10**, since with 8 edges there is nothing to show and the design question only exists at ~90.
+> 19. ⬜ **S8** — visible tags done (§25); breadcrumbs resolved (§26).
+> 20. ⬜ **Wikilinks** — ~90 contextual links across 49 posts. **The next piece of real work**, and the gate on items 18.
 >
 > **✅ DONE 2026-09-29 — default dark, toggle kept.** HayJay's call: the Brain should open **dark** (it matches the storefront) and the light/dark toggle must stay usable. The stock behaviour follows the OS instead (`localStorage.getItem("theme") ?? matchMedia(...)`).
 >
@@ -733,6 +736,8 @@ HayJay: *"It's super important that you keep me updated with any findings like t
 | F8 | `unicode-bidi` wrapping rules may be dead in the storefront CSS | ❌ Dismissed — 0 occurrences in `style.css`, `index.html`, `bio.html`. Never existed. |
 | F9 | `ox-hugo` and `roam` plugins are enabled and unused | ❌ Dismissed — both are already `enabled: false`. A grep for `source:` lines is not a grep for `enabled: true`. |
 | F10 | Content contains Hugo `{{< >}}` shortcodes | ❌ Dismissed — the only match was a **binary `.webp`** (grep matching binary noise), not markdown. |
+| F11 | The "orange-yellow" on tags was one bug | ⚠️ **It was two, one variable apart.** §26 pinned `--tertiary` (selection + search + link hover). The *yellow* the tags were showing is a different token: `--textHighlight`, upstream `#fff23688`, consumed by `.text-highlight`. Pinned in §27. **Lesson: after fixing one unpinned token, enumerate the rest — the class is "the token nobody looked at", and it does not arrive alone.** |
+| F12 | The active explorer item is styled red-on-red in `custom.scss` | ❌ **Not our rule.** Ours is crimson on `--eb-surface` (near-transparent navy) = correct. The theme layer's `.active` wins on specificity and paints `--nav-item-background-active: var(--highlight)` = crimson at 12%. So crimson text lands on a crimson wash. **A specificity loss, not a colour choice** — fix by raising our specificity or pinning the theme var, not by changing colours. |
 
 ### 24.3 Standing rules
 
@@ -888,4 +893,39 @@ The Obsidian base declares `--tertiary` as a yellow-amber, and the brand overlay
 - **`breadcrumbs` revisit point** (§22.2 step 3) lands here: once a post's trail can be `tag → post` rather than `folder → year → post`, the breadcrumb's job is done (D17).
 - **Measure before claiming.** Every row above carries a count and a command that reproduces it.
 - **Never delete a rule on a hunch.** F5 nearly cost a day of genuine editorial dates. If a finding says "this is unused", it must show the *zero*.
+---
+
+## 27. 🟡 S10 follow-up — the second polish pass (2026-10-01)
+
+Reported after §26 shipped. Five items; **three were the same class of bug as `--tertiary`, and one was a duplicate.** The graph requests (always-visible links, reliable tag hover) are logged in §27.5 as *deliberately not done* — they are behaviour changes to a D3 component, not styling.
+
+### 27.1 The yellow was `--textHighlight`: the last unpinned palette slot
+
+Same failure mode as `--tertiary`, one variable over. Obsidian ships `--textHighlight` as **bright yellow** (`#fff23688` light, `#b3aa0288` dark), consumed by `.text-highlight{background-color: var(--textHighlight)}` — so any highlighted run, **and any tag pill sitting inside one**, wore a yellow slab. The overlay never pinned it. Now pinned to a 22% accent tint.
+
+This completes the palette: `--accent`, `--secondary`, `--tertiary`, `--textHighlight` all owned, so no upstream hue can reach the reading room. **Lesson reinforced:** *after fixing one unpinned token, enumerate the rest and check each — the bug class is "the token nobody looked at", and it does not come alone.*
+
+### 27.2 Red-on-red in the sidebar — a specificity loss, not a theme bug
+
+The active explorer item is `.explorer a.nav-file-title.tree-item-self.active`, which our stylesheet sets to `color: var(--eb-accent)` on `background: var(--eb-surface)` — a near-transparent navy tint, so crimson on near-white. That is *correct*. But the theme layer also carries `--nav-item-background-active: var(--highlight)` (`#ca26261f` = **crimson at 12%**), and its `.active` rule beat ours. Result: crimson text on a crimson wash, and the red "gets lost". Logged as **F12** — the fix is to raise our specificity (or pin `--nav-item-background-active`), not to change colours.
+
+### 27.3 Two date fields — the header was duplicating content-meta
+
+`content-meta` printed `Feb 14, 2025 · 8 min read`; the new post header printed `Published Feb 14, 2025 · Updated Sep 28, 2026`. **The same publication date, twice, stacked.** The plugin has no hide-the-date option (only `showReadingTime` / `showComma`), so the date is suppressed in CSS and the reading time kept. Two dates are not redundant when one of them is `Updated`.
+
+### 27.4 Small type fixes
+
+- The `•` between Published and Updated is now a **1px hairline rule** (`.eb-post-dates__sep`, `aria-hidden`) on a flex row with a real `gap`. A middot reads as a word in the sentence; a rule reads as structure.
+- `Published`/`Updated` labels and the dates now sit on an `inline-flex` line with breathing room, and `time` is set in IBM Plex Mono so the two dates align as a pair.
+
+### 27.5 Graph requests — logged, deliberately not done
+
+- **Links visible without hover.** Real behaviour change in the D3 component: the links are drawn at low opacity and only lit on hover. Making them permanent changes the *read* of the graph (structure vs. focus). Worth doing, but as its own pass with a screenshot to judge legibility at `depth: 100` — at full-map scale, permanent links may be visual noise. **Blocked on the wikilinks pass** (item 10): with 8 edges there is nothing to show; with ~90 the distinction matters.
+- **Tag hover reliability.** Likely the same "dim non-hovered nodes on hover" (`focusOnHover`) interacting with the full-map scale — at `depth: 100` the graph is dense and the hover neighbourhood is harder to acquire. Revisit **after** the link pass, not before.
+
+### 27.6 Sidebar width
+
+The `body` grid is `320px auto 320px` and **is not overridden anywhere in `custom.scss`** — the left column is simply upstream's default. Narrowing it is a one-line grid override plus a check that the reading measure still holds. Queued with S3.
+
+**Suite 87 → 90.**
 - **Log the dismissed ones too.** F6–F8 cost five minutes and save the next session from re-running them.

@@ -155,6 +155,15 @@ ${scope} {
      three symptoms, so it is fixed once here rather than patched per-symptom.
      Collapsing it onto the accent makes selection and hover read as brand. */
   --tertiary: var(--color-accent);
+  /* S10 · --textHighlight owned — the LAST unpinned palette slot. Same failure
+     as --tertiary above: the Obsidian base ships this as a bright yellow
+     (#fff23688 light / #b3aa0288 dark) and the overlay never pinned it. It is
+     consumed by .text-highlight{background-color: var(--textHighlight)}, so a
+     highlighted run — or a tag pill sitting inside one — wore a yellow slab.
+     F11. Collapsing it onto the accent finishes the palette: with --accent,
+     --secondary, --tertiary and --textHighlight all owned, no upstream hue can
+     reach the reading room. */
+  --textHighlight: color-mix(in srgb, var(--color-accent) 22%, transparent);
   /* Palette slots that can surface as Obsidian violet / magenta (code tokens,
      canvas, sync avatars, the "example" callout). Collapsed onto the brand
      accent so no off-brand hue can leak into the reading room. */

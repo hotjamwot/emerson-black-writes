@@ -912,6 +912,34 @@ hr::after {
     color: var(--gray);
   }
 
+  // S10 · the divider between Published and Updated is a hairline rule, not a
+  // middot. A "·" reads as a word in the sentence; a rule reads as structure.
+  // aria-hidden so a screen reader announces the two dates without "dot".
+  .eb-post-dates__sep {
+    display: inline-block;
+    width: 1px;
+    height: 0.85em;
+    background: var(--eb-line-strong);
+    flex: 0 0 auto;
+  }
+
+  // S10 · the ORIGINAL date field is suppressed. content-meta renders the
+// publication date plus a reading time, while the post header renders
+// Published plus Updated — the same date, twice, stacked. The plugin has no
+// hide-the-date option, so it is suppressed here and the reading time is kept.
+.content-meta {
+  time {
+    display: none;
+  }
+}
+
+.eb-post-dates__line {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
   time {
     font-family: var(--eb-mono);
     font-size: 0.7rem;

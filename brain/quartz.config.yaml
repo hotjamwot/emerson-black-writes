@@ -276,8 +276,15 @@ plugins:
       # Sits under the title, above the tag pills: Published/Updated first, then
       # the topics. content-meta (20) and tag-list (30) bracket it at 25.
       priority: 25
+  # S10 · the original content-meta date is redundant now that the post header
+  # carries "Published … | Updated …". Keeping both printed the same date twice,
+  # stacked. content-meta keeps only its reading time; the dates are the
+  # post-dates component's job (and it does them better — both of them).
   - source: "@quartz-community/content-meta"
     enabled: true
+    options:
+      showReadingTime: true
+      showComma: false
     layout:
       position: beforeBody
       priority: 20

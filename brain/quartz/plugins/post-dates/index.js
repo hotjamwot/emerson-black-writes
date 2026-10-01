@@ -50,7 +50,7 @@ function PostDatesComponent({ fileData }) {
 
   if (!sameDay && modified != null) {
     line.push(
-      " • ",
+      h("span", { class: "eb-post-dates__sep", "aria-hidden": "true" }),
       h("span", { class: "eb-post-dates__label" }, "Updated"),
       " ",
       h(

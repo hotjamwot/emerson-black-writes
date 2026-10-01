@@ -493,6 +493,28 @@ check(
   scriptBlob.includes("data-eb-recently-updated") && scriptBlob.includes("days < 90"),
   "the client script that reveals the pill is actually shipped",
 )
+check(
+  /eb-post-dates__sep/.test(headerPost) && !/eb-post-dates__line">[^<]*•/.test(headerPost),
+  "the Published/Updated divider is a hairline rule, not a middot",
+)
+// The original date field is suppressed. content-meta renders "Feb 14, 2025 ·
+// 8 min read" while the post header renders "Published Feb 14, 2025 · Updated
+// …" — the same publication date twice, stacked. The plugin has no "hide the
+// date" option, so it is suppressed in CSS. Assert the rule ships AND that it
+// beats the theme layer (specificity: `.content-meta time` inside the
+// unlayered custom bundle).
+check(
+  /\.content-meta\s+time\s*\{[^}]*display:\s*none/.test(headerCss),
+  "the duplicate date is suppressed (content-meta keeps only its reading time)",
+)
+// S10 · the palette is fully owned. --textHighlight was the last unpinned slot
+// and shipped as bright yellow (#fff23688), so any highlighted run — or a tag
+// pill inside one — wore a yellow slab. Assert no upstream yellow survives.
+const themeOut = readFileSync(join(brain, "public", "index.html"), "utf8")
+check(
+  !/--textHighlight:\s*#(fff236|b3aa02)/i.test(themeOut),
+  "no upstream yellow highlight token survives in the theme (--textHighlight is pinned to the accent)",
+)
 
 console.log("\nTypography (computed style — what the reader actually sees)")
 
