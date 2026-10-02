@@ -628,6 +628,16 @@ const scriptBlob = readdirSync(scriptsDir)
   .map((f) => readFileSync(join(scriptsDir, f), "utf8"))
   .join("\n")
 
+// 11.9.7f - Reader mode is gone at EVERY width, by disabling the plugin.
+//
+// Asserted on the BUILT MARKUP rather than on a CSS rule. A display:none hide
+// would leave the button in the DOM and still in the tab order, so "no markup"
+// is the stronger and more honest claim: the control is genuinely absent.
+check(
+  !/class="readermode"/.test(headerPost) && !/readerIcon/.test(headerPost),
+  "Reader mode (the book icon) is absent from the markup at every width",
+)
+
 // 11.9.7e - the mobile reading header. The element and the behaviour are
 // separate guarantees and can break independently: the title can stop
 // rendering (plugin unwired), or the script can stop shipping (then the class
@@ -644,9 +654,22 @@ check(
 )
 check(
   scriptBlob.includes("__ebStickyTitleTeardown") &&
-    scriptBlob.includes("article h1") &&
+    scriptBlob.includes("h1.article-title") &&
     scriptBlob.includes("eb-header--compact"),
-  "the sticky-title scroll script ships (teardown + h1 probe + compact class)",
+  "the sticky-title scroll script ships (teardown + title probe + compact class)",
+)
+// The probe must NOT be `article h1`. Quartz renders beforeBody components into
+// .popover-hint, OUTSIDE <article>, so that selector matched nothing and the
+// header never collapsed on any viewport. Guarded so the regression cannot
+// return as a "simplification".
+check(
+  !/querySelector\("article h1"\)/.test(scriptBlob),
+  "the title probe is not `article h1` (the title lives outside <article>)",
+)
+// Above 800px the class must never be set, or the desktop nav would vanish.
+check(
+  scriptBlob.includes("matchMedia") && scriptBlob.includes("max-width: 800px"),
+  "the collapse is gated on a max-width:800px matchMedia check",
 )
 // Desktop must be unaffected: EVERY compact rule has to live inside the mobile
 // query, not just the first one.
@@ -673,6 +696,22 @@ const compactAllMobile =
 check(
   compactAllMobile,
   `all ${compactAt.length} collapsed-header rules sit inside the mobile query (desktop header untouched)`,
+)
+
+// THE DESKTOP REGRESSION, GUARDED DIRECTLY. `.eb-sticky-title` is emitted on
+// every page regardless of viewport, so its `display: none` MUST be
+// unconditional. When this rule sat inside the max-width:800px query instead,
+// nothing declared a display for it above 800px, it rendered as an inline text
+// node in the header row, and the nav wrapped to two lines while the search
+// button was squashed. Checked by brace depth, not by searching backwards for
+// "@media": a textual scan cannot tell an open media block from a closed one and
+// would report the opposite of the truth here.
+const hideTitle = headerCss.indexOf(".eb-sticky-title{display:none}")
+check(
+  hideTitle > -1 &&
+    headerCss.slice(0, hideTitle).split("{").length ===
+      headerCss.slice(0, hideTitle).split("}").length,
+  "the sticky title is hidden UNCONDITIONALLY (not just below 800px) - desktop header stays clean",
 )
 check(
   scriptBlob.includes("data-eb-recently-updated") && scriptBlob.includes("days < 90"),

@@ -489,10 +489,9 @@ h2.page-title,
   // swap is a `display` change. That is what makes this fail safe: with JS off
   // the class is never added, the title stays hidden, and the header is exactly
   // what it is today.
-  .page > #quartz-body .page-header .eb-sticky-title {
-    display: none;
-  }
-
+  //
+  // `.eb-sticky-title` itself is hidden UNCONDITIONALLY further up - see the
+  // note there. Only these compact rules, which require the class, reveal it.
   .page > #quartz-body .page-header > header.eb-header--compact > footer {
     display: none;
   }
@@ -520,6 +519,24 @@ h2.page-title,
   .page > #quartz-body .page-header > header.eb-header--compact {
     padding: 0.6rem 0;
   }
+}
+
+// The sticky title is HIDDEN AT EVERY WIDTH. This rule is deliberately OUTSIDE
+// the max-width:800px query, and that placement is the whole fix for the
+// desktop regression.
+//
+// The first version put it inside the mobile query alongside the search/theme
+// hides. Unlayered, nothing else declared a display for `.eb-sticky-title`, so
+// above 800px there was no rule at all for it and it rendered as an inline text
+// node in the header row - pushing the nav links onto two lines and squashing
+// the search button. The element is emitted on every page by design (the
+// plugin has no viewport branch), so "hidden" has to be the default state and
+// the mobile compact rules opt it back in.
+//
+// Default-off, opt-in: the safe direction to be wrong in. A missing rule shows
+// an extra word in the header; the reverse would have shown it on phones.
+.page > #quartz-body .page-header .eb-sticky-title {
+  display: none;
 }
 
 // ── 11.9.5(a) The hub: one card per topic ───────────────────────────────────

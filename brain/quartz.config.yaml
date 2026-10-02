@@ -351,8 +351,16 @@ plugins:
       position: header
       priority: 30
       group: toolbar
+  # 11.9.7f - Reader mode is out, at EVERY width. The reader called it "the
+  # little book icon" and asked for it gone; 11.9.7d had already hidden it below
+  # 800px but it was still in the desktop header next to search and the theme
+  # toggle. Disabling the plugin removes the button and its markup rather than
+  # hiding it with CSS - a display:none control is still in the tab order and
+  # still keyboard-reachable, which is worse than absent. custom.scss keeps its
+  # `.readermode` hide rule; harmless, and it keeps mobile correct if this ever
+  # comes back.
   - source: "@quartz-community/reader-mode"
-    enabled: true
+    enabled: false
     layout:
       position: header
       priority: 35
