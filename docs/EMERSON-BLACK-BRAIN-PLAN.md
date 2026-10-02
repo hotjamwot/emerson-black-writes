@@ -267,6 +267,63 @@ type-shaped mistakes — unknown condition names, dead local copies of vendored
 files — are the ones nothing complains about. Assert on the built artifact, and
 check a thing is on the *right* page, not merely that it is somewhere.
 
+#### ✅ 11.9.7f Three real bugs in 11.9.7e — FIXED & SHIPPED 2026-10-02
+
+The reader checked on a real phone and a real desktop, and 11.9.7e did not work
+on either. All three failures share one shape: **a guard passed on a build that
+was wrong.**
+
+**1. The header never collapsed — on any viewport.** The probe was
+`querySelector("article h1")`. On content pages the title is **not inside
+`<article>`** — Quartz renders `beforeBody` components into a
+`<div class="popover-hint">` *before* the article element:
+
+```
+</header><div class="popover-hint"><h1 class="article-title">…</h1>
+```
+
+The probe found nothing, took the early return, and `.eb-header--compact` was
+never added. The feature was simply **inert, with no error anywhere to say so**.
+Now `h1.article-title`.
+
+*This is the guard lesson worth keeping:* the earlier guard asserted the probe
+**string** shipped in the bundle. It did — faithfully — while the selector
+matched nothing on every real page. **A guard that the code is present is not a
+guard that the code works.**
+
+**2. The title leaked into the desktop header.** Its `display: none` sat inside
+the `max-width:800px` query. The plugin emits the element on *every* page
+regardless of viewport, so above 800px nothing declared a display for it and it
+rendered as an inline text node — nav wrapping to two lines, search squashed.
+Hidden is now the **default, unconditional** state, with the mobile compact
+rules opting it back in. Default-off/opt-in is the safe direction to be wrong in:
+a missing rule shows one extra word; the reverse would have shown it on phones.
+
+Guarded by **brace depth**, not by scanning backwards for `@media`. A textual
+scan cannot tell an open media block from a closed one — it reported this rule
+as *inside* the query when it was at the top level, i.e. it would have passed
+the exact bug it was written to catch.
+
+**3. No viewport gate.** The collapse styles only exist below 800px, but the
+script set the class at *any* width, so on desktop scrolling past the title
+would have hidden the nav. Now gated on `matchMedia("(max-width: 800px)")` with
+a `change` listener so rotating a tablet re-evaluates.
+
+**Also: the book icon is out at every width.** Reader mode is disabled as a
+**plugin**, not hidden with CSS — a `display:none` control is still in the tab
+order and still keyboard-reachable, which is worse than absent. The guard
+asserts absence from the built **markup** for that reason.
+
+**Suite: 86 checks, 0 failures.** Four new guards proven red: the
+unconditional-hide (by moving the rule back inside the query), both probe
+guards (by reverting to `article h1`), and reader mode (by re-enabling).
+
+*Note on the first attempt at the probe test:* a blind `sed` replaced the first
+match, which was in a **comment**, leaving the code untouched — so the guard
+passed and the test proved **nothing**. Caught by inspecting the built bundle
+rather than trusting the exit code. Proof of failure requires proof the mutation
+reached the artifact.
+
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
 **Partly closed by 11.9.7c/11.9.7d below** (mobile header is now nav-only; the article precedes the explorer). Still open: (a) the storefront header nav
@@ -400,7 +457,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 82 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 86 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
@@ -432,5 +489,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 82/82 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 86/86 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
