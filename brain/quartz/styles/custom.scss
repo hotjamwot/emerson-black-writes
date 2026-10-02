@@ -380,7 +380,9 @@ h2.page-title,
   white-space: nowrap;
   padding: 6px 0;
   border-bottom: 1px solid transparent;
-  transition: color 0.25s ease, border-color 0.25s ease;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .page > #quartz-body .page-header header > footer > ul > li > a:hover {
@@ -638,7 +640,6 @@ h1.article-title {
   font-family: var(--eb-display);
   letter-spacing: 0.03em;
 }
-
 
 // ── Explorer (archive tree) ────────────────────────────────────────────────
 .explorer {
@@ -940,7 +941,7 @@ hr::after {
     flex: 0 0 auto;
   }
 
-.eb-post-dates__line {
+  .eb-post-dates__line {
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
@@ -1270,6 +1271,31 @@ hr::after {
   }
 }
 
+// -- Tag pills: own the background here, never via the theme's --highlight --
+// 11.9.7. `a.internal.tag-link { background-color: var(--highlight) }` ships in
+// @layer quartz-base, and --highlight is an Obsidian token whose value any later
+// theme aspect may re-declare (upstream: amber rgba(255,208,0,.4) -> #FFD00066).
+// custom.scss is unlayered, so a plain declaration here outranks every layer: the
+// pill background can no longer be repainted by the theme, whichever way
+// --highlight is redefined later. --eb-accent resolves per saved-theme already,
+// so this needs no mode-specific values.
+a.tag-link,
+ul.tags a.tag-link {
+  background-color: color-mix(in srgb, var(--eb-accent) 12%, transparent);
+  border: 1px solid var(--eb-line);
+  border-radius: 999px;
+  color: var(--gray);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--eb-accent) 20%, transparent);
+    border-color: var(--eb-accent);
+    color: var(--eb-accent);
+  }
+}
 
 // Section headings, cards and trails
 .eb-section {
@@ -1353,7 +1379,6 @@ hr::after {
   letter-spacing: -0.01em;
 }
 
-
 // Reading trails on the homepage
 .eb-trail {
   border-top: 1px solid var(--eb-line);
@@ -1395,8 +1420,7 @@ hr::after {
   border: 1px solid var(--eb-line);
   border-radius: var(--eb-radius-lg);
   background:
-    radial-gradient(600px 200px at 100% 0%, var(--eb-glow), transparent 70%),
-    var(--eb-surface);
+    radial-gradient(600px 200px at 100% 0%, var(--eb-glow), transparent 70%), var(--eb-surface);
   margin-bottom: 2.5rem;
 
   h2 {
@@ -1465,4 +1489,3 @@ hr::after {
     display: none;
   }
 }
-

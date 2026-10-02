@@ -571,6 +571,22 @@ check(
   allCss.length > 0 && /--textHighlight:\s*#(fff236|b3aa02)/i.test(allCss),
   "sanity: the upstream yellow token is actually present in the bundle (so this check can fail)",
 )
+// 11.9.7 - the tag pills must not be able to go yellow again. --highlight is a
+// theme token (upstream: amber), so pinning it in the overlay is necessary but
+// not sufficient: a future aspect could re-declare it and the pill would follow.
+// custom.scss is unlayered, so an explicit pill background there outranks every
+// layer. Assert it ships AND that it sits outside any @layer - an unanchored
+// match would pass on a rule that had accidentally been nested, which is exactly
+// how the original content-meta guard gave a false assurance.
+const pillRule = /(^|})\s*(ul\.tags )?a\.tag-link[^{}:]*\{[^}]*background-color:[^}]*\}/.exec(
+  headerCss,
+)
+check(!!pillRule, "the tag pill background is set from custom.scss, not inherited from the theme")
+check(
+  !!pillRule && !/var\(--highlight\)/.test(pillRule[0]),
+  "the tag pill background never routes through --highlight (the amber token)",
+)
+
 check(
   /\.text-highlight\{[^}]*eb-accent/.test(headerCss),
   "the yellow highlight is overridden from unlayered custom.css (the only place that beats quartz-base)",
