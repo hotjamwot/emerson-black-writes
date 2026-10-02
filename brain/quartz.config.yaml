@@ -198,7 +198,22 @@ plugins:
     enabled: true
   - source: "@quartz-community/folder-page"
     enabled: true
+  # 11.9.5(b) — descriptions on the tag listing pages, which REPLACES tag-page.
+  #
+  # `@quartz-community/tag-page` compiles its own copy of PageList into dist/
+  # and that copy renders title/date/tags but NOT `description`, even though all
+  # 51 posts carry one. It exposes no option to swap the list component, and
+  # ./quartz/components/PageList.tsx has no importers — so there is nothing to
+  # patch. The local plugin reimplements the page (match + generate + body +
+  # tag-page's own stylesheet) and adds one `<p class="eb-listing-desc">` per entry.
+  #
+  # Disabled rather than shadowed: ownership of these VIRTUAL pages comes from
+  # `generate()`, and the dispatcher emits each with the layout of the page type
+  # that generated it. Two page types generating the same slugs would just
+  # overwrite each other's output.
   - source: "@quartz-community/tag-page"
+    enabled: false
+  - source: "./quartz/plugins/listing-descriptions"
     enabled: true
   - source: "@quartz-community/explorer"
     enabled: true

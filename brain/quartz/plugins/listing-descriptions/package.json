@@ -1,0 +1,19 @@
+{
+  "name": "listing-descriptions",
+  "version": "1.0.0",
+  "description": "Tag pages: put each post's description under its title",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "quartz": {
+    "name": "listing-descriptions",
+    "displayName": "Listing Descriptions",
+    "description": "Descriptions under titles on tag listing pages",
+    "category": "pageType",
+    "defaultOrder": 90
+  }
+}

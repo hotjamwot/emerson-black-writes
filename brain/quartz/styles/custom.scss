@@ -525,6 +525,25 @@ h2.page-title,
   }
 }
 
+// 11.9.5(b) — descriptions on the tag listing pages.
+//
+// The paragraph is appended inside `.desc`, which is the `3fr` middle column of
+// the listing grid that tag-page's own stylesheet defines, so it sits directly
+// under the title with no grid work needed. These rules only set tone.
+//
+// Tuned to match `.eb-hub__desc` so /desk/ and /tags/<x>/ read as the same
+// product rather than two unrelated listings.
+.page > #quartz-body .page-listing .eb-listing-desc {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  // Quartz's `--secondary` is muted enough for a one-line standfirst but too
+  // faint for two. `--dark` is the post body colour, which is the right weight
+  // here — this is content, not metadata.
+  color: var(--dark);
+  opacity: 0.85;
+}
+
 // 11.9.5(a) The hub: one card per topic ───────────────────────────────────
 // Cards in a responsive grid; `auto-fit` rather than fixed columns so a narrow
 // phone gets one card with no media query, and a wide desktop fills the row

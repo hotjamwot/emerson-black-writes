@@ -589,6 +589,145 @@ check(
     /^@media \(max-width:800px\)\s*\{/.test(headerCss.slice(lastMedia, lastMedia + 40)),
   "those controls are hidden only below 800px (desktop keeps search and reader mode)",
 )
+// 11.9.5(b) - descriptions on the tag listing pages.
+//
+// These assert on the BUILT pages, and the first one is the one that matters:
+// 126 of 126 entries carry a description. This feature was nearly shipped twice
+// while reporting success — first as a `treeTransforms` plugin that matched
+// nothing (it runs over the markdown tree, before the layout renders the
+// listing), then as a page type whose `match` never ran (these are VIRTUAL
+// pages; the dispatcher emits each with the layout of the page type that
+// GENERATED it). Both built clean with zero descriptions. So the count is
+// checked against the real artifact, not against the plugin's own intent.
+const tagPages = readdirSync(join(brain, "public", "tags"))
+  .filter((f) => f.endsWith(".html"))
+  .map((f) => join(brain, "public", "tags", f))
+check(tagPages.length > 0, `tag pages exist to check (${tagPages.length} found)`)
+
+let tagEntries = 0
+let tagDescs = 0
+const tagPagesMissing = []
+for (const file of tagPages) {
+  const html = readFileSync(file, "utf-8")
+  const entries = html.match(/class="section-li"/g)?.length ?? 0
+  const descs = html.match(/class="eb-listing-desc"/g)?.length ?? 0
+  tagEntries += entries
+  tagDescs += descs
+  if (entries !== descs) tagPagesMissing.push(`${file.split("/").pop()} ${descs}/${entries}`)
+}
+check(
+  tagEntries > 0,
+  `tag listings have entries to check (${tagEntries} across ${tagPages.length} pages)`,
+)
+check(
+  tagEntries === tagDescs,
+  `every tag listing entry shows its description (${tagDescs}/${tagEntries})${
+    tagPagesMissing.length ? ` — short: ${tagPagesMissing.join(", ")}` : ""
+  }`,
+)
+
+// The replacement reimplements the page, so the surrounding furniture has to
+// still be there. Each of these is a thing that silently vanished in one of the
+// two failed attempts.
+const anyTag = readFileSync(tagPages[0], "utf-8")
+check(
+  tagPages.every((f) => /class="section-ul"/.test(readFileSync(f, "utf-8"))),
+  "every tag page renders the section list (listPage markup survived the swap)",
+)
+check(
+  tagPages.every((f) => /items with this tag\./.test(readFileSync(f, "utf-8"))),
+  "every tag page keeps its 'N items with this tag.' count line",
+)
+// tag-page's stylesheet was the ONLY source of the `3fr` listing grid as far as
+// THIS plugin is concerned, and it died with the plugin. Losing it stacks date,
+// title and tags vertically.
+//
+// Read the CSS the tag pages actually LINK, not just index-*.css: component
+// styles ship as separate `component-*.css` files, and the first version of this
+// check looked only at index-*.css - so it failed while the rule was sitting in
+// a component stylesheet the page was loading.
+//
+// hrefs are relative to the page (`../component-x.css` from /tags/<x>/), so they
+// resolve against the page's own directory. Joining them onto public/ directly
+// - as a second attempt did - looks in brain/component-x.css and throws ENOENT.
+//
+// KNOWN AND ACCEPTED: this asserts the rule is REACHABLE from a tag page, not
+// that this plugin authored it. `@quartz-community/folder-page` (still enabled,
+// it owns /newsletters/) bundles an identical copy of listPage.scss, so the rule
+// has two sources. That redundancy is why deleting only this plugin's copy left
+// the guard green - so proven-red for this one has to strip BOTH copies. The
+// plugin still carries its own because it is a standalone replacement and should
+// not depend on another plugin's incidental CSS to lay out its own page.
+const tagCssFiles = new Set()
+for (const file of tagPages) {
+  const html = readFileSync(file, "utf-8")
+  for (const m of html.match(/href="[^"]*component-[^"]*\.css"/g) ?? []) {
+    tagCssFiles.add(resolve(dirname(file), m.slice(6, -1)))
+  }
+}
+const tagCss = [...tagCssFiles].map((f) => readFileSync(f, "utf-8")).join("\n")
+check(
+  tagCssFiles.size > 0,
+  `tag pages link component stylesheets to check (${tagCssFiles.size} found)`,
+)
+check(
+  /li\.section-li>\.section\{[^}]*grid-template-columns:fit-content\(8em\) 3fr 1fr/.test(tagCss),
+  "the tag listing still has tag-page's 3-column grid (its CSS is carried over)",
+)
+// Every tag page is a virtual page with an empty body. If someone adds a real
+// content/tags/*.md, this body would silently drop that markdown - so assert the
+// assumption still holds rather than trusting it.
+//
+// Whitespace inside a class attribute is MEANINGFUL here, so match it rather
+// than stripping whitespace first. The first version did
+// `.replace(/\s+/g, "")`, which turned
+// `class="markdown-preview-view markdown-rendered"` into
+// `class="markdown-preview-viewmarkdown-rendered"` and failed every page.
+check(
+  tagPages.every((f) =>
+    /<article[^>]*><div class="markdown-preview-view markdown-rendered"><\/div><\/article>/.test(
+      readFileSync(f, "utf-8"),
+    ),
+  ),
+  "tag pages carry an empty article block (no content/tags/*.md to be dropped)",
+)
+// Internal links are hand-rolled (resolveRelative is ported, since a local
+// plugin cannot import quartz/util). Every one of them has to resolve.
+let tagLinks = 0
+const brokenTagLinks = []
+for (const file of tagPages) {
+  const html = readFileSync(file, "utf-8")
+  for (const href of new Set(html.match(/href="[^"]+"/g)?.map((m) => m.slice(6, -1)) ?? [])) {
+    if (/^(https?:|#|mailto:)/.test(href)) continue
+    tagLinks++
+    const target = resolve(dirname(file), href)
+    if (
+      !existsSync(target) &&
+      !existsSync(`${target}.html`) &&
+      !existsSync(join(target, "index.html"))
+    ) {
+      brokenTagLinks.push(`${file.split("/").pop()} -> ${href}`)
+    }
+  }
+}
+check(
+  brokenTagLinks.length === 0,
+  `all ${tagLinks} internal links on tag pages resolve${
+    brokenTagLinks.length ? ` (broken: ${brokenTagLinks.slice(0, 3).join(", ")})` : ""
+  }`,
+)
+// And tag-page must stay disabled, or two page types would generate the same
+// virtual slugs and silently overwrite one another.
+//
+// Anchored on the SAME entry: the first version used
+// /tag-page[\s\S]{0,80}enabled:\s*true/, whose `[\s\S]` happily ran past the end
+// of this entry, across `- source:`, and matched the NEXT plugin's
+// `enabled: true` - reporting tag-page as enabled when it was disabled.
+check(
+  /- source: "@quartz-community\/tag-page"\s*\n\s*enabled: false/.test(config),
+  "@quartz-community/tag-page stays disabled (the replacement owns /tags/)",
+)
+
 // 11.9.5(a) - the Desk hub: one card per topic, five most recent posts each,
 // with the description under every title.
 //
