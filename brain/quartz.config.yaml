@@ -370,6 +370,30 @@ plugins:
       position: beforeBody
       priority: 5
       condition: not-index
+  # 11.9.5(a) - the hub. INDEX ONLY.
+  #
+  # /desk/ stays (it is the archive and the sitemap/backlink target), but it
+  # needs a front door: one card per topic, five most recent posts in each,
+  # with the description that made each post worth clicking.
+  #
+  # `condition: is-index` is load-bearing, not tidy-up. The component emits
+  # "./" + slug links, which are correct from the index and wrong anywhere
+  # else - a plain-JS local plugin cannot import quartz's resolveRelative, so
+  # correctness here comes from the component being confined to one page.
+  #
+  # It is spelled `is-index`, NOT `index`: `index` is not a condition, and an
+  # unrecognised condition name resolves to undefined and is SILENTLY IGNORED,
+  # so the hub rendered on every page of every page type with no error
+  # anywhere. The positive form did not exist and was added in
+  # quartz/plugins/loader/conditions.ts. The component ALSO self-guards on
+  # `fileData.slug !== "index"`, so this cannot regress silently a second way.
+  # verify-default-mode asserts the hub is on the index and on no other page.
+  - source: "./quartz/plugins/tag-hub"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 8
+      condition: is-index
   - source: "@quartz-community/comments"
     enabled: false
     options:

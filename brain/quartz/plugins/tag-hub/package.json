@@ -1,0 +1,29 @@
+{
+  "name": "tag-hub",
+  "version": "1.0.0",
+  "description": "Desk hub: one card per tag, five most recent posts each, with descriptions",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "tag-hub",
+    "displayName": "Tag Hub",
+    "description": "Per-tag cards of recent posts with subtitles",
+    "components": {
+      "TagHub": {
+        "name": "TagHub",
+        "displayName": "Tag Hub",
+        "description": "One card per topic, five recent posts each",
+        "version": "1.0.0",
+        "defaultPosition": "beforeBody"
+      }
+    }
+  }
+}

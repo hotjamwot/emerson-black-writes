@@ -589,6 +589,40 @@ check(
     /^@media \(max-width:800px\)\s*\{/.test(headerCss.slice(lastMedia, lastMedia + 40)),
   "those controls are hidden only below 800px (desktop keeps search and reader mode)",
 )
+// 11.9.5(a) - the Desk hub: one card per topic, five most recent posts each,
+// with the description under every title.
+//
+// The `condition: index` is load-bearing, not tidiness. The component emits
+// "./" + slug links, which are right from the index and wrong anywhere else,
+// because a plain-JS local plugin cannot import quartz's resolveRelative. So
+// the guard asserts BOTH that the hub is on the index and that it is nowhere
+// else - widening the condition should fail loudly, not ship 404s.
+const hubHtml = readFileSync(join(brain, "public", "index.html"), "utf8")
+const hubCards = (hubHtml.match(/class="eb-hub__card"/g) ?? []).length
+const hubItems = (hubHtml.match(/class="eb-hub__item"/g) ?? []).length
+const hubDescs = (hubHtml.match(/class="eb-hub__desc"/g) ?? []).length
+check(hubCards > 0, `the Desk hub renders one card per topic (${hubCards} cards)`)
+check(
+  hubItems > 0 && hubDescs === hubItems,
+  `every post in the hub shows its description (${hubDescs}/${hubItems})`,
+)
+// `news` is excluded by name, deliberately: award announcements date badly.
+check(
+  !/eb-hub__tag">[\s\S]{0,140}?href="\.\/tags\/news"/.test(hubHtml),
+  "the hub excludes the news topic",
+)
+check(
+  !headerPost.includes("eb-hub__card"),
+  "the hub does not leak onto post pages (condition: index holds)",
+)
+// Every hub link must be a real newsletter post. A slug shape change, or a
+// future tag accidentally gaining a title, would otherwise ship a dead link.
+const hubHrefs = [...hubHtml.matchAll(/eb-hub__link internal" href="([^"]+)"/g)].map((m) => m[1])
+check(
+  hubHrefs.length === hubItems && hubHrefs.every((x) => x.startsWith("./newsletters/")),
+  `all ${hubHrefs.length} hub links point at real newsletter posts`,
+)
+
 const scriptsDir = join(brain, "public", "static", "scripts")
 const scriptBlob = readdirSync(scriptsDir)
   .map((f) => readFileSync(join(scriptsDir, f), "utf8"))
