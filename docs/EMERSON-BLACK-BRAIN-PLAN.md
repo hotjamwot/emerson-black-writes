@@ -425,7 +425,40 @@ tag pages; all **426** internal links resolve. `tag-page` is disabled, not shado
 And a latent `ReferenceError` sat in a guard's **failure branch** — it crashed
 instead of reporting. Only proven-red surfaced it.
 
-**Suite: 95 checks, 0 failures** (85 → 95). All eight new guards proven red.
+**Suite: 142 checks, 0 failures.** All eight new checks proven red.
+
+#### ✅ 11.9.11 The Desk: no body, adaptive grid, subtitles in the year rows
+
+**HayJay's five notes on the Desk — all five right, and one of them was two bugs
+wearing one coat.**
+
+| Note | What it actually was |
+|---|---|
+| Remove the body copy, button, link back | Three copies of one idea; the button scrolled a few hundred pixels |
+| Remove "34 posts across 7 topics" | It summed the 5-per-card cap, so the page said 34 while the fold-out heading said 49 |
+| Cards are different widths | **The same bug as the next row** — a hard 460px grid floor |
+| Cards too wide on mobile | `minmax(460px, 1fr)` cannot narrow; a 460px track inside ~360px |
+| Subtitles in year rows; dates everywhere | Dates were already on both; subtitles reverse a deliberate 11.9.10 call |
+
+The width and the overflow were one bug. `minmax(460px, 1fr)` has a hard floor,
+so a phone laid out a 460px track inside ~360px and overflowed sideways.
+`minmax(min(460px, 100%), 1fr)` makes the floor adaptive — no media query, and
+correct at every width rather than at the two somebody wrote a query for.
+
+> **The 460px guard was a near-miss and would have passed on the bug it exists to
+> catch.** It matched the substring `460px`, which the *broken*
+> `minmax(460px, 1fr)` also contains. It matches the whole expression now.
+>
+> **And the empty-body guard exists because of how that went.** A string check for
+> "Browse the archive" caught a plain sentence added back to `index.md` — but only
+> by accident, because that sentence happened to quote those labels. With
+> different wording it would have sailed through. The guard that ships asserts the
+> rendered body *container* is empty, so it cannot care what anyone writes.
+
+The Desk's frontmatter `created` **stays** and is load-bearing — `recent-notes`
+sorts by it and `hideFolderPages` does not catch slug `index`, so removing it lets
+the Desk fall back to a git-inferred date and compete with real posts for one of
+five slots. The date is kept; it is simply no longer rendered.
 
 #### ✅ 11.9.10 Retire `/Newsletters/`, fold the archive into the Desk
 
@@ -624,7 +657,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 134 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 142 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
