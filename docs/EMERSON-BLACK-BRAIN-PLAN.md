@@ -365,6 +365,40 @@ two guards, restoring the `6rem` fails the padding guard.
 passed guards that asserted code was **present**. A guard that something is
 gone cannot pass for the wrong reason.
 
+#### ✅ 11.9.5(b) Descriptions on the tag pages — SHIPPED 2026-10-02
+
+**Root cause.** Every post has a `description:` (51/51) and Quartz renders it into
+`<meta name="description">` — so the text is in every built page and **nowhere on
+the page itself**. A tag page listed fifteen posts as fifteen bare titles.
+
+**Nothing to patch.** `tag-page` compiles its *own* PageList into `dist/`, which
+drops the field, and exposes no option to swap it. The local
+`quartz/components/PageList.tsx` has **no importers at all**.
+
+**Shipped** `./quartz/plugins/listing-descriptions` — a full replacement for
+`tag-page` (match + generate + body + tag-page's own stylesheet) adding
+`<p class="eb-listing-desc">` under every title. **126/126** entries across 9
+tag pages; all **426** internal links resolve. `tag-page` is disabled, not shadowed.
+
+**Two routes failed first, and both built clean while doing nothing:**
+
+| Route | Why it silently did nothing |
+|---|---|
+| `treeTransforms` | Runs over `clone(componentData.tree)` — the **markdown** tree — *before* the layout renders. It can never see `.page-listing`. |
+| priority + `match` | Tag pages are **virtual**. The dispatcher emits each with the layout of the page type that **`generate()`**d it. `match` is never consulted. |
+
+> Ownership of a virtual page comes from `generate()`, not `match`.
+
+**Three of my own guards were wrong first**, documented in place:
+- searched only `index-*.css`, but component CSS ships as separate `component-*.css`
+- stripped whitespace, corrupting the very class attribute it was matching
+- a config regex ran past the end of an entry and matched the *next* plugin's `enabled: true`
+
+And a latent `ReferenceError` sat in a guard's **failure branch** — it crashed
+instead of reporting. Only proven-red surfaced it.
+
+**Suite: 95 checks, 0 failures** (85 → 95). All eight new guards proven red.
+
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
 **Partly closed by 11.9.7c/11.9.7d below** (mobile header is now nav-only; the article precedes the explorer). Still open: (a) the storefront header nav
@@ -498,7 +532,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 85 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 95 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
@@ -530,5 +564,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 85/85 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 95/95 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
