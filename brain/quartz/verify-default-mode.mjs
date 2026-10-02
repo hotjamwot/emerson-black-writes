@@ -561,6 +561,24 @@ check(
     mobileGrid.indexOf("grid-center") < mobileGrid.indexOf("grid-sidebar-left"),
   `the article is placed before the sidebar on mobile${mobileGrid ? "" : " (no override found)"}`,
 )
+
+// 11.9.7d - the mobile sticky bar is the nav alone. Two halves, and the second
+// matters as much as the first: the controls must disappear on phones AND stay
+// on desktop. A guard that only checked the hide rule would pass if someone
+// moved it out of the media query and killed search everywhere.
+const hideRule =
+  /(\.page>#quartz-body \.page-header \.search,[^}]*?\.readermode)\{display:none\}/.exec(headerCss)
+check(!!hideRule, "the mobile header drops search, the theme toggle and reader mode")
+const hideAt = hideRule ? headerCss.indexOf(hideRule[0]) + hideRule[0].length : -1
+const lastMedia = headerCss.lastIndexOf("@media", hideAt)
+// Anchored against a generous slice rather than an exact character count: two
+// attempts used 24 then 23, and "@media (max-width:800px){" is 25 characters,
+// so each one failed on correct CSS for want of a closing paren.
+check(
+  hideAt > -1 &&
+    /^@media \(max-width:800px\)\s*\{/.test(headerCss.slice(lastMedia, lastMedia + 40)),
+  "those controls are hidden only below 800px (desktop keeps search and reader mode)",
+)
 const scriptsDir = join(brain, "public", "static", "scripts")
 const scriptBlob = readdirSync(scriptsDir)
   .map((f) => readFileSync(join(scriptsDir, f), "utf8"))

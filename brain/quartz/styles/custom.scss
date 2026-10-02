@@ -456,6 +456,27 @@ h2.page-title,
   .page > #quartz-body .page-header header > footer > ul {
     min-width: 0;
   }
+
+  // 11.9.7d — on mobile the sticky bar is the nav and nothing else.
+  //
+  // The wordmark was already `display: none` here since 4a-bis, so what is left
+  // is the nav plus three toolbar controls: the search button, the
+  // dark/light toggle, and Reader mode (the book icon). HayJay's call is to
+  // keep the four links — Books · Desk · About · Subscribe — and drop the
+  // controls, because none of them is a route to another page.
+  //
+  // `display: none` rather than `visibility` or a size clamp: these are
+  // buttons, and a hidden-but-present control is still in the tab order.
+  //
+  // DESKTOP IS UNTOUCHED — this is inside the same `max-width: 800px` query
+  // the rest of 4a-bis uses, so search, Reader mode and the theme toggle all
+  // remain on wide screens. If the theme toggle turns out to be wanted on
+  // phones, delete `.darkmode` from this selector and nothing else changes.
+  .page > #quartz-body .page-header .search,
+  .page > #quartz-body .page-header .darkmode,
+  .page > #quartz-body .page-header .readermode {
+    display: none;
+  }
 }
 
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
