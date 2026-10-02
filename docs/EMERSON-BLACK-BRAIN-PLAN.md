@@ -365,6 +365,34 @@ two guards, restoring the `6rem` fails the padding guard.
 passed guards that asserted code was **present**. A guard that something is
 gone cannot pass for the wrong reason.
 
+#### ✅ 11.9.5(c) Standfirst on posts — SHIPPED 2026-10-02
+
+**Why the reader thought the feature had never worked.** 11.9.5(a) and (b) were
+both shipped and both correct, and neither put the description on an actual
+**post**. It appeared on `/desk/`, on `/tags/<x>/`, and in
+`<meta name="description">` — and never in a post body, which is where the reader
+was looking. Shipped twice, read as never shipped.
+
+**Fixed.** `./quartz/plugins/post-deck`, layout slot **15**:
+
+> title (10) → **deck (15)** → dates (25) → topics (30)
+
+49/49 posts show it. Renders nothing where there is no description (404, tag
+pages, year listings) — an empty paragraph under a title is worse than nothing.
+The Desk index *does* show one: `content/index.md` has a description of its own.
+
+#### ✅ 11.9.6(b) Hover popovers OFF
+
+`enablePopovers: false`. Verified rather than assumed: `.popover{` appears **3**
+times in the built stylesheet with them on, **0** with them off.
+
+#### ✅ 11.9.9 Hub cards: two-up and neutral
+
+| Problem | Cause | Fix |
+|---|---|---|
+| Red on red | `color-mix(var(--light), var(--secondary))` — but `--secondary` is **`#CA2626`**, the Emerson accent, not a muted grey. 40% of every card was brand red. | Neutral tokens only |
+| 3 cards per row | `minmax(320px, 1fr)` fitted three | Floor → `460px`: two per row on desktop, one on a phone, no media query |
+
 #### ✅ 11.9.5(b) Descriptions on the tag pages — SHIPPED 2026-10-02
 
 **Root cause.** Every post has a `description:` (51/51) and Quartz renders it into
@@ -398,6 +426,8 @@ And a latent `ReferenceError` sat in a guard's **failure branch** — it crashed
 instead of reporting. Only proven-red surfaced it.
 
 **Suite: 95 checks, 0 failures** (85 → 95). All eight new guards proven red.
+
+#### ✅ 11.9.5(c)+(b)+(a) — suite now **107 checks, 0 failures**. Twelve further guards, all proven red.
 
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
@@ -532,7 +562,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 95 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 107 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
