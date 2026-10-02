@@ -566,8 +566,18 @@ check(
 // matters as much as the first: the controls must disappear on phones AND stay
 // on desktop. A guard that only checked the hide rule would pass if someone
 // moved it out of the media query and killed search everywhere.
+//
+// The selector list is matched with `[^}]*` rather than requiring `.readermode`
+// to sit immediately before `{`. That is not defensive padding: lightningcss
+// MERGES adjacent rules that share a declaration, so when 11.9.7e added
+// `.eb-sticky-title { display: none }` directly below this one, the built rule
+// became `.search,.darkmode,.readermode,.eb-sticky-title{display:none}` and the
+// adjacency-anchored pattern failed on correct CSS. The merge is correct and
+// wanted; the guard only has to tolerate it.
 const hideRule =
-  /(\.page>#quartz-body \.page-header \.search,[^}]*?\.readermode)\{display:none\}/.exec(headerCss)
+  /(\.page>#quartz-body \.page-header \.search,[^}]*\.readermode[^{}]*)\{display:none\}/.exec(
+    headerCss,
+  )
 check(!!hideRule, "the mobile header drops search, the theme toggle and reader mode")
 const hideAt = hideRule ? headerCss.indexOf(hideRule[0]) + hideRule[0].length : -1
 const lastMedia = headerCss.lastIndexOf("@media", hideAt)
@@ -583,6 +593,53 @@ const scriptsDir = join(brain, "public", "static", "scripts")
 const scriptBlob = readdirSync(scriptsDir)
   .map((f) => readFileSync(join(scriptsDir, f), "utf8"))
   .join("\n")
+
+// 11.9.7e - the mobile reading header. The element and the behaviour are
+// separate guarantees and can break independently: the title can stop
+// rendering (plugin unwired), or the script can stop shipping (then the class
+// is never added and the bar silently never collapses — no error anywhere).
+check(
+  /<span class="eb-sticky-title">[^<]+<\/span>/.test(headerPost),
+  "post pages carry an .eb-sticky-title element in the header",
+)
+check(
+  /<span class="eb-sticky-title">/.test(headerPost) &&
+    headerPost.indexOf("eb-sticky-title") > headerPost.indexOf('class="page-header"') &&
+    headerPost.indexOf("eb-sticky-title") < headerPost.indexOf("</header>"),
+  "the sticky title sits inside the header, as a sibling of the nav",
+)
+check(
+  scriptBlob.includes("__ebStickyTitleTeardown") &&
+    scriptBlob.includes("article h1") &&
+    scriptBlob.includes("eb-header--compact"),
+  "the sticky-title scroll script ships (teardown + h1 probe + compact class)",
+)
+// Desktop must be unaffected: EVERY compact rule has to live inside the mobile
+// query, not just the first one.
+//
+// `indexOf` was the obvious first attempt and it is wrong: it inspects only the
+// earliest occurrence, so relocating a LATER compact rule out of the query
+// still passed. That is the same first-occurrence trap as the slice-width bug
+// above, and the proven-red run caught it. Now every occurrence is checked, so
+// one stray rule outside the query is enough to fail.
+const compactAt = []
+for (
+  let i = headerCss.indexOf("eb-header--compact");
+  i > -1;
+  i = headerCss.indexOf("eb-header--compact", i + 1)
+) {
+  compactAt.push(i)
+}
+const compactAllMobile =
+  compactAt.length > 0 &&
+  compactAt.every((i) => {
+    const m = headerCss.lastIndexOf("@media", i)
+    return /^@media \(max-width:800px\)/.test(headerCss.slice(m, m + 40))
+  })
+check(
+  compactAllMobile,
+  `all ${compactAt.length} collapsed-header rules sit inside the mobile query (desktop header untouched)`,
+)
 check(
   scriptBlob.includes("data-eb-recently-updated") && scriptBlob.includes("days < 90"),
   "the client script that reveals the pill is actually shipped",
