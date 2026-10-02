@@ -46,10 +46,17 @@ function TagHubComponent({ allFiles, cfg, fileData }) {
 
   // Only real posts, and only published ones — an unpublished draft must never
   // surface through the hub even if it is still in `allFiles`.
+  //
+  // `.filter((f) => f.slug !== "index")` is the Desk excluding itself, and it is
+  // needed here too even though it looked unnecessary: `!slug.endsWith("/")`
+  // excludes folder slugs and nothing else, and "index" is not a folder. The hub
+  // never showed the fault because content/index.md has no TAGS, so the homepage
+  // dropped out of `byTag` instead. year-foldouts groups by year, which no
+  // filter happened to catch, so it listed the Desk inside its own archive.
   const posts = allFiles
     .filter((f) => f.frontmatter?.title)
     .filter((f) => f.frontmatter?.publish !== false)
-    .filter((f) => f.slug && !f.slug.endsWith("/"))
+    .filter((f) => f.slug && f.slug !== "index" && !f.slug.endsWith("/"))
 
   const byTag = new Map()
   for (const post of posts) {

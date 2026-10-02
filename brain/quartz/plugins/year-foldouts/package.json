@@ -1,0 +1,29 @@
+{
+  "name": "year-foldouts",
+  "version": "1.0.0",
+  "description": "Desk: the full archive as collapsible year sections",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "year-foldouts",
+    "displayName": "Year Fold-outs",
+    "description": "Collapsible by-year archive for the Desk",
+    "components": {
+      "YearFoldouts": {
+        "name": "YearFoldouts",
+        "displayName": "Year Fold-outs",
+        "description": "The full archive, grouped by year in <details> sections",
+        "version": "1.0.0",
+        "defaultPosition": "beforeBody"
+      }
+    }
+  }
+}

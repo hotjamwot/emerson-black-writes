@@ -1,0 +1,18 @@
+{
+  "name": "archive-redirects",
+  "version": "1.0.0",
+  "description": "11.9.10: redirects the retired /newsletters/ archive URLs to /desk/",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "quartz": {
+    "name": "archive-redirects",
+    "displayName": "Archive Redirects",
+    "description": "Retired archive URLs redirect to the Desk",
+    "emitter": true
+  }
+}

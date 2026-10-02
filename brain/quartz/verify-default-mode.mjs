@@ -363,11 +363,41 @@ check(
 // (c) What it must still do: name the Desk, forward into the archive, and link
 // back to the house. Dropping About removed the only other place the Desk
 // explained itself, so this is the page that has to carry it.
-check(
-  /href="(?:\.\/)*newsletters\/"/.test(homeDoc) &&
-    /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
-  "the landing page forwards into the archive and links back to the storefront",
-)
+//
+// 11.9.10 — "forward into the archive" used to mean `href="newsletters/"`. That
+// page is gone, folded into the year sections at the foot of this same page, so
+// the button now jumps to that section. The guard follows: it asserts the jump
+// target EXISTS on the page, not just that some link was changed, so a stale
+// anchor here would fail rather than scroll nowhere.
+{
+  const archiveAnchor = /id="everything-by-year"/.test(homeDoc)
+  check(
+    archiveAnchor,
+    "the archive jump target actually exists on the landing page (no dead anchor)",
+  )
+  check(
+    /href="#everything-by-year"/.test(homeDoc) &&
+      /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
+    "the landing page forwards into the archive and links back to the storefront",
+  )
+  // And the retired URL must not be linked from anywhere in the built site.
+  // A link to a redirect stub still works, but it is a bounce through a page
+  // that no longer exists, and nothing should be pointing at it.
+  let staleArchiveLinks = 0
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name)
+      if (e.isDirectory()) walk(p)
+      else if (e.name.endsWith(".html") && !p.includes(`${join("public", "newsletters")}`))
+        if (/href="[^"]*ewsletters\/\$?"/.test(readFileSync(p, "utf-8"))) staleArchiveLinks++
+    }
+  }
+  walk(join(brain, "public"))
+  check(
+    staleArchiveLinks === 0,
+    `nothing in the built site still links to /newsletters/ (${staleArchiveLinks} found)`,
+  )
+}
 
 // (d) The recent-posts list is generated, not typed. `recent-notes` is already
 // `afterBody` with limit 5, so the page gets a list that cannot go stale — the
@@ -796,6 +826,12 @@ check(
 // title is worse than nothing. Tag pages and the 404 are generated/virtual and
 // have none.
 //
+// `newsletters/2023/index.html` used to be on this list, as a folder listing. It
+// is not any more: 11.9.10 turned it into a redirect stub, so asserting anything
+// about its markup is meaningless — and worse, reading it unconditionally threw
+// ENOENT whenever the stub was absent, which killed the whole suite and hid the
+// 60-odd checks that had not run yet.
+//
 // The homepage is deliberately NOT in this list. content/index.md carries its own
 // description, so a standfirst there is correct and wanted. The first version of
 // this check listed index.html and failed - the component was right and the
@@ -803,10 +839,12 @@ check(
 const descriptionless = [
   join(brain, "public", "404.html"),
   join(brain, "public", "tags", "process.html"),
-  join(brain, "public", "newsletters", "2023", "index.html"),
+  join(brain, "public", "tags", "index.html"),
 ]
 check(
-  descriptionless.every((f) => !/class="eb-post-deck"/.test(readFileSync(f, "utf-8"))),
+  descriptionless
+    .filter((f) => existsSync(f))
+    .every((f) => !/class="eb-post-deck"/.test(readFileSync(f, "utf-8"))),
   "pages with no description get no standfirst (no empty gap under the title)",
 )
 check(
@@ -945,6 +983,164 @@ check(
   /\.page article\{[^}]*max-width:780px/.test(hubCss),
   "the article reading column still holds its 780px measure",
 )
+
+// ── 11.9.10: the by-year fold-outs, and the retirement of /newsletters/ ─────
+//
+// The archive used to be five pages. `/newsletters/` was a page whose entire
+// content was a list of four year links; each year was a folder page listing the
+// posts inside it. All of it is now collapsible sections on the Desk.
+
+{
+  // 1. The fold-outs exist, one per year, on the Desk.
+  const folds = (homeDoc.match(/class="eb-years__fold"/g) ?? []).length
+  check(folds === 4, `the Desk carries one year fold-out per year (found ${folds})`)
+  check(
+    /<details class="eb-years__fold" open>/.test(homeDoc),
+    "the newest year's fold-out is open by default (a closed one reads as broken)",
+  )
+
+  // 2. THE ONE THAT MATTERS: every post appears exactly once in the year list.
+  // This is the whole point of the fold-outs — it is the complete archive, so a
+  // post missing here is a post the site has quietly stopped offering. Counting
+  // <li> rows against the posts we know build is the only check that catches it.
+  const yearRows = (homeDoc.match(/class="eb-years__row"/g) ?? []).length
+  check(
+    yearRows === builtPosts.length,
+    `the by-year list holds every post exactly once (${yearRows}/${builtPosts.length})`,
+  )
+
+  // 3. Every year row links somewhere real. A fold-out of 49 dead links is worse
+  //    than the folder pages it replaced.
+  const deadYearLinks = [...homeDoc.matchAll(/class="internal eb-years__link" href="\.\/([^"]+)"/g)]
+    .map((m) => m[1])
+    .filter((slug) => !existsSync(join(brain, "public", `${slug}.html`)))
+  check(
+    deadYearLinks.length === 0,
+    `every fold-out row links to a real post${
+      deadYearLinks.length ? ` (${deadYearLinks.length} dead: ${deadYearLinks.slice(0, 2)})` : ""
+    }`,
+  )
+
+  // 4. The headings count what is actually there. This is the guard against the
+  //    number drifting from the content, which is how "51 posts" became a lie
+  //    twice in this project's history.
+  check(
+    new RegExp(`${builtPosts.length} posts</span>`).test(homeDoc),
+    "the fold-out heading counts the real number of posts",
+  )
+
+  // 5. Descending years, checked in document order rather than trusted.
+  const yearOrder = [...homeDoc.matchAll(/class="eb-years__year">(\d{4})</g)].map((m) => m[1])
+  check(
+    yearOrder.join(",") === [...yearOrder].sort((a, b) => b - a).join(","),
+    `the fold-outs run newest year first (${yearOrder.join(", ") || "none found"})`,
+  )
+
+  // 6. The five retired URLs must not be REBUILT as pages. A guard that only
+  //    checks the redirect stub would pass even if folder-page came back on and
+  //    regenerated the real pages over the top of it.
+  //
+  //    existsSync, not readFileSync. The first version read unconditionally and
+  //    threw ENOENT the moment a stub went missing — which kills the whole
+  //    process, so the other 130 checks never ran and the one real problem was
+  //    the only thing you did not learn about it. A missing file is a failed
+  //    check, not a crashed suite.
+  const retiredPaths = [
+    "newsletters",
+    "newsletters/2023",
+    "newsletters/2024",
+    "newsletters/2025",
+    "newsletters/2026",
+  ]
+  const readStub = (p) => {
+    const f = join(brain, "public", p, "index.html")
+    return existsSync(f) ? readFileSync(f, "utf-8") : null
+  }
+  const rebuilt = retiredPaths.filter((p) => {
+    const doc = readStub(p)
+    return doc !== null && !doc.includes('http-equiv="refresh"')
+  })
+  const missingStubs = retiredPaths.filter((p) => readStub(p) === null)
+  check(
+    missingStubs.length === 0,
+    `every retired archive URL still emits a redirect (${
+      missingStubs.length ? `missing: ${missingStubs.join(", ")}` : "all 5 present"
+    })`,
+  )
+  check(
+    rebuilt.length === 0,
+    `the retired archive URLs are redirects and nothing else${
+      rebuilt.length ? ` (rebuilt as pages: ${rebuilt.join(", ")})` : ""
+    }`,
+  )
+
+  // 7. Each redirect points at the Desk, derived from baseUrl rather than a
+  //    guess — and must NOT point at itself, which is what a copy-paste of the
+  //    wrong slug would produce.
+  //
+  //    baseUrl is read out of the config rather than hardcoded here. If it ever
+  //    changes the emitter follows it, and this guard has to follow it too, or it
+  //    would be asserting against a value the site stopped using.
+  const baseUrl = config.match(/^\s*baseUrl:\s*(\S+)/m)?.[1] ?? ""
+  check(
+    baseUrl === "emersonblackwrites.com/desk",
+    "baseUrl is readable from the config for the redirect guard",
+  )
+  const redirectsOk =
+    baseUrl !== "" &&
+    retiredPaths.every((p) => {
+      const doc = readStub(p)
+      if (doc === null) return false
+      const to = doc.match(/http-equiv="refresh" content="0; url=([^"]+)"/)?.[1]
+      return to === `https://${baseUrl.replace(/\/$/, "")}/` && !to.endsWith(p)
+    })
+  check(redirectsOk, `all five retired URLs redirect to the Desk (${retiredPaths.length} checked)`)
+
+  // 8. folder-page stays off. It is what regenerated the year folders, and a
+  //    silently re-enabled plugin is the regression this whole change risks.
+  check(
+    /source: "@quartz-community\/folder-page"\s*\n\s*enabled: false/.test(config),
+    "folder-page stays disabled (it is what regenerates the year folders)",
+  )
+  check(
+    !existsSync(join(brain, "content", "Newsletters", "index.md")),
+    "content/Newsletters/index.md stays deleted",
+  )
+
+  // 9. The 49 posts themselves are untouched. Removing the archive must never
+  //    cost a post.
+  check(
+    builtPosts.length === 49,
+    `all 49 posts still build after the archive was retired (${builtPosts.length})`,
+  )
+
+  // 10. NO PAGE STATES A COUNT IT CANNOT BACK UP. The recent-notes overflow line
+  //     reads `allFiles.length - limit`, and allFiles holds nine virtual tag pages
+  //     plus content/index.md, so it said "See 53 more" and then "See 45 more"
+  //     against 49 posts. There is no YAML option that expresses the one filter
+  //     that would fix it, and a wrapper plugin supplying it silently removed the
+  //     whole list from the page. So the link is off rather than the number being
+  //     wrong, and the honest total is the fold-out heading's.
+  check(!/See \d+ more/.test(homeDoc), "the Desk states no dispatch count it cannot verify")
+  check(
+    new RegExp(`>${builtPosts.length} posts</span>`).test(homeDoc),
+    "the fold-out heading is the one place the archive states its size",
+  )
+  // And the list itself must still be there — the wrapper plugin took it away
+  // silently, which is the failure this whole round is about.
+  check(
+    (homeDoc.match(/class="recent-li"/g) ?? []).length === 5,
+    "the Latest dispatches list still renders its five posts",
+  )
+  check(
+    !/source: "\.\/quartz\/plugins\/latest-dispatches"/.test(config),
+    "the failed recent-notes wrapper is not back in the config",
+  )
+  check(
+    /linkToMore: false/.test(config),
+    "recent-notes renders no overflow link rather than a wrong count",
+  )
+}
 
 // 11.9.5(a) - the Desk hub: one card per topic, five most recent posts each,
 // with the description under every title.

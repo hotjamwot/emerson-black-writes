@@ -701,6 +701,142 @@ h2.page-title,
   color: var(--eb-accent);
 }
 
+// 11.9.10 — the by-year fold-outs at the foot of the Desk.
+//
+// The other half of what the topic cards do not do. The cards answer "what is
+// this about" and cap each topic at five; this is the other axis — "what has he
+// actually written" — and it is the whole archive, so 49 posts against the
+// cards' 34.
+//
+// `<details>` is doing all the work. The disclosure triangle is the browser's,
+// the keyboard and screen-reader behaviour is the browser's, and this is two
+// rules of CSS rather than a button, an aria-expanded and a script that would
+// need to keep working after every Quartz upgrade. The marker is restyled rather
+// than removed, so the control still LOOKS like a disclosure.
+.eb-years {
+  margin: 3rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--eb-line);
+}
+
+.eb-years__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.5rem;
+  font-family: var(--eb-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.eb-years__total {
+  font-family: var(--eb-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--lightgray);
+}
+
+.eb-years__fold {
+  border-bottom: 1px solid var(--eb-line);
+
+  // A hairline between collapsed sections, but not around an open one — the
+  // open section's own list provides its bottom edge and a rule on both would
+  // draw a box around what should read as a panel.
+  &[open] {
+    border-bottom-color: transparent;
+  }
+}
+
+.eb-years__summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.7rem 0.25rem;
+  cursor: pointer;
+  font-family: var(--eb-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark);
+  list-style: none;
+
+  // Safari still renders the default marker on `summary` without this.
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:hover .eb-years__year {
+    color: var(--eb-accent);
+  }
+}
+
+.eb-years__year {
+  transition: color 0.2s ease;
+}
+
+// The disclosure triangle, drawn as a rotated chevron rather than a glyph so it
+// inherits the accent on hover and needs no icon font.
+.eb-years__summary::before {
+  content: "›";
+  display: inline-block;
+  width: 1ch;
+  margin-left: -1ch;
+  color: var(--lightgray);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.eb-years__fold[open] > .eb-years__summary::before {
+  transform: rotate(90deg);
+}
+
+.eb-years__n {
+  margin-left: auto;
+  font-family: var(--eb-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--lightgray);
+}
+
+// Title and date on one line, wrapping together — the date sits in a fixed
+// column so the titles align down the page instead of stepping sideways by
+// however many characters each is.
+.eb-years__list {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+}
+
+.eb-years__row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.22rem 0 0.22rem 1.25rem;
+}
+
+.eb-years__date {
+  font-family: var(--eb-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--lightgray);
+}
+
+.eb-years__link {
+  color: var(--dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--eb-accent);
+  }
+}
+
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
 #quartz-body .center {
   min-width: 0;

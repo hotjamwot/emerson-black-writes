@@ -187,6 +187,11 @@ plugins:
       display: all
   - source: "@quartz-community/alias-redirects"
     enabled: true
+  # 11.9.10 — the retired archive URLs, kept alive as redirects rather than
+  # deleted. See ./quartz/plugins/archive-redirects/index.js for why these are
+  # five small files and not a 404.
+  - source: "./quartz/plugins/archive-redirects"
+    enabled: true
   - source: "@quartz-community/content-index"
     enabled: true
     options:
@@ -202,8 +207,28 @@ plugins:
     enabled: true
   - source: "@quartz-community/content-page"
     enabled: true
+  # 11.9.10 — OFF, deliberately.
+  #
+  # This plugin auto-generates an index page for every folder on the site, which
+  # is what produced /newsletters/2023/ .. 2026/: four pages whose whole content
+  # was the posts in that year. Those five URLs (four years plus the
+  # content/Newsletters/index.md page) are now collapsible sections at the foot
+  # of /desk/, which is where a reader would look for "everything, newest first".
+  #
+  # Nothing else on the site depends on it. /tags/ belongs to tag-page, the
+  # homepage is content/index.md, and the 49 posts are individual .md files
+  # inside the year folders — they are untouched by this. verify-default-mode
+  # asserts none of the five URLs is emitted and that every post still builds.
   - source: "@quartz-community/folder-page"
+    enabled: false
+  # 11.9.10 — the year fold-outs. Slot 9, so it sits directly under the topic
+  # cards (slot 8) and reads as the page's second axis: "what is this about"
+  # above, "what has he written" below.
+  - source: "./quartz/plugins/year-foldouts"
     enabled: true
+    layout:
+      position: beforeBody
+      priority: 9
   # 11.9.5(b) — descriptions on the tag listing pages, which REPLACES tag-page.
   #
   # `@quartz-community/tag-page` compiles its own copy of PageList into dist/
@@ -433,17 +458,37 @@ plugins:
     layout:
       position: afterBody
       priority: 10
+  # 11.9.10 — this was `Newsletters/index`, the archive page that is now gone.
+  #
+  # It is `false` and NOT a link to the year fold-outs, on purpose. This
+  # component's overflow line reads `allFiles.length - limit`, and allFiles holds
+  # nine virtual /tags/ pages plus content/index.md itself, so any number it
+  # renders counts FILES rather than dispatches: the page said "See 45 more"
+  # against 49 posts shown five at a time, which is 44. `hideTagPages` removes the
+  # nine and is worth having regardless, but the Desk's own row is left over — and
+  # `filter` is a function that a YAML config cannot honestly express. A wrapper
+  # plugin supplying it was tried and removed: it did not resolve through the
+  # component registry and silently took the whole list off the page, which is
+  # worse than a wrong number.
+  #
+  # So there is no overflow link here, and nothing on the page states a number this
+  # component cannot state correctly. The archive is reached by the "Browse the
+  # archive" button above, which jumps to the fold-outs, and the honest total
+  # lives in that section's own heading.
   - source: "@quartz-community/recent-notes"
     enabled: true
     options:
       title: Latest dispatches
       limit: 5
-      linkToMore: Newsletters/index
+      linkToMore: false
       showTags: false
       showDate: true
       # Keep folder index pages (year archives, homepage) out of the list —
       # they carry no publication date and would sort to the top.
       hideFolderPages: true
+      # 11.9.10 — the tag pages too. They are virtual and carry no publication
+      # date, so they were never candidates for this list, only for its arithmetic.
+      hideTagPages: true
   - source: "@quartz-community/spacer"
     enabled: true
     options: {}
