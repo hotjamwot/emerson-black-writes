@@ -427,15 +427,44 @@ instead of reporting. Only proven-red surfaced it.
 
 **Suite: 95 checks, 0 failures** (85 → 95). All eight new guards proven red.
 
-#### ✅ 11.9.5(c)+(b)+(a) — twelve further guards, all proven red.
+#### ✅ 11.9.10 Retire `/Newsletters/`, fold the archive into the Desk
 
-**Suite: 114 checks, 0 failures** (107 → 114 with the 11.9.7 e/f/g fixes below). Three of the seven guards added today were either vacuous or masked by a near-miss selector, and every one was caught only by insisting the regression actually *fail*:
+**HayJay: `/Newsletters/` is "just the years with links", fold it into `/desk/`.**
+Confirmed by inspection — it was a page whose entire content was four year links,
+and each year a folder page listing that year's posts. Five URLs, one idea.
 
-- The image rule was `.page article .content img` — compiled, beat the base rule, and matched **0 of 186** images, because this project has no `.content` wrapper.
-- The sidebar guard matched **two** rules, so reverting it to 420px still passed.
-- A stray trailing comma turned one `check()` into a comma expression and the file would not parse.
+**Now on the Desk, below the topic cards** (`./quartz/plugins/year-foldouts`,
+slot 9 under slot 8): collapsible `<details>` by year, newest first, newest open.
+Titles and dates only — the cards above already carry standfirsts, and repeating
+all 49 says the same thing twice. Native `<details>`, no JS, no `aria-expanded`
+to keep working after the next Quartz upgrade.
 
-> **A guard is only worth what its red test is worth.** That is now the third time this round: a guard that cannot go red, a rule that selects nothing, and a selector that matched the wrong rule were all shipped first and all caught second.
+`folder-page` disabled, `content/Newsletters/index.md` deleted, and **all five
+URLs redirect to `/desk/`** (`./quartz/plugins/archive-redirects`). They are all
+in the published sitemap and one is linked from the homepage, so deleting them
+would turn every search result and old bookmark into a dead end.
+
+> **Three things this surfaced, none of them the one I was looking for.**
+>
+> 1. **The fold-outs listed the Desk as a post** — 50 rows against 49. The filter
+>    meant to prevent it, `!slug.endsWith("/")`, only excludes *folder* slugs, and
+>    `"index"` is not a folder. `tag-hub` carried the identical filter and was
+>    wrong the same way; it never surfaced because the homepage has no tags and
+>    dropped out of `byTag` instead.
+> 2. **"See 53 more" on the homepage, against 49 posts.** `recent-notes` computes
+>    overflow as `allFiles.length - limit`, and `allFiles` holds nine virtual tag
+>    pages *and the Desk itself* — so it was counting files, not dispatches.
+> 3. **A wrapper plugin to fix it was written and removed.** It did not resolve
+>    through the component registry and silently removed the whole "Latest
+>    dispatches" list. A wrong number is bad; a missing list is worse. `linkToMore`
+>    is now `false` — no overflow line at all, and the honest total lives in the
+>    fold-out heading.
+>
+> Also: `quartz/static/` is the **assets** directory and publishes to
+> `<output>/static/`, so the first attempt at these redirects landed at
+> `/desk/static/newsletters/` — a clean build containing five redirects no reader
+> would ever reach. They are an emitter now, and the guard reads them from their
+> real path.
 
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
@@ -447,9 +476,25 @@ large images. **Needs a real phone** — I cannot verify rendered geometry
 without one, and guessing at more from the CSS is exactly how 11.9.4 became a
 list of unfixed suspects in the first place.
 
-#### 🔴 11.9.5 Reconsider `/desk/` — decision needed, not a bug
+#### ✅ 11.9.5 Reconsider `/desk/` — DECIDED & DONE 2026-10-02
 
-`/desk/` is the Quartz build — all 49 posts. It can't be removed (every sitemap URL, desk pick and `postDates.json` entry points into it); the homepage `#desk` is six links. **Recommendation (a): keep it, fix how it presents** — the homepage is the shop window, `/desk/` the stockroom, and the 11.9.6 header fold resolves the redundancy. (b) merging highlights into `/desk/` buries the craft proof; (c) serving homepage content at `/desk/` breaks 49 live URLs. **HayJay to confirm (a).**
+**HayJay: keep `/desk/`.** Recommendation (a) confirmed — the homepage is the shop
+window, `/desk/` the stockroom, and the new card list is what makes it work.
+
+| Option | Outcome |
+|---|---|
+| **(a) Keep `/desk/`, fix how it presents** | ✅ **Taken.** Topic cards (11.9.5a) + standfirsts (11.9.5c) + by-year fold-outs (11.9.10) |
+| (b) Merge highlights into `/desk/` | ✗ Buries the craft proof behind an archive |
+| (c) Serve homepage content at `/desk/` | ✗ Breaks 49 live URLs |
+
+**`/Newsletters/` is gone (11.9.10).** It was a page whose entire content was a
+list of four year links, and each year was a folder page listing that year's
+posts — five URLs to say one thing. All of it is now collapsible by-year sections
+at the foot of the Desk. `folder-page` disabled, `content/Newsletters/index.md`
+deleted, and all five URLs redirect to `/desk/` rather than 404ing, because all
+five are in the published sitemap and one is linked from the homepage.
+
+The 49 posts are untouched and still live at `/newsletters/<year>/<slug>`.
 
 #### 🟠 11.9.6 Fold the homepage header into the Desk — DONE 2026-10-02
 
@@ -579,7 +624,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 114 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 134 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
