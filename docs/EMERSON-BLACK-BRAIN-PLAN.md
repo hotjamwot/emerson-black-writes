@@ -120,9 +120,20 @@ F13 (the vacuous guard + wrong-layer pin) is why every guard below must read the
 | F1–F4 | CSS/plugin cruft (15 orphaned `eb-*` classes, 3 inert plugins) | ⏳ open — marked done in the log, never actually pruned |
 | F12 | Active explorer item red-on-red — a **specificity loss**, not a colour choice | ⏳ open |
 | F13 | The vacuous guard + wrong-layer pin (above) | ✅ fixed |
+| F14 | **Two "known-failing" bio guards were unfixable, not flaky.** Both assumed `bio.html` still held about copy; S11 §11.3c turned it into a redirect stub, so one demanded a nav link from a page with no nav, and the other read `<div class="bio-text">` — gone — leaving `bioProse` always `""`, so its own `length > 40` half could never pass | ✅ fixed 2026-10-02 — suite **69 checks, 0 failures** |
 | — | `writing-abroad` slug vs title mismatch → misleading link text | ✅ fixed by HayJay |
 | — | 3 images named for a post that no longer existed | ✅ renamed to `sourcing-intrigue-for-stories` |
 | — | `backlinks` excluded from the content layout — kept the column clean but removed the only way a reader discovers related posts | ⏳ open — re-enable |
+
+**F14's real lesson — a red guard is not automatically a bug.** These two were filed
+as "known, pre-existing, ignore them" for long enough that they became scenery. A
+guard that has never passed is not a flaky guard; it is a **spec that no longer
+matches reality**, and it was silently suppressing the real signal. When a check is
+written off, ask whether it is describing the site or describing an old site.
+
+**The two new pill guards failed this test too.** The first regex matched the
+`:hover` rule; the second matched `transition: background-color`. Both passed with
+the fix *deleted*. Only deleting the fix and re-running exposed it.
 
 **Standing rules** (each bought with a failed deploy — full stories in git log)
 - *A guard that cannot fail is worse than no guard.* Hit four times: the yellow check, two unreachable sitemap assertions, and a `--screenshot` capture that produced byte-identical PNGs (I11).
@@ -130,6 +141,9 @@ F13 (the vacuous guard + wrong-layer pin) is why every guard below must read the
 - *After a visual change, measure the rendered thing* — image dimensions from the file, the DOM from the built artifact, one real look. Verifying the input is not verification (I10).
 - *A check a comment can break is not a check.* Strip comments before pattern-matching (I9).
 - *After fixing one unpinned token, enumerate the rest. Log the dismissed options too. A tidy layout can hide the feature that makes the links worth having.*
+- *Pin the token **and** own the property.* A component rule in `@layer quartz-base` that reads a theme token cannot be fixed by pinning the token alone — the pill was yellow after a correct pin, for a full day, mostly because the fix was never pushed. Fix at the layer that provably wins, then prove it in the built bundle (depth 0, no enclosing `@layer`).
+- *Commit messages: never write them to `/tmp`.* A concurrent write overwrote one mid-flight and a commit landed with a message describing entirely different work. Write the message with the editor tool, under a filename unique to that commit.
+- *An unpushed fix is an unfixed fix.* `deploy.yml` runs on push to `main`; a green local build proves nothing about what a reader sees.
 
 ## 10. Where the Desk stands (measured 2026-10-01)
 
@@ -167,7 +181,7 @@ Full restyle: series pitch replaces the dated launch-banner hero (a launch now b
 
 Shipped inside the rehaul above: sticky header with Desk link (was footer-only). Guard asserts every nav target exists as a section `id`.
 
-### 🟠 11.9 Post-rehaul defect list — 1–3 + 6 + 8 DONE 2026-10-02 · 4–5, 7 OPEN
+### 🟠 11.9 Post-rehaul defect list — 1–3 + 6 + 7 + 8 DONE 2026-10-02 · 4–5 OPEN
 
 **Fixed 2026-10-02** (one commit, measured, HayJay eyeballed): 11.9.1 hero full-bleed, 11.9.2 section rhythm, 11.9.3 prequel cover 5:8. Fixes + guard story in git log.
 
@@ -191,30 +205,52 @@ New local `Wordmark` plugin (`quartz/plugins/wordmark`): the storefront's two-li
 
 #### 🟠 11.9.7 The Desk's visual problems (one `custom.scss` pass)
 
-| Symptom | Likely cause |
+| Symptom | Status |
 |---|---|
-| Left column too wide | §4b reclaimed the empty *right* sidebar; the left was never narrowed |
-| Sidebar at the top on mobile, covering content | Desktop grid retained at small widths — needs a single-column breakpoint and `order` |
-| **Tag pills have ugly yellow behind them** | **Almost certainly the theme-layer leak below** — highest-confidence item here |
-| Search bar too narrow | Never resized after the sidebar change |
-| Post body images far too large | No `max-width` on `.content img` — longest-standing of these |
+| **Tag pills have ugly yellow behind them** | ✅ **fixed and shipped** — see below. Was the highest-confidence item, and the prescribed fix was wrong |
+| Left column too wide | ⏳ open — §4b reclaimed the empty *right* sidebar; the left was never narrowed |
+| Sidebar at the top on mobile, covering content | ⏳ open — desktop grid retained at small widths; needs a single-column breakpoint and `order` |
+| Search bar too narrow | ⏳ open — never resized after the sidebar change |
+| Post body images far too large | ⏳ open — no `max-width` on `.content img`; longest-standing of these |
 
-**Fix the yellow tags in the theme's own aspect block, exactly as the violet was fixed** — not by escalating CSS from outside (layer order means it would appear to work and silently not be true).
+> **The original prescription here was wrong, and it is worth keeping the correction.** It said: *"Fix the yellow tags in the theme's own aspect block… not by escalating CSS from outside (layer order means it would appear to work and silently not be true)."*
+>
+> Pinning `--highlight` in the theme overlay was necessary but **not sufficient**. The rule that actually paints the pill is `a.internal.tag-link{background-color:var(--highlight)}`, which lives in `@layer quartz-base` and reads a *theme* token — so the pill was never really ours to pin. **Lesson: pinning a token is not the same as owning the property.** Where a component reads a borrowed token, declare the property itself, at a layer that provably wins.
 
-#### PART 11.9.7 (closed part)
+#### ✅ 11.9.7a Yellow tag pills — FIXED & SHIPPED 2026-10-02
 
-**Yellow tag pills - fixed at the source, per the prescription below.** The devtools
-reading was `#FFD00066`, upstream's `rgba(255, 208, 0, 0.4)`. The theme's `base` aspect
-declares `--highlight: var(--text-highlight-bg, rgba(255,208,0,.4))` inside
-`@layer obsidian-theme`, which outranks the `quartz-base` layer the crimson pins lived
-in - so the config palette could never win.
-Fixed the violet way: the brand overlay (`quartz/theme/emerson.ts`) now pins
-`--highlight` to the same `rgba(202,38,38,.12)` / `rgba(230,58,58,.18)` pair derived
-from `ACCENT`, and `--highlight` joined `PINNED_VARIABLES`, so upstream dropping the
-anchor fails the build. Verified in the emitted bundle: per mode the brand declaration
-lands after the amber one in the same layer. `verify-brand` asserts the winning value.
+**Two causes, stacked.** The devtools reading was `#FFD00066` = upstream's
+`rgba(255, 208, 0, 0.4)`, declared by the theme's `base` aspect inside
+`@layer obsidian-theme`, which outranks the `quartz-base` layer the crimson pins
+lived in — so the config palette could never win.
 
-**Header declutter, same pass.** `content-meta` printed the publication date plus a
+1. **Token pinned** (`quartz/theme/emerson.ts`): `--highlight` set to the
+   `ACCENT`-derived `rgba(202,38,38,.12)` / `rgba(230,58,58,.18)` pair, and joined
+   `PINNED_VARIABLES` so upstream dropping the anchor fails the build. Verified in
+   the emitted bundle that the brand declaration lands after the amber one per mode.
+2. **Property owned** (`quartz/styles/custom.scss`) — the part that actually
+   mattered. `custom.scss` is *unlayered* and the component rule is in
+   `@layer quartz-base`, so declaring the pill background there outranks every
+   layer regardless of specificity. Verified in the built bundle at **brace depth 0
+   with no enclosing `@layer`**. Uses `--eb-accent`, which already resolves per
+   `saved-theme`, so no mode-specific values.
+
+*(Renaming the pill's class was considered and rejected: it needs a Quartz plugin
+patch, and leaves `--highlight` amber for anything else that reads it.)*
+
+**Also merged the legacy `.tag-link` block**, which was stranded inside
+`@media (min-width: 1200px)` and so styled pills on desktop only. One unlayered
+rule now, no duplicated declarations, identical pills at every width. HayJay
+confirmed on real devices: pills correct at mobile and desktop.
+
+**Two guards added, and proven red by deletion.** Worth recording *how* they
+nearly weren't: the first regex also matched the `:hover` rule, and the second
+matched `transition: background-color` — so both passed with the fix deleted. They
+are now anchored on `background-color:` excluding `:hover`.
+
+#### ✅ 11.9.7b Header declutter — content-meta + ToC disabled
+
+`content-meta` printed the publication date plus a
 reading time under the title, beside the header Published/Updated line - the date
 twice. Its S10 CSS suppression had been nested inside `.eb-post-dates`, compiling to
 `.eb-post-dates .content-meta time` (matches nothing) while the guard passed on an
@@ -245,9 +281,27 @@ Craft posts next to the books they produced — arguably the most agent-interest
 
 ## 12. Roadmap
 
-**Now:** 11.9.6 header fold (carries 11.9.8) → 11.9.4 mobile (needs a real phone) → 11.9.7 Desk CSS pass → 11.9.5 needs HayJay's answer. Then 11.6 craft→books bridge → 11.5 tag constellation.
-**Also open:** Backlinks · sidebar width + active item (I4/I5) · F1–F4 cruft prune.
+**Goal now:** everything remaining is either cosmetic polish or a decision — no more
+structural work on the Desk.
+
+1. **Reading-first navigation** — the last substantive item. Simplify the mobile
+   header/sidebar (11.9.4), and decide how backlinks / related-post links surface
+   (the open finding above). Then everything else is cosmetic.
+2. **HayJay's call on 11.9.5** — recommendation (a) stands: keep `/desk/`, fix how it
+   presents. Still unconfirmed.
+3. **Cosmetic, in one `custom.scss` pass:** left column width · sidebar/search sizing ·
+   `max-width` on `.content img` (the longest-standing) · I4 active-item red-on-red ·
+   F1–F4 cruft prune.
+4. **11.9.4 needs a real phone.** Desktop and mobile pill rendering is confirmed; the
+   rest of the mobile pass is not.
+
+**Verification suite: 69 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
+
+**Highest-ceiling product item, still untouched:** 11.6 craft→books bridge — a line on
+craft posts pointing at the books that used the technique. Turns the Desk into a funnel,
+which is the actual goal.
 
 ## 13. Commands
 
@@ -273,5 +327,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page.
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 69/69 (F14)**.
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
