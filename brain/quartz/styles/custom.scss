@@ -228,11 +228,17 @@ h2.page-title,
   font-weight: 600;
 }
 
-// ── 4a. S1a: the header bar (wordmark · nav · search + controls) ────────────
+// ── 4a. 11.9.6: the header bar (wordmark · nav · search + controls) ───────
 // The header slot is a full-width grid row above the shell (`grid-header`), so
 // it spans both the sidebar and the content column. That is what lets the
 // wordmark sit top-left and the toolbar top-right on one line, with the nav
 // between them — the storefront's shape rather than a sidebar stack.
+//
+// Sticky + blur matches the storefront's `.site-header` (style.css §3):
+// `rgba(6,13,20,0.82)` + 12px blur over the campus hero. The Desk's own
+// palette vars resolve per-mode instead: `color-mix(in srgb, var(--light) 82%,
+// transparent)` is the same 0.82 alpha against the current theme background,
+// so light mode gets a cream blur and dark mode the navy one.
 //
 // Selector notes — both of these were silent no-ops at first, and they are the
 // whole reason this section took several passes.
@@ -254,8 +260,16 @@ h2.page-title,
 //
 // Descendant selectors elsewhere, and the box model is handled explicitly.
 .page > #quartz-body .page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   margin: 0 0 0.5rem;
   border-bottom: 1px solid var(--eb-line);
+  background: color-mix(in srgb, var(--light) 82%, transparent);
+  // NOTE: `backdrop-filter` alone — lightningcss adds `-webkit-` prefix at
+  // build time (verified in emitted bundle). Writing both by hand duplicates
+  // the declaration after prefixing.
+  backdrop-filter: blur(12px);
 }
 
 .page > #quartz-body .page-header > header {
@@ -267,48 +281,52 @@ h2.page-title,
   min-height: 0;
 }
 
-// Wordmark. The `::after` tick in §4 was written for the sidebar version of this
-// element; it is suppressed here in favour of the nav sitting on the baseline.
+// ── 11.9.6: the wordmark is the storefront's two-line stacked mark ─────────
+// `Wordmark` (./quartz/plugins/wordmark) renders the spans; this styles them
+// to match style.css `.wordmark-name` / `.wordmark-series` exactly.
 //
-// S10: `--eb-wordmark-size` is the single source of the mark's size. The visible
-// text is no longer this value (`page-title` prints the site's full name); the
-// short mark `EBW` is painted below from the same variable, so the painted mark
-// and the collapsed name cannot drift apart.
-.page > #quartz-body .page-header h2.page-title {
+// Deliberately NOT the old EBW trick (font-size: 0 + ::before painting
+// "EBW"): the full name is the real content here, not a hidden string with a
+// painted twin, so there is nothing to collapse and nothing that can drift.
+// `pageTitle: "Emerson's Desk"` stays as the <title>/a11y source of truth.
+.page > #quartz-body .page-header h2.page-title.eb-wordmark {
   --eb-wordmark-size: 1.15rem;
-  font-size: var(--eb-wordmark-size);
   margin: 0;
   flex: 0 0 auto;
+}
+
+.page > #quartz-body .page-header h2.page-title.eb-wordmark::after {
+  display: none;
+}
+
+.page > #quartz-body .page-header h2.page-title.eb-wordmark a {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  color: var(--dark);
+  text-decoration: none;
+  font-size: var(--eb-wordmark-size);
+}
+
+.page > #quartz-body .page-header h2.page-title.eb-wordmark a:hover {
+  color: var(--dark);
+  text-decoration: none;
+}
+
+.page > #quartz-body .page-header h2.page-title.eb-wordmark .eb-wordmark-name {
+  font-family: var(--eb-display);
+  font-weight: 700;
+  font-size: var(--eb-wordmark-size);
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.page > #quartz-body .page-header h2.page-title::after {
-  display: none;
-}
-
-// ── S10: the wordmark reads `EBW` ───────────────────────────────────────────
-// §18 decided the header carries the short mark — the letters of the favicon
-// monogram and the storefront's own signature — while the *site* is "Emerson's
-// Desk". `@quartz-community/page-title` renders `cfg.pageTitle` and its README is
-// explicit that the plugin "has no configuration options", so there is no lever
-// to ask it for a different string. The swap is therefore presentational, which
-// also keeps the outcome honest for assistive tech: the anchor still *says*
-// "Emerson's Desk" (it stays in the accessibility tree and remains the link's
-// accessible name), and only the painted glyphs change.
-//
-// `font-size: 0` on the anchor collapses the long name without taking it out of
-// flow or out of the a11y tree; the pseudo-element then paints the mark at the
-// h2's own size via `--eb-wordmark-size` (which it inherits, as custom
-// properties do). `letter-spacing` and `text-transform` inherit too, so the mark
-// matches the tracked-uppercase register of the rest of the chrome.
-.page > #quartz-body .page-header h2.page-title a {
-  font-size: 0;
-}
-
-.page > #quartz-body .page-header h2.page-title a::before {
-  content: "EBW";
-  font-size: var(--eb-wordmark-size);
+.page > #quartz-body .page-header h2.page-title.eb-wordmark .eb-wordmark-series {
+  font-family: var(--eb-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray);
 }
 
 // The nav. The `footer` plugin emits `<footer><p>…Quartz…</p><ul><li><a>`;
@@ -355,17 +373,21 @@ h2.page-title,
 
 .page > #quartz-body .page-header header > footer > ul > li > a {
   font-family: var(--eb-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gray);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.2s ease;
+  padding: 6px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 
 .page > #quartz-body .page-header header > footer > ul > li > a:hover {
-  color: var(--eb-accent);
+  color: var(--dark);
+  border-bottom-color: var(--eb-accent);
 }
 
 // Toolbar (search + darkmode + reader-mode) pushed to the right edge.

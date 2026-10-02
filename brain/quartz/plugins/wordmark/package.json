@@ -1,0 +1,29 @@
+{
+  "name": "wordmark",
+  "version": "1.0.0",
+  "description": "Two-line stacked storefront wordmark linking to /, replacing page-title",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "wordmark",
+    "displayName": "Wordmark",
+    "description": "Two-line stacked storefront wordmark linking to /",
+    "components": {
+      "Wordmark": {
+        "name": "Wordmark",
+        "displayName": "Wordmark",
+        "description": "Emerson Black / Seen in Silverbridge, linking home",
+        "version": "1.0.0",
+        "defaultPosition": "header"
+      }
+    }
+  }
+}

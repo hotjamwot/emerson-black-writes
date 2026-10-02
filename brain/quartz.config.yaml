@@ -294,16 +294,23 @@ plugins:
       position: beforeBody
       priority: 30
   # ── S1a: the header bar ────────────────────────────────────────────────────
-  # The wordmark moves out of the left sidebar and into the header slot, so the
-  # nav row and the site identity share one band across the top of the shell.
-  - source: "@quartz-community/page-title"
+  # 11.9.6: the wordmark is our own `Wordmark` component (./quartz/plugins/
+  # wordmark) — the storefront's two-line stacked mark linking to `/`.
+  # `@quartz-community/page-title` has no options and links back into /desk/;
+  # 11.9.8 (wordmark → /) is the link target, so the swap is structural, not
+  # presentational. The accessible name stays "Emerson Black — home" and the
+  # series line is aria-hidden (decorative twin of the name).
+  - source: "./quartz/plugins/wordmark"
     enabled: true
     layout:
       position: header
       priority: 10
   # Footer repurposed as the nav: the plugin already renders `links` as a
   # <ul><li><a> list, which is exactly the markup a nav wants, so there is no
-  # reason to write a component. It also emits a "Created with Quartz v4 © year"
+  # reason to write a component. 11.9.6: order mirrors the storefront
+  # (Books / Desk / About / Subscribe) so the two headers read as one.
+  # About points at the homepage #about section (bio.html is a redirect stub,
+  # not a destination). It also emits a "Created with Quartz v4 © year"
   # <p>, which is upstream attribution we do not want on this site — custom.scss
   # §5 hides `header > footer > p` and nothing else, so the links still render.
   - source: "@quartz-community/footer"
@@ -311,8 +318,8 @@ plugins:
     options:
       links:
         Books: https://emersonblackwrites.com/#books
-        About: https://emersonblackwrites.com/bio.html
         Desk: https://emersonblackwrites.com/desk/
+        About: https://emersonblackwrites.com/#about
         Subscribe: https://emersonblackwrites.substack.com/
     layout:
       position: header
