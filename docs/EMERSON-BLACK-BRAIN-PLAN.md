@@ -427,7 +427,15 @@ instead of reporting. Only proven-red surfaced it.
 
 **Suite: 95 checks, 0 failures** (85 → 95). All eight new guards proven red.
 
-#### ✅ 11.9.5(c)+(b)+(a) — suite now **107 checks, 0 failures**. Twelve further guards, all proven red.
+#### ✅ 11.9.5(c)+(b)+(a) — twelve further guards, all proven red.
+
+**Suite: 114 checks, 0 failures** (107 → 114 with the 11.9.7 e/f/g fixes below). Three of the seven guards added today were either vacuous or masked by a near-miss selector, and every one was caught only by insisting the regression actually *fail*:
+
+- The image rule was `.page article .content img` — compiled, beat the base rule, and matched **0 of 186** images, because this project has no `.content` wrapper.
+- The sidebar guard matched **two** rules, so reverting it to 420px still passed.
+- A stray trailing comma turned one `check()` into a comma expression and the file would not parse.
+
+> **A guard is only worth what its red test is worth.** That is now the third time this round: a guard that cannot go red, a rule that selects nothing, and a selector that matched the wrong rule were all shipped first and all caught second.
 
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
@@ -452,10 +460,19 @@ New local `Wordmark` plugin (`quartz/plugins/wordmark`): the storefront's two-li
 | Symptom | Status |
 |---|---|
 | **Tag pills have ugly yellow behind them** | ✅ **fixed and shipped** — see below. Was the highest-confidence item, and the prescribed fix was wrong |
-| Left column too wide | ⏳ open — §4b reclaimed the empty *right* sidebar; the left was never narrowed |
+| Left column too wide | ✅ **fixed** 11.9.7g — §4b widened the track to 420px while both panels were symmetric; with the right one reclaimed it kept 420px, giving the archive tree 356px of content. Now **320px**, the base theme's own `$sidePanelWidth`. |
 | Sidebar at the top on mobile, covering content | ⏳ open — desktop grid retained at small widths; needs a single-column breakpoint and `order` |
-| Search bar too narrow | ⏳ open — never resized after the sidebar change |
-| Post body images far too large | ⏳ open — no `max-width` on `.content img`; longest-standing of these |
+| Search bar too narrow | ✅ **fixed** 11.9.7e — **the recorded cause was wrong.** No stylesheet in the project had *ever* given `.search-bar` a width; it is a bare `<input>` inside Quartz's `width: 65%` overlay, so at 1440px a ~936px container held a ~170px field. Now `width: 100%`. |
+| Post body images far too large | ✅ **fixed** 11.9.7f — `img { max-width: 100% }` is not a size, it means "as wide as the column", and the column is 780px. Capped at **40rem**, centred. |
+
+> **Three of these were symptoms with guessed causes, and three guesses were
+> wrong.** Search was blamed on the sidebar and had no connection to it. Post
+> images were blamed on a missing `max-width` when `max-width: 100%` was present
+> and meant the opposite of a cap. The left column was blamed on the base theme
+> when §4b itself had set it. The first attempt at the image fix,
+> `.page article .content img`, compiled, beat the base rule, and matched **0 of
+> the 186 images in the built posts** — there is no `.content` wrapper here. All
+> three corrections are recorded in the source next to the rules.
 
 > **The original prescription here was wrong, and it is worth keeping the correction.** It said: *"Fix the yellow tags in the theme's own aspect block… not by escalating CSS from outside (layer order means it would appear to work and silently not be true)."*
 >
@@ -562,7 +579,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 107 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 114 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
