@@ -167,7 +167,7 @@ Full restyle: series pitch replaces the dated launch-banner hero (a launch now b
 
 Shipped inside the rehaul above: sticky header with Desk link (was footer-only). Guard asserts every nav target exists as a section `id`.
 
-### 🟠 11.9 Post-rehaul defect list — 1–3 FIXED 2026-10-02 · 4–8 OPEN
+### 🟠 11.9 Post-rehaul defect list — 1–3 + 6 + 8 DONE 2026-10-02 · 4–5, 7 OPEN
 
 **Fixed 2026-10-02** (one commit, measured, HayJay eyeballed): 11.9.1 hero full-bleed, 11.9.2 section rhythm, 11.9.3 prequel cover 5:8. Fixes + guard story in git log.
 
@@ -185,9 +185,9 @@ Not yet root-caused; needs a real device pass. Two known suspects already: (a) t
 
 `/desk/` is the Quartz build — all 49 posts. It can't be removed (every sitemap URL, desk pick and `postDates.json` entry points into it); the homepage `#desk` is six links. **Recommendation (a): keep it, fix how it presents** — the homepage is the shop window, `/desk/` the stockroom, and the 11.9.6 header fold resolves the redundancy. (b) merging highlights into `/desk/` buries the craft proof; (c) serving homepage content at `/desk/` breaks 49 live URLs. **HayJay to confirm (a).**
 
-#### 🟠 11.9.6 Fold the homepage header into the Desk
+#### 🟠 11.9.6 Fold the homepage header into the Desk — DONE 2026-10-02
 
-Strongest open item, close to free: make the Desk's header *look like* the storefront's (same wordmark, nav, sticky behaviour) — same look, not shared code (different build systems). Carries 11.9.8 with it (wordmark → `/`).
+New local `Wordmark` plugin (`quartz/plugins/wordmark`): the storefront's two-line stacked mark linking to `/`, replacing `page-title` (no options, linked back into `/desk/`). Carries 11.9.8 (wordmark → `/`, done in the same swap). Header sticky + 12px blur, per-mode 82% background; nav type/hover matches the storefront; order Books/Desk/About/Subscribe with About → `/#about`. Verified against the built bundle; `verify-brand` + `verify-storefront` green.
 
 #### 🟠 11.9.7 The Desk's visual problems (one `custom.scss` pass)
 
