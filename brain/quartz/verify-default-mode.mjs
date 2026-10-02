@@ -860,6 +860,92 @@ check(
   "the hub lays out two cards per row (460px floor gives text room to breathe)",
 )
 
+// ── 11.9.7 e/f/g: the three desktop sizing fixes ───────────────────────────
+//
+// Each of these was recorded as a symptom with a guess at the cause. Two of the
+// three guesses were wrong, so each guard asserts the measured fact rather than
+// the symptom's name.
+
+// (e) The search field. The plan said "never resized after the sidebar change".
+// Wrong: NO stylesheet in the project has ever given `.search-bar` a width, so
+// it rendered at the browser default ~170px inside a `width: 65%` overlay.
+check(
+  /\.search-bar\{[^}]*width:100%/.test(hubCss),
+  "the search field fills its overlay (it had no width rule at all)",
+)
+
+// (f) Post images. `img { max-width: 100% }` is not a size — it means "as wide
+// as the column", and the column is 780px, so every image was a full-bleed slab.
+check(
+  /\.page article img\{[^}]*max-width:40rem/.test(hubCss),
+  "article images are capped at 40rem and centred (they were filling 780px)",
+)
+
+// (f) THE GUARD THAT MATTERS, and the one this round of work exists for. The
+// first version of the fix used `.page article .content img`. It compiled, it
+// beat the base rule, and it matched 0 of the 186 images in the built posts —
+// there is no `.content` wrapper in this project's article bodies. A selector
+// that matches nothing looks exactly like a selector that works.
+//
+// So: count the real images, then require that the shipped rule could select
+// them. A selector check alone would have passed forever.
+{
+  let imgsInArticle = 0
+  for (const f of builtPosts) {
+    const html = readFileSync(join(brain, "public", f), "utf-8")
+    const a0 = html.indexOf("<article")
+    const a1 = html.indexOf("</article>")
+    if (a0 === -1 || a1 === -1) continue
+    for (const m of html.slice(a0, a1).matchAll(/<img\b/g)) imgsInArticle++
+  }
+  check(
+    imgsInArticle > 0,
+    `built posts contain images to size (${imgsInArticle} found inside <article>)`,
+  )
+  // `.content` does not exist in these article bodies. If someone reintroduces
+  // that wrapper the image cap would silently stop applying, so the class this
+  // project actually uses is pinned here.
+  const sampleHtml = readFileSync(join(brain, "public", builtPosts[0]), "utf-8")
+  check(
+    !/class="content"/.test(sampleHtml),
+    "article bodies carry no `.content` wrapper (a selector assuming one is a trap)",
+  )
+  check(
+    /markdown-preview-view/.test(sampleHtml),
+    "article bodies use `.markdown-preview-view`, which is what to target",
+  )
+}
+
+// (g) The left sidebar. §4b widened it to 420px while both panels were
+// symmetric; with the right one reclaimed the track kept 420px and the archive
+// tree got 356px of content.
+// The built CSS is minified, so there is no space between the closing quote and
+// the `/` of the track list. An earlier version of this regex expected one and
+// failed against a rule that was demonstrably in the stylesheet.
+//
+// Then it failed the other way. A looser regex — `grid-sidebar-left grid-footer"/
+// 320px auto` — matched TWO rules: this one and an unrelated breakpoint that
+// carries a `grid-sidebar-right` column. So reverting this rule to 420px still
+// passed, because the other one still said 320px. A guard that cannot tell the
+// rule it means from a rule that merely looks like it is not a guard either.
+//
+// Hence the full three-row template with NO grid-sidebar-right, which is what
+// makes this the single-sidebar desktop shell.
+check(
+  /grid-sidebar-left grid-header""grid-sidebar-left grid-center""grid-sidebar-left grid-footer"\/320px auto/.test(
+    hubCss,
+  ),
+  "the desktop sidebar track is 320px, not the 420px §4b left behind",
+)
+
+// The reading measure must survive all three of these. The article column is
+// capped at 780px and the image cap at 640px, so an image must never be able to
+// out-measure its own column.
+check(
+  /\.page article\{[^}]*max-width:780px/.test(hubCss),
+  "the article reading column still holds its 780px measure",
+)
+
 // 11.9.5(a) - the Desk hub: one card per topic, five most recent posts each,
 // with the description under every title.
 //

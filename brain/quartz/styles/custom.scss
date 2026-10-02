@@ -741,11 +741,20 @@ h2.page-title,
 // queries own small screens and lets this own the desktop shell.
 @media (min-width: 1200px) {
   .page > #quartz-body:has(> .sidebar.right:empty) {
+    // 11.9.7g — 420px -> 320px. §4b widened this to 420 when it reclaimed the
+    // right column, and the two panels were symmetric then. With the right one
+    // gone the track kept 420px, so the archive tree ended up with 356px of
+    // content (420 less the 2rem padding either side) — wide enough that a
+    // filename like "how-i-wrote-my-first-novel" floats in space.
+    //
+    // 320px is not a new magic number: it is exactly the base theme's
+    // $sidePanelWidth, so the single sidebar is now the width the theme always
+    // intended for it, and the reclaimed space goes to the gutter.
     grid-template:
       "grid-sidebar-left grid-header"
       "grid-sidebar-left grid-center"
       "grid-sidebar-left grid-footer"
-      / 420px auto;
+      / 320px auto;
   }
 }
 
@@ -795,6 +804,38 @@ h2.page-title,
 // because the grid track is now much wider than the text.
 .page article {
   max-width: 780px;
+  margin-inline: auto;
+}
+
+// 11.9.7f — post images were "far too large", the longest-standing of these.
+//
+// The rule in force was `img { max-width: 100% }`, which is not a size at all —
+// it means "as wide as whatever column you are in". The article column is capped
+// at 780px above, so every illustration, book mock-up and screenshot was allowed
+// to render the full 780px: a full-bleed slab with a hard edge against the text
+// on both sides.
+//
+// 40rem (640px) is the cap. An image narrower than its column also stops reading
+// as a slab and starts reading as a figure, and centring it is what makes that
+// read. `height: auto` travels with the width, or a tall screenshot would
+// stretch to 780px tall.
+//
+// `custom.scss` is unlayered, so this beats the layered `img` rule on cascade
+// order alone. `.page article` rather than a bare `article` keeps it off chrome
+// like the wordmark and the site logo.
+//
+// SELECTOR CHOSEN AGAINST THE BUILT MARKUP, NOT AGAINST THE STYLESHEET. The
+// first attempt was `.page article .content img`. It compiled, it beat the base
+// rule, and it matched **0 of the 186 images in the built posts** — this project
+// has no `.content` wrapper in article bodies at all. The body carries
+// `markdown-preview-view markdown-rendered`. A rule that never selects anything
+// is indistinguishable from a fix that works until someone looks, which is the
+// exact failure this round of work is meant to end. Hence the guard below, which
+// counts real `<img>` inside real `<article>` and fails if the rule cannot reach
+// them.
+.page article img {
+  max-width: 40rem;
+  height: auto;
   margin-inline: auto;
 }
 
@@ -909,7 +950,21 @@ h1.article-title {
   }
 }
 
+// 11.9.7e — the search field had NO WIDTH RULE AT ALL.
+//
+// The plan recorded this as "search bar too narrow — never resized after the
+// sidebar change". That diagnosis was wrong. Across every shipped stylesheet the
+// only `.search-bar` rule was `font-family` and `letter-spacing` — nothing has
+// ever sized it. It is a bare `<input>` inside `.search-space`, which Quartz
+// sets to `width: 65%` of the viewport, so at 1440px the container is ~936px and
+// the field inside it renders at the browser default ~170px. Nothing about the
+// sidebar ever touched it.
+//
+// So the field was never merely tight; it was a stub with a placeholder in it,
+// sitting at the top of a 900px overlay. `width: 100%` is the whole fix.
 .search-bar {
+  width: 100%;
+  box-sizing: border-box;
   font-family: var(--eb-display);
   letter-spacing: 0.03em;
 }
