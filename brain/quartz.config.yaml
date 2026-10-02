@@ -331,20 +331,6 @@ plugins:
     layout:
       position: header
       priority: 20
-  # 11.9.7e - the mobile reading header. At rest the bar is the nav above; once
-  # the post's own title has scrolled out of view, the bar collapses to a
-  # shrunken copy of that title. Priority 25 puts it after the nav and before
-  # the toolbar group.
-  #
-  # It cannot be CSS-only: `.page-header` sits inside `.center` and the title
-  # lives in `<article>`, so "has the title been scrolled past" needs a
-  # measurement. The element is emitted hidden and the script only toggles a
-  # class, so with JS off the header stays exactly as it is today.
-  - source: "./quartz/plugins/sticky-title"
-    enabled: true
-    layout:
-      position: header
-      priority: 25
   - source: "@quartz-community/darkmode"
     enabled: true
     layout:

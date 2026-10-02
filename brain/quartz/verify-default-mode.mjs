@@ -638,80 +638,58 @@ check(
   "Reader mode (the book icon) is absent from the markup at every width",
 )
 
-// 11.9.7e - the mobile reading header. The element and the behaviour are
-// separate guarantees and can break independently: the title can stop
-// rendering (plugin unwired), or the script can stop shipping (then the class
-// is never added and the bar silently never collapses — no error anywhere).
-check(
-  /<span class="eb-sticky-title">[^<]+<\/span>/.test(headerPost),
-  "post pages carry an .eb-sticky-title element in the header",
-)
-check(
-  /<span class="eb-sticky-title">/.test(headerPost) &&
-    headerPost.indexOf("eb-sticky-title") > headerPost.indexOf('class="page-header"') &&
-    headerPost.indexOf("eb-sticky-title") < headerPost.indexOf("</header>"),
-  "the sticky title sits inside the header, as a sibling of the nav",
-)
-check(
-  scriptBlob.includes("__ebStickyTitleTeardown") &&
-    scriptBlob.includes("h1.article-title") &&
-    scriptBlob.includes("eb-header--compact"),
-  "the sticky-title scroll script ships (teardown + title probe + compact class)",
-)
-// The probe must NOT be `article h1`. Quartz renders beforeBody components into
-// .popover-hint, OUTSIDE <article>, so that selector matched nothing and the
-// header never collapsed on any viewport. Guarded so the regression cannot
-// return as a "simplification".
-check(
-  !/querySelector\("article h1"\)/.test(scriptBlob),
-  "the title probe is not `article h1` (the title lives outside <article>)",
-)
-// Above 800px the class must never be set, or the desktop nav would vanish.
-check(
-  scriptBlob.includes("matchMedia") && scriptBlob.includes("max-width: 800px"),
-  "the collapse is gated on a max-width:800px matchMedia check",
-)
-// Desktop must be unaffected: EVERY compact rule has to live inside the mobile
-// query, not just the first one.
+// 11.9.7g - THE HEADER IS NOT STICKY, AT ANY WIDTH.
 //
-// `indexOf` was the obvious first attempt and it is wrong: it inspects only the
-// earliest occurrence, so relocating a LATER compact rule out of the query
-// still passed. That is the same first-occurrence trap as the slice-width bug
-// above, and the proven-red run caught it. Now every occurrence is checked, so
-// one stray rule outside the query is enough to fail.
-const compactAt = []
-for (
-  let i = headerCss.indexOf("eb-header--compact");
-  i > -1;
-  i = headerCss.indexOf("eb-header--compact", i + 1)
-) {
-  compactAt.push(i)
-}
-const compactAllMobile =
-  compactAt.length > 0 &&
-  compactAt.every((i) => {
-    const m = headerCss.lastIndexOf("@media", i)
-    return /^@media \(max-width:800px\)/.test(headerCss.slice(m, m + 40))
-  })
+// Six guards about the scroll-driven header were deleted along with it. These
+// replace them, and they are deliberately simpler: they assert an ABSENCE, so
+// none of them can be satisfied by a selector matching for the wrong reason.
+//
+// The standing temptation in this repo has been to assert that code is PRESENT.
+// Two of the three 11.9.7f bugs passed exactly that kind of guard - the probe
+// string shipped faithfully while the selector matched nothing on any real page.
+// Asserting that something is GONE cannot fail that way.
+
+// Every `position: sticky` in the bundle, and whether its selector names
+// .page-header. Scoped to the rule that owns the declaration rather than
+// searching backwards for a class name, so a sticky header authored by any
+// route is caught.
+const headerSticky = [...headerCss.matchAll(/position:\s*sticky/g)].filter((m) => {
+  const braceStart = headerCss.lastIndexOf("{", m.index)
+  const braceEnd = headerCss.lastIndexOf("}", m.index)
+  return /\.page-header/.test(headerCss.slice(braceEnd + 1, braceStart))
+})
 check(
-  compactAllMobile,
-  `all ${compactAt.length} collapsed-header rules sit inside the mobile query (desktop header untouched)`,
+  headerSticky.length === 0,
+  "the page header is not position:sticky at any width (the whole 11.9.7g point)",
 )
 
-// THE DESKTOP REGRESSION, GUARDED DIRECTLY. `.eb-sticky-title` is emitted on
-// every page regardless of viewport, so its `display: none` MUST be
-// unconditional. When this rule sat inside the max-width:800px query instead,
-// nothing declared a display for it above 800px, it rendered as an inline text
-// node in the header row, and the nav wrapped to two lines while the search
-// button was squashed. Checked by brace depth, not by searching backwards for
-// "@media": a textual scan cannot tell an open media block from a closed one and
-// would report the opposite of the truth here.
-const hideTitle = headerCss.indexOf(".eb-sticky-title{display:none}")
+// The blur existed only because content scrolled *under* a translucent bar.
+// With the bar in normal flow it would only blur the page background.
 check(
-  hideTitle > -1 &&
-    headerCss.slice(0, hideTitle).split("{").length ===
-      headerCss.slice(0, hideTitle).split("}").length,
-  "the sticky title is hidden UNCONDITIONALLY (not just below 800px) - desktop header stays clean",
+  !/\.page-header[^{]*\{[^}]*backdrop-filter/.test(headerCss),
+  "the header no longer carries a backdrop-filter blur",
+)
+
+// The whole feature is gone, not merely unused: element, CSS and script.
+check(
+  !headerPost.includes("eb-sticky-title"),
+  "the shrunken-title element is gone from the markup (plugin deleted)",
+)
+check(
+  !headerCss.includes("eb-sticky-title") && !headerCss.includes("eb-header--compact"),
+  "no sticky-title or compact-header CSS survives in the bundle",
+)
+check(
+  !scriptBlob.includes("__ebStickyTitleTeardown") && !scriptBlob.includes("eb-header--compact"),
+  "the scroll handler is gone from every shipped script",
+)
+
+// The sidebar's `padding: 6rem 2rem 2rem` existed ONLY to clear the sticky
+// header. Left in place once the header scrolls away it becomes a 6rem hole
+// above the explorer, so the release is asserted rather than assumed.
+check(
+  /\.page>#quartz-body \.sidebar\.left\{padding-top:1rem\}/.test(headerCss),
+  "the sidebar's dead 6rem header-clearance padding is released",
 )
 check(
   scriptBlob.includes("data-eb-recently-updated") && scriptBlob.includes("days < 90"),

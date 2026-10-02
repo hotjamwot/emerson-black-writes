@@ -257,17 +257,36 @@ h2.page-title,
 //    below actually apply.
 //
 // Descendant selectors elsewhere, and the box model is handled explicitly.
+// 11.9.7g — THE HEADER IS NOT STICKY, AT ANY WIDTH.
+//
+// It was, and it was the single most complained-about thing on the site:
+// 11.9.7d (too much information on mobile), then 11.9.7e/7f (a scroll-driven
+// collapse to a shrunken title), which took two attempts and did not work on
+// either device. HayJay's call after that: no sticky header, desktop or mobile.
+//
+// So `position: sticky`, `top`, `z-index` and `backdrop-filter` are simply gone.
+// The header is an ordinary block at the top of `.center` and scrolls away with
+// the page. That is the whole change.
+//
+// WHAT THAT BUYS, beyond the feature itself:
+//   - one fewer JS component (./quartz/plugins/sticky-title) and its scroll
+//     handler, its matchMedia gate, its teardown handle and its four guards;
+//   - no scroll listener on any page, so nothing to leak on SPA navigation;
+//   - no blur compositing on every scroll frame;
+//   - the header can no longer obscure the top of the content column.
+//
+// The blur and the translucent background went WITH the stickiness. They only
+// ever mattered because content scrolled *under* the bar; with the bar in normal
+// flow a translucent background would just show the page background through it.
+// The solid `var(--light)` and the hairline bottom border stay, so the header
+// still reads as a distinct band.
+//
+// The sidebar's `padding: 6rem 2rem 2rem` is dealt with further down — it
+// existed to clear this bar and is now a 6rem hole.
 .page > #quartz-body .page-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  margin: 0 0 0.5rem;
+  margin: 0 0 1rem;
   border-bottom: 1px solid var(--eb-line);
-  background: color-mix(in srgb, var(--light) 82%, transparent);
-  // NOTE: `backdrop-filter` alone — lightningcss adds `-webkit-` prefix at
-  // build time (verified in emitted bundle). Writing both by hand duplicates
-  // the declaration after prefixing.
-  backdrop-filter: blur(12px);
+  background: var(--light);
 }
 
 .page > #quartz-body .page-header > header {
@@ -472,74 +491,41 @@ h2.page-title,
   // the rest of 4a-bis uses, so search, Reader mode and the theme toggle all
   // remain on wide screens. If the theme toggle turns out to be wanted on
   // phones, delete `.darkmode` from this selector and nothing else changes.
+  // 11.9.7g — no sticky header (see the main block). These mobile rules used
+  // to drive the two-state header; the controls stay hidden below 800px, and
+  // the leftover 4a-bis wrapping rules below are kept because the header is
+  // still a single non-wrapping flex row that must not overflow a phone.
   .page > #quartz-body .page-header .search,
   .page > #quartz-body .page-header .darkmode,
   .page > #quartz-body .page-header .readermode {
     display: none;
   }
+}
 
-  // 11.9.7e — the reading header. Two states, one of them visible.
-  //
-  // REST: the nav, as 11.9.7d left it.
-  // COMPACT: `.eb-header--compact` is added by ./quartz/plugins/sticky-title
-  // once the article's <h1> has scrolled above the bar. The nav goes, a small
-  // copy of the title arrives, and the bar loses its padding.
-  //
-  // The title element is a SIBLING of the nav, not a replacement for it, so the
-  // swap is a `display` change. That is what makes this fail safe: with JS off
-  // the class is never added, the title stays hidden, and the header is exactly
-  // what it is today.
-  //
-  // `.eb-sticky-title` itself is hidden UNCONDITIONALLY further up - see the
-  // note there. Only these compact rules, which require the class, reveal it.
-  .page > #quartz-body .page-header > header.eb-header--compact > footer {
-    display: none;
-  }
-
-  .page > #quartz-body .page-header > header.eb-header--compact .eb-sticky-title {
-    font-family: var(--eb-display);
-    font-size: 0.85rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-    color: var(--dark);
-    // `-webkit-box` + line-clamp IS the display that makes this a clamped
-    // block, so it cannot also be `display: block` in the same rule — the
-    // second declaration would silently win and the clamp would still work but
-    // the intent would read wrong. Two lines max, so a wordy post title cannot
-    // turn the "shrunken" bar into a block of text that eats the viewport.
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  // Less padding in the compact state — the shrink the reader sees is mostly
-  // this, not the font size.
-  .page > #quartz-body .page-header > header.eb-header--compact {
-    padding: 0.6rem 0;
+// 11.9.7g — the left sidebar's top padding, released.
+//
+// The base theme ships
+//   .page>#quartz-body .sidebar { padding: 6rem 2rem 2rem; position: sticky; top: 0 }
+// That 6rem existed to clear the sticky header, which sat over the top of the
+// shell. With the header no longer sticky (see the main 11.9.7g block) nothing
+// overlaps the sidebar, so the 6rem is now a hole: a 6rem gap above the explorer
+// and 6rem of wasted vertical space in a sidebar that is `height: 100vh`.
+//
+// Reduced to 1rem. Not zero — the explorer's top file entry still needs to sit
+// off the very top edge of the viewport.
+//
+// This rule is unlayered, so it wins over the base stylesheet's layered rule
+// regardless of the media queries around it, and it is scoped
+// `min-width: 1200px` because the base sheet sets `padding: 2rem 0 0` for the
+// sidebar at mobile widths. Above 1200px is the only range where the desktop
+// padding applies.
+@media (min-width: 1200px) {
+  .page > #quartz-body .sidebar.left {
+    padding-top: 1rem;
   }
 }
 
-// The sticky title is HIDDEN AT EVERY WIDTH. This rule is deliberately OUTSIDE
-// the max-width:800px query, and that placement is the whole fix for the
-// desktop regression.
-//
-// The first version put it inside the mobile query alongside the search/theme
-// hides. Unlayered, nothing else declared a display for `.eb-sticky-title`, so
-// above 800px there was no rule at all for it and it rendered as an inline text
-// node in the header row - pushing the nav links onto two lines and squashing
-// the search button. The element is emitted on every page by design (the
-// plugin has no viewport branch), so "hidden" has to be the default state and
-// the mobile compact rules opt it back in.
-//
-// Default-off, opt-in: the safe direction to be wrong in. A missing rule shows
-// an extra word in the header; the reverse would have shown it on phones.
-.page > #quartz-body .page-header .eb-sticky-title {
-  display: none;
-}
-
-// ── 11.9.5(a) The hub: one card per topic ───────────────────────────────────
+// 11.9.5(a) The hub: one card per topic ───────────────────────────────────
 // Cards in a responsive grid; `auto-fit` rather than fixed columns so a narrow
 // phone gets one card with no media query, and a wide desktop fills the row
 // instead of stretching three cards across 1200px.
