@@ -1,0 +1,29 @@
+{
+  "name": "post-deck",
+  "version": "1.0.0",
+  "description": "Post header: the post's description as a standfirst under the title",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "post-deck",
+    "displayName": "Post Deck",
+    "description": "Standfirst under the post title",
+    "components": {
+      "PostDeck": {
+        "name": "PostDeck",
+        "displayName": "Post Deck",
+        "description": "The post description, rendered under the title",
+        "version": "1.0.0",
+        "defaultPosition": "beforeBody"
+      }
+    }
+  }
+}

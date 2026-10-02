@@ -544,13 +544,43 @@ h2.page-title,
   opacity: 0.85;
 }
 
+// 11.9.5(c) The standfirst under a post's title ─────────────────────────────
+//
+// Sized and coloured to read as the first line of the piece, not as metadata:
+// it sits between the title and the Published/Updated line, and it is the only
+// thing on a post page that says what the post is actually about.
+//
+// `var(--dark)` rather than `var(--gray)`: --gray is #6B7A91, which is tuned for
+// small metadata like the tag pills and the dates. At 1.08rem this is body copy
+// and deserves body-copy contrast.
+.eb-post-deck {
+  margin: 0.75rem 0 0;
+  font-family: var(--eb-display);
+  font-size: 1.08rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--dark);
+  opacity: 0.82;
+  max-width: 46rem;
+  // A standfirst is one or two sentences. Anything longer is the post's own
+  // first paragraph, which is already below the fold - so clamp rather than
+  // letting a runaway description push the whole article down.
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 // 11.9.5(a) The hub: one card per topic ───────────────────────────────────
-// Cards in a responsive grid; `auto-fit` rather than fixed columns so a narrow
-// phone gets one card with no media query, and a wide desktop fills the row
-// instead of stretching three cards across 1200px.
+// TWO COLUMNS, not three. `auto-fit minmax(320px, 1fr)` fitted three cards
+// across the content column, which squeezed each card's descriptions to a few
+// words a line and left the list feeling like a grid of previews rather than a
+// list of writing. The floor is raised to 460px, which drops a wide desktop to
+// two columns - enough width that a standfirst fits on one or two comfortable
+// lines - while a phone still gets exactly one card with no media query.
 .eb-hub {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
   gap: 1.25rem;
   margin: 2rem 0;
 }
@@ -570,7 +600,13 @@ h2.page-title,
   padding: 1.1rem 1.2rem 1.2rem;
   border: 1px solid var(--eb-line);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--light) 60%, var(--secondary));
+  // WAS: color-mix(in srgb, var(--light) 60%, var(--secondary)) — which mixed 40%
+  // of the Emerson RED into the surface, because in this theme `--secondary` is
+  // not a muted grey (it is #CA2626, the accent). The cards came out dusty pink
+  // and the grey descriptions sat on them at poor contrast: red on red.
+  // `--light` is the page background and `--eb-line` is the neutral hairline, so
+  // tinting toward those keeps the card a neutral surface in both modes.
+  background: color-mix(in srgb, var(--light) 88%, var(--eb-line));
   break-inside: avoid;
 }
 

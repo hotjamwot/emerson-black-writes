@@ -728,6 +728,138 @@ check(
   "@quartz-community/tag-page stays disabled (the replacement owns /tags/)",
 )
 
+// 11.9.5(c) The standfirst on post pages, plus 11.9.6(b) popovers off.
+//
+// 11.9.5(c) exists because 11.9.5(a) and (b) were both shipped and BOTH looked
+// like the feature had never worked: the description showed on /desk/ and
+// /tags/<x>/, and not on a post. The reader checked a post and saw no standfirst.
+// So the guard that matters is not "the text exists somewhere" - it is "every
+// post shows it, in the header, in the right order".
+// Year folders only — public/newsletters/ also holds og-image.webp, and
+// readdir-ing a file as a directory throws ENOTDIR.
+//
+// `index.html` inside a year folder is a LISTING page, not a post: it has no
+// frontmatter of its own and must not be expected to carry a standfirst. The
+// first version of this guard counted them and reported 49/53.
+const builtPosts = readdirSync(join(brain, "public", "newsletters"), { withFileTypes: true })
+  .filter((e) => e.isDirectory())
+  .flatMap((y) =>
+    readdirSync(join(brain, "public", "newsletters", y.name))
+      .filter((f) => f.endsWith(".html") && f !== "index.html")
+      .map((f) => `newsletters/${y.name}/${f}`),
+  )
+
+let decks = 0
+const decksMissing = []
+const decksMisordered = []
+for (const f of builtPosts) {
+  const html = readFileSync(join(brain, "public", f), "utf-8")
+  if (/<p class="eb-post-deck">[^<]+<\/p>/.test(html)) decks++
+  else decksMissing.push(f)
+  // Order: title, then deck, then the dates. The deck is the sentence that sets
+  // the post up, so it reads before the metadata - not after it as a footnote.
+  const t = html.indexOf('class="article-title"')
+  const d = html.indexOf('class="eb-post-deck"')
+  const p = html.indexOf('class="eb-post-dates"')
+  if (!(t !== -1 && d !== -1 && p !== -1 && t < d && d < p)) decksMisordered.push(f)
+}
+check(
+  builtPosts.length > 0,
+  `built posts exist to check the standfirst on (${builtPosts.length} found)`,
+)
+check(
+  decks === builtPosts.length,
+  `every post shows its description as a standfirst (${decks}/${builtPosts.length})${
+    decksMissing.length ? ` — missing: ${decksMissing.slice(0, 3).join(", ")}` : ""
+  }`,
+)
+check(
+  decksMisordered.length === 0,
+  `the standfirst sits between the title and the dates on every post${
+    decksMisordered.length ? ` (wrong order: ${decksMisordered.slice(0, 3).join(", ")})` : ""
+  }`,
+)
+// The text must be the post's own frontmatter description, not the meta tag's
+// copy or a generic filler.
+{
+  const one = builtPosts[0]
+  const html = readFileSync(join(brain, "public", one), "utf-8")
+  const deck = html.match(/<p class="eb-post-deck">([^<]+)<\/p>/)?.[1]
+  const meta = html.match(/<meta name="description" content="([^"]*)"/)?.[1]
+  check(!!deck && deck.length > 10, "the standfirst carries real text, not a placeholder")
+  check(
+    !!deck && !!meta && deck.trim() === meta.trim(),
+    "the standfirst is the post's own description (not a stock string)",
+  )
+}
+// Pages with NO description must not get a standfirst - an empty gap under the
+// title is worse than nothing. Tag pages and the 404 are generated/virtual and
+// have none.
+//
+// The homepage is deliberately NOT in this list. content/index.md carries its own
+// description, so a standfirst there is correct and wanted. The first version of
+// this check listed index.html and failed - the component was right and the
+// assertion was wrong.
+const descriptionless = [
+  join(brain, "public", "404.html"),
+  join(brain, "public", "tags", "process.html"),
+  join(brain, "public", "newsletters", "2023", "index.html"),
+]
+check(
+  descriptionless.every((f) => !/class="eb-post-deck"/.test(readFileSync(f, "utf-8"))),
+  "pages with no description get no standfirst (no empty gap under the title)",
+)
+check(
+  /class="eb-post-deck"/.test(readFileSync(join(brain, "public", "index.html"), "utf-8")),
+  "the Desk index shows its own standfirst (it has a description too)",
+)
+
+// The built theme stylesheet, read once. (Declared here rather than reusing the
+// `indexSrc` further down this file, which is in its temporal dead zone at this
+// point — referencing it threw a ReferenceError.)
+const hubCss = readFileSync(
+  join(
+    brain,
+    "public",
+    readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f)),
+  ),
+  "utf8",
+)
+
+// 11.9.6(b) Hover popovers off. These fire on EVERY internal link, which on a
+// phone means every tap-then-tap opens a preview instead of the post.
+//
+// PROBE THE CSS, NOT JS STRINGS. The first version scanned the built .js for
+// "popover" and passed no matter what — VACUOUS, and it took a proven-red test
+// to discover. The emitted script is minified, so it never contains that
+// literal: with popovers ON postscript is 640 bytes and carries the code, with
+// them OFF 588 bytes and carries none, and neither contains the word. A guard
+// that cannot go red is not a guard.
+//
+// The stylesheet is the honest probe, and it discriminates cleanly: `.popover{`
+// appears 3 times with popovers on and 0 times with them off.
+check(
+  !/\.popover\{/.test(hubCss),
+  "no popover stylesheet is shipped (the hover-preview boxes are gone)",
+)
+check(/enablePopovers:\s*false/.test(config), "enablePopovers stays false in quartz.config.yaml")
+
+// The hub cards were red on red. `--secondary` is the Emerson ACCENT (#CA2626)
+// in this theme, not a muted grey, so a card background mixing in `--secondary`
+// tinted every surface pink and the grey standfirsts sat on it badly.
+// Assert the surface is built from neutral tokens only.
+const hubCard = hubCss.match(/\.eb-hub__card\{[^}]*\}/)?.[0] ?? ""
+check(!!hubCard, "the hub card rule exists in the built CSS")
+check(
+  !!hubCard && !/var\(--secondary\)|var\(--color-accent\)|#ca2626/i.test(hubCard),
+  "the hub card surface does not mix in the red accent (no red-on-red)",
+)
+// Two columns on a wide desktop, not three: 460px floor, was 320px.
+check(
+  /\.eb-hub\{[^}]*minmax\(460px,1fr\)/.test(hubCss),
+  "the hub lays out two cards per row (460px floor gives text room to breathe)",
+)
+
 // 11.9.5(a) - the Desk hub: one card per topic, five most recent posts each,
 // with the description under every title.
 //

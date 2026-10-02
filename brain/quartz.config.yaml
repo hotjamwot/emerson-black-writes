@@ -9,7 +9,13 @@ configuration:
   # without it every tab read "Emerson's DeskEmerson Black Writes".
   pageTitleSuffix: " · Emerson Black Writes"
   enableSPA: true
-  enablePopovers: true
+  # 11.9.6(b) - hover popovers OFF. These are Quartz's Obsidian-flavoured link
+  # previews, and they were firing on every internal link: a box of half-rendered
+  # content chasing the cursor over the archive, on a site whose whole argument is
+  # that the writing is worth arriving at deliberately. It also fought the header
+  # work - the popover script re-renders the listing markup the description work
+  # depends on. verify-default-mode asserts the popover script is not shipped.
+  enablePopovers: false
   analytics:
     provider: plausible
   locale: en-US
@@ -287,6 +293,22 @@ plugins:
     layout:
       position: beforeBody
       priority: 10
+  # 11.9.5(c) - the description, as a standfirst under the post title.
+  #
+  # This is the gap that made 11.9.5(a) and (b) look like the feature "never
+  # worked": the text appears on /desk/ and on /tags/<x>/, and was in every
+  # built page's <meta name="description">, but open an actual POST and the
+  # header went title -> dates -> topics with the one sentence that says what
+  # the piece is about never rendered.
+  #
+  # Slot 15 puts it directly under article-title (10) and above post-dates
+  # (25): it is the sentence that sets the post up, so it reads before the
+  # metadata rather than as a footnote to it.
+  - source: "./quartz/plugins/post-deck"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 15
   - source: "./quartz/plugins/post-dates"
     enabled: true
     layout:
