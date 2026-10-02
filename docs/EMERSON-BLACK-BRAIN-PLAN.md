@@ -135,6 +135,22 @@ written off, ask whether it is describing the site or describing an old site.
 `:hover` rule; the second matched `transition: background-color`. Both passed with
 the fix *deleted*. Only deleting the fix and re-running exposed it.
 
+| F15 | **Two symptoms in one report were not one bug.** "Cards look different widths" and "cards too wide on mobile" arrived together, shared a CSS-level theory (`minmax(460px, 1fr)` has a hard floor), got one fix — and only the overflow half was real. The width half survived, and no guard covered card widths, so nothing noticed | ⏳ open — see RECORDED (b) |
+| F16 | **"No dates" was "dates at 1.81:1".** `.eb-hub__date` renders in `--lightgray`, a *hairline* token, on the tinted card surface — 34 dates in the DOM, drawn, and effectively invisible in light mode. Feature present, contrast absent | ⏳ open — see RECORDED (a) |
+
+**F15's lesson — one theory, two symptoms is a hypothesis, not a diagnosis.** The
+fix was verified against the symptom I could explain from the CSS and not against
+the one I could not, and the plan recorded it as a single solved bug. A theory that
+elegantly unifies two reports should be the *most* suspicious kind, not the least.
+The tell is that the unifying explanation was written in the same sentence as the
+fix, which is where confidence goes to hide.
+
+**F16's lesson — presence in the DOM is not visibility.** Every check said the dates
+existed, and all of them were true. What none of them asked was whether the colour
+had enough contrast against the surface it was painted on. "The feature is missing"
+and "the feature is invisible" produce the same report and completely different
+fixes.
+
 **Standing rules** (each bought with a failed deploy — full stories in git log)
 - *A guard that cannot fail is worse than no guard.* Hit four times: the yellow check, two unreachable sitemap assertions, and a `--screenshot` capture that produced byte-identical PNGs (I11).
 - *Reproduce a deploy from a fresh clone before pushing.* Working copies carry state that hides ordering bugs — I6 (case-variant sitemap dupes, invisible on macOS), I7 (date export ordered after artifact copy), I8 (`render-desk-picks` reading a file that only existed from a prior build).
@@ -427,21 +443,126 @@ instead of reporting. Only proven-red surfaced it.
 
 **Suite: 142 checks, 0 failures.** All eight new checks proven red.
 
+#### 🔵 RECORDED 2026-10-02 — four notes on the Desk, **NOT ACTIONED**
+
+HayJay's read of the Desk after 11.9.11. Filed as observations with the diagnosis
+attached, so they can be picked up in one pass later. **Nothing here is built.**
+
+---
+
+##### (a) "Dates have not been added to /desk/ posts"
+
+**They have — they are simply invisible in light mode.** This one is a real finding,
+not a preference.
+
+Measured in the built CSS:
+
+| Surface | Markup | Visible? |
+|---|---|---|
+| Topic-card posts | **34 × `.eb-hub__date`** | ⚠️ **1.81:1** on the card |
+| Year rows | **49 × `.eb-years__date`** | ✅ legible |
+
+`.eb-hub__date` is `color: var(--lightgray)` = `#a8b5c9` at `0.7rem`, sitting on
+`.eb-hub__card`'s `color-mix(--light 88%, --eb-line)` = `#ecf0f5`. That is **1.81:1
+against a 4.5:1 AA floor** — it is drawn, it is in the DOM, and it is very nearly
+invisible. `--lightgray` is a *hairline* token, borrowed from the borders, and a
+date is body text. In dark mode the same token reads 9.21:1 and is fine, which is
+why this reads as "no dates" rather than "unreadable dates".
+
+The year rows get away with it because they sit on the page background, not the
+card surface.
+
+Also below AA on the same surface: `.eb-hub__desc` at **3.81:1** light / **4.39:1**
+dark. `--gray` (`#6b7a91`) is a shade too light for the tint the cards use. Both
+need a token that is not a decoration colour. **Two decisions when this is picked
+up:** which grey, and whether the date belongs under the title on the card or in
+the margin beside it.
+
+---
+
+##### (b) "Card widths are still different — highly piggledy"
+
+**Not yet diagnosed. Recorded as a symptom, not a cause.** The 11.9.11 `min(460px,
+100%)` fix targeted a *hard 460px floor* overflowing a phone; it was never aimed at
+this, and the two are different problems that shared one report.
+
+What is known: the grid is `repeat(auto-fit, minmax(min(460px, 100%), 1fr))` and
+`.eb-hub__card` sets no `width`, so **tracks are equal by construction** — which
+means "different widths" is either (i) a *ragged bottom edge* being read as
+uneven width, since `align-self: start` was added in 11.9.11 and cards have 5–15
+items each, or (ii) the grid not applying at all at the width being viewed.
+
+Those have opposite fixes — masonry/columns versus a container query — so **this
+needs one look at a real browser before anything is changed.** Do not re-fix
+`min()` on the strength of this note.
+
+---
+
+##### (c) "Clicking dates in the sidebar opens /desk/ — bring the year pages back"
+
+**Confirmed, and it is a genuine regression from 11.9.10.** Confirmed in the build:
+`/newsletters/2023/index.html` exists but is now the redirect stub
+(`http-equiv="refresh" → /desk/`), and the Explorer in the left sidebar still builds
+its tree from the file tree, so it still shows `2023 / 2024 / 2025 / 2026` as
+clickable folders. Clicking one follows the stub and lands on the Desk.
+
+So the sidebar advertises four year pages that no longer exist, and HayJay is right
+that they should come back. Three ways, and they are not equivalent:
+
+| Option | Cost | Note |
+|---|---|---|
+| **Re-enable `folder-page` for year folders only** | smallest | Re-introduces the pages 11.9.10 removed; they must stay *out* of the sitemap and *not* be linked from the Desk |
+| **Custom emitter, year pages only** | medium | Same output, no general-purpose plugin; the pattern already exists in `archive-redirects` |
+| **Point the sidebar's year folders at `#everything-by-year`** | smallest | Hides the symptom. Four folder entries all jumping to one anchor is worse than the redirect |
+
+Recommendation: **option 2** — the year pages are genuinely useful as durable
+URLs (they are the shape `/newsletters/2023/` was always meant to be), and a
+scoped emitter keeps `folder-page` off. **Option 3 is a trap**: it makes the
+sidebar look fixed while `/newsletters/2023/` still 404s for anyone with the old
+link in their history.
+
+---
+
+##### (d) "No total post numbers on the topic cards"
+
+Agreed. `.eb-hub__n` renders `15`, `9`, `7`… — the tag's **full** count — directly
+above a list of **five**. So each card says "15" while showing five rows, and the
+card below says "9". A reader is invited to add up numbers that do not describe
+what is on screen.
+
+Note it is not pure duplication: `eb-hub__more` ("6 more on process") already
+carries the only honest number on the card, so removing `.eb-hub__n` loses
+information the reader can get one line away — which is the right trade. **Cheapest
+of the four**, and independent of the other three.
+
+---
+
+**Suite: 142 checks** (unchanged — nothing here is built).
+
 #### ✅ 11.9.11 The Desk: no body, adaptive grid, subtitles in the year rows
 
-**HayJay's five notes on the Desk — all five right, and one of them was two bugs
-wearing one coat.**
+**HayJay's five notes on the Desk — all five accepted. One of them turned out to be
+two separate bugs, and only one of the two was fixed.** (See the correction below.)
 
 | Note | What it actually was |
 |---|---|
 | Remove the body copy, button, link back | Three copies of one idea; the button scrolled a few hundred pixels |
 | Remove "34 posts across 7 topics" | It summed the 5-per-card cap, so the page said 34 while the fold-out heading said 49 |
-| Cards are different widths | **The same bug as the next row** — a hard 460px grid floor |
+| Cards are different widths | ⚠️ **NOT FIXED BY THIS — see (b) above.** The `min()` fix below addressed the overflow, not this |
 | Cards too wide on mobile | `minmax(460px, 1fr)` cannot narrow; a 460px track inside ~360px |
 | Subtitles in year rows; dates everywhere | Dates were already on both; subtitles reverse a deliberate 11.9.10 call |
 
-The width and the overflow were one bug. `minmax(460px, 1fr)` has a hard floor,
-so a phone laid out a 460px track inside ~360px and overflowed sideways.
+> ⚠️ **Correction, 2026-10-02.** This section originally concluded that "cards are
+> different widths" and "cards too wide on mobile" were *one* bug, both cured by
+> `min(460px, 100%)`. The overflow half is fixed and verified. **The width half is
+> not** — HayJay still sees uneven cards, and the suite has no check for card
+> widths, so nothing caught it. The over-confident claim is the lesson: two
+> symptoms arriving in the same message looked like one cause, and the fix was
+> verified only against the symptom I had a CSS-level theory for. Entry **(b)**
+> above supersedes this.
+
+The width and the overflow were *thought* to be one bug. `minmax(460px, 1fr)` has a
+hard floor, so a phone laid out a 460px track inside ~360px and overflowed sideways.
 `minmax(min(460px, 100%), 1fr)` makes the floor adaptive — no media query, and
 correct at every width rather than at the two somebody wrote a query for.
 
@@ -647,12 +768,18 @@ structural work on the Desk.
    explorer on mobile). Left: the storefront's 701–900px nav crowding and the
    `.series-hook` silhouette stacking, then how backlinks / related-post links
    should surface. 11.9.4 still needs a real phone.
-2. **HayJay's call on 11.9.5** — recommendation (a) stands: keep `/desk/`, fix how it
-   presents. Still unconfirmed.
-3. **Cosmetic, in one `custom.scss` pass:** left column width · sidebar/search sizing ·
+2. **HayJay's call on 11.9.5** — done: keep `/desk/`, and it now presents as
+   cards + years.
+3. **Four Desk notes recorded, not actioned** (see "RECORDED 2026-10-02" above) —
+   (a) card dates are drawn but fail contrast at **1.81:1** in light mode, so they
+   read as absent; (b) card widths still uneven, undiagnosed; (c) sidebar year
+   folders bounce to `/desk/` because the year pages are now redirect stubs —
+   **re-enable year pages via a scoped emitter**; (d) drop `.eb-hub__n`. (d) is
+   cheapest and independent; (c) is a real regression worth doing properly.
+4. **Cosmetic, in one `custom.scss` pass:** left column width · sidebar/search sizing ·
    `max-width` on `.content img` (the longest-standing) · I4 active-item red-on-red ·
    F1–F4 cruft prune.
-4. **Backlinks** — currently `position: left`, so on desktop they live in the
+5. **Backlinks** — currently `position: left`, so on desktop they live in the
    sidebar and on mobile they now sit under the article. That is defensible, but
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
