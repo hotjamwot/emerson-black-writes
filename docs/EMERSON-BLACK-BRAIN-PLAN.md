@@ -39,7 +39,7 @@
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,000 lines, unlayered overrides) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
 | Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs` |
-| Mirrored plan | `docs/EMERSON-BLACK-BRAIN-PLAN.md` (rsync target) |
+| Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` in this repo |
 
 ## 3. Frontmatter spec
 
@@ -449,7 +449,6 @@ node brain/scripts/verify-storefront.mjs
 
 # Publish vault → site (or double-click "Publish Brain.command")
 # Local preview: double-click "Preview Brain.command"
-# Plan sync: rsync the vault plan to docs/, then commit
 
 # Deploy status without the gh CLI
 curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | grep conclusion
