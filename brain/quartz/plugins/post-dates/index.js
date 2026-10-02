@@ -37,6 +37,19 @@ const fmt = (d) =>
 
 // The actual renderer, receiving Quartz's per-page props.
 function PostDatesComponent({ fileData }) {
+  // AN INDEX IS NOT A DISPATCH. 11.9.11.
+  //
+  // content/index.md is the Desk — an archive index, not a post — and "Published
+  // Jan 19, 2023" above it is a claim about a page that was not published that
+  // day. It appeared there only because the frontmatter has to carry a date for
+  // recent-notes to sort against (see the comment in content/index.md).
+  //
+  // The guard is on the slug, not on a missing date, because the date is exactly
+  // what is present. Every other index-style page in this site is a real folder
+  // index and none of them are listed in the sitemap, so "index" is the only one
+  // that reaches a reader at all.
+  if (fileData?.slug === "index") return null
+
   const created = fileData?.dates?.created
   const modified = fileData?.dates?.modified ?? created
   if (!created) return null

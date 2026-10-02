@@ -26,11 +26,27 @@ import { h } from "preact"
  * closed disclosure on a page that looks like a list is indistinguishable from a
  * broken one.
  *
- * TITLES ONLY, NO DESCRIPTIONS HERE. The tag cards above already carry a
- * standfirst for 34 entries; repeating descriptions for all 49 would make the
- * page twice as long and say the same thing twice. In a by-year list the title
- * and the date are the whole signal — this is a lookup table, not a browsing
- * surface. So: title, date, and nothing else.
+ * TITLES ONLY — WHICH WAS WRONG, AND WAS FIXED ON BEING ASKED FOR. 11.9.11. This
+ * component shipped with title and date and no standfirst, on the reasoning that
+ * the tag cards above already carry descriptions so repeating all 49 would say
+ * the same thing twice. That reasoning was sound about the CARDS and wrong about
+ * the YEAR LIST: a card shows the five most recent posts in a topic, so it is a
+ * way in, whereas this list IS the archive. A reader who opens 2023 to find one
+ * specific dispatch was previously given forty-odd bare titles and had to open
+ * each one to know what any of them were about — and the whole point of the
+ * fold-out is that it is now open.
+ *
+ * So every row carries its standfirst too, clamped to one line by the CSS. Clamped
+ * because descriptions here run to a full sentence: unclamped they would triple
+ * the height of a list the reader opened to scan, which is the opposite of a
+ * lookup table. The two-line clamp on the cards is 2 because a card is a preview;
+ * one line here is enough to recognise a dispatch from its subject.
+ *
+ * ROW SHAPE changed with it. Date and text used to be siblings directly under the
+ * <li>, which only works while the date is the only thing besides the title. With
+ * a description the title has to hang off a block beside the date, or every row
+ * becomes a full-width stack and the dates stop forming a column — and the dates
+ * forming a column is the entire reason this is a by-YEAR list.
  *
  * LINK PREFIX and the index-only guard are the same constraints as ./tag-hub, for
  * the same reason: a plain-JS local plugin cannot import quartz/util (see the
@@ -126,14 +142,25 @@ function YearFoldoutsComponent({ allFiles, fileData }) {
               "li",
               { class: "eb-years__row" },
               h(
-                "time",
-                { class: "eb-years__date", datetime: post.dates.created.toISOString() },
-                fmtDay(post.dates.created),
+                "div",
+                { class: "eb-years__meta" },
+                h(
+                  "time",
+                  { class: "eb-years__date", datetime: post.dates.created.toISOString() },
+                  fmtDay(post.dates.created),
+                ),
               ),
               h(
-                "a",
-                { class: "internal eb-years__link", href: `./${post.slug}` },
-                post.frontmatter.title,
+                "div",
+                { class: "eb-years__body" },
+                h(
+                  "a",
+                  { class: "internal eb-years__link", href: `./${post.slug}` },
+                  post.frontmatter.title,
+                ),
+                post.frontmatter.description
+                  ? h("p", { class: "eb-years__desc" }, post.frontmatter.description)
+                  : null,
               ),
             ),
           ),

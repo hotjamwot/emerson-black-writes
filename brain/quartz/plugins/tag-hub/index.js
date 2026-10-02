@@ -19,6 +19,14 @@ import { h } from "preact"
  * newswire. Excluding a tag by string is a deliberate editorial choice, so it is
  * a named constant, not a filter buried in the sort.
  *
+ * NO "34 posts across 7 topics" LEDE. 11.9.11. It was removed because it was
+ * wrong in a way nobody noticed: `totalShown` sums the FIVE-per-card cap, so it
+ * said 34 — which is the number of posts the cards actually list — on a page that
+ * is plainly the whole archive. The fold-out heading below says 49, and the page
+ * was therefore announcing two different totals about itself. It was also the only
+ * thing on the Desk telling you what the cards above it were, which is what a
+ * section is for.
+ *
  * LINK PREFIX: this component is placed on the Desk index ONLY, and emits
  * "./" + slug. Quartz's own PageList resolves links properly with
  * resolveRelative(); a plain-JS local plugin cannot import from quartz/util
@@ -83,12 +91,9 @@ function TagHubComponent({ allFiles, cfg, fileData }) {
     return d !== 0 ? d : a.localeCompare(b)
   })
 
-  const totalShown = tags.reduce((n, t) => n + Math.min(byTag.get(t).length, PER_TAG), 0)
-
   return h(
     "section",
     { class: "eb-hub", "aria-label": "Browse by topic" },
-    h("p", { class: "eb-hub__count" }, `${totalShown} posts across ${tags.length} topics`),
     tags.map((tag) => {
       const group = byTag.get(tag).sort(newestFirst)
       const shown = group.slice(0, PER_TAG)

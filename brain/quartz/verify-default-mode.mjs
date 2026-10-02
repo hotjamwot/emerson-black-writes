@@ -376,10 +376,44 @@ check(
     "the archive jump target actually exists on the landing page (no dead anchor)",
   )
   check(
-    /href="#everything-by-year"/.test(homeDoc) &&
-      /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
-    "the landing page forwards into the archive and links back to the storefront",
+    !/Browse the archive/.test(homeDoc) && !/Back to the main site/.test(homeDoc),
+    "the Desk carries no body copy, no buttons and no link back",
   )
+  // The check above only knows two specific strings. This one does not care what
+  // anybody writes: it asserts the Desk's rendered markdown body is EMPTY.
+  //
+  // Tested by putting a plain sentence back into content/index.md. The string
+  // guard above missed that sentence — it fired only by accident, because the
+  // sentence quoted the button labels somewhere in its text. An assertion on the
+  // body container itself cannot miss it, and it covers the buttons, the hint
+  // line, and any prose nobody has written yet.
+  //
+  // `.markdown-preview-view` is the body container; it is empty exactly when the
+  // page renders `<div class="markdown-preview-view markdown-rendered"></div>`.
+  //
+  // The first attempt sliced from `<article>` to `<section class="eb-hub">` and
+  // got a zero-length string, because the hub renders BEFORE the article — both
+  // are slotted `afterBody` but the hub sits at priority 10 and the article body
+  // is emitted ahead of it. Anchoring on the container is stable regardless of
+  // what order the slots resolve in.
+  check(
+    /<div class="markdown-preview-view markdown-rendered"><\/div>/.test(homeDoc),
+    "the Desk's rendered body is empty (no prose, no buttons, no links)",
+  )
+  check(
+    !/class="eb-post-dates"/.test(homeDoc),
+    "the Desk states no publication date (an archive index is not a dispatch)",
+  )
+  // The standfirst survives: it is the only sentence that tells a search engine
+  // what this page is, and it is the one piece of copy here doing real work.
+  check(
+    /class="eb-post-deck"/.test(homeDoc),
+    "the Desk keeps its standfirst and its meta description",
+  )
+  // Whether every real post still shows its own Published date is asserted at the
+  // end of this file, next to `builtPosts` — it is declared there, and a guard that
+  // reaches forward into a later binding crashes the suite instead of failing it.
+
   // And the retired URL must not be linked from anywhere in the built site.
   // A link to a redirect stub still works, but it is a bounce through a page
   // that no longer exists, and nothing should be pointing at it.
@@ -893,9 +927,23 @@ check(
   "the hub card surface does not mix in the red accent (no red-on-red)",
 )
 // Two columns on a wide desktop, not three: 460px floor, was 320px.
+//
+// 11.9.11 — the floor is now `min(460px, 100%)`. The bare `minmax(460px, 1fr)`
+// could not narrow below 460px, so on a phone it laid out a 460px track inside a
+// ~360px container and overflowed the page sideways: the cards were too wide and
+// the whole Desk scrolled horizontally. `min()` makes the floor adaptive.
+//
+// This guard checks the WHOLE expression, not just that "460px" appears. Asserting
+// the substring would have passed against the broken version, because the broken
+// version contains it too — the same near-miss selector that let the 11.9.7 image
+// and sidebar guards pass while broken.
 check(
-  /\.eb-hub\{[^}]*minmax\(460px,1fr\)/.test(hubCss),
-  "the hub lays out two cards per row (460px floor gives text room to breathe)",
+  /\.eb-hub\{[^}]*minmax\(min\(460px,100%\),1fr\)/.test(hubCss),
+  "the hub floor is adaptive (min(460px, 100%)) so it cannot overflow a phone",
+)
+check(
+  !/minmax\(460px,1fr\)/.test(hubCss),
+  "the hub has no hard 460px minimum a narrow screen cannot meet",
 )
 
 // ── 11.9.7 e/f/g: the three desktop sizing fixes ───────────────────────────
@@ -1139,6 +1187,46 @@ check(
   check(
     /linkToMore: false/.test(config),
     "recent-notes renders no overflow link rather than a wrong count",
+  )
+
+  // 11.9.11 — every post is recognisable without opening it.
+  //
+  // The cards already carried a standfirst and a date; the year rows carried a
+  // date and nothing else, on the reasoning that a card already says it. That is
+  // true of a preview and false of an index: a reader who opened 2023 to find one
+  // dispatch got forty bare titles. Every year row now carries both.
+  const yearDescs = (homeDoc.match(/class="eb-years__desc"/g) ?? []).length
+  check(yearDescs === yearRows, `every year row carries its subtitle (${yearDescs}/${yearRows})`)
+  // And the date is on both surfaces, not just one. `hubItems` is declared further
+  // down this file, so it is counted here rather than reached for — same rule as
+  // `builtPosts`: a guard that reaches forward crashes the suite instead of
+  // failing it, and a crash tells you far less than a red line does.
+  const hubDates = (homeDoc.match(/class="eb-hub__date"/g) ?? []).length
+  const hubRowCount = (homeDoc.match(/class="eb-hub__item"/g) ?? []).length
+  check(
+    hubDates === hubRowCount,
+    `every topic-card post shows its date (${hubDates}/${hubRowCount})`,
+  )
+  check(
+    !/eb-hub__count/.test(homeDoc) && !/posts across \d+ topics/.test(homeDoc),
+    "the Desk states no second, disagreeing total for itself",
+  )
+  // 11.9.11 — post-dates now returns null for slug "index", so the Desk shows no
+  // "Published Jan 19, 2023". That guard is a slug check in a component used on
+  // every page, so what matters is that it stopped at exactly one page.
+  const postDateLines = builtPosts.filter((f) => {
+    // `builtPosts` entries are "newsletters/<year>/<file>.html" — relative paths
+    // that already end in the file. Joining an extra "/index.html" onto one of
+    // those points at a path that does not exist, and existsSync swallows it, so
+    // the count came back 0/49 and read as though post-dates had broken every post
+    // on the site. It had not. The guard was reading a directory path for files
+    // that are flat.
+    const p = join(brain, "public", f)
+    return existsSync(p) && /class="eb-post-dates"/.test(readFileSync(p, "utf-8"))
+  })
+  check(
+    postDateLines.length === builtPosts.length,
+    `every real post still shows its own Published date (${postDateLines.length}/${builtPosts.length})`,
   )
 }
 

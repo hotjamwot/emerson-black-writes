@@ -578,23 +578,33 @@ h2.page-title,
 // list of writing. The floor is raised to 460px, which drops a wide desktop to
 // two columns - enough width that a standfirst fits on one or two comfortable
 // lines - while a phone still gets exactly one card with no media query.
+//
+// `min(460px, 100%)`, WHICH IS THE WHOLE FIX FOR MOBILE. 11.9.11.
+//
+// `minmax(460px, 1fr)` has a HARD 460px floor: the track cannot be narrower than
+// that no matter how little room it is given. On a 390px phone the grid still
+// laid out a 460px column and overflowed the page sideways — which is why the
+// cards looked too wide on mobile and why the page scrolled horizontally, and
+// which is also why the cards looked ragged there: the track was overflowing its
+// own container rather than fitting it.
+//
+// Wrapping the floor in `min(460px, 100%)` makes it adaptive instead of fixed —
+// 460px on desktop, and "whatever the container is" on a phone. One expression,
+// no media query, and it degrades correctly at every width in between rather
+// than only at the two widths someone wrote a query for.
 .eb-hub {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
   gap: 1.25rem;
   margin: 2rem 0;
 }
 
-.eb-hub__count {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gray);
-}
-
+// Every card in a row stretches to the height of the tallest, which with cards of
+// different post counts leaves a lot of dead space under the short ones. The
+// cards are a browsing surface, not a comparison table, so ragged bottoms are
+// correct and aligning them is not.
 .eb-hub__card {
+  align-self: start;
   // A raised surface needs a padding and a border of its own — the hairline
   // --eb-line alone reads as a divider, not a container.
   padding: 1.1rem 1.2rem 1.2rem;
@@ -817,8 +827,21 @@ h2.page-title,
   display: grid;
   grid-template-columns: 4.5rem 1fr;
   gap: 0.75rem;
+  // `baseline` still lines the date up with the title's first line now that the
+  // body is a block holding title + standfirst. It used to align two inline
+  // siblings; it aligns a block's first line just as well.
   align-items: baseline;
   padding: 0.22rem 0 0.22rem 1.25rem;
+}
+
+.eb-years__meta {
+  min-width: 0;
+}
+
+.eb-years__body {
+  // Same reason as the standfirst: a grid item will not shrink below its content
+  // unless told to, and one long word would otherwise widen the entire row.
+  min-width: 0;
 }
 
 .eb-years__date {
@@ -835,6 +858,32 @@ h2.page-title,
   &:hover {
     color: var(--eb-accent);
   }
+}
+
+// 11.9.11 — the standfirst, now that year rows carry one.
+//
+// ONE line, not two. The cards clamp at 2 because a card is a preview and there
+// are five of them side by side; a year row is a scannable index and there are up
+// to forty of them stacked, so a second line here buys almost nothing and costs
+// the reader a screenful of scroll for every year opened. The clamp is
+// `-webkit-line-clamp` rather than a fixed height, so a one-sentence standfirst
+// still occupies exactly one line and does not leave a gap.
+//
+// `min-width: 0` is load-bearing. The row is a grid track, and a grid item's
+// default `min-width: auto` refuses to shrink below its content — so an
+// unbreakable long word in a standfirst would widen the whole row and push the
+// description out past the edge. The card list needs the same thing for the same
+// reason.
+.eb-years__desc {
+  margin: 0.1rem 0 0;
+  min-width: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--gray);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────

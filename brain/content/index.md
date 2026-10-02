@@ -1,22 +1,36 @@
 ---
 title: "Emerson's Desk"
 description: Every Stormhouse letter dispatch since January 2023 — the full archive, cross-linked and searchable.
-# Anchors this site page to the start of the archive so it never outranks a
-# real dispatch in the "Latest dispatches" list.
+# `created` stays, and it is load-bearing rather than decorative.
+#
+# recent-notes sorts "Latest dispatches" by `dates.created`, and `hideFolderPages`
+# does not catch this page: "index" is not a folder slug. Drop the date and the
+# Desk falls back to whatever Quartz infers from git, lands somewhere unpredictable
+# in that sort, and starts competing with real posts for one of five slots.
+#
+# 2023-01-19 is older than every dispatch on the site, so the Desk always sorts
+# last and never appears. post-dates is index-guarded so the date never RENDERS.
 created: 2023-01-19
 publish: true
 ---
 
-Every _Stormhouse letter_ dispatch since January 2023 lives here — the craft notes, drafting diaries and deadline disasters behind the books. The books, and everything else about Emerson Black, live on the main site.
+<!--
+  11.9.11 — the body of this page is now empty on purpose.
 
-<div class="eb-actions">
-  <!--
-    11.9.10 — this pointed at /newsletters/, a page that was nothing but a list
-    of four year links. The archive is now the by-year fold-outs at the foot of
-    this page, so the button points here and names what it actually opens.
-  -->
-  <a class="eb-btn eb-btn--primary" href="#everything-by-year">Browse the archive</a>
-  <a class="eb-btn eb-btn--quiet" href="https://emersonblackwrites.com/">Back to the main site</a>
-</div>
+  Removed: the "Every Stormhouse letter dispatch..." paragraph, the "Browse the
+  archive" button, the "Back to the main site" link, and the ⌘K/graph hint line.
 
-<p class="eb-fine">Press ⌘K (Ctrl&nbsp;+&nbsp;K) to search every note, or follow the graph to wander by idea.</p>
+  Why. The page had three things saying the same thing: this paragraph, the
+  button that jumped to the fold-outs below, and the fold-outs themselves. And the
+  button was self-defeating — it scrolled a page whose entire content was already
+  a few hundred pixels below it.
+
+  What is left is the title, the standfirst, the seven topic cards and the years.
+  The card list answers "what is this about"; the fold-outs answer "what has he
+  written". A page that is just those two is a map, and a map does not need to
+  introduce itself.
+
+  The `description` above is KEPT and is still the standfirst under the title. It
+  is also what the sitemap and social cards use, and it is the only sentence that
+  describes this page to a search engine.
+-->
