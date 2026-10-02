@@ -539,6 +539,28 @@ check(
   /\.eb-recently-updated\[hidden\][^{}]*\{[^}]*display:\s*none/.test(headerCss),
   "the pill keeps a [hidden] gate in CSS (a bare display rule would light it on every post)",
 )
+// 11.9.7c - the article must come before the explorer on mobile. Base Quartz
+// stacks grid-sidebar-left FIRST, putting a full screen of file tree above the
+// title. Two traps here, both hit: matching the BASE rule (it appears first,
+// and passing would mean nothing), and taking the first hit rather than the
+// winning one. custom.scss is unlayered AND appended last, so the effective
+// declaration is the LAST occurrence - assert on that.
+const mobileGrids = [
+  ...headerCss.matchAll(
+    /@media \(max-width:800px\)\{\.page>#quartz-body\{grid-template:([^}]*)\}/g,
+  ),
+].map((m) => m[1])
+const mobileGrid = mobileGrids.at(-1)
+check(
+  mobileGrids.length > 1,
+  "the mobile grid override ships in custom.scss, after the base stack it must beat",
+)
+check(
+  !!mobileGrid &&
+    mobileGrid.indexOf("grid-center") > -1 &&
+    mobileGrid.indexOf("grid-center") < mobileGrid.indexOf("grid-sidebar-left"),
+  `the article is placed before the sidebar on mobile${mobileGrid ? "" : " (no override found)"}`,
+)
 const scriptsDir = join(brain, "public", "static", "scripts")
 const scriptBlob = readdirSync(scriptsDir)
   .map((f) => readFileSync(join(scriptsDir, f), "utf8"))

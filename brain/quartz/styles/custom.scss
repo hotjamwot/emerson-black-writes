@@ -510,6 +510,36 @@ h2.page-title,
   display: none;
 }
 
+// ── 4c. Mobile: the article comes FIRST, not the file tree ───────────────────
+// 11.9.7c. Base Quartz stacks, at `max-width: 800px`:
+//
+//   grid-sidebar-left → grid-header → grid-center → grid-sidebar-right → footer
+//
+// so the whole left sidebar — the explorer file tree and the backlinks list —
+// renders ABOVE the page header and the article. On a phone that is a full
+// screen of navigation before the title: every reader pays it. This is the
+// "sidebar at the top on mobile, covering content" symptom, and it is a
+// layout-order defect rather than a taste question.
+//
+// `order` cannot fix it. Grid items placed by `grid-area` names are placed by
+// the template; `order` only affects auto-placed items. Redefining
+// `grid-template` for the same breakpoint is the lever that actually moves the
+// tracks. `custom.scss` is unlayered, so this wins over the layered base rule
+// at equal specificity without needing `!important`.
+//
+// Desktop is untouched: the rule is inside the same `max-width: 800px` query
+// the base uses, and §4b's 420px desktop shell is `min-width: 1200px`.
+@media (max-width: 800px) {
+  .page > #quartz-body {
+    grid-template:
+      "grid-header"
+      "grid-center"
+      "grid-sidebar-left"
+      "grid-sidebar-right"
+      "grid-footer" / auto;
+  }
+}
+
 // Hold the reading measure. Collapsing the column widened the centre from 850
 // to 1075px, which pushed paragraphs to 98 characters per line — past the point
 // where the eye reliably finds the start of the next line. So the reclaimed
