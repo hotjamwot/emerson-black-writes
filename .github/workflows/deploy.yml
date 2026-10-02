@@ -262,6 +262,19 @@ jobs:
           fi
           echo "Guard: 6 desk picks rendered (3 curated + $LATEST_COUNT latest), no placeholders."
 
+      # S11 §11.9: the storefront, measured AS RENDERED rather than as written.
+      # Three visual regressions shipped in the §11.3c rehaul (I10) — a hero that
+      # was not full-width, a section rhythm that vanished, and a cover that
+      # rendered as a strip — and every check at the time read the source. The CSS
+      # was correct as written in all three cases; the rendered box was wrong.
+      #
+      # Its static tier always runs. Its browser tier runs whenever Chrome is on
+      # the runner (it is, on ubuntu-latest) and aborts on a real geometry
+      # regression; if Chrome is ever missing it says so loudly and skips, because
+      # "cannot measure here" is not evidence of a failed guard, whereas
+      # "measured, and wrong" is.
+      - name: Storefront geometry check (rendered)
+        run: node brain/scripts/verify-storefront.mjs _site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

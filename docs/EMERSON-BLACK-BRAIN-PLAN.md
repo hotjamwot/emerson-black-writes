@@ -1,6 +1,6 @@
 # Emerson Black — Site Plan & Log
 
-**Status:** Live · `emersonblackwrites.com/` (storefront) + `/desk/` (Emerson's Desk) · Quartz v5 · **Updated:** 2026-10-01
+**Status:** Live · `emersonblackwrites.com/` (storefront) + `/desk/` (Emerson's Desk) · Quartz v5 · **Updated:** 2026-10-02
 **Owner:** HayJay + AI assistant · **Full narrative history:** git log (this file was condensed from 1000 lines on 2026-10-01; the pre-condensation text is at commit `75beccf`)
 
 **Goal:** Write in Obsidian → run `Publish Brain.command` → the archive is live at **`emersonblackwrites.com/desk/`**, built by GitHub Actions.
@@ -38,7 +38,7 @@
 | Quartz config | `brain/quartz.config.yaml` |
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,000 lines, unlayered overrides) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
-| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs` |
+| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs` |
 | Mirrored plan | `docs/EMERSON-BLACK-BRAIN-PLAN.md` (rsync target) |
 
 ## 3. Frontmatter spec
@@ -88,9 +88,11 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 npx quartz build
 node quartz/verify-default-mode.mjs     # browser checks need a static server on :8099
 node quartz/theme/verify-brand.mjs
+# Storefront (run from the repo root) — measured AS RENDERED, needs Chrome
+node brain/scripts/verify-storefront.mjs      # ...or `_site`, which is what CI runs
 ```
 
-**Suite currently 91/91.** Both scripts assert against the **built stylesheet**, not the source — see §9.
+**Suite currently 91/91 for the Desk + 33/33 for the storefront.** The Desk scripts assert against the **built stylesheet** and the storefront script against the **rendered page** — never the source, because reading the input file is not verification — see §9.
 
 ## 8. Incidents
 
@@ -132,6 +134,7 @@ node quartz/theme/verify-brand.mjs
 - **I8 (new, 2026-10-01): the same class again, and a working copy HID it.** `render-desk-picks` ran before the file it reads existed; it passed locally twice because a previous build's output was still sitting there. Only a **fresh `git clone`** exposed it.
 - **I9 (new, 2026-10-01): a guard that reported four failures on a correct file** — the search matched the *comment explaining the fix*. A false FAIL trains you to ignore the audit, and then it waves a real regression through. **A check a comment can break is not a check.**
 - **I10 (new, 2026-10-01): three visual regressions shipped in the rehaul, all mine, all caught by HayJay looking at the page.** The hero isn't full-width, the vertical rhythm is gone, the prequel cover renders as a strip. In each case the CSS was correct *as written* and the test that passed was one I had designed. **I checked a file, never the page.**
+- **I11 (new, 2026-10-02): my "one real look" was a lie I nearly believed.** Chasing the I10 standing rule, I screenshotted the storefront with headless Chrome `--screenshot` and a URL fragment. Three shots — `#start-reading`, `#desk`, `#about` — came back as **byte-identical** flat dark PNGs (same md5), and I was one step from writing down "the page renders blank below the fold". The capture method was broken, not the page; HayJay's eye on the real file settled it in seconds. **Lesson: a screenshot I cannot trust is worse than no screenshot — the vacuous guard in a new costume. The fix is to measure geometry (`brain/scripts/verify-storefront.mjs`), not to look at a picture and hope.**
 - *A step that "works when I run it" is not a step that works. Order matters, and only the assembled artifact can prove it.*
 - **Standing rule after I6/I7/I8: reproduce a deploy from a fresh clone before pushing.** Three of these in a row, all invisible locally.
 - **Standing rule after I10: after a visual change, measure the rendered thing** — image dimensions from the file, the DOM from the built artifact, and one real look. Verifying the input file is not verification.
@@ -303,27 +306,58 @@ Shipped as part of the 11.3c rehaul: a sticky header carrying the wordmark plus 
 
 New guard: every nav target is asserted to exist as a section `id`, because a renamed id renders a perfectly normal-looking link that goes nowhere.
 
-### 🔴 11.9 Post-rehaul defect list — OPEN, triaged 2026-10-01
+### 🟠 11.9 Post-rehaul defect list — 1–3 FIXED 2026-10-02 · 4–8 OPEN
 
-HayJay's report from using the site after the rehaul. **Every item was reproduced against the live site or the source before being written down**, and the likely cause is recorded where it was diagnosable — so the next pass starts from a cause, not a symptom. Items 1–5 are homepage; 6–8 are the Desk.
+HayJay's report from using the site after the rehaul. **Every item was reproduced against the live site or the source before being written down**, and the likely cause is recorded where it was diagnosable — so each pass starts from a cause, not a symptom. Items 1–5 are homepage; 6–8 are the Desk.
 
-#### 🔴 11.9.1 The hero image does not span the full width
+**Items 1–3 are fixed, measured, and looked at.** (HayJay opened the page — that is the only check that actually settles "does it look right".) The three fixes were one commit; most of the session went on the measuring stick below, which is the part worth keeping.
 
-**Cause, confirmed.** `.main-content` is `max-width: 1100px`, and `.hero` is a plain child of it. In the rehaul I defined `.bleed` and `.shell` as helpers and then **never applied `.bleed` to any section** — `grep -c bleed index.html` returns **0**. So the hero's background paints inside an 1100px column, and the full-bleed treatment the other sections still carry is why they look right.
+#### ✅ The measuring stick — `brain/scripts/verify-storefront.mjs` (new 2026-10-02)
 
-**Fix:** put `bleed` on the full-bleed sections (hero, desk, characters, start-reading) and `shell` on their inner content. The hero's `.hero-inner` then needs the padding `.bleed` gives up.
+**Built before the fixes, not after, and run against the broken page first: 19 of its 33 checks failed.** That is the only thing that makes it worth having (the F13 lesson — a check that cannot fail is worse than none). All 33 pass now.
 
-#### 🔴 11.9.2 Content is vertically cramped
+**Two tiers.** Static checks over the source, with `/* … */` stripped before anything is matched (I9). Then rendered geometry out of headless Chrome at 1400 / 1100 / 390px: the page loads in an **iframe**, because an iframe's width *is* a viewport — the page's own media queries apply inside it, and `100vw` there is the iframe's width, which is what makes the full-bleed assertion honest rather than decorative. It serves the directory itself over a loopback HTTP server (no python, no separate "start a server first" step) and generates the probe document **in memory**, never on disk. It also passes `--disable-dev-shm-usage`, because the CI runner is a container and Chrome's default `/dev/shm` use is a classic crash there.
 
-**Cause, confirmed.** The rehaul removed `gap: var(--space-2xl)` from `.main-content` when it became a plain block container — but every section depends on that gap for its rhythm, and none supplies its own top margin.
+**It is a deploy guard**, running against `_site` after assembly and before the upload. The browser tier aborts on a measured regression; if Chrome is ever absent it says so loudly and skips, because "cannot measure here" is not evidence of a regression — whereas "measured, and wrong" is.
 
-**Fix:** restore a section gap in `.main-content`. Prefer the container gap: it keeps the rhythm in one place rather than 7 hand-set margins that will drift.
+**The honest part: the first attempt at "one real look" was worthless.** Headless Chrome `--screenshot` with a URL fragment produced three **byte-identical** flat dark PNGs for `#start-reading`, `#desk` and `#about` — identical md5. I was one step from reading that as "the page is blank below the fold". A screenshot I cannot trust is worse than no screenshot (I11).
 
-#### 🔴 11.9.3 `.prequel-cover img` renders long and skinny
+#### ✅ 11.9.1 The hero image does not span the full width — FIXED 2026-10-02
 
-**Cause, confirmed by measuring the source.** The covers are genuinely `1280×2048` and `1600×2560` — a **0.625 ratio, exactly 5:8** — so the files are correct. The CSS asks for `aspect-ratio: 5/8` too, but sets `max-width: 280px` with **no matching height**, inside a `1fr` column ~418px wide. The image is left-aligned in a column twice its width, so it reads as a narrow strip rather than a book.
+**Cause, confirmed.** `.main-content` is `max-width: 1100px`, and `.hero` is a plain child of it. In the rehaul `.bleed` and `.shell` were defined as helpers and then **never applied to any section** — `grep -c bleed index.html` returned **0** — so the hero's background painted inside an 1100px column. The sections that looked right did so because they still hand-rolled `width: 100vw; margin-left: calc(50% - 50vw)`, four times over.
 
-**Fix:** give the wrapper the width and let the image fill it — or put the ratio on the *container* the way `.book-cover` already does. **Reuse the exact `.book-cover` recipe:** the books grid is already right, and the prequel is the copy that went stale.
+**Fix — and a correction to this item's own fix note.** The note above said to put `bleed` on hero/desk/characters/**start-reading** and `shell` on their inner content. Measured, that turned out to be two different things:
+
+- The four real bands — hero, series hook, Desk picks, characters — now carry `bleed`, and the hand-rolled lines are **deleted**, so the escape hatch exists in exactly one place. Asserted: exactly one `100vw` in the stylesheet.
+- **`start-reading` is deliberately NOT a band.** It has no background and its content is a 900px grid inside the measure, so bleeding it would only widen an invisible box. What it *had* was worse: `padding-left: calc(50% - 550px + …)`, a hard-coded half-shell that silently collapsed to 0 below ~1160px — i.e. exactly where it was meant to widen — and that would break the day `--shell` changed. Deleted.
+- **`.shell` wrappers were not needed on the other bands either.** They already re-centre with their own padding, and wrapping the character grid would have narrowed it for no reason.
+
+**Measured:** hero `182…1218 of 1400` → **`0…1400`**, at 1400, 1100 and 390px. The 390px run also caught a horizontal overflow that had nothing to do with the hero — `scrollWidth 406 → 390` — which was the `550px` calc above.
+
+#### ✅ 11.9.2 Content is vertically cramped — FIXED 2026-10-02
+
+**Cause, confirmed against the rehaul diff.** `.main-content` used to be `padding: var(--space-2xl) 0; gap: var(--space-2xl)`. The rehaul made it `padding: 0 var(--space-lg)` and dropped **both** the gap and the vertical padding, so the 6rem rhythm vanished — and no section supplies a top margin of its own.
+
+**Fix:** `gap: var(--space-2xl)` restored, plus a `padding-bottom` that is the last section's breathing room before the footer. Sections the rehaul had given their own vertical padding now add none, or the two stack: `.about` is `padding: 0` and `.start-reading` lost its 6rem, because the container gap *is* the rhythm and seven hand-set margins drift. The `≤700px` media query's `.main-content { padding: 0 var(--space-md) }` was also silently overwriting the new bottom padding on mobile; it now carries it through.
+
+**Measured:** tightest gap between sections **0px → 96px** (6rem) at 1400px.
+
+#### ✅ 11.9.3 `.prequel-cover img` renders long and skinny — FIXED 2026-10-02
+
+**Cause, confirmed by measuring the rendered box — and it was worse than "left-aligned".** The files are correct (`1280×2048`, exactly 5:8) and the CSS did say `aspect-ratio: 5/8`. But the ratio was on the `<img>`, which also had `max-width: 280px` and **no `height`** — so the `height="750"` *presentational attribute* won, and the cover rendered **280×750**: a ratio of **0.373**. Not a small book — a genuine strip. `.book-cover` escapes this only because its rule sets `height: 100%`; the prequel is the copy that went stale, exactly as this item guessed.
+
+**Fix:** the `.book-cover` recipe, which is what this item asked for — the ratio on the **box**, the image filling it:
+
+```css
+.prequel-cover { width: 100%; max-width: 320px; justify-self: center; aspect-ratio: 5 / 8; overflow: hidden; }
+.prequel-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+```
+
+`height: 100%` is not decoration — it is the declaration that stops the presentational attribute from winning, and it is why the books grid was never affected. The `≤768px` rule that capped the **image** at 200px is now a cap on the **box** (240px), because capping the image inside a wider box is the same bug again.
+
+**Also corrected:** the `width="500" height="750"` attributes on all five covers, which claimed 2:3 while the files are 5:8. They are only hints, so they matter exactly when CSS does *not* constrain the box — which is the case that broke.
+
+**Measured:** box `418×759` with image **`280×750` (0.373)** → box `320×512` with image `320×512`, **ratio 0.625**, image filling the box. At 390px: box 240×384, same ratio.
 
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
@@ -393,7 +427,7 @@ A visitor who lands on Book 3 (the hero) has no idea who Luce is. A visible 0→
 
 ## 12. Roadmap
 
-**Now: the 11.9 defect list.** 11.9.1–11.9.3 are small and confirmed; 11.9.4 needs a real phone; 11.9.6 (shared header) is the highest-value item. **11.9.5 is a decision, not a bug — needs HayJay's answer first.** Then craft→books bridge (11.6) → tag constellation (11.5).
+**Now: the rest of the 11.9 defect list.** ✅ 11.9.1–11.9.3 are fixed, measured and looked at (2026-10-02): hero full-bleed, section rhythm restored, prequel cover 5:8 — plus the guard that now measures the rendered page on every deploy. **Next: 11.9.6 (fold the storefront header into the Desk)** — highest-value and nearly free, and it should carry 11.9.8 with it; then 11.9.4 (mobile — needs a real phone, two suspects already named) and 11.9.7 (the Desk's own CSS pass, where the yellow tags are the highest-confidence item). **11.9.5 is a decision, not a bug — needs HayJay's answer first.** Then craft→books bridge (11.6) → tag constellation (11.5).
 **Also open:** Search Console is live with the sitemap. Analytics stays off — at current traffic levels Plausible's ~$9/month isn't justified, and **Search Console is free and answers the more useful question** (what people search for, and whether they find us). Revisit when traffic justifies it.
 **Then:** backlinks enabled · sidebar width + active item (I4/I5) · F1–F4 cruft prune.
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
@@ -409,6 +443,9 @@ cd ~/Movies/PROJECTS/Websites/EBW\ website/brain
 npx quartz build
 node quartz/verify-default-mode.mjs        # serve public/ on :8099 first for browser checks
 node quartz/theme/verify-brand.mjs
+
+# Storefront geometry (rendered; needs Chrome) — run from the repo root
+node brain/scripts/verify-storefront.mjs
 
 # Publish vault → site (or double-click "Publish Brain.command")
 # Local preview: double-click "Preview Brain.command"

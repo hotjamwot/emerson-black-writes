@@ -151,9 +151,16 @@ a:hover { color: var(--accent-red-bright); }
     width: 100%;
     max-width: var(--shell);
     margin: 0 auto;
-    padding: 0 var(--space-lg);
+    /* Vertical rhythm lives HERE, once — S11 §11.9.2. The rehaul turned this
+       into a plain block container and dropped the gap along with the vertical
+       padding; every section depends on that gap and none supplies its own top
+       margin, so the page read as cramped. One gap rather than seven hand-set
+       margins that drift, and the bottom padding is the last section's breathing
+       room before the footer. */
+    padding: 0 var(--space-lg) var(--space-2xl);
     display: flex;
     flex-direction: column;
+    gap: var(--space-2xl);
 }
 
 .bleed {
@@ -392,8 +399,7 @@ a:hover { color: var(--accent-red-bright); }
         radial-gradient(circle at top left, rgba(227, 28, 61, 0.14), transparent 30%),
         linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
         var(--bg-secondary);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    /* Full bleed comes from .bleed in index.html (S11 §11.9.1). */
     border-radius: 0;
     display: grid;
     grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
@@ -589,12 +595,14 @@ a:hover { color: var(--accent-red-bright); }
 
 /* Start Reading */
 .start-reading {
+    /* Deliberately NOT a full-bleed band, though §11.9.1's fix note listed it
+       with them. It has no background — its content is a 900px grid sitting
+       inside the measure — so bleeding the section would only widen an invisible
+       box. What it *had* was worse: a `padding-left: calc(50% - <half the shell>)`
+       — a hard-coded half-shell that silently collapsed to 0 below ~1160px, i.e.
+       exactly where it was meant to widen, and that would break the day --shell
+       changed. Vertical spacing now comes from .main-content's gap. */
     text-align: center;
-    padding: var(--space-2xl) var(--space-lg);
-    margin: var(--space-xl) calc(-1 * var(--space-lg));
-    padding-left: calc(50% - 550px + var(--space-lg));
-    padding-right: calc(50% - 550px + var(--space-lg));
-    border-radius: 16px;
 }
 
 .start-reading h2 { 
@@ -606,14 +614,24 @@ a:hover { color: var(--accent-red-bright); }
 
 .prequel-book { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); align-items: start; max-width: 900px; margin: 0 auto; }
 
-.prequel-cover img {
+/* The .book-cover recipe, copied deliberately: the books grid was already right
+   and the prequel is the copy that went stale (S11 §11.9.3). The ratio lives on
+   the BOX and the image fills it. The old rule capped the <img> at 280px inside a
+   418px column and never set `height`, so the `height="750"` presentational
+   attribute won and the cover rendered 280×750 — a genuine strip, measured. The
+   file was correct (1280×2048, exactly 5:8) and so was `aspect-ratio`; the
+   rendered box was the bug, and no source-level check can see that. */
+.prequel-cover {
     width: 100%;
-    max-width: 280px;
+    max-width: 320px;
+    justify-self: center;
     aspect-ratio: 5 / 8;
-    object-fit: cover;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 3px var(--accent-red);
+    overflow: hidden;
     border-radius: 3px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 3px var(--accent-red);
 }
+
+.prequel-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 .prequel-content { display: flex; flex-direction: column; gap: var(--space-md); }
 .prequel-content h3 { font-size: 1.8rem; font-family: var(--font-display); color: var(--text-primary); margin: 0; }
@@ -629,8 +647,9 @@ a:hover { color: var(--accent-red-bright); }
         radial-gradient(circle at top left, rgba(227, 28, 61, 0.16), transparent 36%),
         linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
         var(--bg-secondary);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    /* Full bleed comes from the .bleed class in index.html, not from hand-rolled
+       lines — the whole point of the helper, and the reason the hero was the one
+       section that missed out (S11 §11.9.1). */
     position: relative;
     overflow: hidden;
 }
@@ -743,7 +762,9 @@ a:hover { color: var(--accent-red-bright); }
     grid-template-columns: 300px 1fr;
     gap: var(--space-xl);
     align-items: start;
-    padding: var(--space-2xl) 0;
+    /* Vertical spacing is .main-content's gap plus its bottom padding; the
+       section adds none of its own or the two stack (S11 §11.9.2). */
+    padding: 0;
     /* No tinted panel: every other section already has a full-bleed
        background, and a card inside a full-bleed band competes. This one is
        plain ground so the eye can finally rest. */
@@ -825,8 +846,7 @@ a:hover { color: var(--accent-red-bright); }
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 40%),
         var(--bg-primary);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    /* Full bleed comes from .bleed in index.html (S11 §11.9.1). */
     position: relative;
 }
 
@@ -1019,7 +1039,9 @@ a:hover { color: var(--accent-red-bright); }
     .about-media img { max-width: 220px; }
     
     .prequel-book { grid-template-columns: 1fr; text-align: center; }
-    .prequel-cover img { max-width: 200px; margin: 0 auto; display: block; }
+    /* Cap the BOX, never the image: capping the image inside a wider box is
+       exactly the bug §11.9.3 fixed, and it would come straight back here. */
+    .prequel-cover { max-width: 240px; margin: 0 auto; }
     .prequel-content { align-items: center; }
 }
 
@@ -1046,7 +1068,7 @@ a:hover { color: var(--accent-red-bright); }
     .site-nav a { font-size: 0.65rem; letter-spacing: 0.1em; }
     .site-nav a[href*="substack"] { display: none; }
     .shell { padding-left: var(--space-md); padding-right: var(--space-md); }
-    .main-content { padding: 0 var(--space-md); }
+    .main-content { padding: 0 var(--space-md) var(--space-2xl); }
     html { scroll-padding-top: 4.5rem; }
     #books, #desk, #about, #characters, #start-reading, #top { scroll-margin-top: 4rem; }
     .hero-actions { flex-direction: column; align-items: center; }
