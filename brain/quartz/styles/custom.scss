@@ -1251,24 +1251,6 @@ hr::after {
     border: 1px solid var(--eb-line);
     background: var(--eb-surface);
   }
-
-  a.tag-link,
-  .tag-link {
-    font-family: var(--eb-display);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.66rem;
-    color: var(--gray);
-    border: 1px solid var(--eb-line);
-    border-radius: 999px;
-    padding: 0.12rem 0.55rem;
-    text-decoration: none;
-
-    &:hover {
-      color: var(--eb-accent);
-      border-color: var(--eb-accent);
-    }
-  }
 }
 
 // -- Tag pills: own the background here, never via the theme's --highlight --
@@ -1281,6 +1263,12 @@ hr::after {
 // so this needs no mode-specific values.
 a.tag-link,
 ul.tags a.tag-link {
+  font-family: var(--eb-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.66rem;
+  padding: 0.12rem 0.55rem;
+  text-decoration: none;
   background-color: color-mix(in srgb, var(--eb-accent) 12%, transparent);
   border: 1px solid var(--eb-line);
   border-radius: 999px;

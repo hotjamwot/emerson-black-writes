@@ -286,13 +286,24 @@ check(
 )
 
 // (e) The storefront's own two pages must point at the new path.
-for (const [name, html] of [
-  ["index.html", storefrontIndex],
-  ["bio.html", storefrontBio],
-]) {
-  check(/href="desk\/"/.test(html), `storefront ${name} links the Desk at desk/`)
-  check(!/href="brain\//.test(html), `storefront ${name} no longer links brain/`)
-}
+// bio.html is exempt, and deliberately: S11 11.3c turned it into a redirect stub
+// to /#about, where the about copy now lives. It has no nav and no Desk link by
+// design, so demanding `href="desk/"` of it asserted an intent that was retired.
+// It is checked for its actual contract instead, below.
+check(/href="desk\/"/.test(storefrontIndex), "storefront index.html links the Desk at desk/")
+check(
+  !/href="brain\//.test(storefrontIndex) && !/href="brain\//.test(storefrontBio),
+  "storefront links no longer point at brain/",
+)
+check(
+  /http-equiv="refresh"[^>]*url=\/#about/.test(storefrontBio) &&
+    /href="\/#about"/.test(storefrontBio),
+  "storefront bio.html redirects to /#about (and offers a manual link)",
+)
+check(
+  /id="about"/.test(storefrontIndex),
+  "the #about target the bio redirect points at actually exists",
+)
 
 // (f) The workflow moves the artifact, and leaves a redirect behind. Note the
 // stub at `_site/brain/index.html` is *intended*, so the guard checks the app
@@ -383,9 +394,17 @@ check(
 )
 
 // (f) The storefront owns the bio prose; the Desk must not restate it. Read from
-// bio.html rather than hardcoded, so a future reword of the storefront is caught
-// either way — the §15 lesson, applied to copy instead of a hex.
-const bioProse = (/<div class="bio-text">\s*<p>([\s\S]*?)<\/p>/.exec(storefrontBio)?.[1] ?? "")
+// the source rather than hardcoded, so a future reword of the storefront is
+// caught either way - the section 15 lesson, applied to copy instead of a hex.
+// S11 11.3c moved this copy out of bio.html into index.html's #about, and with it
+// out of a <div class="bio-text"> wrapper into .about-body behind an eyebrow and
+// an <h2>. Reading bio.html here matched nothing, so bioProse was always "" and
+// the length>40 half of the assertion could never pass.
+const bioProse = (
+  /<div class="about-body">[\s\S]*?<h2>[^<]*<\/h2>\s*<p>([\s\S]*?)<\/p>/.exec(
+    storefrontIndex,
+  )?.[1] ?? ""
+)
   .replace(/<[^>]+>/g, " ")
   .replace(/\s+/g, " ")
   .trim()
