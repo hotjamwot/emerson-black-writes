@@ -82,6 +82,8 @@ const PINNED_VARIABLES = [
   "--text-accent",
   "--color-purple",
   "--color-pink",
+  // 11.9.7 - tag-pill background; upstream declares it amber in base.
+  "--highlight",
 ] as const
 
 /**
@@ -171,6 +173,17 @@ ${scope} {
      The real override is the unlayered .text-highlight rule in custom.scss,
      which outranks every layer. See F13 in the plan. */
   --textHighlight: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  /* S10/11.9.7 - the tag-pill background. Upstream paints it via
+     (a.internal.tag-link sets background-color: var(--highlight)), and upstream
+     pins it to Obsidian amber rgba(255, 208, 0, 0.4) - devtools showed the
+     pills as #FFD00066 behind crimson tag text. quartz.config.yaml already
+     carries the brand value (rgba(202,38,38,.12) light / rgba(230,58,58,.18)
+     dark) but declares it in quartz-base, the LOWEST layer, so the theme's
+     amber in this layer always outranked it. Echoing the config pair here -
+     derived from ACCENT like every other token - is what makes the config's
+     own palette finally take effect. The 11.9.7 prescribed fix: fix the
+     yellow tags in the theme aspect block, as the violet was fixed. */
+  --highlight: rgba(${rgb}, ${mode === "dark" ? "0.18" : "0.12"});
   /* Palette slots that can surface as Obsidian violet / magenta (code tokens,
      canvas, sync avatars, the "example" callout). Collapsed onto the brand
      accent so no off-brand hue can leak into the reading room. */

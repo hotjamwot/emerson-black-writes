@@ -201,6 +201,30 @@ New local `Wordmark` plugin (`quartz/plugins/wordmark`): the storefront's two-li
 
 **Fix the yellow tags in the theme's own aspect block, exactly as the violet was fixed** — not by escalating CSS from outside (layer order means it would appear to work and silently not be true).
 
+#### PART 11.9.7 (closed part)
+
+**Yellow tag pills - fixed at the source, per the prescription below.** The devtools
+reading was `#FFD00066`, upstream's `rgba(255, 208, 0, 0.4)`. The theme's `base` aspect
+declares `--highlight: var(--text-highlight-bg, rgba(255,208,0,.4))` inside
+`@layer obsidian-theme`, which outranks the `quartz-base` layer the crimson pins lived
+in - so the config palette could never win.
+Fixed the violet way: the brand overlay (`quartz/theme/emerson.ts`) now pins
+`--highlight` to the same `rgba(202,38,38,.12)` / `rgba(230,58,58,.18)` pair derived
+from `ACCENT`, and `--highlight` joined `PINNED_VARIABLES`, so upstream dropping the
+anchor fails the build. Verified in the emitted bundle: per mode the brand declaration
+lands after the amber one in the same layer. `verify-brand` asserts the winning value.
+
+**Header declutter, same pass.** `content-meta` printed the publication date plus a
+reading time under the title, beside the header Published/Updated line - the date
+twice. Its S10 CSS suppression had been nested inside `.eb-post-dates`, compiling to
+`.eb-post-dates .content-meta time` (matches nothing) while the guard passed on an
+unanchored regex.
+
+Rather than re-nest the rule, `content-meta` and `table-of-contents` are now
+**disabled in `quartz.config.yaml`** and the dead rules deleted from `custom.scss`; the
+guards assert on built HTML instead, a fact that cannot silently stop matching. The
+header is now title, then Published/Updated, then topics.
+
 #### 🟢 11.9.8 Desk wordmark → `/` (do inside 11.9.6 — link target and style are one decision)
 
 ### 11.5 🟢 Tag constellation, not a graph

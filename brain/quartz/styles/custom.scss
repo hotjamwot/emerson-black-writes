@@ -51,7 +51,6 @@
 // choice rather than a fallback — Gabarito is the storefront's label face, and
 // this matches the tracked-uppercase section labels above.
 .explorer a.nav-file-title.tree-item-self,
-.toc .toc-content a,
 .backlinks ul a,
 .recent-notes ul a,
 .breadcrumb-element a,
@@ -216,7 +215,6 @@ h6 {
 .page-title,
 h2.page-title,
 .graph > h3,
-.toc-header > h3,
 .backlinks > h3,
 .recent-notes > h3,
 .explorer .folder-title,
@@ -599,21 +597,6 @@ h1.article-title {
   margin: 0.15rem 0 0.5rem;
 }
 
-p.content-meta {
-  font-family: var(--eb-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gray);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin: 0 0 1.4rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--eb-line);
-  max-width: none;
-}
-
 // Search draws a real inline <svg>, so a surface pill is safe on it.
 .search-button {
   border: 1px solid var(--eb-line);
@@ -739,20 +722,17 @@ p.content-meta {
   opacity: 0.75;
 }
 
-// ── Sidebar panels: TOC · Backlinks · Recent · Graph ───────────────────────
-.toc,
+// ── Sidebar panels: Backlinks · Recent · Graph ───────────────────────
 .backlinks,
 .recent-notes,
 .graph {
-  h3,
-  .toc-header > h3 {
+  h3 {
     font-size: 0.72rem;
     color: var(--gray);
     margin: 0 0 0.55rem;
   }
 }
 
-.toc-content.overflow a,
 .backlinks ul a,
 .recent-ul a {
   color: var(--darkgray);
@@ -762,16 +742,6 @@ p.content-meta {
   &:hover {
     color: var(--eb-accent);
     text-decoration: none;
-  }
-}
-
-.toc-content.overflow {
-  border-left: 1px solid var(--eb-line);
-  padding-left: 0.7rem;
-
-  a.active,
-  a:hover {
-    color: var(--eb-accent);
   }
 }
 
@@ -970,16 +940,6 @@ hr::after {
     flex: 0 0 auto;
   }
 
-  // S10 · the ORIGINAL date field is suppressed. content-meta renders the
-// publication date plus a reading time, while the post header renders
-// Published plus Updated — the same date, twice, stacked. The plugin has no
-// hide-the-date option, so it is suppressed here and the reading time is kept.
-.content-meta {
-  time {
-    display: none;
-  }
-}
-
 .eb-post-dates__line {
     display: inline-flex;
     align-items: center;
@@ -1020,8 +980,7 @@ hr::after {
 // title (and its meta line) are dropped only on that page. Browsers without
 // `:has()` simply show the extra heading — harmless.
 #quartz-body .center:has(.eb-hero) {
-  h1.article-title,
-  p.content-meta {
+  h1.article-title {
     display: none;
   }
 }

@@ -180,10 +180,15 @@ const emersonTheme = readFileSync(join(brain, "quartz", "theme", "emerson.ts"), 
 // Parse the Brain's ACCENT map rather than hardcoding, so this keeps working if
 // the brand colour is ever changed in emerson.ts (the single source of truth).
 const themeAccent = Object.fromEntries(
-  [...emersonTheme.matchAll(/(light|dark):\s*"(#[0-9A-Fa-f]{6})"/g)].map((m) => [m[1], m[2].toUpperCase()]),
+  [...emersonTheme.matchAll(/(light|dark):\s*"(#[0-9A-Fa-f]{6})"/g)].map((m) => [
+    m[1],
+    m[2].toUpperCase(),
+  ]),
 )
 const storeAccent = /--accent-red:\s*(#[0-9A-Fa-f]{6})/.exec(storefrontCss)?.[1].toUpperCase()
-const storeBright = /--accent-red-bright:\s*(#[0-9A-Fa-f]{6})/.exec(storefrontCss)?.[1].toUpperCase()
+const storeBright = /--accent-red-bright:\s*(#[0-9A-Fa-f]{6})/
+  .exec(storefrontCss)?.[1]
+  .toUpperCase()
 
 check(!!themeAccent.dark && !!storeAccent, "both halves declare an accent")
 check(
@@ -271,7 +276,10 @@ check(
 
 // (d) The slug. `baseUrl` is what every absolute URL is built from (OG cards,
 // canonical link, sitemap), so this is the assertion that the move is real.
-check(/baseUrl:\s*emersonblackwrites\.com\/desk\s*$/m.test(config), "baseUrl is emersonblackwrites.com/desk")
+check(
+  /baseUrl:\s*emersonblackwrites\.com\/desk\s*$/m.test(config),
+  "baseUrl is emersonblackwrites.com/desk",
+)
 check(
   !/emersonblackwrites\.com\/brain\b/.test(config),
   "no /brain/ URL left in quartz.config.yaml (that is the header nav)",
@@ -289,9 +297,13 @@ for (const [name, html] of [
 // (f) The workflow moves the artifact, and leaves a redirect behind. Note the
 // stub at `_site/brain/index.html` is *intended*, so the guard checks the app
 // paths and the stub's target rather than banning the string "/brain/".
-check(/cp -R brain\/public\/\. _site\/desk\//.test(workflow), "deploy.yml stages the build at _site/desk/")
 check(
-  /_site\/desk\/index\.html/.test(workflow) && !/_site\/brain\/(newsletters|organise)/.test(workflow),
+  /cp -R brain\/public\/\. _site\/desk\//.test(workflow),
+  "deploy.yml stages the build at _site/desk/",
+)
+check(
+  /_site\/desk\/index\.html/.test(workflow) &&
+    !/_site\/brain\/(newsletters|organise)/.test(workflow),
   "deploy.yml guards check _site/desk/, not the retired paths",
 )
 check(
@@ -341,7 +353,8 @@ check(
 // back to the house. Dropping About removed the only other place the Desk
 // explained itself, so this is the page that has to carry it.
 check(
-  /href="(?:\.\/)*newsletters\/"/.test(homeDoc) && /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
+  /href="(?:\.\/)*newsletters\/"/.test(homeDoc) &&
+    /href="https:\/\/emersonblackwrites\.com\/"/.test(homeDoc),
   "the landing page forwards into the archive and links back to the storefront",
 )
 
@@ -402,9 +415,18 @@ const TAXONOMY = [
 const frontmatterTag = (src) => {
   const fm = src.split("---")[1] ?? ""
   const m = /^tags:\s*\[(.*?)\]\s*$/m.exec(fm)
-  if (m) return m[1].split(",").map((s) => s.trim()).filter(Boolean)
+  if (m)
+    return m[1]
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
   const block = /^tags:\s*\n((?:\s*-\s*.+\n?)+)/m.exec(fm)
-  return block ? block[1].split("\n").map((l) => l.replace(/^\s*-\s*/, "").trim()).filter(Boolean) : []
+  return block
+    ? block[1]
+        .split("\n")
+        .map((l) => l.replace(/^\s*-\s*/, "").trim())
+        .filter(Boolean)
+    : []
 }
 // `readdirSync(..., {recursive:true})` yields POSIX separators on macOS, and the
 // vault mirror is flat under `Newsletters/`. `index.md` is the archive landing
@@ -414,10 +436,7 @@ const noteFiles = authored.filter(
   (f) => f.startsWith("Newsletters/") && !f.includes("_drafts") && !f.endsWith("/index.md"),
 )
 const tagOf = new Map(
-  noteFiles.map((f) => [
-    f,
-    frontmatterTag(readFileSync(join(brain, "content", f), "utf8")),
-  ]),
+  noteFiles.map((f) => [f, frontmatterTag(readFileSync(join(brain, "content", f), "utf8"))]),
 )
 const untagged = [...tagOf].filter(([, t]) => t.length === 0).map(([f]) => f)
 // One tag is the default, and a second (bridging) tag is deliberate and good —
@@ -434,8 +453,9 @@ check(
   bridges > 0,
   `bridging second tags are in use (${bridges} posts cross a sphere boundary) — this is what makes the tag graph a graph`,
 )
-const offVocabulary = [...tagOf]
-  .flatMap(([f, t]) => t.filter((x) => !TAXONOMY.includes(x)).map((x) => `${f} (${x})`))
+const offVocabulary = [...tagOf].flatMap(([f, t]) =>
+  t.filter((x) => !TAXONOMY.includes(x)).map((x) => `${f} (${x})`),
+)
 check(
   untagged.length === 0,
   `every one of the ${noteFiles.length} published posts carries a tag${untagged.length ? ` — untagged: ${untagged.slice(0, 3).join(", ")}` : ""}`,
@@ -454,13 +474,18 @@ check(!anyBreadcrumb, "no built page renders a breadcrumb trail (breadcrumbs are
 // The taxonomy only earns its keep if the pages it promises actually exist.
 // FLAT output, not `tags/<tag>/index.html`: Quartz emits `tags/process.html`.
 // (Asserting the directory form here is the §17 trap again — the build is the fact.)
-const missingTagPages = TAXONOMY.filter((t) => !existsSync(join(brain, "public", "tags", `${t}.html`)))
+const missingTagPages = TAXONOMY.filter(
+  (t) => !existsSync(join(brain, "public", "tags", `${t}.html`)),
+)
 check(
   missingTagPages.length === 0,
   `all 8 tag pages are generated${missingTagPages.length ? ` — missing: /tags/${missingTagPages.join(", /tags/")}` : ""}`,
 )
 // And a tag must be *findable* on the post, not just present in the frontmatter.
-const samplePost = readFileSync(join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"), "utf8")
+const samplePost = readFileSync(
+  join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"),
+  "utf8",
+)
 check(
   /class="tags"[\s\S]{0,200}href="[^"]*tags\/craft-plot"/.test(samplePost),
   "a post renders its tag as a pill linking to its tag page",
@@ -471,7 +496,10 @@ check(
 // the local plugin failing to load (which is silent; the build just omits the
 // component), or the pill losing its `hidden` gate and firing on every post
 // forever. Both are asserted on the built output.
-const headerPost = readFileSync(join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"), "utf8")
+const headerPost = readFileSync(
+  join(brain, "public", "newsletters", "2025", "the-dangers-of-overplotting.html"),
+  "utf8",
+)
 check(
   /class="eb-post-dates"/.test(headerPost) && /eb-post-dates__label">Published</.test(headerPost),
   "a post renders the Published/Updated header",
@@ -480,7 +508,14 @@ check(
   /class="eb-recently-updated"[^>]*data-modified="\d{4}-\d{2}-\d{2}"[^>]*hidden/.test(headerPost),
   "the Recently updated pill ships hidden, carrying its date for the client check",
 )
-const headerCss = readFileSync(join(brain, "public", readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f))), "utf8")
+const headerCss = readFileSync(
+  join(
+    brain,
+    "public",
+    readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f)),
+  ),
+  "utf8",
+)
 check(
   /\.eb-recently-updated\[hidden\][^{}]*\{[^}]*display:\s*none/.test(headerCss),
   "the pill keeps a [hidden] gate in CSS (a bare display rule would light it on every post)",
@@ -497,15 +532,25 @@ check(
   /eb-post-dates__sep/.test(headerPost) && !/eb-post-dates__line">[^<]*•/.test(headerPost),
   "the Published/Updated divider is a hairline rule, not a middot",
 )
-// The original date field is suppressed. content-meta renders "Feb 14, 2025 ·
-// 8 min read" while the post header renders "Published Feb 14, 2025 · Updated
-// …" — the same publication date twice, stacked. The plugin has no "hide the
-// date" option, so it is suppressed in CSS. Assert the rule ships AND that it
-// beats the theme layer (specificity: `.content-meta time` inside the
-// unlayered custom bundle).
+// 11.9.7 - header declutter. Two things used to live in the post header:
+// content-meta printed the publication date plus a reading time ("Feb 14, 2025 /
+// 8 min read") under the title, duplicating the date the post header already
+// prints as "Published ... | Updated ...", and the table of contents added a
+// second navigation model next to the title. The reader asked for less, not more.
+// Both components are disabled in quartz.config.yaml, so the assertions belong
+// on the built HTML rather than on a CSS rule that can silently stop matching.
+// That is how the old content-meta guard passed for months: its rule had been
+// nested inside .eb-post-dates, compiling to a selector no page can have, and
+// the unanchored regex still matched the text.
+const anyPageRenders = (pattern) =>
+  builtHtml.some((f) => pattern.test(readFileSync(join(brain, "public", f), "utf8")))
 check(
-  /\.content-meta\s+time\s*\{[^}]*display:\s*none/.test(headerCss),
-  "the duplicate date is suppressed (content-meta keeps only its reading time)",
+  !anyPageRenders(/class="[^"]*\bcontent-meta\b/),
+  "no built page renders content-meta (no duplicate date line under the title)",
+)
+check(
+  !anyPageRenders(/class="(?:toc|toc-header|toc-content)\b/),
+  "no built page renders a table of contents",
 )
 // S10/F13 · no upstream yellow survives IN THE BUILT STYLESHEET.
 //
@@ -545,7 +590,11 @@ check(
   !!fontsLayer && /--font-interface:\s*ui-sans-serif/.test(fontsLayer.src),
   "known cause still present: @layer quartz-fonts hardcodes a sans --font-interface",
 )
-const indexCss = join(brain, "public", readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f)))
+const indexCss = join(
+  brain,
+  "public",
+  readdirSync(join(brain, "public")).find((f) => /^index-.*\.css$/.test(f)),
+)
 const indexSrc = existsSync(indexCss) ? readFileSync(indexCss, "utf8") : ""
 check(
   /:root\{--font-interface:var\(--eb-serif\)/.test(indexSrc),
@@ -583,7 +632,9 @@ function isPortUp(base) {
 
 const execFileSyncAsync = (cmd, args) =>
   new Promise((res) => {
-    execFile(cmd, args, { maxBuffer: 64 * 1024 * 1024 }, (err, stdout) => res({ stdout: stdout ?? "" }))
+    execFile(cmd, args, { maxBuffer: 64 * 1024 * 1024 }, (err, stdout) =>
+      res({ stdout: stdout ?? "" }),
+    )
   })
 
 /**
@@ -645,7 +696,6 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     out.push("li=" + ff("article li"))
     out.push("h1=" + ff("h1.article-title"))
     out.push("explorer=" + ff(".explorer a.nav-file-title.tree-item-self"))
-    out.push("toc=" + ff(".toc .toc-content a"))
     out.push("breadcrumb=" + ff(".breadcrumb-element"))
   `,
   )
@@ -657,22 +707,13 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
   const isDisplay = (v) => !!v && /^"?Gabarito"?/.test(v.trim())
 
   check(field("p") !== null, `computed-style probe ran (${probe ? "browser ok" : "no output"})`)
-  check(
-    isSerif(field("p")),
-    `body paragraphs render in Lora (got: ${field("p") ?? "n/a"})`,
-  )
+  check(isSerif(field("p")), `body paragraphs render in Lora (got: ${field("p") ?? "n/a"})`)
   check(isSerif(field("li")), `list items render in Lora (got: ${field("li") ?? "n/a"})`)
-  check(
-    isDisplay(field("h1")),
-    `article titles render in Gabarito (got: ${field("h1") ?? "n/a"})`,
-  )
+  check(isDisplay(field("h1")), `article titles render in Gabarito (got: ${field("h1") ?? "n/a"})`)
   // The serif variable is inherited by the theme's UI, so the chrome must be
   // pinned to the display face explicitly or the whole sidebar turns to Lora.
   // (Breadcrumbs dropped out of this list in S10 — the trail is disabled, §25.2.)
-  for (const [name, label] of [
-    ["explorer", "explorer links"],
-    ["toc", "table-of-contents links"],
-  ]) {
+  for (const [name, label] of [["explorer", "explorer links"]]) {
     check(
       isDisplay(field(name)),
       `${label} stay on the display face (got: ${field(name) ?? "n/a"})`,
@@ -719,17 +760,21 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     const hit = (lay ?? "").split(" || ").find((s) => s.startsWith(name + "="))
     return hit ? hit.slice(name.length + 1) : null
   }
-  check(lf("rightKids") === "0", `right sidebar renders no phantom column (kids: ${lf("rightKids") ?? "n/a"})`)
-  check(lf("rightDisplay") === "none", `empty right sidebar is display:none (got: ${lf("rightDisplay") ?? "n/a"})`)
+  check(
+    lf("rightKids") === "0",
+    `right sidebar renders no phantom column (kids: ${lf("rightKids") ?? "n/a"})`,
+  )
+  check(
+    lf("rightDisplay") === "none",
+    `empty right sidebar is display:none (got: ${lf("rightDisplay") ?? "n/a"})`,
+  )
   const chars = Number(lf("chars"))
   // Assert the TRACK COUNT, not just the empty/hidden state. Reverting the grid
   // rule to `:not(:empty)` leaves the sidebar `display:none` via its own rule and
   // the measure at 67 chars — every other check still passes, while the layout is
   // in fact the old 3-track one. That regression was caught only by counting
   // tracks, which is why this check exists and why `chars` alone was not enough.
-  const trackCount = lf("cols")
-    ? lf("cols").trim().split(/\s+/).length
-    : null
+  const trackCount = lf("cols") ? lf("cols").trim().split(/\s+/).length : null
   check(
     trackCount === 2,
     `shell collapses to 2 grid tracks, not 3 (got: ${trackCount ?? "n/a"} — "${lf("cols") ?? "?"}")`,
@@ -738,7 +783,10 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     lf("chars") !== null && chars >= 45 && chars <= 90,
     `reading measure holds 45-90 chars/line (got: ${lf("chars") ?? "n/a"})`,
   )
-  check(lf("overflow") === "false", `no horizontal overflow at 1920px (got: ${lf("overflow") ?? "n/a"})`)
+  check(
+    lf("overflow") === "false",
+    `no horizontal overflow at 1920px (got: ${lf("overflow") ?? "n/a"})`,
+  )
 
   // ── S1a: the header bar ───────────────────────────────────────────────────
   // The nav is the `footer` plugin rendered into the `header` slot, so it is a
@@ -801,9 +849,18 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
   // rendered — the search button and both toggles were simply gone. Assert the
   // controls are actually present and sized.
   check(Number(hf("toolbarW")) > 0, `header toolbar has width (got: ${hf("toolbarW") ?? "n/a"})`)
-  check(Number(hf("searchW")) > 0, `search control is visible in the header (got: ${hf("searchW") ?? "n/a"})`)
-  check(hf("overflow1920") === "false", `header causes no overflow at 1920px (got: ${hf("overflow1920") ?? "n/a"})`)
-  check(hf("headerFits") === "true", `nav row stays inside the header box (got: ${hf("headerFits") ?? "n/a"})`)
+  check(
+    Number(hf("searchW")) > 0,
+    `search control is visible in the header (got: ${hf("searchW") ?? "n/a"})`,
+  )
+  check(
+    hf("overflow1920") === "false",
+    `header causes no overflow at 1920px (got: ${hf("overflow1920") ?? "n/a"})`,
+  )
+  check(
+    hf("headerFits") === "true",
+    `nav row stays inside the header box (got: ${hf("headerFits") ?? "n/a"})`,
+  )
 
   // ── S10: the wordmark ──────────────────────────────────────────────────────
   // `page-title` has no options, so the `EBW` mark is a presentational swap over
@@ -823,10 +880,7 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     hf("wmFontSize") === "0px",
     `the full name is kept but not painted (computed size ${hf("wmFontSize") ?? "n/a"}, want 0px)`,
   )
-  check(
-    Number(hf("wmW")) > 0,
-    `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`,
-  )
+  check(Number(hf("wmW")) > 0, `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`)
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in

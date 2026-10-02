@@ -34,6 +34,9 @@ const EXPECTED = {
     "--text-accent": "var(--color-accent)",
     "--color-purple": "#CA2626",
     "--color-pink": "#CA2626",
+    // 11.9.7 - tag-pill background: amber upstream (#FFD00066), pinned in
+    // the brand overlay to mirror the quartz.config.yaml palette pair.
+    "--highlight": "rgba(202, 38, 38, 0.12)",
   },
   dark: {
     "--accent-h": "0",
@@ -42,6 +45,7 @@ const EXPECTED = {
     "--text-accent": "var(--color-accent)",
     "--color-purple": "#E63A3A",
     "--color-pink": "#E63A3A",
+    "--highlight": "rgba(230, 58, 58, 0.18)",
   },
 }
 

@@ -92,8 +92,11 @@ plugins:
   - source: "@quartz-community/github-flavored-markdown"
     enabled: true
     order: 40
+  # 11.9.7 - header declutter: the ToC is out. The reader wants less info in
+  # the header (article header and left rail alike), so it is disabled here and
+  # locked off: verify-default-mode asserts that no built page renders one.
   - source: "@quartz-community/table-of-contents"
-    enabled: true
+    enabled: false
     order: 50
     layout:
       position: left
@@ -274,14 +277,18 @@ plugins:
     layout:
       position: beforeBody
       # Sits under the title, above the tag pills: Published/Updated first, then
-      # the topics. content-meta (20) and tag-list (30) bracket it at 25.
+      # the topics (tag-list at 30; content-meta's 20 slot is retired, 11.9.7).
       priority: 25
-  # S10 · the original content-meta date is redundant now that the post header
-  # carries "Published … | Updated …". Keeping both printed the same date twice,
-  # stacked. content-meta keeps only its reading time; the dates are the
-  # post-dates component's job (and it does them better — both of them).
+  # 11.9.7 - content-meta is disabled outright. Under the title it printed the
+  # publication date plus a reading time ("Feb 14, 2025 / 8 min read") beside
+  # the post header's "Published ... | Updated ...", so the same date appeared
+  # twice, stacked. The S10 compromise (hide the date, keep the reading time)
+  # had been matching nothing: its rule got nested inside .eb-post-dates, so it
+  # compiled to a selector no page can have. Both fields go - the dates are the
+  # post-dates component's job, and the reader wants the bare header: title,
+  # Published/Updated, topics.
   - source: "@quartz-community/content-meta"
-    enabled: true
+    enabled: false
     options:
       showReadingTime: true
       showComma: false
