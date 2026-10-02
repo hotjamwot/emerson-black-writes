@@ -324,6 +324,47 @@ passed and the test proved **nothing**. Caught by inspecting the built bundle
 rather than trusting the exit code. Proof of failure requires proof the mutation
 reached the artifact.
 
+#### ✅ 11.9.7g No sticky header — desktop and mobile — SHIPPED 2026-10-02
+
+After two failed attempts at a scroll-driven header (11.9.7e, 11.9.7f), the
+reader's call: **no sticky header on either.** The right call, and the cheap
+one — two attempts is enough evidence the feature wasn't earning its complexity.
+
+**Removed:** `position: sticky` / `top` / `z-index` / `backdrop-filter` from
+`.page-header`; the entire `sticky-title` plugin (render, scroll handler, rAF
+throttle, matchMedia gate, SPA teardown, config entry, directory); the
+collapsed-header CSS; six guards asserting the machinery was **present**.
+
+**Kept:** wordmark, nav, hairline border, solid background — the header still
+reads as a distinct band, it just scrolls away. The translucency and blur went
+*with* the stickiness: they only mattered because content scrolled under the
+bar, and in normal flow would just show the page background through.
+
+**The non-obvious part — why this wasn't a four-line delete.** The base theme
+ships:
+
+```
+.page>#quartz-body .sidebar { padding: 6rem 2rem 2rem; position: sticky; top: 0 }
+```
+
+That `6rem` existed **to clear the sticky header**. Remove the header and it
+becomes a 6rem hole above the explorer — in a sidebar that is `height: 100vh`,
+so 6rem of the reading column wasted on nothing. Reduced to `1rem`, scoped
+`min-width: 1200px` (the base sheet sets a different padding at mobile widths).
+**Guarded**, because a silently inherited layout value nobody remembers is
+exactly how a header gap reappears three releases later.
+
+The **left sidebar keeps its own stickiness** — the explorer staying put while
+you read is useful. Only the header stopped sticking.
+
+**Suite: 85 checks, 0 failures.** All proven red: re-sticking the header fails
+two guards, restoring the `6rem` fails the padding guard.
+
+*Lesson, now written into the shape of the tests:* the new guards assert
+**absences**. That inversion is deliberate — two of the three 11.9.7f bugs
+passed guards that asserted code was **present**. A guard that something is
+gone cannot pass for the wrong reason.
+
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
 **Partly closed by 11.9.7c/11.9.7d below** (mobile header is now nav-only; the article precedes the explorer). Still open: (a) the storefront header nav
@@ -457,7 +498,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 86 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 85 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
@@ -489,5 +530,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 86/86 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 85/85 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
