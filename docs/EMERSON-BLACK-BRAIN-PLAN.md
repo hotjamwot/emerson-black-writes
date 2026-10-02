@@ -223,6 +223,50 @@ slicing 24 then 23 characters against `@media (max-width:800px){`, which is 25.
 Anchored against a generous slice now — no magic numbers. A green/red cycle is
 not proof the CSS is right; sometimes the guard is simply wrong.
 
+#### ✅ 11.9.5(a) The Desk hub — one card per topic — FIXED & SHIPPED 2026-10-02
+
+**Decided:** keep `/desk/` and give it a front door. One card per topic, the 5
+most recent posts in each, with the description under every title. `news`
+excluded by name — award announcements date badly and pull a craft archive
+toward being a newswire.
+
+Shipped: **7 cards, 34 posts, 34 descriptions**, `news` absent, all 34 links
+resolve to real newsletter posts (28 unique — 6 appear twice by multi-tag,
+which is the nature of a tag hub). Descriptions clamp to two lines so card
+heights in a row stay even.
+
+**The root cause of "titles only" was not styling.** `description` exists on
+all 50 published posts and was never rendered: `@quartz-community/folder-page`
+and `tag-page` each **compile their own copy of PageList** into `dist/`, that
+copy has a `div.desc` wrapper holding only the `<h3>`, and neither exposes an
+option to swap the list component. The local `quartz/components/PageList.tsx`
+you find by grepping is a **dead copy** — nothing imports it.
+
+Also worth recording: `/newsletters/` never listed posts at all. It lists
+**year folders** (2023, 2024, 2025). Real post lists live on the year and tag
+pages.
+
+**The bug this shipped with** — kept here because it is the most dangerous class
+of mistake in the plan so far. The config said `condition: index`. **`index` is
+not a condition** — only `not-index` / `has-tags` / `has-backlinks` / `has-toc`
+exist — and an unrecognised condition name resolves to `undefined` and is
+**silently ignored**. The hub rendered on *every page of every page type*: 7
+cards on the post page, 7 on `/newsletters/`, no error anywhere. The guard
+caught it.
+
+Fixed three ways, deliberately redundant — new `is-index` builtin (the existing
+`not-index` had been left without its positive form), a component self-guard on
+`fileData.slug !== "index"`, and a guard asserting the hub is on the index **and
+on no other page**. Proven-red by peeling the layers one at a time: removing
+only the self-guard still passed, reverting only the condition still passed.
+Both had to go before the guard went red.
+
+*Lesson (same shape as 11.9.7e):* a config value that resolves to `undefined`
+and is then ignored produces a build that **looks** fine and is wrong. The
+type-shaped mistakes — unknown condition names, dead local copies of vendored
+files — are the ones nothing complains about. Assert on the built artifact, and
+check a thing is on the *right* page, not merely that it is somewhere.
+
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
 **Partly closed by 11.9.7c/11.9.7d below** (mobile header is now nav-only; the article precedes the explorer). Still open: (a) the storefront header nav
@@ -356,7 +400,7 @@ structural work on the Desk.
    whether related posts deserve a more prominent slot (e.g. an end-of-post
    "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 73 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 82 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
@@ -388,5 +432,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 73/73 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 82/82 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
