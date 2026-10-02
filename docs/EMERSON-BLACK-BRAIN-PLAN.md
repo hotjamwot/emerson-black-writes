@@ -193,7 +193,13 @@ Static tier (comments stripped per I9) + rendered geometry via headless Chrome a
 
 #### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
 
-Not yet root-caused; needs a real device pass. Two known suspects already: (a) the header nav has 4 items and only drops "Subscribe" below 700px, so at 701–900px it is at its most crowded; (b) `.series-hook` collapses to one column and the two decorative silhouettes stack *above* the text, pushing the premise below two large images. **Fix the known ones, then look again on a real phone** rather than guessing at more.
+**Partly closed by 11.9.7c below.** Still open: (a) the storefront header nav
+has 4 items and only drops "Subscribe" below 700px, so at 701–900px it is at
+its most crowded; (b) `.series-hook` collapses to one column and the two
+decorative silhouettes stack *above* the text, pushing the premise below two
+large images. **Needs a real phone** — I cannot verify rendered geometry
+without one, and guessing at more from the CSS is exactly how 11.9.4 became a
+list of unfixed suspects in the first place.
 
 #### 🔴 11.9.5 Reconsider `/desk/` — decision needed, not a bug
 
@@ -261,6 +267,26 @@ Rather than re-nest the rule, `content-meta` and `table-of-contents` are now
 guards assert on built HTML instead, a fact that cannot silently stop matching. The
 header is now title, then Published/Updated, then topics.
 
+#### ✅ 11.9.7c Mobile: the article before the explorer — FIXED & SHIPPED 2026-10-02
+
+Not a taste question — a layout-order defect. Base Quartz stacks, at
+`max-width: 800px`: `grid-sidebar-left → grid-header → grid-center → …`, so
+the **whole left sidebar** (explorer file tree + backlinks) rendered *above*
+the page header and the article. A screen of navigation before the title, paid
+by every phone reader.
+
+`order` cannot fix it: grid items placed by `grid-area` names are placed by the
+template, and `order` only affects auto-placed items. Redefining
+`grid-template` at the same breakpoint is the lever that moves the tracks.
+`custom.scss` is unlayered, so it beats the layered base rule with no
+`!important`. Desktop untouched.
+
+Two guards, proven red by deletion. Writing them surfaced two traps worth
+keeping: the first regex matched the **base** rule — which appears first, so
+passing would have meant nothing — and took the first match rather than the
+winning declaration. `custom.scss` is unlayered *and* appended last, so the
+effective rule is the **last** occurrence.
+
 #### 🟢 11.9.8 Desk wordmark → `/` (do inside 11.9.6 — link target and style are one decision)
 
 ### 11.5 🟢 Tag constellation, not a graph
@@ -284,18 +310,21 @@ Craft posts next to the books they produced — arguably the most agent-interest
 **Goal now:** everything remaining is either cosmetic polish or a decision — no more
 structural work on the Desk.
 
-1. **Reading-first navigation** — the last substantive item. Simplify the mobile
-   header/sidebar (11.9.4), and decide how backlinks / related-post links surface
-   (the open finding above). Then everything else is cosmetic.
+1. **Reading-first navigation** — 11.9.7c shipped (article now precedes the
+   explorer on mobile). Left: the storefront's 701–900px nav crowding and the
+   `.series-hook` silhouette stacking, then how backlinks / related-post links
+   should surface. 11.9.4 still needs a real phone.
 2. **HayJay's call on 11.9.5** — recommendation (a) stands: keep `/desk/`, fix how it
    presents. Still unconfirmed.
 3. **Cosmetic, in one `custom.scss` pass:** left column width · sidebar/search sizing ·
    `max-width` on `.content img` (the longest-standing) · I4 active-item red-on-red ·
    F1–F4 cruft prune.
-4. **11.9.4 needs a real phone.** Desktop and mobile pill rendering is confirmed; the
-   rest of the mobile pass is not.
+4. **Backlinks** — currently `position: left`, so on desktop they live in the
+   sidebar and on mobile they now sit under the article. That is defensible, but
+   whether related posts deserve a more prominent slot (e.g. an end-of-post
+   "related" section) is a **taste call for HayJay**, not a defect.
 
-**Verification suite: 69 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
+**Verification suite: 71 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
 
 **Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
 
@@ -327,5 +356,5 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | 
 
 ## 14. History
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 69/69 (F14)**.
+Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 71/71 (F14)** · **mobile: article now precedes the explorer tree (11.9.7c)**
 - Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
