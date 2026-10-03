@@ -36,6 +36,11 @@ const brain = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const EXPECTED_DEFAULT = "dark"
 
 const problems = []
+// Sections skipped for want of a browser/server. Tracked so the closing summary
+// can say so out loud: F18 was three dead checks sitting behind a green 173/173,
+// invisible precisely because skipping is silent. A count that does not report
+// its own omissions is a count you cannot trust.
+const skipped = []
 const check = (ok, message) => {
   console.log(`${ok ? "  ✓" : "  ✗"} ${message}`)
   if (!ok) problems.push(message)
@@ -1145,11 +1150,48 @@ check(
 
 // The reading measure must survive all three of these. The article column is
 // capped at 780px and the image cap at 640px, so an image must never be able to
-// out-measure its own column. 12.1(b) scopes the rule off the hub cards
-// (`:not(.eb-hub__card)`), so the regex allows that suffix.
+// out-measure its own column.
+//
+// 12.6: this regex used to tolerate a `:not(.eb-hub__card)` suffix, because that
+// was the shape the override had taken — a base rule carved around our cards.
+// The tolerance is REMOVED rather than left in place. A selector with an escape
+// hatch in it is precisely the thing §12.6 agreed to stop doing, and a guard that
+// permits it back is a guard that cannot catch its own regression. This now
+// demands the plain, stock selector.
 check(
-  /\.page article(?::not\(\.eb-hub__card\))?\{[^}]*max-width:780px/.test(hubCss),
+  /\.page article\{[^}]*max-width:780px/.test(hubCss),
   "the article reading column still holds its 780px measure",
+)
+
+// ── 12.6: the hub cards must not be `<article>` ─────────────────────────────
+//
+// The whole F15 workaround existed because the topic cards were `<article>`,
+// which put them inside Quartz's reading-column rule: capped at 780px AND
+// un-stretched by `margin-inline: auto`, giving the 399-524px ragged range. The
+// 12.6 fix was to stop opting in — tag-hub emits a `<div>` — so both
+// compensations could be deleted rather than narrowed.
+//
+// Two guards, because either alone is half the check: the CSS could be reverted
+// while the markup stays correct (visually fine, override silently back), or the
+// markup could change while the CSS stays (cards visibly capped and ragged).
+// Asserting the DOM and the stylesheet together is the only way to know the
+// override is actually unnecessary rather than merely unused.
+// Read here rather than reusing the `hubHtml` declared further down with the
+// rest of the hub checks: a `const` cannot be used before its declaration, and
+// hoisting the whole hub section upward would move that discussion away from
+// where it belongs. One local read, named for what it is.
+const deskHtml = readFileSync(join(brain, "public", "index.html"), "utf8")
+check(
+  !/<article class="eb-hub__card"/.test(deskHtml),
+  "12.6: the hub cards are not <article> (which is what forced the reading-measure override)",
+)
+check(
+  !/margin-inline:\s*0/.test(hubCard),
+  "12.6: the compensating margin-inline:0 is gone from .eb-hub__card",
+)
+check(
+  !/\.page article:not\(/.test(hubCss),
+  "12.6: the reading-measure rule is stock, with no :not() escape hatch",
 )
 
 // ── 11.9.10: the by-year fold-outs, and the retirement of /newsletters/ ─────
@@ -1649,6 +1691,7 @@ f.onload = () => setTimeout(() => {
 const PROBE_BASE = process.env.EB_VERIFY_BASE ?? "http://localhost:8099"
 
 if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
+  skipped.push("computed-style + header geometry + wordmark (need Chrome and a server)")
   console.log(
     `  ! skipping computed-style check — need Chrome and a server on ${PROBE_BASE}.\n` +
       `    Serve it with:  cd brain/public && python3 -m http.server 8099`,
@@ -1778,16 +1821,33 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     out.push("navLinks=" + d.querySelectorAll(".page-header footer ul li a").length)
     out.push("navGridArea=" + (nav ? getComputedStyle(nav).gridArea : "ABSENT"))
     out.push("wordmarkInHeader=" + (wm ? "yes" : "no"))
-    // S10: the header paints the short mark EBW while the anchor keeps the
-    // site's full name as its accessible text (see custom.scss 4a).
+    // S10/11.9.6: the header renders the stacked wordmark. The anchor keeps an
+    // aria-label as the accessible name because the series line is aria-hidden,
+    // so textContent alone cannot prove the name survived — measure both spans
+    // and read the label.
     const wmLink = d.querySelector(".page-header .page-title a")
     out.push("mark=" + (wmLink ? getComputedStyle(wmLink, "::before").content : "ABSENT"))
     out.push("wmName=" + (wmLink ? wmLink.textContent.trim() : "ABSENT"))
-    // The name must be *present but not painted*: the mark alone would still read
-    // "EBW" if the collapse rule were dropped, and the page would then show the
-    // full name and the mark at once. Assert the collapsed size and that the
-    // painted mark has real width.
-    out.push("wmFontSize=" + (wmLink ? getComputedStyle(wmLink).fontSize : "ABSENT"))
+    out.push("wmAria=" + (wmLink ? wmLink.getAttribute("aria-label") : "ABSENT"))
+    // HEIGHT, not width. The anchor is display:flex with flex-direction:column,
+    // so align-items:stretch makes BOTH spans exactly as wide as the anchor —
+    // a width probe returns the same number twice whatever is inside it, and
+    // would report two painted lines for a stack of empty ones. Height is what
+    // actually distinguishes a rendered line from a collapsed one at
+    // font-size:0, and the two lines carry different font sizes (1.15rem vs
+    // 0.6rem) so their heights genuinely differ.
+    out.push(
+      "wmNameH=" +
+        (wmLink
+          ? Math.round(wmLink.querySelector(".eb-wordmark-name")?.getBoundingClientRect().height ?? -1)
+          : -1),
+    )
+    out.push(
+      "wmSeriesH=" +
+        (wmLink
+          ? Math.round(wmLink.querySelector(".eb-wordmark-series")?.getBoundingClientRect().height ?? -1)
+          : -1),
+    )
     out.push("wmW=" + (wmLink ? Math.round(wmLink.getBoundingClientRect().width) : -1))
     out.push("toolbarW=" + (tb ? Math.round(tb.getBoundingClientRect().width) : -1))
     out.push("searchW=" + (search ? Math.round(search.getBoundingClientRect().width) : -1))
@@ -1829,25 +1889,46 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     `nav row stays inside the header box (got: ${hf("headerFits") ?? "n/a"})`,
   )
 
-  // ── S10: the wordmark ──────────────────────────────────────────────────────
-  // `page-title` has no options, so the `EBW` mark is a presentational swap over
-  // the site's real name. Assert BOTH halves: a rule that painted "EBW" but also
-  // rewrote the anchor text would look right on screen and read wrong in a screen
-  // reader, and a rule that failed to apply at all leaves the full name visible
-  // (`font-size: 0` never set) — neither shows up in a static check.
+  // ── S10: the wordmark ────────────────────────────────────────────────────
+  // 11.9.6 RETIRED the "EBW" trick and these checks were left behind asserting
+  // it. They had been failing since that commit and nothing noticed, because the
+  // browser-based checks only run when `public/` is being served — in a plain
+  // `npx quartz build` they are skipped, so a permanently red section was
+  // indistinguishable from a passing one. This is the sixth instance of the
+  // pattern in 9.2: a guard that outlives the thing it guarded.
+  //
+  // What 11.9.6 shipped instead: the Wordmark plugin renders two real spans,
+  // `.eb-wordmark-name` ("Emerson Black") and `.eb-wordmark-series` ("Seen in
+  // Silverbridge"), stacked. No painted `::before`, no `font-size: 0`, and the
+  // accessible name is a real aria-label rather than collapsed text.
+  //
+  // These assert the CURRENT contract. The property 11.9.6 was reaching for — a
+  // short mark on screen with the real site name available to assistive tech —
+  // is satisfied by the stacked mark without any of the fragile collapse
+  // machinery, and that is worth protecting.
   check(
-    (hf("mark") ?? "").replace(/^["']|["']$/g, "") === "EBW",
-    `header wordmark paints "EBW" (got: ${hf("mark") ?? "n/a"})`,
+    hf("mark") === "none" || hf("mark") === "ABSENT",
+    `the wordmark paints no ::before twin (got ${hf("mark") ?? "n/a"}) — 11.9.6 retired the EBW trick`,
   )
   check(
-    hf("wmName") === cfgTitle,
-    `wordmark link keeps the full site name for assistive tech (got: ${hf("wmName") ?? "n/a"})`,
+    hf("wmName") === "Emerson BlackSeen in Silverbridge",
+    `the header wordmark renders the real stacked name, not a collapsed string (got: ${hf("wmName") ?? "n/a"})`,
   )
+  // The series line is aria-hidden, so the accessible name is carried entirely
+  // by the anchor's aria-label. Assert it directly — textContent alone cannot
+  // show whether it survived, which is the half of the old guard that mattered.
   check(
-    hf("wmFontSize") === "0px",
-    `the full name is kept but not painted (computed size ${hf("wmFontSize") ?? "n/a"}, want 0px)`,
+    hf("wmAria") === "Emerson Black — home",
+    `the wordmark link keeps a full accessible name (got: ${hf("wmAria") ?? "n/a"})`,
   )
-  check(Number(hf("wmW")) > 0, `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`)
+  // Both lines must actually be visible. The failure the old version risked — a
+  // mark painting while the real name is hidden at font-size 0 — is only
+  // detectable by measuring both spans.
+  check(
+    Number(hf("wmNameH") ?? -1) > 0 && Number(hf("wmSeriesH") ?? -1) > 0,
+    `both wordmark lines are painted (${hf("wmNameH") ?? "n/a"}px / ${hf("wmSeriesH") ?? "n/a"}px tall)`,
+  )
+  check(Number(hf("wmW") ?? -1) > 0, `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`)
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in
@@ -2192,3 +2273,13 @@ if (problems.length) {
 }
 console.log(`\n✓ Default is "${EXPECTED_DEFAULT}", order-independent, toggle visible.`)
 console.log(`✓ Layout, header, fonts, favicon, storefront palette and the S10 rename all hold.`)
+// The omissions, stated in the summary rather than only mid-scroll. F18's three
+// dead checks were invisible because a skip prints one line in the middle of the
+// output and still reports a clean total; a reader who only sees the last two
+// lines has been told everything passed. This cannot be skimmed past.
+if (skipped.length) {
+  console.log(
+    `\n! ${skipped.length} section(s) NOT CHECKED — ${skipped.join("; ")}.\n` +
+      `  The pass above is real but INCOMPLETE. Serve public/ and re-run for a full verdict.`,
+  )
+}

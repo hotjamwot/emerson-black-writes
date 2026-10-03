@@ -618,11 +618,15 @@ h2.page-title,
 }
 
 // 11.9.5(a) The hub: one card per topic ───────────────────────────────────
-// [SAFE — brand] .eb-hub* are your own tag-hub components. NOTE: one coupled
-// OVERRIDE lives at `.page article:not(.eb-hub__card)` (~line 1050): the base
-// reading measure would otherwise cap and un-stretch these cards (they ARE
-// <article> elements). If the hub ever moves to non-article markup, that guard
-// can go stock.
+// [SAFE — brand] .eb-hub* are your own tag-hub components, and this whole
+// section is upstream-independent: it styles only classes tag-hub emits.
+// It used to carry a coupled caveat — that the base reading measure at
+// `.page article` had to be narrowed with `:not(.eb-hub__card)` because these
+// cards were `<article>` elements. That caveat is GONE as of 12.6; tag-hub emits
+// a `<div>`, the override was deleted rather than narrowed, and this section is
+// now genuinely standalone. If a future change puts the cards back into an
+// `<article>`, the reading-measure rule starts capping them again and this
+// section is where you will see the ragged widths first.
 // TWO COLUMNS, not three. `auto-fit minmax(320px, 1fr)` fitted three cards
 // across the content column, which squeezed each card's descriptions to a few
 // words a line and left the list feeling like a grid of previews rather than a
@@ -656,13 +660,6 @@ h2.page-title,
 // correct and aligning them is not.
 .eb-hub__card {
   align-self: start;
-  // 12.1(b), second half. The reading-column rule below sets
-  // `margin-inline: auto` on `.page article`, and these cards ARE articles —
-  // the `:not()` there lifts the 780px cap, but auto margins un-stretch a grid
-  // item all by themselves (they absorb the track's free space instead of the
-  // item stretching into it). Zeroing them here re-stretches the card to its
-  // track. Without this the cards measured 399–524px ragged on equal tracks.
-  margin-inline: 0;
   // A raised surface needs a padding and a border of its own — the hairline
   // --eb-line alone reads as a divider, not a container.
   padding: 1.1rem 1.2rem 1.2rem;
@@ -1052,21 +1049,17 @@ h2.page-title,
 // column and not to sidebars or the footer. `margin-inline: auto` re-centres it,
 // because the grid track is now much wider than the text.
 //
-// 12.1(b) — the second half of F15, diagnosed from the BUILT DOM, not the
-// stylesheet. The hub cards are THEMSELVES `<article class="eb-hub__card">`
-// (see tag-hub), so this rule was capping every card at 780px AND centring it
-// with `margin-inline: auto`. An auto-margined grid item stops stretching to
-// its track (auto margins absorb the free space), so each card sized to its
-// own content instead: the 399–524px ragged range at 1440px.
-//
-// `:not()` alone is NOT enough — and the first attempt proved it. `max-width`
-// and `margin-inline: auto` are separate properties with separate effects, and
-// a grid item with `margin-inline: auto` still refuses to stretch even with no
-// max-width constraining it. So the exclusion must reset BOTH: the cap goes
-// away via `:not(.eb-hub__card)`, and the un-stretching goes away via the
-// explicit `.eb-hub__card { margin-inline: 0 }` below. Either half alone leaves
-// the cards ragged.
-.page article:not(.eb-hub__card) {
+// 12.1(b) used to read `.page article:not(.eb-hub__card)` with a second
+// compensation on `.eb-hub__card { margin-inline: 0 }`, because the topic cards
+// were themselves `<article>` and so were being capped at 780px AND un-stretched
+// by the auto margins — the 399-524px ragged range at 1440px (F15). Both
+// compensations are GONE as of 12.6: tag-hub now emits a `<div>` for the card,
+// which `.page article` does not match, so this rule reaches the reading column
+// and nothing else. Verified by measurement, not by argument — see the
+// "hub cards are not articles" checks in verify-default-mode.mjs, which assert
+// the built DOM carries no `<article class="eb-hub__card">` AND that this
+// selector is plain again.
+.page article {
   max-width: 780px;
   margin-inline: auto;
 }

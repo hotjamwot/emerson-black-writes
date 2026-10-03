@@ -33,6 +33,26 @@ import { h } from "preact"
  * honest remainder one line below, so the chip is deleted rather than corrected:
  * two numbers on one card is the bug, not the wrong one.
  *
+ * A CARD IS A `<div>`, NOT AN `<article>` — 12.6. This one word was the sole
+ * reason the site carried an override of Quartz's `.page article` rule. That
+ * rule caps the reading column at 780px and centres it with
+ * `margin-inline: auto`; both effects landed on these cards, because they were
+ * articles. The visible symptom was the topic cards measuring 399-524px ragged
+ * on equal grid tracks (F15), and the workaround was two declarations of
+ * compensation — `:not(.eb-hub__card)` on the cap, and `margin-inline: 0` here
+ * to undo the auto margins, since an auto-margined grid item refuses to stretch
+ * into its track even with nothing capping it.
+ *
+ * Neither compensation is now needed. A `<div>` is simply not matched by
+ * `.page article`, so the upstream rule applies to the reading column and to
+ * nothing else, unmodified. The override is gone rather than merely narrowed.
+ *
+ * This is the §12.6 trade in one edit, and it is the shape every future
+ * "upstream fights us" request should be tested against first: if the thing we
+ * are fighting is a SELECTOR we chose to opt into, we can stop choosing it. The
+ * semantics also improve — a card holding five links to other posts is a nav
+ * group, not a self-contained composition, which is what `<article>` means.
+ *
  * LINK PREFIX: this component is placed on the Desk index ONLY, and emits
  * "./" + slug. Quartz's own PageList resolves links properly with
  * resolveRelative(); a plain-JS local plugin cannot import from quartz/util
@@ -104,7 +124,10 @@ function TagHubComponent({ allFiles, cfg, fileData }) {
       const group = byTag.get(tag).sort(newestFirst)
       const shown = group.slice(0, PER_TAG)
       return h(
-        "article",
+        // 12.6 — a `<div>`, not an `<article>`. See the header comment: the card
+        // is a nav group, and `<article>` was also the sole reason this site had
+        // to override `.page article` at all.
+        "div",
         { class: "eb-hub__card" },
         h(
           "h3",

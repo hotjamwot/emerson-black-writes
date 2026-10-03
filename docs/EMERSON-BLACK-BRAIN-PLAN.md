@@ -147,6 +147,11 @@ verification (§9).
 Each was bought with a failed deploy, a wrong fix, or a guard that lied. Full stories
 in git; the ones worth not rediscovering:
 
+- **A suite number means nothing unless you know which checks ran.** Browser-measured
+  guards execute only when `public/` is served; otherwise they are skipped silently and
+  the count still looks complete. F18 sat red and undetected for weeks behind a
+  173/173. **Always serve `public/` on :8099 before trusting `verify-default-mode.mjs`**,
+  and read the last line — it names the count, so compare it against expectations.
 - **Ask the Quartz-native question first.** On every styling/structure request, the
 assistant queries HayJay with the override-free alternative before touching upstream
 selectors or plugin markup — e.g. tokens + own `eb-*` classes, additive slot components,
@@ -190,6 +195,7 @@ selectors (`.page`, `.tag-link`, `.section`, layered theme rules). See §12.6.
 | F15 | **Two symptoms in one report were not one bug.** "Cards look different widths" + "too wide on mobile" shared a theory, got one fix; only the overflow half was real | ⏳ open — §12.1(b) |
 | F16 | **"No dates" was "dates at 1.82:1".** Drawn in the DOM, invisible in light mode. Fixed with a real `--eb-meta` token + a computed-contrast guard | ✅ fixed |
 | F17 | **`--gray` (#6b7a91) as *text* is 3.94:1 on the page background** — below AA. Used by section labels, `.folder-title`, tag pills, `h4–h6` and table headers | ⏳ open |
+| F18 | **Three wordmark guards had been failing since 11.9.6 and nobody saw it**, because they only run when `public/` is served — a plain build skips them, so a permanently red section looked like a passing one | ✅ fixed |
 
 **F14's lesson — a red guard is not automatically a bug.** Two checks were filed as
 "known-failing, ignore" long enough to become scenery. A guard that has never passed is
@@ -203,6 +209,18 @@ theory, and not against the one that did not.
 
 **F16's lesson — "the feature is missing" and "the feature is invisible" produce the same
 report and completely different fixes.** Presence checks cannot see contrast.
+
+**F18's lesson — F14's, plus why it survived so much longer.** F14 was two guards
+filed as "known-failing, ignore". F18 is three guards asserting the *old* EBW wordmark,
+retired by 11.9.6 in favour of the stacked name — they could never pass again. The
+difference is not severity but **invisibility**: browser-measured checks run only when
+`public/` is being served, so in every plain `npx quartz build` they are skipped
+entirely. A section that is silently absent is indistinguishable from a section that is
+green, and the suite reported 173/173 while three of its checks were dead. Any guard
+that needs a browser must be run deliberately, with the server up, or it is decoration.
+Both halves now assert the *current* contract (stacked name, real `aria-label`, both
+lines measured) and were confirmed falsifiable: hiding either line reports `0px`, and
+dropping the `aria-label` reports `null`.
 
 ### 9.3 Dead code and traps worth remembering
 
