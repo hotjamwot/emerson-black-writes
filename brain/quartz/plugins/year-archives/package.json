@@ -1,0 +1,19 @@
+{
+  "name": "year-archives",
+  "version": "1.0.0",
+  "description": "Year pages: one listing per newsletters/<year> folder, with descriptions",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "quartz": {
+    "name": "year-archives",
+    "displayName": "Year Archives",
+    "description": "One listing page per year, newest first, with standfirsts",
+    "category": "pageType",
+    "defaultOrder": 90
+  }
+}

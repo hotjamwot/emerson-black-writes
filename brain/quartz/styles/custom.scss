@@ -16,14 +16,37 @@
 //  Sections: 1 tokens · 2 surface/grain · 3 typography · 4 chrome
 //            5 reading experience · 6 archive lists · 7 landing-page kit
 //            8 responsive & motion
+//
+//  MAINTENANCE CONTRACT — the Quartz truce (plan §9.1, §12.6).
+//  Every section below carries one of two banners:
+//
+//    [SAFE — brand]   Only touches :root tokens or .eb-* classes (your own
+//                     components). Survives Quartz updates. LLMs may edit freely.
+//
+//    [OVERRIDE — upstream]  Restyles Quartz's own selectors (.page, .explorer,
+//                     .page-listing, .tag-link …). Works, but breaks when
+//                     upstream renames markup or layers. Edit only on request,
+//                     and prefer the Quartz-native alternative in the comment.
+//
+//  Rule of thumb: if the selector doesn't start with .eb- or :root, read the
+//  banner before touching it.
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ── 1. Design tokens ───────────────────────────────────────────────────────
+// [SAFE — brand] Token definitions only. The Quartz-native way to theme.
 // Semantic aliases point at the colours configured in quartz.config.yaml, so
 // a palette change there flows through automatically.
 :root {
   --eb-accent: var(--secondary);
   --eb-accent-bright: #a81f1f;
+  // The Desk's metadata grey — dates, year counts, the "N more" links, the
+  // disclosure chevron. Deliberately NOT --lightgray: that token is the hairline
+  // used for borders, and borrowed as text on the hub cards it measured 1.82:1
+  // against the card surface — below the 4.5:1 AA floor. That is why the dates
+  // read as "missing" rather than "faint" (§12.1a / F16). Pinned as a real,
+  // auditable colour per mode; verify-default-mode computes the ratio against the
+  // rendered card surface rather than trusting that the class is present.
+  --eb-meta: #556072;
   --eb-radius: 4px;
   --eb-radius-lg: 10px;
   --eb-display: "Gabarito", "Century Gothic", "Avant Garde", "Futura", system-ui, sans-serif;
@@ -31,7 +54,6 @@
   --eb-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --eb-tracking: 0.16em;
   --eb-shadow: 0 20px 40px -26px rgba(6, 13, 20, 0.45);
-  --eb-shadow-lift: 0 26px 50px -28px rgba(6, 13, 20, 0.6);
   --eb-line: rgba(17, 31, 46, 0.14);
   --eb-line-strong: rgba(17, 31, 46, 0.32);
   --eb-surface: rgba(17, 31, 46, 0.035);
@@ -43,6 +65,10 @@
 }
 
 // ── 1c. Chrome keeps the display face ────────────────────────────────────────
+// [OVERRIDE — upstream] Targets Quartz/Obsidian chrome selectors (.explorer,
+// .backlinks, .tags …) because the theme drives them from shared font vars.
+// Quartz-native alternative: accept the theme's sans chrome. Keep only if the
+// tracked-uppercase chrome look is worth the selector list on updates.
 // §1b repoints `--font-interface` at the reading serif, which is correct for
 // article copy but wrong for navigation: the Obsidian theme drives the explorer,
 // TOC, backlinks and search from the same variables, so they inherited Lora as
@@ -62,6 +88,10 @@ ul.tags a {
 }
 
 // ── 1b. Brand font variables, at the winning layer ───────────────────────────
+// [OVERRIDE — upstream] Repoints upstream's own --font-* vars from unlayered
+// CSS to beat @layer quartz-fonts. Works, but must be re-checked if the fonts
+// plugin or theme renames those vars. Quartz-native alternative: accept the
+// theme's default faces (loses Lora/Gabarito).
 // S6 follow-up. Pinning the theme's own `--font-interface` in
 // `quartz/theme/emerson.ts` was correct but ineffective: the theme lives in
 // `@layer obsidian-theme`, and `@quartz-community/quartz-fonts` emits its own
@@ -91,8 +121,8 @@ ul.tags a {
 
 :root[saved-theme="dark"] {
   --eb-accent-bright: #ff5b5b;
+  --eb-meta: #8b98ab;
   --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
-  --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
   --eb-line: rgba(240, 244, 248, 0.09);
   --eb-line-strong: rgba(240, 244, 248, 0.22);
   --eb-surface: rgba(255, 255, 255, 0.028);
@@ -107,8 +137,8 @@ ul.tags a {
 @media (prefers-color-scheme: dark) {
   :root:not([saved-theme="light"]) {
     --eb-accent-bright: #ff5b5b;
+    --eb-meta: #8b98ab;
     --eb-shadow: 0 22px 45px -26px rgba(0, 0, 0, 0.85);
-    --eb-shadow-lift: 0 30px 60px -30px rgba(0, 0, 0, 0.95);
     --eb-line: rgba(240, 244, 248, 0.09);
     --eb-line-strong: rgba(240, 244, 248, 0.22);
     --eb-surface: rgba(255, 255, 255, 0.028);
@@ -121,6 +151,11 @@ ul.tags a {
 }
 
 // ── 2. Surface, grain and page furniture ───────────────────────────────────
+// [OVERRIDE — upstream] Restrains upstream's highlight/selection tokens
+// (.highlight, .text-highlight) to a quiet accent tint. Worth keeping: without
+// it search hits render as a loud yellow slab. Re-check if quartz-base renames
+// those classes. The body/grain/focus rules below are plain element styling,
+// safe by construction.
 body {
   background-color: var(--light);
   background-image:
@@ -198,6 +233,10 @@ html {
 }
 
 // ── 3. Typography ──────────────────────────────────────────────────────────
+// [OVERRIDE — upstream] Sets heading/chrome faces on bare elements (h1–h6) and
+// Quartz chrome (.page-title, .graph > h3 …). The font VALUES are brand (safe);
+// the SELECTORS are upstream's, so a markup rename orphan them. Quartz-native
+// alternative: theme `typography` config + accept default chrome type.
 // Display face (Gabarito ≈ the storefront's Century Gothic) carries the small
 // structural labels; long-form headings stay sentence case for readability.
 h1,
@@ -217,9 +256,7 @@ h2.page-title,
 .graph > h3,
 .backlinks > h3,
 .recent-notes > h3,
-.explorer .folder-title,
-.eb-kicker,
-.eb-section-title {
+.explorer .folder-title {
   font-family: var(--eb-display);
   text-transform: uppercase;
   letter-spacing: var(--eb-tracking);
@@ -227,6 +264,10 @@ h2.page-title,
 }
 
 // ── 4a. 11.9.6: the header bar (wordmark · nav · search + controls) ───────
+// [OVERRIDE — upstream] Restyles Quartz's header shell (.page-header) so the
+// Desk reads as part of the storefront. Keep: it is the visible brand link.
+// Re-check on updates that rename header markup. Quartz-native alternative:
+// stock header (loses the stacked wordmark + nav row).
 // The header slot is a full-width grid row above the shell (`grid-header`), so
 // it spans both the sidebar and the content column. That is what lets the
 // wordmark sit top-left and the toolbar top-right on one line, with the nav
@@ -299,6 +340,7 @@ h2.page-title,
 }
 
 // ── 11.9.6: the wordmark is the storefront's two-line stacked mark ─────────
+// [SAFE — brand] Only restyles .eb-wordmark (your own class on the title).
 // `Wordmark` (./quartz/plugins/wordmark) renders the spans; this styles them
 // to match style.css `.wordmark-name` / `.wordmark-series` exactly.
 //
@@ -433,6 +475,9 @@ h2.page-title,
 }
 
 // ── 4a-bis. Header on narrow screens ───────────────────────────────────────
+// [OVERRIDE — upstream] Media-query fixes on Quartz's header selectors.
+// Keep while the custom header exists; delete with it if the header ever goes
+// stock. Quartz-native alternative: stock responsive header.
 // At 420px the wordmark, four nav links and the three toolbar controls cannot
 // share one line: the row is a single non-wrapping flex container, so it
 // measured 420px of content in a 420px viewport and the document overflowed
@@ -545,6 +590,7 @@ h2.page-title,
 }
 
 // 11.9.5(c) The standfirst under a post's title ─────────────────────────────
+// [SAFE — brand] .eb-post-deck is your own post-deck component.
 //
 // Sized and coloured to read as the first line of the piece, not as metadata:
 // it sits between the title and the Published/Updated line, and it is the only
@@ -572,6 +618,11 @@ h2.page-title,
 }
 
 // 11.9.5(a) The hub: one card per topic ───────────────────────────────────
+// [SAFE — brand] .eb-hub* are your own tag-hub components. NOTE: one coupled
+// OVERRIDE lives at `.page article:not(.eb-hub__card)` (~line 1050): the base
+// reading measure would otherwise cap and un-stretch these cards (they ARE
+// <article> elements). If the hub ever moves to non-article markup, that guard
+// can go stock.
 // TWO COLUMNS, not three. `auto-fit minmax(320px, 1fr)` fitted three cards
 // across the content column, which squeezed each card's descriptions to a few
 // words a line and left the list feeling like a grid of previews rather than a
@@ -605,6 +656,13 @@ h2.page-title,
 // correct and aligning them is not.
 .eb-hub__card {
   align-self: start;
+  // 12.1(b), second half. The reading-column rule below sets
+  // `margin-inline: auto` on `.page article`, and these cards ARE articles —
+  // the `:not()` there lifts the 780px cap, but auto margins un-stretch a grid
+  // item all by themselves (they absorb the track's free space instead of the
+  // item stretching into it). Zeroing them here re-stretches the card to its
+  // track. Without this the cards measured 399–524px ragged on equal tracks.
+  margin-inline: 0;
   // A raised surface needs a padding and a border of its own — the hairline
   // --eb-line alone reads as a divider, not a container.
   padding: 1.1rem 1.2rem 1.2rem;
@@ -644,14 +702,6 @@ h2.page-title,
   color: var(--eb-accent);
 }
 
-.eb-hub__n {
-  font-family: var(--eb-mono);
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: var(--gray);
-}
-
 .eb-hub__list {
   list-style: none;
   margin: 0;
@@ -682,7 +732,12 @@ h2.page-title,
   margin: 0.2rem 0 0;
   font-size: 0.86rem;
   line-height: 1.4;
-  color: var(--gray);
+  // Matches `.eb-listing-desc` on /tags/<x>/ exactly — the two listings are the
+  // same product and the comment there says so; they had silently diverged
+  // (this one at --gray = 3.82:1 on the card, below AA). --dark at 0.85 reads as
+  // content rather than metadata, which is what a description is.
+  color: var(--dark);
+  opacity: 0.85;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -695,7 +750,7 @@ h2.page-title,
   font-family: var(--eb-mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
-  color: var(--lightgray);
+  color: var(--eb-meta);
 }
 
 .eb-hub__more {
@@ -704,7 +759,7 @@ h2.page-title,
 }
 
 .eb-hub__more a {
-  color: var(--gray);
+  color: var(--eb-meta);
 }
 
 .eb-hub__more a:hover {
@@ -712,6 +767,7 @@ h2.page-title,
 }
 
 // 11.9.10 — the by-year fold-outs at the foot of the Desk.
+// [SAFE — brand] .eb-years* are your own year-foldouts components.
 //
 // The other half of what the topic cards do not do. The cards answer "what is
 // this about" and cap each topic at five; this is the other axis — "what has he
@@ -749,7 +805,7 @@ h2.page-title,
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: none;
-  color: var(--lightgray);
+  color: var(--eb-meta);
 }
 
 .eb-years__fold {
@@ -796,7 +852,7 @@ h2.page-title,
   display: inline-block;
   width: 1ch;
   margin-left: -1ch;
-  color: var(--lightgray);
+  color: var(--eb-meta);
   transform-origin: center;
   transition: transform 0.2s ease;
 }
@@ -811,7 +867,7 @@ h2.page-title,
   font-size: 0.72rem;
   font-weight: 400;
   letter-spacing: 0.02em;
-  color: var(--lightgray);
+  color: var(--eb-meta);
 }
 
 // Title and date on one line, wrapping together — the date sits in a fixed
@@ -848,7 +904,7 @@ h2.page-title,
   font-family: var(--eb-mono);
   font-size: 0.7rem;
   letter-spacing: 0.04em;
-  color: var(--lightgray);
+  color: var(--eb-meta);
 }
 
 .eb-years__link {
@@ -887,6 +943,10 @@ h2.page-title,
 }
 
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
+// [OVERRIDE — upstream] Re-templates Quartz's grid shell (empty right column,
+// sidebar widths, breadcrumb/order fixes). Load-bearing for the current layout;
+// re-verify if the base frame changes its grid areas. Quartz-native
+// alternative: accept the default shell (regains an empty 320px column).
 #quartz-body .center {
   min-width: 0;
 }
@@ -948,6 +1008,10 @@ h2.page-title,
 }
 
 // ── 4c. Mobile: the article comes FIRST, not the file tree ───────────────────
+// [OVERRIDE — upstream] Redefines Quartz's mobile grid-template so content
+// precedes the explorer. `order` cannot do this (grid-area placement ignores
+// it). Re-check if base breakpoints move. Quartz-native alternative: stock
+// order (sidebar above article on phones).
 // 11.9.7c. Base Quartz stacks, at `max-width: 800px`:
 //
 //   grid-sidebar-left → grid-header → grid-center → grid-sidebar-right → footer
@@ -987,7 +1051,22 @@ h2.page-title,
 // `.page article` rather than a bare `article` so this applies to the reading
 // column and not to sidebars or the footer. `margin-inline: auto` re-centres it,
 // because the grid track is now much wider than the text.
-.page article {
+//
+// 12.1(b) — the second half of F15, diagnosed from the BUILT DOM, not the
+// stylesheet. The hub cards are THEMSELVES `<article class="eb-hub__card">`
+// (see tag-hub), so this rule was capping every card at 780px AND centring it
+// with `margin-inline: auto`. An auto-margined grid item stops stretching to
+// its track (auto margins absorb the free space), so each card sized to its
+// own content instead: the 399–524px ragged range at 1440px.
+//
+// `:not()` alone is NOT enough — and the first attempt proved it. `max-width`
+// and `margin-inline: auto` are separate properties with separate effects, and
+// a grid item with `margin-inline: auto` still refuses to stretch even with no
+// max-width constraining it. So the exclusion must reset BOTH: the cap goes
+// away via `:not(.eb-hub__card)`, and the un-stretching goes away via the
+// explicit `.eb-hub__card { margin-inline: 0 }` below. Either half alone leaves
+// the cards ragged.
+.page article:not(.eb-hub__card) {
   max-width: 780px;
   margin-inline: auto;
 }
@@ -1155,6 +1234,8 @@ h1.article-title {
 }
 
 // ── Explorer (archive tree) ────────────────────────────────────────────────
+// [OVERRIDE — upstream] Skins Quartz's explorer selectors. Cosmetic only —
+// safe to drop to stock explorer styling at any time.
 .explorer {
   margin-top: 0.25rem;
 
@@ -1237,6 +1318,8 @@ h1.article-title {
 }
 
 // ── Sidebar panels: Backlinks · Recent · Graph ───────────────────────
+// [OVERRIDE — upstream] Skins Quartz's panel selectors. Cosmetic only — safe
+// to drop to stock panel styling at any time.
 .backlinks,
 .recent-notes,
 .graph {
@@ -1350,6 +1433,10 @@ hr::after {
 }
 
 // ── 6. Archive listings (folder pages: /newsletters/2023/ …) ───────────────
+// [OVERRIDE — upstream] Restyles the year/tag listing grid (.page-listing,
+// .section-li) emitted by listing-descriptions/year-archives. Keep — this is
+// the archive's reading surface. If those plugins ever go stock, this goes
+// with them. Your .eb-listing-desc paragraph inside it is [SAFE — brand].
 .page-listing {
   margin-top: 2rem;
 
@@ -1425,6 +1512,8 @@ hr::after {
 }
 
 // ── 7a. Post header — Published / Updated + the "Recently updated" pill ─────
+// [SAFE — brand] Only touches .eb-post-dates / .eb-recently-updated (your own
+// post-dates component).
 // S10 / D18. The pill is `hidden` in the markup and revealed by the component's
 // own afterDOMLoaded script, so it must stay hidden until the *client* has
 // checked the date. That is why the `[hidden]` rule is explicit and repeated: a
@@ -1489,121 +1578,10 @@ hr::after {
   }
 }
 
-// ── 7b. Landing-page kit (used by content/index.md) ─────────────────────────
-// The homepage supplies its own <h1> inside the hero, so the duplicate article
-// title (and its meta line) are dropped only on that page. Browsers without
-// `:has()` simply show the extra heading — harmless.
-#quartz-body .center:has(.eb-hero) {
-  h1.article-title {
-    display: none;
-  }
-}
-
-.eb-hero {
-  padding: 1rem 0 2.6rem;
-  border-bottom: 1px solid var(--eb-line);
-  margin-bottom: 3rem;
-
-  h1,
-  .eb-hero-title {
-    font-family: var(--eb-display);
-    font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.7rem);
-    font-weight: 600;
-    line-height: 1.06;
-    letter-spacing: -0.02em;
-    color: var(--dark);
-    margin: 0.5rem 0 1.1rem;
-    text-transform: none;
-  }
-}
-
-.eb-kicker {
-  font-size: 0.7rem;
-  color: var(--eb-accent);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-
-  &::before {
-    content: "";
-    width: 26px;
-    height: 2px;
-    background: var(--eb-accent);
-  }
-}
-
-.eb-hero-lede {
-  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.22rem);
-  color: var(--darkgray);
-  max-width: 46ch;
-  margin-bottom: 1.7rem;
-}
-
-.eb-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  margin-bottom: 1.4rem;
-}
-
-// Buttons — mirror the storefront's .btn-primary / .btn-secondary
-.eb-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-family: var(--eb-display);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 0.85rem 1.5rem;
-  border-radius: 3px;
-  border: 2px solid var(--eb-line-strong);
-  background: transparent;
-  color: var(--dark);
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease;
-
-  &:hover {
-    color: var(--eb-accent);
-    border-color: var(--eb-accent);
-    transform: translateY(-2px);
-    text-decoration: none;
-  }
-
-  &.eb-btn--primary {
-    background: var(--eb-accent);
-    border-color: var(--eb-accent);
-    color: #fff;
-
-    &:hover {
-      background: var(--eb-accent-bright);
-      border-color: var(--eb-accent-bright);
-      color: #fff;
-    }
-  }
-
-  &.eb-btn--quiet {
-    border-color: transparent;
-    padding-left: 0.35rem;
-    padding-right: 0.35rem;
-
-    &:hover {
-      border-color: transparent;
-      background: none;
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-    }
-  }
-}
-
 // ── 5. Reading experience ──────────────────────────────────────────────────
+// [OVERRIDE — upstream] Sets body type on Quartz's content class
+// (.markdown-preview-view). Worth keeping (Lora reading column is the brand),
+// single selector, easy to re-point. Quartz-native alternative: theme fonts.
 // S6 · Writerly serif body — Lora (optical sizing, true italics).
 .markdown-preview-view.markdown-rendered {
   font-family: var(--eb-serif);
@@ -1798,166 +1776,10 @@ ul.tags a.tag-link {
   }
 }
 
-// Section headings, cards and trails
-.eb-section {
-  margin: 0 0 3.2rem;
-
-  > .eb-section-title {
-    font-size: 0.74rem;
-    color: var(--gray);
-    margin: 0 0 1.3rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--eb-line);
-    display: flex;
-    align-items: baseline;
-    gap: 0.7rem;
-
-    .eb-count {
-      font-family: var(--eb-mono);
-      font-size: 0.66rem;
-      letter-spacing: 0.08em;
-      text-transform: none;
-      color: var(--gray);
-    }
-  }
-}
-
-.eb-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 0.9rem;
-}
-
-.eb-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 1.15rem 1.2rem 1.25rem;
-  border: 1px solid var(--eb-line);
-  border-radius: var(--eb-radius-lg);
-  background: var(--eb-surface);
-  text-decoration: none;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    border-color: var(--eb-accent);
-    background: var(--eb-surface-strong);
-    box-shadow: var(--eb-shadow-lift);
-    text-decoration: none;
-  }
-
-  .eb-card-kicker {
-    font-family: var(--eb-mono);
-    font-size: 0.64rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--eb-accent);
-  }
-
-  .eb-card-title {
-    font-family: var(--eb-display);
-    font-size: 1.08rem;
-    font-weight: 600;
-    line-height: 1.28;
-    color: var(--dark);
-  }
-
-  .eb-card-text {
-    font-size: 0.92rem;
-    color: var(--darkgray);
-    margin: 0;
-  }
-}
-
-// Year cards carry a little more weight
-.eb-year .eb-card-title {
-  font-size: 1.85rem;
-  letter-spacing: -0.01em;
-}
-
-// Reading trails on the homepage
-.eb-trail {
-  border-top: 1px solid var(--eb-line);
-  padding: 1.1rem 0 1.2rem;
-
-  &:first-of-type {
-    border-top: none;
-    padding-top: 0;
-  }
-
-  h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: none;
-    letter-spacing: 0;
-    margin: 0 0 0.5rem;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      margin-bottom: 0.3rem;
-
-      &::before {
-        content: "→";
-        color: var(--eb-accent);
-        margin-right: 0.5rem;
-        font-size: 0.9em;
-      }
-    }
-  }
-}
-
-.eb-cta {
-  padding: 1.8rem 1.9rem;
-  border: 1px solid var(--eb-line);
-  border-radius: var(--eb-radius-lg);
-  background:
-    radial-gradient(600px 200px at 100% 0%, var(--eb-glow), transparent 70%), var(--eb-surface);
-  margin-bottom: 2.5rem;
-
-  h2 {
-    font-size: 1.35rem;
-    font-weight: 600;
-    text-transform: none;
-    letter-spacing: -0.005em;
-    margin: 0 0 0.5rem;
-  }
-
-  p {
-    margin: 0 0 1.2rem;
-    color: var(--darkgray);
-  }
-}
-
-.eb-fine {
-  font-family: var(--eb-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin: 0;
-}
-
 // ── 8. Responsive & motion ─────────────────────────────────────────────────
+// [SAFE — brand] Media queries over your own components + motion/print
+// hygiene. Keep.
 @media (max-width: 800px) {
-  .eb-hero {
-    padding-bottom: 2rem;
-    margin-bottom: 2.2rem;
-  }
-
-  .eb-actions .eb-btn {
-    flex: 1 1 100%;
-  }
-
   .page-listing li.section-li .section {
     grid-template-columns: 1fr;
     gap: 0.2rem;
@@ -1978,8 +1800,6 @@ ul.tags a.tag-link {
     animation-duration: 0.01ms !important;
   }
 
-  .eb-card:hover,
-  .eb-btn:hover,
   .page-listing li.section-li .section:hover {
     transform: none;
   }

@@ -117,7 +117,7 @@ node brain/scripts/verify-storefront.mjs  # from repo root; rendered, needs Chro
 
 | Suite | Count |
 |---|---|
-| Desk — `verify-default-mode.mjs` | **142 checks, 0 failures** |
+| Desk — `verify-default-mode.mjs` | **159 checks, 0 failures** |
 | Brand — `verify-brand.mjs` | passing |
 | Storefront — `verify-storefront.mjs` | **34 checks, passing** |
 
@@ -147,6 +147,12 @@ verification (§9).
 Each was bought with a failed deploy, a wrong fix, or a guard that lied. Full stories
 in git; the ones worth not rediscovering:
 
+- **Ask the Quartz-native question first.** On every styling/structure request, the
+assistant queries HayJay with the override-free alternative before touching upstream
+selectors or plugin markup — e.g. tokens + own `eb-*` classes, additive slot components,
+config options, or accepting the default. An override ships only on an explicit call.
+- **Stock Quartz renders; brand lives in tokens + `eb-*`.** Nothing overrides upstream
+selectors (`.page`, `.tag-link`, `.section`, layered theme rules). See §12.6.
 - **A guard that cannot fail is worse than no guard.** Hit repeatedly: a check that
   grepped `index.html` for theme vars that live in the CSS bundle; two unreachable
   sitemap assertions; `--screenshot` captures that produced byte-identical PNGs (I11 —
@@ -177,12 +183,13 @@ in git; the ones worth not rediscovering:
 
 | # | Finding | Status |
 |---|---|---|
-| F1–F4 | CSS/plugin cruft (15 orphaned `eb-*` classes, 3 inert plugins) | ⏳ open |
-| F12 | Active explorer item red-on-red — a **specificity loss**, not a colour choice | ⏳ open |
+| F1–F4 | CSS/plugin cruft — **cut**: 20 orphaned `eb-*` classes (**276 lines**; the "15" became 20 as the last five went dead too), the now-orphaned `--eb-shadow-lift` token, and 3 inert plugins (`canvas-page`, `bases-page`, `obsidian-plugin-excalidraw`) | ✅ fixed |
+| F12 | Active explorer item "red-on-red" — **not reproducible in the build**: the theme declares `--nav-item-background-active: var(--highlight)` but nothing consumes it, so only our `--eb-surface` paints the active item. Re-check on device before trusting | ✅ fixed (verify) |
 | F13 | The vacuous guard + wrong-layer pin | ✅ fixed |
 | F14 | Two "known-failing" bio guards were unfixable, not flaky — S11 turned `bio.html` into a redirect stub, so both were specs describing an old site | ✅ fixed |
 | F15 | **Two symptoms in one report were not one bug.** "Cards look different widths" + "too wide on mobile" shared a theory, got one fix; only the overflow half was real | ⏳ open — §12.1(b) |
-| F16 | **"No dates" was "dates at 1.81:1".** Drawn in the DOM, invisible in light mode | ⏳ open — §12.1(a) |
+| F16 | **"No dates" was "dates at 1.82:1".** Drawn in the DOM, invisible in light mode. Fixed with a real `--eb-meta` token + a computed-contrast guard | ✅ fixed |
+| F17 | **`--gray` (#6b7a91) as *text* is 3.94:1 on the page background** — below AA. Used by section labels, `.folder-title`, tag pills, `h4–h6` and table headers | ⏳ open |
 
 **F14's lesson — a red guard is not automatically a bug.** Two checks were filed as
 "known-failing, ignore" long enough to become scenery. A guard that has never passed is
@@ -257,50 +264,51 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 11.9.9 Hub cards | Neutral surface (a "muted grey" `--secondary` is actually the crimson accent, so the cards came out red-on-red) |
 | 11.9.10 Retire `/Newsletters/` | Folded into the Desk as `<details>` by year. Recent-notes overflow link **off**: it counts files, not dispatches, and a missing list is worse than a wrong number |
 | 11.9.11 Desk cleanup | Body emptied; grid floor made adaptive; year rows gained standfirsts |
+| 12.1(a)/12.1(d) + F1–F4 (2026-10-03) | Desk metadata contrast fixed with a real `--eb-meta` token (light **5.57:1** / dark **6.56:1** on the card; was `--lightgray` at **1.82:1**); `.eb-hub__desc` aligned to `.eb-listing-desc`; the contradicting per-tag count chip dropped; the orphaned landing kit pruned (**276 lines**); `canvas-page` / `bases-page` / `obsidian-plugin-excalidraw` disabled. **17 new checks**, all proven red by breakage |
+| 12.1(b) card widths (2026-10-04) | **Not a grid bug: `.page article` capped every card at 780px + `margin-inline: auto`, which un-stretches grid items** — measured 399–524px ragged at 1440px. Scoped to `:not(.eb-hub__card)`; tracks now equal |
+| 12.1(c) year archives (2026-10-04) | **New `year-archives` page-type plugin**: the four `/newsletters/<year>/` URLs are real listing pages again (newest first, title + standfirst + tags, tag-page row shape); top-level `/newsletters/` stays a redirect |
 
 ## 12. Open items
 
-### 12.1 🔴 The four Desk notes — recorded 2026-10-02, **not actioned**
+### 12.1 The four Desk notes — all four shipped ✅
 
-**Nothing here is built.** Each was checked against the build, and three turned out to
-be different from how they were phrased.
+Each was checked against the build, and three turned out to be different from how they
+were phrased. **All four are done** (§11, 2026-10-03/04); the remaining styling item is
+large desktop images (deferred as cosmetic, §12.4).
 
-**(a) "Dates have not been added to /desk/ posts" → they are drawn and invisible.**
-34 on the topic cards, 49 in the year rows, all asserted by the suite. But
-`.eb-hub__date` is `color: var(--lightgray)` (`#a8b5c9`, a *hairline* token borrowed from
-the borders) at `0.7rem` on `.eb-hub__card`'s `color-mix(--light 88%, --eb-line)` =
-`#ecf0f5`. That is **1.81:1 against a 4.5:1 AA floor.** Dark mode reads 9.21:1 on the same
-token, which is why this reads as "no dates" rather than "unreadable dates". The year rows
-escape it by sitting on the page background rather than the card.
+**(a) "Dates have not been added to /desk/ posts" → they were drawn and invisible.** ✅
+Done. `.eb-hub__date` was `color: var(--lightgray)` on the card surface — **1.82:1** against
+a 4.5:1 AA floor, which is why it read as "no dates". Fixed with a real metadata token
+`--eb-meta` (light `#556072` = **5.57:1**, dark `#8b98ab` = **6.56:1** on the card), applied
+to `.eb-hub__date`, the three year-row metadata rules and the disclosure chevron;
+`.eb-hub__desc` now matches `.eb-listing-desc` (`--dark` @ 0.85 = **10.3:1**). A computed
+contrast guard resolves the tokens from the *built* stylesheet and fails under AA. Decision
+taken: the date stays under the title. `--lightgray` is a decoration token, so the
+"enumerate the rest" rule was applied to every Desk use of it.
 
-`.eb-hub__desc` is also below AA on that surface — **3.81:1** light, **4.39:1** dark.
-Both need a token that is not a decoration colour. **Two decisions when picked up:** which
-grey, and whether the date belongs under the title or in the margin beside it.
+**(b) "Card widths are still different" → the reading column was capping the cards.** ✅
+Done 2026-10-04, diagnosed from the built DOM. The hub cards are themselves
+`<article class="eb-hub__card">`, so `.page article { max-width: 780px;
+margin-inline: auto }` capped every card *and* un-stretched it (auto margins absorb
+the track's free space): measured 399–524px ragged at 1440px with equal 523.5px
+tracks underneath. Scoped to `.page article:not(.eb-hub__card)`. The hub grid was
+never broken; the `min(460px, 100%)` floor stays as the mobile-overflow fix.
 
-**(b) "Card widths are still different" → undiagnosed, recorded as a symptom only.**
-The 11.9.11 `min(460px, 100%)` fix targeted the mobile overflow, not this; they shared
-one report but not one cause. The grid is `repeat(auto-fit, minmax(min(460px, 100%), 1fr))`
-and the card sets no `width`, so **tracks are equal by construction** — which means either
-the ragged bottom edge is being read as uneven width (`align-self: start` was added in
-11.9.11 and cards hold 5–15 items each), or the grid is not applying at the width being
-viewed. Those have opposite fixes, so **this needs one look at a real browser before
-anything changes. Do not re-fix `min()` on the strength of this note.**
+**(c) Sidebar year folders bounce to `/desk/` → the folders were right; the pages were missing.** ✅
+Done 2026-10-04. 11.9.10 retired `/newsletters/<year>/` to redirect stubs, but the
+Explorer builds its tree from the file tree, so the sidebar kept advertising four
+folders that bounced. New **`year-archives` page-type plugin** (`generate()` claims
+`newsletters/<year>/index` — the `/index` suffix is load-bearing: it is the URL the
+sidebar's folder-link points at): each year is a real listing page again, newest
+first, title + standfirst + tags in the tag-page row shape. Top-level `/newsletters/`
+stays a redirect (nothing links there but old bookmarks do). `folder-page` stays off;
+`archive-redirects` emits only the top-level stub now. Suite asserts all four pages
+exist, are not stubs, and list exactly their year's posts with standfirsts.
 
-**(c) Sidebar year folders bounce to `/desk/` → a real regression from 11.9.10.**
-`/newsletters/<year>/index.html` is now a redirect stub, but the Explorer still builds its
-tree from the file tree, so it still shows 2023/2024/2025/2026 as clickable folders that
-lead to the Desk. The sidebar advertises four pages that do not exist.
-
-| Option | Verdict |
-|---|---|
-| Re-enable `folder-page` for year folders only | Re-introduces what 11.9.10 removed; they'd need to stay out of the sitemap and unlinked from the Desk |
-| **Scoped emitter, year pages only** | **Recommended** — same output, no general-purpose plugin; the pattern already exists in `archive-redirects` |
-| Point the sidebar's year folders at `#everything-by-year` | **Trap** — hides the symptom while `/newsletters/2023/` still bounces for anyone holding the old link |
-
-**(d) Drop the topic cards' post counts.** `.eb-hub__n` renders the tag's **full** count
-(`15`, `9`, `7`…) directly above a list of **five**. `eb-hub__more` ("6 more on process")
-already carries the honest number one line below. Cheapest of the four and independent of
-the others.
+**(d) Drop the topic cards' post counts.** ✅ Done. `.eb-hub__n` printed the tag's full
+count (`15`, `9`, `7`…) above a list of five; `.eb-hub__more` ("6 more on process") already
+carries the honest remainder, so the chip was deleted from the `tag-hub` component *and* the
+stylesheet. The suite asserts `eb-hub__n` is absent from the built HTML and CSS.
 
 ### 12.2 🔴 11.9.4 Mobile — partly open, **needs a real phone**
 
@@ -324,16 +332,69 @@ this became a list of unfixed suspects.
   chips sized by post count, linking to tag pages, no JS. The full graph returns once the
   link graph is dense enough.
 
-### 12.4 🟠 Cosmetic — one `custom.scss` pass
+### 12.4 🟠 Cosmetic — shipped 2026-10-03
 
-I4 active-item red-on-red · mobile sidebar above content (needs a single-column
-breakpoint + `order`) · F1–F4 cruft prune.
+Done: F1–F4 cruft prune (20 orphaned `eb-*` classes, 276 lines; 3 inert plugins off),
+§12.1(a) contrast, §12.1(d) count chip.
+
+**Two items that were filed here are stale and are removed.** "Mobile sidebar above
+content (needs a single-column breakpoint + `order`)" was already fixed by 11.9.7c — the
+`grid-template` redefinition at `max-width: 800px` in `custom.scss` §4c — and §12.2 says so
+on the same page. I4 (F12) does not reproduce in the build: the theme declares
+`--nav-item-background-active` but nothing consumes it. Remaining cosmetic work is whatever
+`--gray`-as-text (F17) becomes.
 
 ### 12.5 TASTE — HayJay's call, not a defect
 
 - **Backlinks** sit `position: left`, so desktop puts them in the sidebar and mobile under
   the article. Defensible as-is; whether related posts deserve a more prominent slot
   (e.g. an end-of-post "related" section) is a taste call.
+
+### 12.6 🟢 The Quartz truce — stop fighting the theme (agreed 2026-10-04)
+
+Settled direction, not a defect list. Quartz stays as the content engine (Obsidian →
+markdown → HTML + `contentIndex.json` + graph); brand lives in tokens and our own
+`eb-*` classes; upstream selectors and plugin markup are read-only unless HayJay
+explicitly approves an override after seeing the Quartz-native alternative (§9.1).
+
+- **Split `custom.scss` (done 2026-10-04, comment-only).** All ~1,800 lines now carry
+  a banner: `[SAFE — brand]` (own `eb-*` classes, `:root` tokens — survives any
+  update) or `[OVERRIDE — upstream]` (restyles Quartz's selectors, with the
+  Quartz-native fallback named so a future LLM can price the fight before
+  joining it). No visual change — build + verify green. LLM edit rule from here:
+  touch `eb-*` and tokens only; an upstream selector needs an explicit ask first.
+- **Additive plugins stay; replacement plugins are pinned.** `tag-hub`, `year-foldouts`,
+  `post-deck`, `post-dates` render into slots upstream leaves open — update-safe, keep.
+  `listing-descriptions` (replaces `tag-page`) and `year-archives` (replaces `folder-page`)
+  reimplement upstream pages: keep, but pin Quartz in `package.json` and check exactly
+  those two files on update day.
+- **Storefront ↔ Desk palette: aligned, and now guarded (2026-10-04).** `style.css`
+  already carried the Desk's dark palette as CSS variables, so the alignment work
+  was done; what was missing is that **only the accent was ever checked**. The other
+  five shared colours and all three typefaces were copied by hand and unguarded —
+  change `--gray` in `quartz.config.yaml` and the Desk's muted text moves while the
+  storefront's stays, and the site silently becomes two brands. Five new checks
+  compare both halves against the config, read from it rather than hardcoded.
+  **Trap worth remembering: `lightgray` and `darkgray` swap meaning between modes.**
+  In lightMode `lightgray` is the pale hairline; in darkMode it is the dark surface.
+  Reading the names "obviously" produced two false failures on first run. Mapping is
+  written out by value, with the swap explained in place.
+- **Provenance, not a pin (done 2026-10-04).** `brain/package.json` *is*
+  `@jackyzha0/quartz` 5.0.0 — core is **vendored**, not a dependency, so `npm update`
+  cannot move it and there is nothing to pin. What was missing was a record of what
+  we forked from, now in a `//ebw` block: upstream URL, tag, full 40-char commit,
+  fork date, our edit surface, and a 5-step upgrade-day procedure that names the
+  two replacement plugins as the first thing to check. Five offline guards keep it
+  honest (notably: `version` must equal `v${upstreamRef}`, since bumping one and not
+  the other yields a record that looks authoritative and is wrong). We are on
+  **v5.0.0, the latest tag**.
+- **An opt-in upstream check.** `brain/quartz/check-quartz-upstream.mjs` — read-only,
+  needs network, three distinct exit codes (0 current / 1 behind / 2 unreachable) so
+  a flaky connection is never read as "you are out of date". **Not** in the verify
+  suite, which must never require a network. Sorts versions *numerically*: a string
+  sort picks `9.0.0` as newer than `10.0.1`, verified.
+- **Updates become deliberate.** That record + the verify suites turn an upstream
+  release into bump → build → read the failures, instead of surprise catchup.
 
 ## 13. Commands
 
@@ -349,6 +410,11 @@ node quartz/theme/verify-brand.mjs
 
 # Storefront geometry (rendered; needs Chrome) — run from the repo root
 node brain/scripts/verify-storefront.mjs
+
+# Has upstream Quartz moved? (§12.6 — needs network, READ-ONLY, safe to run anytime)
+cd ~/Movies/PROJECTS/Websites/EBW\ website/brain && node quartz/check-quartz-upstream.mjs
+#   exit 0 = up to date · 1 = upstream is ahead · 2 = could not reach GitHub
+#   Deliberately NOT part of verify-default-mode: that suite must never need a network.
 
 # Publish vault → site (or double-click "Publish Brain.command")
 # Local preview: double-click "Preview Brain.command"

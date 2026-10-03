@@ -33,6 +33,25 @@
     "blog",
     "quartz"
   ],
+  "//ebw": {
+    "_comment": "EBW provenance. Quartz core is VENDORED into this repo (brain/quartz is upstream's source, edited in place) rather than installed as a dependency, so there is no package version to pin — `npm update` cannot move it. That makes an upgrade a manual copy of upstream's files over ours, and the ONLY record of what we forked from is the commit below. Bump this on every deliberate upgrade; verify-default-mode asserts it is a real upstream commit and that `version` agrees with it.",
+    "upstream": "https://github.com/jackyzha0/quartz",
+    "upstreamRef": "v5.0.0",
+    "upstreamCommit": "7284f12ebf6b24e69b6cc9417e71b7d26700dc17",
+    "forkedOn": "2026-09-01",
+    "upgradeDay": [
+      "1. Fetch upstream and diff: git -C /tmp/quartz-upstream fetch origin && git -C /tmp/quartz-upstream checkout <newRef>",
+      "2. Copy upstream's brain/quartz over ours, then re-apply our edits — the only files we have changed are listed by `git status` in brain/quartz.",
+      "3. Check the two replacement plugins FIRST: quartz/plugins/listing-descriptions (replaces tag-page) and quartz/plugins/year-archives (replaces folder-page). These reimplement upstream pages and are the likeliest thing to break.",
+      "4. npm run build-plugins, then npx quartz build, then all three verify suites. Treat any ✗ as a real regression, not noise.",
+      "5. Update upstreamRef / upstreamCommit / forkedOn above in the same commit as the upgrade."
+    ],
+    "ourEditsToCore": [
+      "quartz/styles/custom.scss — brand layer, all of it ours",
+      "quartz/theme/emerson.ts — brand theme, all of it ours",
+      "quartz/config.ts, quartz/util/*, quartz/components/*, quartz/plugins/emitters/*, quartz/plugins/pageTypes/*, quartz/plugins/filters/*, quartz/plugins/transformers/*, quartz/build.ts, quartz/cli/* — upstream, unmodified"
+    ]
+  },
   "bin": {
     "quartz": "./quartz/bootstrap-cli.mjs"
   },

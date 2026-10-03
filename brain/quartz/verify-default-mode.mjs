@@ -211,6 +211,125 @@ check(
   "the pre-S9 pinker accent is fully retired",
 )
 
+// §12.6 — the rest of the palette, and the fonts.
+//
+// Until now ONLY the accent was guarded, because the accent is the only value a
+// human reliably notices drifting. The other six shared colours were copied by
+// hand into style.css and nothing compared them: change `--gray` in
+// quartz.config.yaml and the Desk's metadata grey moves while the storefront's
+// muted text stays where it was, and the site quietly becomes two brands. That
+// is the whole failure §12.6 exists to prevent, and it was unguarded.
+//
+// Read from quartz.config.yaml's `darkMode` block rather than hardcoded, so
+// changing the brand palette in the one place that owns it keeps this honest
+// with no edit here — the same reasoning as themeAccent above.
+const darkModeBlock = /darkMode:\s*\n((?:\s{6,}[a-zA-Z]+:.*\n)+)/.exec(config)?.[1] ?? ""
+const deskDark = Object.fromEntries(
+  [...darkModeBlock.matchAll(/^\s+([a-zA-Z]+):\s*"?\s*(#[0-9A-Fa-f]{6})"?/gm)].map((m) => [
+    m[1],
+    m[2].toUpperCase(),
+  ]),
+)
+
+// storefront token → the Desk token it must equal. Only the pairs where the two
+// halves are genuinely the same colour appear here; the storefront's own
+// `--border`/`--surface` alpha tokens have no Desk equivalent and are excluded
+// rather than being given a pretend counterpart.
+//
+// `lightgray` and `darkgray` SWAP MEANING BETWEEN MODES, and that is the whole
+// reason this table is written out rather than inferred. In lightMode,
+// `lightgray` is the pale hairline (#A8B5C9) and `darkgray` is the near-black
+// surface (#111F2E). In darkMode they are exchanged: `lightgray` becomes the
+// dark surface (#111F2E) and `darkgray` becomes the pale one (#A8B5C9). The
+// names describe the LIGHT theme and are meaningless in the dark one.
+//
+// Reading them "obviously" produces exactly the two false failures this check
+// reported on its first run — `--bg-secondary` compared against `--darkgray`
+// and `--text-secondary` against `--lightgray`, both wrong, both flagged as
+// drift. Mapping by name is the trap; mapping by VALUE is the fix, and the
+// table below is the corrected mapping.
+const SHARED = [
+  ["--bg-deep", "light", "page background"],
+  ["--bg-secondary", "lightgray", "raised surface (darkMode lightgray)"],
+  ["--text-primary", "dark", "body text"],
+  ["--text-secondary", "darkgray", "secondary text (darkMode darkgray)"],
+  ["--text-muted", "gray", "muted text"],
+]
+
+const drifted = []
+for (const [storeToken, deskToken, role] of SHARED) {
+  const store = new RegExp(`${storeToken}:\\s*(#[0-9A-Fa-f]{6})`).exec(storefrontCss)?.[1]
+  const desk = deskDark[deskToken]
+  if (!store || !desk) continue // nothing to compare; the coverage check below catches absence
+  if (store.toUpperCase() !== desk) drifted.push(`${storeToken} ${store} ≠ --${deskToken} ${desk}`)
+}
+check(
+  drifted.length === 0,
+  `every shared colour matches the Desk's dark palette (${
+    drifted.length ? drifted.join("; ") : `${SHARED.length}/${SHARED.length} in agreement`
+  })`,
+)
+
+// Coverage, so the comparison above cannot pass by silently matching nothing.
+// Without this, deleting a token from style.css makes the loop `continue` on
+// every pair and the check reports a clean `5/5` while comparing zero values —
+// the same "a guard that cannot fail" trap the contrast guards in §12.1a record.
+const storeTokensDeclared = SHARED.filter(([t]) =>
+  new RegExp(`${t}:\\s*#[0-9A-Fa-f]{6}`).test(storefrontCss),
+).length
+check(
+  storeTokensDeclared === SHARED.length,
+  `the storefront declares every token the palette check compares (${storeTokensDeclared}/${SHARED.length})`,
+)
+check(
+  Object.keys(deskDark).length > 0,
+  `the Desk's dark palette is readable from quartz.config.yaml (${Object.keys(deskDark).length} colours)`,
+)
+
+// Fonts are the other half of "one brand". The storefront comment claims the
+// faces are shared with the Brain; that claim was never checked, and it is
+// exactly the kind of comment that goes stale.
+//
+// Scoped to the CORE `typography:` block, not matched anywhere in the file. The
+// config declares the faces TWICE — core at the top, and again in the
+// `@quartz-community/quartz-fonts` plugin lower down — and a global regex over
+// both finds the second block's empty `header:` and matches across the newline
+// (because `\s` eats newlines), silently losing `code:` and reporting two faces
+// on a site that configures three. Scope the read; do not widen the pattern.
+//
+// Captured by INDENTATION rather than by "every line that looks like a key",
+// because this block has four comment lines inside it. A `key: value` line
+// pattern stops at the first comment and captures an empty string, which is how
+// the first version of this reported "Desk none" on a block that plainly says
+// `body: Lora`.
+const coreTypography = (() => {
+  const lines = config.split("\n")
+  const start = lines.findIndex((l) => /^\s+typography:\s*$/.test(l))
+  if (start === -1) return ""
+  const indent = lines[start].search(/\S/)
+  const out = []
+  for (const line of lines.slice(start + 1)) {
+    if (line.trim() === "") continue
+    if (line.search(/\S/) <= indent) break // dedented out of the block
+    out.push(line)
+  }
+  return out.join("\n")
+})()
+const deskFaces = [...coreTypography.matchAll(/^\s+(header|body|code):\s*(.+?)\s*$/gm)].map(
+  (m) => m[2],
+)
+const storeFaces = ["--font-display", "--font-body", "--font-mono"]
+  .map((t) => new RegExp(`${t}:\\s*"([^"]+)"`).exec(storefrontCss)?.[1])
+  .filter(Boolean)
+check(
+  deskFaces.length === 3 && storeFaces.length === 3,
+  `both halves declare all three brand faces (Desk ${deskFaces.join("/") || "none"}, storefront ${storeFaces.length}/3)`,
+)
+check(
+  storeFaces.length === 3 && storeFaces.every((f) => deskFaces.includes(f)),
+  `the storefront and the Desk load the same typefaces (${storeFaces.join(", ") || "none"})`,
+)
+
 // ── 5b. the rename must be complete on both halves (S10) ─────────────────────
 // The site is "Emerson's Desk" (§18) and it is served at /desk/. Nothing
 // structurally connects the places that name and that path are written —
@@ -1026,9 +1145,10 @@ check(
 
 // The reading measure must survive all three of these. The article column is
 // capped at 780px and the image cap at 640px, so an image must never be able to
-// out-measure its own column.
+// out-measure its own column. 12.1(b) scopes the rule off the hub cards
+// (`:not(.eb-hub__card)`), so the regex allows that suffix.
 check(
-  /\.page article\{[^}]*max-width:780px/.test(hubCss),
+  /\.page article(?::not\(\.eb-hub__card\))?\{[^}]*max-width:780px/.test(hubCss),
   "the article reading column still holds its 780px measure",
 )
 
@@ -1084,47 +1204,51 @@ check(
     `the fold-outs run newest year first (${yearOrder.join(", ") || "none found"})`,
   )
 
-  // 6. The five retired URLs must not be REBUILT as pages. A guard that only
-  //    checks the redirect stub would pass even if folder-page came back on and
-  //    regenerated the real pages over the top of it.
+  // 6. 12.1(c) — the year folders are REAL pages again, not redirect stubs.
+  // The Explorer builds its tree from the file tree, so it advertises
+  // /newsletters/<year>/ as clickable folders; a redirect there is a bounce
+  // through a page that no longer exists. year-archives emits the four pages.
   //
-  //    existsSync, not readFileSync. The first version read unconditionally and
-  //    threw ENOENT the moment a stub went missing — which kills the whole
-  //    process, so the other 130 checks never ran and the one real problem was
-  //    the only thing you did not learn about it. A missing file is a failed
-  //    check, not a crashed suite.
-  const retiredPaths = [
-    "newsletters",
+  // existsSync, not readFileSync — a missing file is a failed check, not a
+  // crashed suite (see the original comment, kept because the lesson holds).
+  const yearPaths = [
     "newsletters/2023",
     "newsletters/2024",
     "newsletters/2025",
     "newsletters/2026",
   ]
-  const readStub = (p) => {
+  const readYear = (p) => {
     const f = join(brain, "public", p, "index.html")
     return existsSync(f) ? readFileSync(f, "utf-8") : null
   }
-  const rebuilt = retiredPaths.filter((p) => {
-    const doc = readStub(p)
-    return doc !== null && !doc.includes('http-equiv="refresh"')
-  })
-  const missingStubs = retiredPaths.filter((p) => readStub(p) === null)
+  const missingYears = yearPaths.filter((p) => readYear(p) === null)
   check(
-    missingStubs.length === 0,
-    `every retired archive URL still emits a redirect (${
-      missingStubs.length ? `missing: ${missingStubs.join(", ")}` : "all 5 present"
+    missingYears.length === 0,
+    `every year folder resolves to a real archive page (${
+      missingYears.length ? `missing: ${missingYears.join(", ")}` : "all 4 present"
     })`,
   )
+  const stillStubs = yearPaths.filter((p) => {
+    const doc = readYear(p)
+    return doc !== null && doc.includes('http-equiv="refresh"')
+  })
   check(
-    rebuilt.length === 0,
-    `the retired archive URLs are redirects and nothing else${
-      rebuilt.length ? ` (rebuilt as pages: ${rebuilt.join(", ")})` : ""
+    stillStubs.length === 0,
+    `the year archives are pages, not redirect stubs${
+      stillStubs.length ? ` (still stubs: ${stillStubs.join(", ")})` : ""
     }`,
   )
+  // 6b. The top-level /newsletters/ stays a redirect: nothing links there but
+  // old bookmarks and the sitemap do, and there is no year to show on it.
+  const topStub = readYear("newsletters")
+  check(
+    topStub !== null && topStub.includes('http-equiv="refresh"'),
+    "the retired top-level /newsletters/ still emits a redirect",
+  )
 
-  // 7. Each redirect points at the Desk, derived from baseUrl rather than a
-  //    guess — and must NOT point at itself, which is what a copy-paste of the
-  //    wrong slug would produce.
+  // 7. The top-level redirect points at the Desk, derived from baseUrl rather
+  //    than a guess — and must NOT point at itself, which is what a copy-paste
+  //    of the wrong slug would produce.
   //
   //    baseUrl is read out of the config rather than hardcoded here. If it ever
   //    changes the emitter follows it, and this guard has to follow it too, or it
@@ -1134,15 +1258,34 @@ check(
     baseUrl === "emersonblackwrites.com/desk",
     "baseUrl is readable from the config for the redirect guard",
   )
-  const redirectsOk =
-    baseUrl !== "" &&
-    retiredPaths.every((p) => {
-      const doc = readStub(p)
-      if (doc === null) return false
-      const to = doc.match(/http-equiv="refresh" content="0; url=([^"]+)"/)?.[1]
-      return to === `https://${baseUrl.replace(/\/$/, "")}/` && !to.endsWith(p)
+  const topTo = topStub?.match(/http-equiv="refresh" content="0; url=([^"]+)"/)?.[1]
+  check(
+    !!topTo && topTo === `https://${baseUrl.replace(/\/$/, "")}/`,
+    "the top-level /newsletters/ redirect points at the Desk",
+  )
+
+  // 7b. Each year page lists exactly its year's posts, newest first, each with
+  // its standfirst — the same contract as the Desk fold-outs, which remain the
+  // canonical archive. Counts are derived from the built posts, not hardcoded,
+  // so a new year is caught either way.
+  const yearOf = (f) => f.split("/")[1]
+  const yearsOk = yearPaths.every((p) => {
+    const year = p.split("/")[1]
+    const doc = readYear(p)
+    if (!doc) return false
+    const want = builtPosts.filter((f) => yearOf(f) === year)
+    const rows = (doc.match(/class="section-li"/g) ?? []).length
+    const descs = (doc.match(/class="eb-listing-desc"/g) ?? []).length
+    if (rows !== want.length || descs !== want.length) return false
+    return want.every((f) => {
+      const slug = f.replace(/\.html$/, "")
+      return doc.includes(slug)
     })
-  check(redirectsOk, `all five retired URLs redirect to the Desk (${retiredPaths.length} checked)`)
+  })
+  check(
+    yearsOk,
+    "each year archive lists exactly its year's posts with standfirsts",
+  )
 
   // 8. folder-page stays off. It is what regenerated the year folders, and a
   //    silently re-enabled plugin is the regression this whole change risks.
@@ -1874,6 +2017,174 @@ for (const [label, opts, expected] of cases) {
     `${label.padEnd(30)} → ${String(shipped).padEnd(5)} (both orders, expected ${expected})`,
   )
 }
+
+// ── §12.1(a) metadata contrast, and F1–F4 dead-code guards ───────────────────
+// A contrast bug produced a "the dates are missing" report (§12.1a / F16):
+// presence checks cannot see contrast. So these compute WCAG ratios from the
+// BUILT stylesheet — the old `--lightgray` on the hub card measured 1.82:1,
+// below the 4.5:1 AA floor, which is why the dates read as absent. The guard
+// resolves the real token values, rebuilds the card surface from the actual
+// `color-mix()`, and fails if any Desk metadata drops under AA.
+console.log("\nDesk metadata contrast + cruft (§12.1a, F1–F4)")
+
+const cssText = unlayered || ""
+const declsIn = (block) => {
+  const out = {}
+  for (const m of block.matchAll(/(--[\w-]+)\s*:\s*([^;}]+)/g)) out[m[1]] = m[2].trim()
+  return out
+}
+// Light: every attribute-less `:root{…}` (custom.scss is appended last, so the
+// last declaration of a token wins). Dark: `:root[saved-theme=dark]{…}`.
+const lightVars = {}
+for (const m of cssText.matchAll(/:root\s*\{([^}]*)\}/g)) Object.assign(lightVars, declsIn(m[1]))
+const darkVars = {}
+for (const m of cssText.matchAll(/:root\[saved-theme=["']?dark["']?\]\s*\{([^}]*)\}/g))
+  Object.assign(darkVars, declsIn(m[1]))
+
+const toRgb = (v) => {
+  if (!v) return null
+  v = v.trim()
+  const h = /^#([0-9a-f]{6})([0-9a-f]{2})?$/i.exec(v)
+  if (h) {
+    const c = [0, 2, 4].map((i) => parseInt(h[1].slice(i, i + 2), 16))
+    return [...c, h[2] === undefined ? 1 : parseInt(h[2], 16) / 255]
+  }
+  const r = /rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:[\s,/]+([\d.]+))?\s*\)/i.exec(v)
+  return r ? [+r[1], +r[2], +r[3], r[4] === undefined ? 1 : +r[4]] : null
+}
+const lin = (c) => {
+  c /= 255
+  return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+}
+const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
+const wcag = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05)
+const over = (fg, bg) => fg.slice(0, 3).map((c, i) => c * fg[3] + bg[i] * (1 - fg[3]))
+// color-mix(in srgb, A p%, B): premultiplied average; alpha = p·aA + (1-p)·aB
+const mix = (a, b, p) => {
+  const q = 1 - p
+  const alpha = p * a[3] + q * b[3]
+  return [...[0, 1, 2].map((i) => (p * a[3] * a[i] + q * b[3] * b[i]) / alpha), alpha]
+}
+
+// The card surface is read from the real `.eb-hub__card` background expression,
+// so a change to the mix is caught rather than silently invalidating the check.
+const cardRule = /\.eb-hub__card\s*\{([^}]*)\}/.exec(cssText)
+const cardMix =
+  cardRule &&
+  /color-mix\(in srgb, var\((--[\w-]+)\)\s*([\d.]+)%, var\((--[\w-]+)\)\)/.exec(cardRule[1])
+
+const AA = 4.5
+for (const [mode, vars] of [["light", lightVars], ["dark", darkVars]]) {
+  const meta = toRgb(vars["--eb-meta"])
+  const base = toRgb(vars["--light"])
+  check(Boolean(meta && base), `${mode}: --eb-meta and --light resolve from the built CSS`)
+  if (!meta || !base) continue
+  let surface = null
+  if (cardMix) {
+    const b = toRgb(vars[cardMix[1]])
+    const t = toRgb(vars[cardMix[3]])
+    if (b && t) surface = over(mix(b, t, parseFloat(cardMix[2]) / 100), base)
+  }
+  if (surface) {
+    check(
+      wcag(meta, surface) >= AA,
+      `${mode}: --eb-meta on the hub card ≥ ${AA}:1 (${wcag(meta, surface).toFixed(2)}:1)`,
+    )
+  }
+  check(
+    wcag(meta, base) >= AA,
+    `${mode}: --eb-meta on the page background ≥ ${AA}:1 (${wcag(meta, base).toFixed(2)}:1)`,
+  )
+  const descRule = /\.eb-hub__desc\s*\{([^}]*)\}/.exec(cssText)
+  const descColor = descRule && /color:\s*var\((--[\w-]+)\)/.exec(descRule[1])
+  const descOpacity = descRule && /opacity:\s*([\d.]+)/.exec(descRule[1])
+  const fg = descColor && toRgb(vars[descColor[1]])
+  if (surface && fg) {
+    const op = descOpacity ? parseFloat(descOpacity[1]) : 1
+    const blended = [...over([fg[0], fg[1], fg[2], op], surface), 1]
+    check(
+      wcag(blended, surface) >= AA,
+      `${mode}: .eb-hub__desc (${descColor[1]} @ ${op}) on the card ≥ ${AA}:1 (${wcag(blended, surface).toFixed(2)}:1)`,
+    )
+  }
+}
+// Ownership: the metadata must actually draw from the AA token, so a future
+// refactor cannot quietly revert it to the decorative `--lightgray`.
+for (const sel of [".eb-hub__date", ".eb-years__total", ".eb-years__n", ".eb-years__date"]) {
+  const rule = new RegExp(`\\${sel}\\s*\\{([^}]*)\\}`).exec(cssText)
+  check(
+    Boolean(rule) && /color:\s*var\(--eb-meta\)/.test(rule[1]),
+    `${sel} draws its colour from --eb-meta`,
+  )
+}
+
+// F1 — assert ABSENCE of the pruned landing kit (§9: a presence check cannot
+// tell "pruned" from "regrown"), and §12.1(d)'s count chip must not return.
+const ORPHANS = [
+  "eb-hero", "eb-kicker", "eb-hero-title", "eb-hero-lede", "eb-section",
+  "eb-section-title", "eb-grid", "eb-card", "eb-card-kicker", "eb-card-title",
+  "eb-card-text", "eb-count", "eb-cta", "eb-trail", "eb-year", "eb-actions",
+  "eb-btn", "eb-fine",
+]
+const survivors = ORPHANS.filter((c) => new RegExp(`\\.${c}(?![\\w-])`).test(cssText))
+check(
+  survivors.length === 0,
+  `F1: no orphaned landing-kit class survives the prune${survivors.length ? ` — found ${survivors.join(", ")}` : ""}`,
+)
+check(
+  !/eb-hub__n\b/.test(homeDoc) && !/eb-hub__n\b/.test(cssText),
+  "12.1(d): the topic cards carry no second, contradicting count",
+)
+for (const p of ["canvas-page", "bases-page", "obsidian-plugin-excalidraw"]) {
+  const block = new RegExp(`source:\\s*"@quartz-community/${p}"\\s*\\n\\s*enabled:\\s*(\\w+)`).exec(
+    config,
+  )
+  check(Boolean(block) && block[1] === "false", `F2–F4: ${p} stays disabled (no matching input)`)
+}
+// ── §12.6: Quartz provenance, so an upgrade is diffable ─────────────────────
+//
+// Quartz core is VENDORED here — brain/quartz is upstream's own source tree,
+// edited in place — so there is no dependency to pin and `npm update` cannot
+// move it. An upgrade is a manual copy of upstream's files over ours, which
+// means the only thing standing between "upgrade" and "silent divergence" is a
+// record of what we forked from. brain/package.json's `//ebw` block carries it.
+//
+// These checks are deliberately OFFLINE and structural. They assert the record
+// is present, internally consistent, and shaped like a real commit — NOT that
+// the commit still exists upstream, because a verify suite that needs the
+// network fails on a plane and teaches people to ignore it. The upstream check
+// is a separate, opt-in command (below) that you run once a year or before an
+// upgrade.
+console.log("\nQuartz provenance (§12.6)")
+const pkg = JSON.parse(readFileSync(join(brain, "package.json"), "utf8"))
+const prov = pkg["//ebw"]
+check(
+  !!prov && !!prov.upstream && !!prov.upstreamRef && !!prov.upstreamCommit,
+  `brain/package.json records which Quartz we forked from (${prov?.upstreamRef ?? "no //ebw block"})`,
+)
+check(
+  prov?.upstreamCommit === (prov?.upstreamCommit ?? "").toLowerCase() &&
+    /^[0-9a-f]{40}$/.test(prov?.upstreamCommit ?? ""),
+  `the recorded commit is a full 40-char SHA, not an abbreviation (${(prov?.upstreamCommit ?? "").slice(0, 12)}…)`,
+)
+// version and upstreamRef must agree. These drift apart the moment someone
+// bumps one and not the other, and the resulting record is worse than none:
+// it looks authoritative and is wrong.
+check(
+  !!prov && prov.upstreamRef === `v${pkg.version}`,
+  `package version and upstreamRef agree (${pkg.version} vs ${prov?.upstreamRef ?? "—"})`,
+)
+check(
+  Array.isArray(prov?.upgradeDay) && prov.upgradeDay.length >= 4,
+  `the record carries an upgrade-day procedure (${prov?.upgradeDay?.length ?? 0} steps)`,
+)
+// The two replacement plugins are the stated fragile pair; the procedure must
+// actually name them, or it is a checklist that misses the whole point.
+const step3 = (prov?.upgradeDay ?? []).join(" ")
+check(
+  /listing-descriptions/.test(step3) && /year-archives/.test(step3),
+  "the upgrade procedure names both replacement plugins as the first thing to check",
+)
 
 if (problems.length) {
   console.error(`\n✗ ${problems.length} problem(s): the build is not as intended.`)

@@ -37,13 +37,7 @@ import path from "node:path"
  * only hardcoded part is the path below the base, which is this site's.
  */
 
-const RETIRED = [
-  "newsletters",
-  "newsletters/2023",
-  "newsletters/2024",
-  "newsletters/2025",
-  "newsletters/2026",
-]
+const RETIRED = ["newsletters"]
 
 const TEMPLATE = ({ url, canonical }) => `<!doctype html>
 <html lang="en">

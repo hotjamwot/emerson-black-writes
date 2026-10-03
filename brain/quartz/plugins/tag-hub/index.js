@@ -27,6 +27,12 @@ import { h } from "preact"
  * thing on the Desk telling you what the cards above it were, which is what a
  * section is for.
  *
+ * NO COUNT CHIP. 12.1(d). `.eb-hub__n` printed the tag's FULL count (15, 9, 7…)
+ * directly above a list capped at five, so the card announced a number its own
+ * list contradicted. `.eb-hub__more` ("6 more on process") already carries the
+ * honest remainder one line below, so the chip is deleted rather than corrected:
+ * two numbers on one card is the bug, not the wrong one.
+ *
  * LINK PREFIX: this component is placed on the Desk index ONLY, and emits
  * "./" + slug. Quartz's own PageList resolves links properly with
  * resolveRelative(); a plain-JS local plugin cannot import from quartz/util
@@ -104,7 +110,6 @@ function TagHubComponent({ allFiles, cfg, fileData }) {
           "h3",
           { class: "eb-hub__tag" },
           h("a", { class: "internal", href: `./tags/${tag}` }, tag.replace(/-/g, " ")),
-          h("span", { class: "eb-hub__n" }, String(group.length)),
         ),
         h(
           "ul",

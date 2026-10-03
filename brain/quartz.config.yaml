@@ -203,8 +203,11 @@ plugins:
     enabled: true
   - source: "@quartz-community/cname"
     enabled: true
+  # F2 — no `.canvas` files exist in the vault, so this emitter produces nothing.
+  # Disabled rather than left on: an enabled page emitter with no input is cruft
+  # that survives every upgrade and has to be re-investigated each time.
   - source: "@quartz-community/canvas-page"
-    enabled: true
+    enabled: false
   - source: "@quartz-community/content-page"
     enabled: true
   # 11.9.10 — OFF, deliberately.
@@ -245,6 +248,13 @@ plugins:
   - source: "@quartz-community/tag-page"
     enabled: false
   - source: "./quartz/plugins/listing-descriptions"
+    enabled: true
+  # 12.1(c) — the year folders, back as reading rooms. Replaces the four year
+  # redirect stubs (the sidebar builds its tree from the file tree, so it kept
+  # advertising folders whose pages bounced). Same pageType pattern as
+  # listing-descriptions: generate() claims newsletters/<year> as virtual pages,
+  # one per year derived from the posts' own dates.
+  - source: "./quartz/plugins/year-archives"
     enabled: true
   - source: "@quartz-community/explorer"
     enabled: true
@@ -497,8 +507,10 @@ plugins:
       position: left
       priority: 25
       display: mobile-only
+  # F3 — no `.base` files exist, so this emits no `/bases` route. Same reasoning
+  # as canvas-page (F2) directly above.
   - source: "@quartz-community/bases-page"
-    enabled: true
+    enabled: false
     options: {}
     order: 50
   - source: "@quartz-community/note-properties"
@@ -518,8 +530,10 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
+  # F4 — no `.excalidraw` drawings exist, so this transforms nothing. Same
+  # reasoning as canvas-page (F2).
   - source: "@quartz-community/obsidian-plugin-excalidraw"
-    enabled: true
+    enabled: false
     options:
       enableInteraction: true
       darkMode: auto
@@ -540,6 +554,11 @@ layout:
     content:
       exclude:
         - backlinks
+      positions:
+        right: []
+    year:
+      exclude:
+        - reader-mode
       positions:
         right: []
     folder:
