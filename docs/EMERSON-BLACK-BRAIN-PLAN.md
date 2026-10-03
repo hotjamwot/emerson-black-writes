@@ -1,11 +1,21 @@
-# Emerson Black — Site Plan & Log
+# Emerson Black — Site Plan
 
-**Status:** Live · `emersonblackwrites.com/` (storefront) + `/desk/` (Emerson's Desk) · Quartz v5 · **Updated:** 2026-10-02
-**Owner:** HayJay + AI assistant · **Full narrative history:** git log (this file was condensed from 1000 lines on 2026-10-01; the pre-condensation text is at commit `75beccf`)
+**Status:** Live · `emersonblackwrites.com/` (storefront) + `/desk/` (Emerson's Desk) · Quartz v5
+**Updated:** 2026-10-03 · **Owner:** HayJay + AI assistant
 
-**Goal:** Write in Obsidian → run `Publish Brain.command` → the archive is live at **`emersonblackwrites.com/desk/`**, built by GitHub Actions.
+**Goal:** Write in Obsidian → run `Publish Brain.command` → the archive is live at
+**`emersonblackwrites.com/desk/`**, built by GitHub Actions.
 
-**Direction (settled 2026-10-01):** *a writer's site that happens to sell books.* Lead with the person; the books link to Amazon anyway. The real target is readership → **rights consideration for a screen adaptation, and signing with an agent.** That reframes priorities: an industry reader wants evidence of range and craft, which is what the Desk holds and the storefront was hiding.
+**Direction (settled 2026-10-01):** *a writer's site that happens to sell books.* Lead
+with the person; the books link to Amazon anyway. The real target is readership →
+**rights consideration for a screen adaptation, and signing with an agent.** An
+industry reader wants evidence of range and craft, which is what the Desk holds and
+the storefront was hiding.
+
+> **How to read this file.** §1–7 and §13 are operational — paths, rules, commands.
+> §8–9 are the incident and lesson log; the lessons are distilled, the narratives are
+> in git. §11 is what has shipped, as one line each. **§12 is the only section with
+> work in it.** Anything not in §12 is either settled or in the git log.
 
 ---
 
@@ -26,7 +36,8 @@
 2. The repo lives outside iCloud and holds all code.
 3. One repo, one domain, subpath routing. The deploy copies storefront files + `brain/public/` into `_site/`.
 4. **Drafts** live in `Newsletters/_drafts/`; rsync `--exclude='_*'` plus `explicit-publish: true` keeps them out.
-5. **GitHub Pages Source must be "GitHub Actions"** — otherwise GitHub's own Jekyll build overwrites the artifact and the Desk silently reverts (Incident I1).
+5. GitHub Pages Source must be **"GitHub Actions"** — otherwise GitHub's own Jekyll build
+   overwrites the artifact and the Desk silently reverts (Incident I1).
 
 ## 2. Locations
 
@@ -39,7 +50,7 @@
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,000 lines, unlayered overrides) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
 | Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs` |
-| Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` in this repo |
+| Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` |
 
 ## 3. Frontmatter spec
 
@@ -65,20 +76,33 @@ source: substack:176627320
 
 ## 4. Images
 
-Vault notes reference `![](../../../../../organise/Images/newsletters/<year>/<file>.webp)`. The publish script rsyncs them into `brain/content/organise/images/newsletters/` (lowercase `images` for Quartz slug casing), rewrites paths to root-relative `/organise/images/…`, and **halts if any referenced file is missing**. Verified: 184/184 resolve.
+Vault notes reference `![](../../../../../organise/Images/newsletters/<year>/<file>.webp)`.
+The publish script rsyncs them into `brain/content/organise/images/newsletters/`
+(lowercase `images` for Quartz slug casing), rewrites paths to root-relative
+`/organise/images/…`, and **halts if any referenced file is missing**.
 
 ## 5. Daily workflow
 
 1. Write/edit in Obsidian; add `[[wikilinks]]`, tags, `publish: true`.
-2. Double-click **`Publish Brain.command`** — mirrors notes + images, rewrites image paths, runs the missing-image guard, syncs `created:`/`modified:`, commits and pushes.
+2. Double-click **`Publish Brain.command`** — mirrors notes + images, rewrites image
+   paths, runs the missing-image guard, syncs `created:`/`modified:`, commits and pushes.
 3. Actions builds and deploys in ~1 minute.
+
 ## 6. Design system (locked)
 
-- **Brand:** Gabarito (chrome) / Lora (body) / IBM Plex Mono (dates, code). Same three on both halves. Two Google Fonts links are unavoidable — Quartz core and the fonts plugin each emit one — but both are brand-identical.
-- **Accent:** crimson `#CA2626` light / `#E63A3A` dark, owned by the `emerson` theme's `brandOverlay()` and asserted by `verify-brand.mjs`.
+- **Brand:** Gabarito (chrome) / Lora (body) / IBM Plex Mono (dates, code). Same three on
+  both halves. Two Google Fonts links are unavoidable — Quartz core and the fonts plugin
+  each emit one — but both are brand-identical.
+- **Accent:** crimson `#CA2626` light / `#E63A3A` dark, owned by the `emerson` theme's
+  `brandOverlay()` and asserted by `verify-brand.mjs`.
 - **Default mode:** dark for first-time visitors; a returning reader's own choice always wins.
-- **Measure:** ~74 characters, deliberately held rather than widened when the right sidebar collapsed.
-- **Cascade rule (learned the hard way, twice):** theme overlays live in `@layer obsidian-theme`, which sits **after** `quartz-base` — so `quartz-base` wins at equal specificity. **Anything that must beat upstream belongs unlayered in `custom.scss`.**
+- **Measure:** ~74 characters, deliberately held rather than widened.
+- **Layout:** `#quartz-body` grid is `320px auto` — the left sidebar keeps Quartz's own
+  `$sidePanelWidth`; the empty right sidebar is collapsed rather than reclaimed.
+- **Cascade rule:** theme overlays live in `@layer obsidian-theme`, which sits **after**
+  `quartz-base` — so `quartz-base` wins at equal specificity. **Anything that must beat
+  upstream belongs unlayered in `custom.scss`.** `custom.scss` is also appended last, so
+  the *last* matching occurrence is the effective one.
 
 ## 7. Verification
 
@@ -88,709 +112,228 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 npx quartz build
 node quartz/verify-default-mode.mjs     # browser checks need a static server on :8099
 node quartz/theme/verify-brand.mjs
-# Storefront (run from the repo root) — measured AS RENDERED, needs Chrome
-node brain/scripts/verify-storefront.mjs      # ...or `_site`, which is what CI runs
+node brain/scripts/verify-storefront.mjs  # from repo root; rendered, needs Chrome
 ```
 
-**Suite currently 91/91 for the Desk + 33/33 for the storefront.** The Desk scripts assert against the **built stylesheet** and the storefront script against the **rendered page** — never the source, because reading the input file is not verification — see §9.
+| Suite | Count |
+|---|---|
+| Desk — `verify-default-mode.mjs` | **142 checks, 0 failures** |
+| Brand — `verify-brand.mjs` | passing |
+| Storefront — `verify-storefront.mjs` | **34 checks, passing** |
+
+The Desk scripts assert against the **built stylesheet / built HTML**; the storefront
+script against the **rendered page**. Never the source — reading the input file is not
+verification (§9).
 
 ## 8. Incidents
 
 | # | Symptom | Cause | Status |
 |---|---|---|---|
 | I1 | Desk silently reverted to a Jekyll page | Pages Source left on "Deploy from a branch" | ✅ fixed + smoke-tested |
-| I2 | Sun/moon toggle invisible (~3% opacity) | Theme paints icons via `background` + `mask-image`; our blanket `background` rule overwrote it | ✅ fixed — set `--icon-color` only |
-| I3 | Body serif never reached paragraphs | `@quartz-community/quartz-fonts` appends its layer **last** and beat our pin | ✅ fixed — fonts pinned **unlayered** |
-| I4 | Active sidebar item red-on-red | Theme's `.active` won on specificity, painting a crimson wash under crimson text | ⏳ open (F12) |
-| I5 | Left sidebar still upstream's 320px | Never overridden | ⏳ open — one-line grid override |
+| I2 | Sun/moon toggle invisible (~3% opacity) | Theme paints icons via `background` + `mask-image`; a blanket `background` rule overwrote it | ✅ fixed — set `--icon-color` only |
+| I3 | Body serif never reached paragraphs | `@quartz-community/quartz-fonts` appends its layer **last** and beat the pin | ✅ fixed — fonts pinned **unlayered** |
+| I4 | Active sidebar item red-on-red | Theme's `.active` won on specificity, painting a crimson wash under crimson text | ⏳ **open** (F12) |
 
-**Lesson from I2:** for these components *the icon is the background*. Any blanket `background` rule on an icon button destroys it.
+**I2 lesson:** for these components *the icon is the background*. Any blanket
+`background` rule on an icon button destroys it.
+
+**I5 (left sidebar 320px) is closed** — 11.9.7g settled on Quartz's own
+`$sidePanelWidth`, which is the right answer rather than an override.
 
 ## 9. Findings & hard-won lessons
 
-F13 (the vacuous guard + wrong-layer pin) is why every guard below must read the built artifact and be proven red by deletion — see the two bullets it took to learn it:
+### 9.1 Standing rules
 
-1. **`--textHighlight` yellow.** Pinned in the theme overlay, which lost to `quartz-base` on layer order. Fixed unlayered in `custom.scss`. Lesson: pinning is not proof — only a check reading the built stylesheet proves it.
-2. **The guard that could not fail.** Grepped `public/index.html` for theme vars that live in the CSS bundle — trivially true. Replacement reads the real stylesheet and asserts the upstream token is still *present* (so it can fail) *and* the override ships.
+Each was bought with a failed deploy, a wrong fix, or a guard that lied. Full stories
+in git; the ones worth not rediscovering:
 
-**Other logged findings**
+- **A guard that cannot fail is worse than no guard.** Hit repeatedly: a check that
+  grepped `index.html` for theme vars that live in the CSS bundle; two unreachable
+  sitemap assertions; `--screenshot` captures that produced byte-identical PNGs (I11 —
+  *measure geometry, never eyeball screenshots*).
+- **A guard that the code is *present* is not a guard that the code *works*.** The
+  11.9.7e header probe was `article h1`; on content pages the title is not inside
+  `<article>`, so the probe matched nothing and the feature was inert with no error.
+- **Assert absences, not presences**, for anything removed. Two of three 11.9.7f bugs
+  passed guards asserting code was present; a guard that something is *gone* cannot pass
+  for the wrong reason.
+- **Assert a thing is on the *right* page, not merely that it is somewhere.**
+- **Pin the token *and* own the property.** A component rule in `@layer quartz-base`
+  reading a theme token cannot be fixed by pinning the token alone.
+- **Ownership of a virtual page comes from `generate()`, not `match`.** Tag pages are
+  virtual; `match` is never consulted.
+- **A config value that resolves to `undefined` and is then ignored produces a build
+  that looks fine and is wrong.** `condition: index` is not a condition — only
+  `not-index` / `has-tags` / `has-backlinks` / `has-toc` exist.
+- **A crashed suite is worse than a red one** — it hides every check that had not run yet.
+- **Presence in the DOM is not visibility.** See F16.
+- **After a visual change, measure the rendered thing.** Verifying the input is not verification (I10).
+- **A check a comment can break is not a check.** Strip comments before pattern-matching (I9).
+- **After fixing one unpinned token, enumerate the rest.**
+- **An unpushed fix is an unfixed fix.** `deploy.yml` runs on push to `main`.
+- **Commit messages: never write them to `/tmp`** — a concurrent write overwrote one mid-flight.
+
+### 9.2 Findings
 
 | # | Finding | Status |
 |---|---|---|
-| F1–F4 | CSS/plugin cruft (15 orphaned `eb-*` classes, 3 inert plugins) | ⏳ open — marked done in the log, never actually pruned |
+| F1–F4 | CSS/plugin cruft (15 orphaned `eb-*` classes, 3 inert plugins) | ⏳ open |
 | F12 | Active explorer item red-on-red — a **specificity loss**, not a colour choice | ⏳ open |
-| F13 | The vacuous guard + wrong-layer pin (above) | ✅ fixed |
-| F14 | **Two "known-failing" bio guards were unfixable, not flaky.** Both assumed `bio.html` still held about copy; S11 §11.3c turned it into a redirect stub, so one demanded a nav link from a page with no nav, and the other read `<div class="bio-text">` — gone — leaving `bioProse` always `""`, so its own `length > 40` half could never pass | ✅ fixed 2026-10-02 — suite **69 checks, 0 failures** |
-| — | `writing-abroad` slug vs title mismatch → misleading link text | ✅ fixed by HayJay |
-| — | 3 images named for a post that no longer existed | ✅ renamed to `sourcing-intrigue-for-stories` |
-| — | `backlinks` excluded from the content layout — kept the column clean but removed the only way a reader discovers related posts | ⏳ open — re-enable |
-
-**F14's real lesson — a red guard is not automatically a bug.** These two were filed
-as "known, pre-existing, ignore them" for long enough that they became scenery. A
-guard that has never passed is not a flaky guard; it is a **spec that no longer
-matches reality**, and it was silently suppressing the real signal. When a check is
-written off, ask whether it is describing the site or describing an old site.
-
-**The two new pill guards failed this test too.** The first regex matched the
-`:hover` rule; the second matched `transition: background-color`. Both passed with
-the fix *deleted*. Only deleting the fix and re-running exposed it.
-
-| F15 | **Two symptoms in one report were not one bug.** "Cards look different widths" and "cards too wide on mobile" arrived together, shared a CSS-level theory (`minmax(460px, 1fr)` has a hard floor), got one fix — and only the overflow half was real. The width half survived, and no guard covered card widths, so nothing noticed | ⏳ open — see RECORDED (b) |
-| F16 | **"No dates" was "dates at 1.81:1".** `.eb-hub__date` renders in `--lightgray`, a *hairline* token, on the tinted card surface — 34 dates in the DOM, drawn, and effectively invisible in light mode. Feature present, contrast absent | ⏳ open — see RECORDED (a) |
-
-**F15's lesson — one theory, two symptoms is a hypothesis, not a diagnosis.** The
-fix was verified against the symptom I could explain from the CSS and not against
-the one I could not, and the plan recorded it as a single solved bug. A theory that
-elegantly unifies two reports should be the *most* suspicious kind, not the least.
-The tell is that the unifying explanation was written in the same sentence as the
-fix, which is where confidence goes to hide.
-
-**F16's lesson — presence in the DOM is not visibility.** Every check said the dates
-existed, and all of them were true. What none of them asked was whether the colour
-had enough contrast against the surface it was painted on. "The feature is missing"
-and "the feature is invisible" produce the same report and completely different
-fixes.
-
-**Standing rules** (each bought with a failed deploy — full stories in git log)
-- *A guard that cannot fail is worse than no guard.* Hit four times: the yellow check, two unreachable sitemap assertions, and a `--screenshot` capture that produced byte-identical PNGs (I11).
-- *Reproduce a deploy from a fresh clone before pushing.* Working copies carry state that hides ordering bugs — I6 (case-variant sitemap dupes, invisible on macOS), I7 (date export ordered after artifact copy), I8 (`render-desk-picks` reading a file that only existed from a prior build).
-- *After a visual change, measure the rendered thing* — image dimensions from the file, the DOM from the built artifact, one real look. Verifying the input is not verification (I10).
-- *A check a comment can break is not a check.* Strip comments before pattern-matching (I9).
-- *After fixing one unpinned token, enumerate the rest. Log the dismissed options too. A tidy layout can hide the feature that makes the links worth having.*
-- *Pin the token **and** own the property.* A component rule in `@layer quartz-base` that reads a theme token cannot be fixed by pinning the token alone — the pill was yellow after a correct pin, for a full day, mostly because the fix was never pushed. Fix at the layer that provably wins, then prove it in the built bundle (depth 0, no enclosing `@layer`).
-- *Commit messages: never write them to `/tmp`.* A concurrent write overwrote one mid-flight and a commit landed with a message describing entirely different work. Write the message with the editor tool, under a filename unique to that commit.
-- *An unpushed fix is an unfixed fix.* `deploy.yml` runs on push to `main`; a green local build proves nothing about what a reader sees.
-
-## 10. Where the Desk stands (measured 2026-10-01)
-
-- **49 published posts**, all 8 tags, **7 posts carrying wikilinks** (~7 edges; HayJay is adding more by hand).
-- **8 tags:** `process` 14 · `mindset` 13 · `news` 9 · `systems` 7 · `reading` 7 · `craft-character` 6 · `craft-plot` 5 · `bookcraft` 4. All 49 carry at least one — **no untagged orphans.** (This taxonomy is about to become *public homepage navigation*, so re-confirm the vocabulary before that.)
-- **The graph is not yet a map.** 8 tag nodes and ~7 edges reads as broken, not connected. It improves as wikilinks are added — which is why "always-visible graph links" and "tag hover reliability" are blocked on the wikilink pass, not on styling.
-- **`contentIndex.json` exports no date field** — worked around via `postDates.json` (11.3a).
----
-
-## 11. 🔵 S11 — the storefront as a writer's site
-
-The storefront is two static files, **zero `<script>` tags**, 9.6KB + 20KB. Sections: hero → books → series hook → free novella (Substack iframe) → characters → author → footer.
-
-### ✅ 11.1 Make the site findable — DONE 2026-10-01
-
-Added `meta description`, `og:`/`twitter:` tags, canonical URLs, `robots.txt`, and a **generated `sitemap.xml`** (`brain/scripts/generate-sitemap.mjs`, built from the actual `_site` tree so it cannot disagree with what shipped — 61 URLs, clean URLs without `.html`, thin folder pages and `/brain/` excluded, count guard aborts below 40 posts). Search description = concrete pitch; `og:description` = emotional hook. No separate Books page — single flowing homepage. Full story in git log (incl. I6 case-variant trap: dedupe, don't abort).
-
-### 11.2 Analytics — off (Search Console instead)
-
-No analytics anywhere (the `plausible` config key emits nothing — no plugin, no domain). Decision 2026-10-02: Plausible ~$9/mo unjustified at this traffic; Search Console (live, sitemap submitted) answers the useful question free. Revisit when traffic justifies it.
-
-### ✅ 11.3a Date export — DONE 2026-10-01
-
-`contentIndex.json` carries no date (upstream deletes it deliberately), so `brain/scripts/export-post-dates.mjs` writes a separate `static/postDates.json` (`{slug, date, title, description}`, newest first). It reads **frontmatter**, not `<time datetime>` (Quartz parses dates as UTC midnight, rendering a day early). Guards reject empty/short/unsorted/malformed exports — all proven red. Full story in git log (incl. I7 ordering bug: export must run before the artifact copy).
-
-### ✅ 11.3b "From the Desk" section — DONE 2026-10-01
-
-Placed after the series hook: 3 hand-chosen craft posts (**Overplotting**, **Plan My Novel Writing Process**, **Sourcing Intrigue** — chosen for range, not random) + 3 auto-generated Latest from `postDates.json`. Rendered server-side at deploy into the `_site` copy (never the source, so no snapshot rots), zero JS. Guards: exactly 6 picks, 3 generated, all real dated URLs, no placeholders. Full story in git log (incl. I8: must run after the date export).
-
-### ✅ 11.3c Storefront rehaul — DONE 2026-10-01
-
-Full restyle: series pitch replaces the dated launch-banner hero (a launch now belongs in the books grid as a badge, never the `h1`), Book 0 free leads, sticky header (Books/Desk/About/Subscribe), `#about` section replaces the `bio.html` stub (kept as a `noindex` redirect — a live URL may be bookmarked). Still zero JS. Along the way: killed iOS-janky `background-attachment: fixed`, the 14px root shrink, missing `:focus-visible`/`prefers-reduced-motion`, the all-headings uppercase rule, `100vh` hero overflow, two typos. Guards: redirect stays working, every nav anchor hits a real section id, sitemap excludes the stub. Full story in git log (incl. I9/I10).
-
-### ✅ 11.4 A real link to the Desk in the header — DONE 2026-10-01
-
-Shipped inside the rehaul above: sticky header with Desk link (was footer-only). Guard asserts every nav target exists as a section `id`.
-
-### 🟠 11.9 Post-rehaul defect list — 1–3 + 6 + 7 + 8 DONE 2026-10-02 · 4–5 OPEN
-
-**Fixed 2026-10-02** (one commit, measured, HayJay eyeballed): 11.9.1 hero full-bleed, 11.9.2 section rhythm, 11.9.3 prequel cover 5:8. Fixes + guard story in git log.
-
-**The guard that made it stick** — `brain/scripts/verify-storefront.mjs`, built *before* the fixes and run against the broken page first (19/33 failed — the only thing that makes it worth having).
-
-Static tier (comments stripped per I9) + rendered geometry via headless Chrome at 1400/1100/390px. Deploy guard against `_site`; browser tier aborts on measured regression, skips loudly if Chrome is absent. (I11: `--screenshot` captures were byte-identical PNGs — measure geometry, never eyeball screenshots.)
-
-#### ✅ 11.9.1–11.9.3 FIXED — detail in git log
-
-#### ✅ 11.9.7d Mobile header — nav only — FIXED & SHIPPED 2026-10-02
-
-HayJay's read on the phone: the sticky header is good but too busy. Gone
-below 800px: the **search button**, the **dark/light toggle**, and **Reader
-mode** — which is the "little book icon" (`.readermode`), *not* part of the
-wordmark. What remains is the four links: Books · Desk · About · Subscribe.
-
-The **wordmark was already `display: none` below 800px** since §4a-bis, so the
-mobile bar was nav + those three controls. Worth stating plainly, because it
-corrects an assumption: the **post title, dates and tags were never sticky**.
-`.page-header` sits *inside* `.center`, and the title/dates/tags follow it in
-the DOM, so they have always scrolled away. Only the header bar sticks.
-
-`display: none`, not `visibility` or a size clamp — these are buttons, and a
-hidden-but-present control is still in the tab order.
-
-**Subscribe was reconsidered and KEPT.** Once the controls go the bar is short,
-so it costs nothing visually, and it is the only conversion path in the header.
-
-Desktop untouched (same `max-width: 800px` query as §4a-bis). To get the theme
-toggle back on phones, delete `.darkmode` from that one selector.
-
-Two guards, both proven red — and the second is the one worth keeping. It
-asserts the hide rule sits **inside** the mobile query, verified by moving the
-rule out: the "drops controls" check still passed while "only below 800px" went
-red. That is exactly the desktop regression a hide-only guard waves through.
-
-*Guard-authoring note:* the first two versions failed on **correct** CSS by
-slicing 24 then 23 characters against `@media (max-width:800px){`, which is 25.
-Anchored against a generous slice now — no magic numbers. A green/red cycle is
-not proof the CSS is right; sometimes the guard is simply wrong.
-
-#### ✅ 11.9.5(a) The Desk hub — one card per topic — FIXED & SHIPPED 2026-10-02
-
-**Decided:** keep `/desk/` and give it a front door. One card per topic, the 5
-most recent posts in each, with the description under every title. `news`
-excluded by name — award announcements date badly and pull a craft archive
-toward being a newswire.
-
-Shipped: **7 cards, 34 posts, 34 descriptions**, `news` absent, all 34 links
-resolve to real newsletter posts (28 unique — 6 appear twice by multi-tag,
-which is the nature of a tag hub). Descriptions clamp to two lines so card
-heights in a row stay even.
-
-**The root cause of "titles only" was not styling.** `description` exists on
-all 50 published posts and was never rendered: `@quartz-community/folder-page`
-and `tag-page` each **compile their own copy of PageList** into `dist/`, that
-copy has a `div.desc` wrapper holding only the `<h3>`, and neither exposes an
-option to swap the list component. The local `quartz/components/PageList.tsx`
-you find by grepping is a **dead copy** — nothing imports it.
-
-Also worth recording: `/newsletters/` never listed posts at all. It lists
-**year folders** (2023, 2024, 2025). Real post lists live on the year and tag
-pages.
-
-**The bug this shipped with** — kept here because it is the most dangerous class
-of mistake in the plan so far. The config said `condition: index`. **`index` is
-not a condition** — only `not-index` / `has-tags` / `has-backlinks` / `has-toc`
-exist — and an unrecognised condition name resolves to `undefined` and is
-**silently ignored**. The hub rendered on *every page of every page type*: 7
-cards on the post page, 7 on `/newsletters/`, no error anywhere. The guard
-caught it.
-
-Fixed three ways, deliberately redundant — new `is-index` builtin (the existing
-`not-index` had been left without its positive form), a component self-guard on
-`fileData.slug !== "index"`, and a guard asserting the hub is on the index **and
-on no other page**. Proven-red by peeling the layers one at a time: removing
-only the self-guard still passed, reverting only the condition still passed.
-Both had to go before the guard went red.
-
-*Lesson (same shape as 11.9.7e):* a config value that resolves to `undefined`
-and is then ignored produces a build that **looks** fine and is wrong. The
-type-shaped mistakes — unknown condition names, dead local copies of vendored
-files — are the ones nothing complains about. Assert on the built artifact, and
-check a thing is on the *right* page, not merely that it is somewhere.
-
-#### ✅ 11.9.7f Three real bugs in 11.9.7e — FIXED & SHIPPED 2026-10-02
-
-The reader checked on a real phone and a real desktop, and 11.9.7e did not work
-on either. All three failures share one shape: **a guard passed on a build that
-was wrong.**
-
-**1. The header never collapsed — on any viewport.** The probe was
-`querySelector("article h1")`. On content pages the title is **not inside
-`<article>`** — Quartz renders `beforeBody` components into a
-`<div class="popover-hint">` *before* the article element:
-
-```
-</header><div class="popover-hint"><h1 class="article-title">…</h1>
-```
-
-The probe found nothing, took the early return, and `.eb-header--compact` was
-never added. The feature was simply **inert, with no error anywhere to say so**.
-Now `h1.article-title`.
-
-*This is the guard lesson worth keeping:* the earlier guard asserted the probe
-**string** shipped in the bundle. It did — faithfully — while the selector
-matched nothing on every real page. **A guard that the code is present is not a
-guard that the code works.**
-
-**2. The title leaked into the desktop header.** Its `display: none` sat inside
-the `max-width:800px` query. The plugin emits the element on *every* page
-regardless of viewport, so above 800px nothing declared a display for it and it
-rendered as an inline text node — nav wrapping to two lines, search squashed.
-Hidden is now the **default, unconditional** state, with the mobile compact
-rules opting it back in. Default-off/opt-in is the safe direction to be wrong in:
-a missing rule shows one extra word; the reverse would have shown it on phones.
-
-Guarded by **brace depth**, not by scanning backwards for `@media`. A textual
-scan cannot tell an open media block from a closed one — it reported this rule
-as *inside* the query when it was at the top level, i.e. it would have passed
-the exact bug it was written to catch.
-
-**3. No viewport gate.** The collapse styles only exist below 800px, but the
-script set the class at *any* width, so on desktop scrolling past the title
-would have hidden the nav. Now gated on `matchMedia("(max-width: 800px)")` with
-a `change` listener so rotating a tablet re-evaluates.
-
-**Also: the book icon is out at every width.** Reader mode is disabled as a
-**plugin**, not hidden with CSS — a `display:none` control is still in the tab
-order and still keyboard-reachable, which is worse than absent. The guard
-asserts absence from the built **markup** for that reason.
-
-**Suite: 86 checks, 0 failures.** Four new guards proven red: the
-unconditional-hide (by moving the rule back inside the query), both probe
-guards (by reverting to `article h1`), and reader mode (by re-enabling).
-
-*Note on the first attempt at the probe test:* a blind `sed` replaced the first
-match, which was in a **comment**, leaving the code untouched — so the guard
-passed and the test proved **nothing**. Caught by inspecting the built bundle
-rather than trusting the exit code. Proof of failure requires proof the mutation
-reached the artifact.
-
-#### ✅ 11.9.7g No sticky header — desktop and mobile — SHIPPED 2026-10-02
-
-After two failed attempts at a scroll-driven header (11.9.7e, 11.9.7f), the
-reader's call: **no sticky header on either.** The right call, and the cheap
-one — two attempts is enough evidence the feature wasn't earning its complexity.
-
-**Removed:** `position: sticky` / `top` / `z-index` / `backdrop-filter` from
-`.page-header`; the entire `sticky-title` plugin (render, scroll handler, rAF
-throttle, matchMedia gate, SPA teardown, config entry, directory); the
-collapsed-header CSS; six guards asserting the machinery was **present**.
-
-**Kept:** wordmark, nav, hairline border, solid background — the header still
-reads as a distinct band, it just scrolls away. The translucency and blur went
-*with* the stickiness: they only mattered because content scrolled under the
-bar, and in normal flow would just show the page background through.
-
-**The non-obvious part — why this wasn't a four-line delete.** The base theme
-ships:
-
-```
-.page>#quartz-body .sidebar { padding: 6rem 2rem 2rem; position: sticky; top: 0 }
-```
-
-That `6rem` existed **to clear the sticky header**. Remove the header and it
-becomes a 6rem hole above the explorer — in a sidebar that is `height: 100vh`,
-so 6rem of the reading column wasted on nothing. Reduced to `1rem`, scoped
-`min-width: 1200px` (the base sheet sets a different padding at mobile widths).
-**Guarded**, because a silently inherited layout value nobody remembers is
-exactly how a header gap reappears three releases later.
-
-The **left sidebar keeps its own stickiness** — the explorer staying put while
-you read is useful. Only the header stopped sticking.
-
-**Suite: 85 checks, 0 failures.** All proven red: re-sticking the header fails
-two guards, restoring the `6rem` fails the padding guard.
-
-*Lesson, now written into the shape of the tests:* the new guards assert
-**absences**. That inversion is deliberate — two of the three 11.9.7f bugs
-passed guards that asserted code was **present**. A guard that something is
-gone cannot pass for the wrong reason.
-
-#### ✅ 11.9.5(c) Standfirst on posts — SHIPPED 2026-10-02
-
-**Why the reader thought the feature had never worked.** 11.9.5(a) and (b) were
-both shipped and both correct, and neither put the description on an actual
-**post**. It appeared on `/desk/`, on `/tags/<x>/`, and in
-`<meta name="description">` — and never in a post body, which is where the reader
-was looking. Shipped twice, read as never shipped.
-
-**Fixed.** `./quartz/plugins/post-deck`, layout slot **15**:
-
-> title (10) → **deck (15)** → dates (25) → topics (30)
-
-49/49 posts show it. Renders nothing where there is no description (404, tag
-pages, year listings) — an empty paragraph under a title is worse than nothing.
-The Desk index *does* show one: `content/index.md` has a description of its own.
-
-#### ✅ 11.9.6(b) Hover popovers OFF
-
-`enablePopovers: false`. Verified rather than assumed: `.popover{` appears **3**
-times in the built stylesheet with them on, **0** with them off.
-
-#### ✅ 11.9.9 Hub cards: two-up and neutral
-
-| Problem | Cause | Fix |
-|---|---|---|
-| Red on red | `color-mix(var(--light), var(--secondary))` — but `--secondary` is **`#CA2626`**, the Emerson accent, not a muted grey. 40% of every card was brand red. | Neutral tokens only |
-| 3 cards per row | `minmax(320px, 1fr)` fitted three | Floor → `460px`: two per row on desktop, one on a phone, no media query |
-
-#### ✅ 11.9.5(b) Descriptions on the tag pages — SHIPPED 2026-10-02
-
-**Root cause.** Every post has a `description:` (51/51) and Quartz renders it into
-`<meta name="description">` — so the text is in every built page and **nowhere on
-the page itself**. A tag page listed fifteen posts as fifteen bare titles.
-
-**Nothing to patch.** `tag-page` compiles its *own* PageList into `dist/`, which
-drops the field, and exposes no option to swap it. The local
-`quartz/components/PageList.tsx` has **no importers at all**.
-
-**Shipped** `./quartz/plugins/listing-descriptions` — a full replacement for
-`tag-page` (match + generate + body + tag-page's own stylesheet) adding
-`<p class="eb-listing-desc">` under every title. **126/126** entries across 9
-tag pages; all **426** internal links resolve. `tag-page` is disabled, not shadowed.
-
-**Two routes failed first, and both built clean while doing nothing:**
-
-| Route | Why it silently did nothing |
+| F13 | The vacuous guard + wrong-layer pin | ✅ fixed |
+| F14 | Two "known-failing" bio guards were unfixable, not flaky — S11 turned `bio.html` into a redirect stub, so both were specs describing an old site | ✅ fixed |
+| F15 | **Two symptoms in one report were not one bug.** "Cards look different widths" + "too wide on mobile" shared a theory, got one fix; only the overflow half was real | ⏳ open — §12.1(b) |
+| F16 | **"No dates" was "dates at 1.81:1".** Drawn in the DOM, invisible in light mode | ⏳ open — §12.1(a) |
+
+**F14's lesson — a red guard is not automatically a bug.** Two checks were filed as
+"known-failing, ignore" long enough to become scenery. A guard that has never passed is
+not flaky; it is a spec that no longer matches reality, and it was suppressing the real
+signal. Ask whether it describes the site or describes an old site.
+
+**F15's lesson — one theory unifying two reports is a hypothesis, not a diagnosis.** The
+unifying explanation was written in the same sentence as the fix, which is where
+confidence goes to hide. The fix was verified against the symptom that had a CSS-level
+theory, and not against the one that did not.
+
+**F16's lesson — "the feature is missing" and "the feature is invisible" produce the same
+report and completely different fixes.** Presence checks cannot see contrast.
+
+### 9.3 Dead code and traps worth remembering
+
+- `@quartz-community/folder-page` and `tag-page` each **compile their own copy of
+  `PageList` into `dist/`**, which drops `description`, and expose no option to swap the
+  list component. The local `quartz/components/PageList.tsx` you find by grepping is a
+  **dead copy** — nothing imports it.
+- `treeTransforms` runs over the **markdown** tree before layout renders, so it can never
+  see `.page-listing`.
+- A plain-JS local plugin cannot import from `quartz/util` (it is loaded as a runtime
+  module), so `tag-hub` / `year-foldouts` emit `"./" + slug` and guard on
+  `fileData.slug !== "index"` themselves.
+- `!slug.endsWith("/")` excludes **folder** slugs only. Root slug `"index"` does not end
+  in a slash, so it survives that filter — which is how the Desk listed itself as a post.
+- `minmax(460px, 1fr)` has a **hard 460px floor** and cannot narrow below it.
+- `quartz/static/` is the **assets** directory and publishes to `<output>/static/` — a
+  redirect written there lands at a path nothing links to, in a clean build.
+
+## 10. Where the Desk stands (measured 2026-10-03)
+
+- **49 published dispatches**, 2023→2026, all building; none lost in the 11.9.10 archive migration.
+- **`/desk/`** = title + standfirst + **7 topic cards** (34 posts) + **4 collapsible year
+  sections** (49 posts). No body copy.
+- **Retired:** `/Newsletters/` and its four year pages all **redirect to `/desk/`**
+  (`quartz/plugins/archive-redirects`) — all five were in the published sitemap, so they
+  bounce rather than 404. Known regression: §12.1(c).
+- **Tag taxonomy:** `set` 13 · `news` 9 · `systems` 7 · `reading` 7 · `craft-character` 6 ·
+  `craft-plot` 5 · `bookcraft` 4. All 49 carry at least one — **no untagged orphans.**
+- **The graph is not yet a map** — 8 tag nodes and ~7 edges reads as broken, not connected.
+  It improves as wikilinks are added, which is why always-visible graph links and tag
+  hover are blocked on the wikilink pass, not on styling.
+- `contentIndex.json` exports no date field — worked around via `postDates.json`.
+
+## 11. Shipped
+
+One line each; the reasoning is in git. **S11 = storefront as a writer's site (2026-10-01/02),
+11.9 = defect list, 11.9.10/11 = Desk (2026-10-02/03).**
+
+| Item | Decision kept |
 |---|---|
-| `treeTransforms` | Runs over `clone(componentData.tree)` — the **markdown** tree — *before* the layout renders. It can never see `.page-listing`. |
-| priority + `match` | Tag pages are **virtual**. The dispatcher emits each with the layout of the page type that **`generate()`**d it. `match` is never consulted. |
+| 11.1 Findability | Generated sitemap from the actual `_site` tree so it cannot disagree with what shipped; no separate Books page |
+| 11.2 Analytics | **Off.** Plausible ~$9/mo unjustified; Search Console answers the useful question free |
+| 11.3a Date export | `contentIndex.json` has no date, so `export-post-dates.mjs` reads **frontmatter**, not `<time datetime>` (Quartz parses as UTC midnight → renders a day early) |
+| 11.3b "From the Desk" | 3 hand-chosen craft posts + 3 generated, rendered at deploy into `_site`, never the source |
+| 11.3c Storefront rehaul | Series pitch replaces the dated hero; `#about` replaces the `bio.html` stub (kept as a `noindex` redirect) |
+| 11.4 Desk link in header | Moved footer-only → sticky header |
+| 11.9.1–3 | Hero full-bleed, section rhythm, prequel cover 5:8 — all measured, not eyeballed |
+| 11.9.4 Mobile | ⚠️ **Partly open** — see §12.2 |
+| 11.9.5(a) Desk hub | One card per topic, 5 most recent each; `news` excluded by name (award announcements date badly and pull a craft archive toward a newswire) |
+| 11.9.5(b) Tag page descriptions | `listing-descriptions` — a **full replacement** for `tag-page`; the community plugin drops `description` and cannot be patched |
+| 11.9.5(c) Standfirst on posts | Shipped *twice* and read as never shipped: it was on `/desk/` and `/tags/`, never in a post body. An empty paragraph under a title is worse than nothing |
+| 11.9.6(b) Hover popovers | Off; verified `.popover{` count 3 → 0 in the built stylesheet |
+| 11.9.7a Yellow tag pills | **Token pinned *and* property owned** — see §6/§9.1. Legacy desktop-only `.tag-link` block merged |
+| 11.9.7b Header declutter | `content-meta` + ToC **disabled**, not restyled — the date was printed twice |
+| 11.9.7c Mobile order | Article precedes the explorer. `order` cannot fix it: `grid-area`-placed items are placed by the template; redefining `grid-template` is the lever |
+| 11.9.7d Mobile header | Nav only below 800px — search, reader mode, theme toggle gone. `display: none`, not `visibility`: a hidden-but-present control is still in the tab order |
+| 11.9.7e/f Search + header collapse | Recorded causes were **wrong**; the fixes shipped only after real-device checking |
+| 11.9.7g No sticky header | Reader's call after two failed attempts. Kept: wordmark, nav, border. Removed: stickiness *and* the translucency that only mattered because content scrolled under it |
+| 11.9.9 Hub cards | Neutral surface (a "muted grey" `--secondary` is actually the crimson accent, so the cards came out red-on-red) |
+| 11.9.10 Retire `/Newsletters/` | Folded into the Desk as `<details>` by year. Recent-notes overflow link **off**: it counts files, not dispatches, and a missing list is worse than a wrong number |
+| 11.9.11 Desk cleanup | Body emptied; grid floor made adaptive; year rows gained standfirsts |
 
-> Ownership of a virtual page comes from `generate()`, not `match`.
+## 12. Open items
 
-**Three of my own guards were wrong first**, documented in place:
-- searched only `index-*.css`, but component CSS ships as separate `component-*.css`
-- stripped whitespace, corrupting the very class attribute it was matching
-- a config regex ran past the end of an entry and matched the *next* plugin's `enabled: true`
+### 12.1 🔴 The four Desk notes — recorded 2026-10-02, **not actioned**
 
-And a latent `ReferenceError` sat in a guard's **failure branch** — it crashed
-instead of reporting. Only proven-red surfaced it.
+**Nothing here is built.** Each was checked against the build, and three turned out to
+be different from how they were phrased.
 
-**Suite: 142 checks, 0 failures.** All eight new checks proven red.
+**(a) "Dates have not been added to /desk/ posts" → they are drawn and invisible.**
+34 on the topic cards, 49 in the year rows, all asserted by the suite. But
+`.eb-hub__date` is `color: var(--lightgray)` (`#a8b5c9`, a *hairline* token borrowed from
+the borders) at `0.7rem` on `.eb-hub__card`'s `color-mix(--light 88%, --eb-line)` =
+`#ecf0f5`. That is **1.81:1 against a 4.5:1 AA floor.** Dark mode reads 9.21:1 on the same
+token, which is why this reads as "no dates" rather than "unreadable dates". The year rows
+escape it by sitting on the page background rather than the card.
 
-#### 🔵 RECORDED 2026-10-02 — four notes on the Desk, **NOT ACTIONED**
+`.eb-hub__desc` is also below AA on that surface — **3.81:1** light, **4.39:1** dark.
+Both need a token that is not a decoration colour. **Two decisions when picked up:** which
+grey, and whether the date belongs under the title or in the margin beside it.
 
-HayJay's read of the Desk after 11.9.11. Filed as observations with the diagnosis
-attached, so they can be picked up in one pass later. **Nothing here is built.**
+**(b) "Card widths are still different" → undiagnosed, recorded as a symptom only.**
+The 11.9.11 `min(460px, 100%)` fix targeted the mobile overflow, not this; they shared
+one report but not one cause. The grid is `repeat(auto-fit, minmax(min(460px, 100%), 1fr))`
+and the card sets no `width`, so **tracks are equal by construction** — which means either
+the ragged bottom edge is being read as uneven width (`align-self: start` was added in
+11.9.11 and cards hold 5–15 items each), or the grid is not applying at the width being
+viewed. Those have opposite fixes, so **this needs one look at a real browser before
+anything changes. Do not re-fix `min()` on the strength of this note.**
 
----
+**(c) Sidebar year folders bounce to `/desk/` → a real regression from 11.9.10.**
+`/newsletters/<year>/index.html` is now a redirect stub, but the Explorer still builds its
+tree from the file tree, so it still shows 2023/2024/2025/2026 as clickable folders that
+lead to the Desk. The sidebar advertises four pages that do not exist.
 
-##### (a) "Dates have not been added to /desk/ posts"
-
-**They have — they are simply invisible in light mode.** This one is a real finding,
-not a preference.
-
-Measured in the built CSS:
-
-| Surface | Markup | Visible? |
-|---|---|---|
-| Topic-card posts | **34 × `.eb-hub__date`** | ⚠️ **1.81:1** on the card |
-| Year rows | **49 × `.eb-years__date`** | ✅ legible |
-
-`.eb-hub__date` is `color: var(--lightgray)` = `#a8b5c9` at `0.7rem`, sitting on
-`.eb-hub__card`'s `color-mix(--light 88%, --eb-line)` = `#ecf0f5`. That is **1.81:1
-against a 4.5:1 AA floor** — it is drawn, it is in the DOM, and it is very nearly
-invisible. `--lightgray` is a *hairline* token, borrowed from the borders, and a
-date is body text. In dark mode the same token reads 9.21:1 and is fine, which is
-why this reads as "no dates" rather than "unreadable dates".
-
-The year rows get away with it because they sit on the page background, not the
-card surface.
-
-Also below AA on the same surface: `.eb-hub__desc` at **3.81:1** light / **4.39:1**
-dark. `--gray` (`#6b7a91`) is a shade too light for the tint the cards use. Both
-need a token that is not a decoration colour. **Two decisions when this is picked
-up:** which grey, and whether the date belongs under the title on the card or in
-the margin beside it.
-
----
-
-##### (b) "Card widths are still different — highly piggledy"
-
-**Not yet diagnosed. Recorded as a symptom, not a cause.** The 11.9.11 `min(460px,
-100%)` fix targeted a *hard 460px floor* overflowing a phone; it was never aimed at
-this, and the two are different problems that shared one report.
-
-What is known: the grid is `repeat(auto-fit, minmax(min(460px, 100%), 1fr))` and
-`.eb-hub__card` sets no `width`, so **tracks are equal by construction** — which
-means "different widths" is either (i) a *ragged bottom edge* being read as
-uneven width, since `align-self: start` was added in 11.9.11 and cards have 5–15
-items each, or (ii) the grid not applying at all at the width being viewed.
-
-Those have opposite fixes — masonry/columns versus a container query — so **this
-needs one look at a real browser before anything is changed.** Do not re-fix
-`min()` on the strength of this note.
-
----
-
-##### (c) "Clicking dates in the sidebar opens /desk/ — bring the year pages back"
-
-**Confirmed, and it is a genuine regression from 11.9.10.** Confirmed in the build:
-`/newsletters/2023/index.html` exists but is now the redirect stub
-(`http-equiv="refresh" → /desk/`), and the Explorer in the left sidebar still builds
-its tree from the file tree, so it still shows `2023 / 2024 / 2025 / 2026` as
-clickable folders. Clicking one follows the stub and lands on the Desk.
-
-So the sidebar advertises four year pages that no longer exist, and HayJay is right
-that they should come back. Three ways, and they are not equivalent:
-
-| Option | Cost | Note |
-|---|---|---|
-| **Re-enable `folder-page` for year folders only** | smallest | Re-introduces the pages 11.9.10 removed; they must stay *out* of the sitemap and *not* be linked from the Desk |
-| **Custom emitter, year pages only** | medium | Same output, no general-purpose plugin; the pattern already exists in `archive-redirects` |
-| **Point the sidebar's year folders at `#everything-by-year`** | smallest | Hides the symptom. Four folder entries all jumping to one anchor is worse than the redirect |
-
-Recommendation: **option 2** — the year pages are genuinely useful as durable
-URLs (they are the shape `/newsletters/2023/` was always meant to be), and a
-scoped emitter keeps `folder-page` off. **Option 3 is a trap**: it makes the
-sidebar look fixed while `/newsletters/2023/` still 404s for anyone with the old
-link in their history.
-
----
-
-##### (d) "No total post numbers on the topic cards"
-
-Agreed. `.eb-hub__n` renders `15`, `9`, `7`… — the tag's **full** count — directly
-above a list of **five**. So each card says "15" while showing five rows, and the
-card below says "9". A reader is invited to add up numbers that do not describe
-what is on screen.
-
-Note it is not pure duplication: `eb-hub__more` ("6 more on process") already
-carries the only honest number on the card, so removing `.eb-hub__n` loses
-information the reader can get one line away — which is the right trade. **Cheapest
-of the four**, and independent of the other three.
-
----
-
-**Suite: 142 checks** (unchanged — nothing here is built).
-
-#### ✅ 11.9.11 The Desk: no body, adaptive grid, subtitles in the year rows
-
-**HayJay's five notes on the Desk — all five accepted. One of them turned out to be
-two separate bugs, and only one of the two was fixed.** (See the correction below.)
-
-| Note | What it actually was |
+| Option | Verdict |
 |---|---|
-| Remove the body copy, button, link back | Three copies of one idea; the button scrolled a few hundred pixels |
-| Remove "34 posts across 7 topics" | It summed the 5-per-card cap, so the page said 34 while the fold-out heading said 49 |
-| Cards are different widths | ⚠️ **NOT FIXED BY THIS — see (b) above.** The `min()` fix below addressed the overflow, not this |
-| Cards too wide on mobile | `minmax(460px, 1fr)` cannot narrow; a 460px track inside ~360px |
-| Subtitles in year rows; dates everywhere | Dates were already on both; subtitles reverse a deliberate 11.9.10 call |
+| Re-enable `folder-page` for year folders only | Re-introduces what 11.9.10 removed; they'd need to stay out of the sitemap and unlinked from the Desk |
+| **Scoped emitter, year pages only** | **Recommended** — same output, no general-purpose plugin; the pattern already exists in `archive-redirects` |
+| Point the sidebar's year folders at `#everything-by-year` | **Trap** — hides the symptom while `/newsletters/2023/` still bounces for anyone holding the old link |
 
-> ⚠️ **Correction, 2026-10-02.** This section originally concluded that "cards are
-> different widths" and "cards too wide on mobile" were *one* bug, both cured by
-> `min(460px, 100%)`. The overflow half is fixed and verified. **The width half is
-> not** — HayJay still sees uneven cards, and the suite has no check for card
-> widths, so nothing caught it. The over-confident claim is the lesson: two
-> symptoms arriving in the same message looked like one cause, and the fix was
-> verified only against the symptom I had a CSS-level theory for. Entry **(b)**
-> above supersedes this.
+**(d) Drop the topic cards' post counts.** `.eb-hub__n` renders the tag's **full** count
+(`15`, `9`, `7`…) directly above a list of **five**. `eb-hub__more` ("6 more on process")
+already carries the honest number one line below. Cheapest of the four and independent of
+the others.
 
-The width and the overflow were *thought* to be one bug. `minmax(460px, 1fr)` has a
-hard floor, so a phone laid out a 460px track inside ~360px and overflowed sideways.
-`minmax(min(460px, 100%), 1fr)` makes the floor adaptive — no media query, and
-correct at every width rather than at the two somebody wrote a query for.
+### 12.2 🔴 11.9.4 Mobile — partly open, **needs a real phone**
 
-> **The 460px guard was a near-miss and would have passed on the bug it exists to
-> catch.** It matched the substring `460px`, which the *broken*
-> `minmax(460px, 1fr)` also contains. It matches the whole expression now.
->
-> **And the empty-body guard exists because of how that went.** A string check for
-> "Browse the archive" caught a plain sentence added back to `index.md` — but only
-> by accident, because that sentence happened to quote those labels. With
-> different wording it would have sailed through. The guard that ships asserts the
-> rendered body *container* is empty, so it cannot care what anyone writes.
+Closed by 11.9.7c/d: mobile header is nav-only; the article precedes the explorer. Still
+open: (a) the storefront header has 4 items and only drops "Subscribe" below 700px, so at
+701–900px it is at its most crowded; (b) `.series-hook` collapses to one column and the
+two decorative silhouettes stack *above* the text, pushing the premise below two large
+images. I cannot verify rendered geometry without a device, and guessing from CSS is how
+this became a list of unfixed suspects.
 
-The Desk's frontmatter `created` **stays** and is load-bearing — `recent-notes`
-sorts by it and `hideFolderPages` does not catch slug `index`, so removing it lets
-the Desk fall back to a git-inferred date and compete with real posts for one of
-five slots. The date is kept; it is simply no longer rendered.
+### 12.3 🟢 Product — untouched, in ceiling order
 
-#### ✅ 11.9.10 Retire `/Newsletters/`, fold the archive into the Desk
+- **11.6 Bridge the craft writing to the books** — highest ceiling, zero cost. A line on
+  craft posts pointing at the books that used the technique turns the Desk into a funnel,
+  which is the actual goal.
+- **11.8 A unifying "How I Write" page** — craft posts next to the books they produced;
+  arguably the most agent-interesting page on the site. Flagged, not built.
+- **11.7 Series reading order** — visible 0→1→2→3 with one-line hooks and a "start here"
+  for the free novella.
+- **11.5 Tag constellation, not a graph** — settled: no force graph on the homepage. Static
+  chips sized by post count, linking to tag pages, no JS. The full graph returns once the
+  link graph is dense enough.
 
-**HayJay: `/Newsletters/` is "just the years with links", fold it into `/desk/`.**
-Confirmed by inspection — it was a page whose entire content was four year links,
-and each year a folder page listing that year's posts. Five URLs, one idea.
+### 12.4 🟠 Cosmetic — one `custom.scss` pass
 
-**Now on the Desk, below the topic cards** (`./quartz/plugins/year-foldouts`,
-slot 9 under slot 8): collapsible `<details>` by year, newest first, newest open.
-Titles and dates only — the cards above already carry standfirsts, and repeating
-all 49 says the same thing twice. Native `<details>`, no JS, no `aria-expanded`
-to keep working after the next Quartz upgrade.
+I4 active-item red-on-red · mobile sidebar above content (needs a single-column
+breakpoint + `order`) · F1–F4 cruft prune.
 
-`folder-page` disabled, `content/Newsletters/index.md` deleted, and **all five
-URLs redirect to `/desk/`** (`./quartz/plugins/archive-redirects`). They are all
-in the published sitemap and one is linked from the homepage, so deleting them
-would turn every search result and old bookmark into a dead end.
+### 12.5 TASTE — HayJay's call, not a defect
 
-> **Three things this surfaced, none of them the one I was looking for.**
->
-> 1. **The fold-outs listed the Desk as a post** — 50 rows against 49. The filter
->    meant to prevent it, `!slug.endsWith("/")`, only excludes *folder* slugs, and
->    `"index"` is not a folder. `tag-hub` carried the identical filter and was
->    wrong the same way; it never surfaced because the homepage has no tags and
->    dropped out of `byTag` instead.
-> 2. **"See 53 more" on the homepage, against 49 posts.** `recent-notes` computes
->    overflow as `allFiles.length - limit`, and `allFiles` holds nine virtual tag
->    pages *and the Desk itself* — so it was counting files, not dispatches.
-> 3. **A wrapper plugin to fix it was written and removed.** It did not resolve
->    through the component registry and silently removed the whole "Latest
->    dispatches" list. A wrong number is bad; a missing list is worse. `linkToMore`
->    is now `false` — no overflow line at all, and the honest total lives in the
->    fold-out heading.
->
-> Also: `quartz/static/` is the **assets** directory and publishes to
-> `<output>/static/`, so the first attempt at these redirects landed at
-> `/desk/static/newsletters/` — a clean build containing five redirects no reader
-> would ever reach. They are an emitter now, and the guard reads them from their
-> real path.
-
-#### 🔴 11.9.4 Mobile is a mess, on both the homepage and the Desk
-
-**Partly closed by 11.9.7c/11.9.7d below** (mobile header is now nav-only; the article precedes the explorer). Still open: (a) the storefront header nav
-has 4 items and only drops "Subscribe" below 700px, so at 701–900px it is at
-its most crowded; (b) `.series-hook` collapses to one column and the two
-decorative silhouettes stack *above* the text, pushing the premise below two
-large images. **Needs a real phone** — I cannot verify rendered geometry
-without one, and guessing at more from the CSS is exactly how 11.9.4 became a
-list of unfixed suspects in the first place.
-
-#### ✅ 11.9.5 Reconsider `/desk/` — DECIDED & DONE 2026-10-02
-
-**HayJay: keep `/desk/`.** Recommendation (a) confirmed — the homepage is the shop
-window, `/desk/` the stockroom, and the new card list is what makes it work.
-
-| Option | Outcome |
-|---|---|
-| **(a) Keep `/desk/`, fix how it presents** | ✅ **Taken.** Topic cards (11.9.5a) + standfirsts (11.9.5c) + by-year fold-outs (11.9.10) |
-| (b) Merge highlights into `/desk/` | ✗ Buries the craft proof behind an archive |
-| (c) Serve homepage content at `/desk/` | ✗ Breaks 49 live URLs |
-
-**`/Newsletters/` is gone (11.9.10).** It was a page whose entire content was a
-list of four year links, and each year was a folder page listing that year's
-posts — five URLs to say one thing. All of it is now collapsible by-year sections
-at the foot of the Desk. `folder-page` disabled, `content/Newsletters/index.md`
-deleted, and all five URLs redirect to `/desk/` rather than 404ing, because all
-five are in the published sitemap and one is linked from the homepage.
-
-The 49 posts are untouched and still live at `/newsletters/<year>/<slug>`.
-
-#### 🟠 11.9.6 Fold the homepage header into the Desk — DONE 2026-10-02
-
-New local `Wordmark` plugin (`quartz/plugins/wordmark`): the storefront's two-line stacked mark linking to `/`, replacing `page-title` (no options, linked back into `/desk/`). Carries 11.9.8 (wordmark → `/`, done in the same swap). Header sticky + 12px blur, per-mode 82% background; nav type/hover matches the storefront; order Books/Desk/About/Subscribe with About → `/#about`. Verified against the built bundle; `verify-brand` + `verify-storefront` green.
-
-#### 🟠 11.9.7 The Desk's visual problems (one `custom.scss` pass)
-
-| Symptom | Status |
-|---|---|
-| **Tag pills have ugly yellow behind them** | ✅ **fixed and shipped** — see below. Was the highest-confidence item, and the prescribed fix was wrong |
-| Left column too wide | ✅ **fixed** 11.9.7g — §4b widened the track to 420px while both panels were symmetric; with the right one reclaimed it kept 420px, giving the archive tree 356px of content. Now **320px**, the base theme's own `$sidePanelWidth`. |
-| Sidebar at the top on mobile, covering content | ⏳ open — desktop grid retained at small widths; needs a single-column breakpoint and `order` |
-| Search bar too narrow | ✅ **fixed** 11.9.7e — **the recorded cause was wrong.** No stylesheet in the project had *ever* given `.search-bar` a width; it is a bare `<input>` inside Quartz's `width: 65%` overlay, so at 1440px a ~936px container held a ~170px field. Now `width: 100%`. |
-| Post body images far too large | ✅ **fixed** 11.9.7f — `img { max-width: 100% }` is not a size, it means "as wide as the column", and the column is 780px. Capped at **40rem**, centred. |
-
-> **Three of these were symptoms with guessed causes, and three guesses were
-> wrong.** Search was blamed on the sidebar and had no connection to it. Post
-> images were blamed on a missing `max-width` when `max-width: 100%` was present
-> and meant the opposite of a cap. The left column was blamed on the base theme
-> when §4b itself had set it. The first attempt at the image fix,
-> `.page article .content img`, compiled, beat the base rule, and matched **0 of
-> the 186 images in the built posts** — there is no `.content` wrapper here. All
-> three corrections are recorded in the source next to the rules.
-
-> **The original prescription here was wrong, and it is worth keeping the correction.** It said: *"Fix the yellow tags in the theme's own aspect block… not by escalating CSS from outside (layer order means it would appear to work and silently not be true)."*
->
-> Pinning `--highlight` in the theme overlay was necessary but **not sufficient**. The rule that actually paints the pill is `a.internal.tag-link{background-color:var(--highlight)}`, which lives in `@layer quartz-base` and reads a *theme* token — so the pill was never really ours to pin. **Lesson: pinning a token is not the same as owning the property.** Where a component reads a borrowed token, declare the property itself, at a layer that provably wins.
-
-#### ✅ 11.9.7a Yellow tag pills — FIXED & SHIPPED 2026-10-02
-
-**Two causes, stacked.** The devtools reading was `#FFD00066` = upstream's
-`rgba(255, 208, 0, 0.4)`, declared by the theme's `base` aspect inside
-`@layer obsidian-theme`, which outranks the `quartz-base` layer the crimson pins
-lived in — so the config palette could never win.
-
-1. **Token pinned** (`quartz/theme/emerson.ts`): `--highlight` set to the
-   `ACCENT`-derived `rgba(202,38,38,.12)` / `rgba(230,58,58,.18)` pair, and joined
-   `PINNED_VARIABLES` so upstream dropping the anchor fails the build. Verified in
-   the emitted bundle that the brand declaration lands after the amber one per mode.
-2. **Property owned** (`quartz/styles/custom.scss`) — the part that actually
-   mattered. `custom.scss` is *unlayered* and the component rule is in
-   `@layer quartz-base`, so declaring the pill background there outranks every
-   layer regardless of specificity. Verified in the built bundle at **brace depth 0
-   with no enclosing `@layer`**. Uses `--eb-accent`, which already resolves per
-   `saved-theme`, so no mode-specific values.
-
-*(Renaming the pill's class was considered and rejected: it needs a Quartz plugin
-patch, and leaves `--highlight` amber for anything else that reads it.)*
-
-**Also merged the legacy `.tag-link` block**, which was stranded inside
-`@media (min-width: 1200px)` and so styled pills on desktop only. One unlayered
-rule now, no duplicated declarations, identical pills at every width. HayJay
-confirmed on real devices: pills correct at mobile and desktop.
-
-**Two guards added, and proven red by deletion.** Worth recording *how* they
-nearly weren't: the first regex also matched the `:hover` rule, and the second
-matched `transition: background-color` — so both passed with the fix deleted. They
-are now anchored on `background-color:` excluding `:hover`.
-
-#### ✅ 11.9.7b Header declutter — content-meta + ToC disabled
-
-`content-meta` printed the publication date plus a
-reading time under the title, beside the header Published/Updated line - the date
-twice. Its S10 CSS suppression had been nested inside `.eb-post-dates`, compiling to
-`.eb-post-dates .content-meta time` (matches nothing) while the guard passed on an
-unanchored regex.
-
-Rather than re-nest the rule, `content-meta` and `table-of-contents` are now
-**disabled in `quartz.config.yaml`** and the dead rules deleted from `custom.scss`; the
-guards assert on built HTML instead, a fact that cannot silently stop matching. The
-header is now title, then Published/Updated, then topics.
-
-#### ✅ 11.9.7c Mobile: the article before the explorer — FIXED & SHIPPED 2026-10-02
-
-Not a taste question — a layout-order defect. Base Quartz stacks, at
-`max-width: 800px`: `grid-sidebar-left → grid-header → grid-center → …`, so
-the **whole left sidebar** (explorer file tree + backlinks) rendered *above*
-the page header and the article. A screen of navigation before the title, paid
-by every phone reader.
-
-`order` cannot fix it: grid items placed by `grid-area` names are placed by the
-template, and `order` only affects auto-placed items. Redefining
-`grid-template` at the same breakpoint is the lever that moves the tracks.
-`custom.scss` is unlayered, so it beats the layered base rule with no
-`!important`. Desktop untouched.
-
-Two guards, proven red by deletion. Writing them surfaced two traps worth
-keeping: the first regex matched the **base** rule — which appears first, so
-passing would have meant nothing — and took the first match rather than the
-winning declaration. `custom.scss` is unlayered *and* appended last, so the
-effective rule is the **last** occurrence.
-
-#### 🟢 11.9.8 Desk wordmark → `/` (do inside 11.9.6 — link target and style are one decision)
-
-### 11.5 🟢 Tag constellation, not a graph
-
-Settled: no force graph on the homepage (8 nodes / ~7 edges reads as broken). Instead a static tag constellation — chips sized by post count, linking to tag pages. No JS. Full graph returns once the link graph is dense enough.
-
-### 11.6 🔴 Bridge the craft writing to the books (highest ceiling, zero cost)
-
-Highest-ceiling open item for the screen-adaptation goal: a line on craft posts / in the Desk sidebar — *"Want to see these techniques applied? Read A Rock Star Has Exploded."* Turns the newsletter into a funnel.
-
-### 11.7 🟢 Series reading order
-
-Visible 0→1→2→3 order with one-line hooks each + explicit "start here" for the free novella.
-
-### 11.8 🟢 A unifying "How I Write" page (needs a decision)
-
-Craft posts next to the books they produced — arguably the most agent-interesting page. Flagged, not built.
-
-## 12. Roadmap
-
-**Goal now:** everything remaining is either cosmetic polish or a decision — no more
-structural work on the Desk.
-
-1. **Reading-first navigation** — 11.9.7c shipped (article now precedes the
-   explorer on mobile). Left: the storefront's 701–900px nav crowding and the
-   `.series-hook` silhouette stacking, then how backlinks / related-post links
-   should surface. 11.9.4 still needs a real phone.
-2. **HayJay's call on 11.9.5** — done: keep `/desk/`, and it now presents as
-   cards + years.
-3. **Four Desk notes recorded, not actioned** (see "RECORDED 2026-10-02" above) —
-   (a) card dates are drawn but fail contrast at **1.81:1** in light mode, so they
-   read as absent; (b) card widths still uneven, undiagnosed; (c) sidebar year
-   folders bounce to `/desk/` because the year pages are now redirect stubs —
-   **re-enable year pages via a scoped emitter**; (d) drop `.eb-hub__n`. (d) is
-   cheapest and independent; (c) is a real regression worth doing properly.
-4. **Cosmetic, in one `custom.scss` pass:** left column width · sidebar/search sizing ·
-   `max-width` on `.content img` (the longest-standing) · I4 active-item red-on-red ·
-   F1–F4 cruft prune.
-5. **Backlinks** — currently `position: left`, so on desktop they live in the
-   sidebar and on mobile they now sit under the article. That is defensible, but
-   whether related posts deserve a more prominent slot (e.g. an end-of-post
-   "related" section) is a **taste call for HayJay**, not a defect.
-
-**Verification suite: 142 checks, 0 failures** (was 67/2 — F14 closed 2026-10-02).
-
-**Deferred until enough wikilinks exist:** always-visible graph links, reliable tag hover.
-
-**Highest-ceiling product item, still untouched:** 11.6 craft→books bridge — a line on
-craft posts pointing at the books that used the technique. Turns the Desk into a funnel,
-which is the actual goal.
+- **Backlinks** sit `position: left`, so desktop puts them in the sidebar and mobile under
+  the article. Defensible as-is; whether related posts deserve a more prominent slot
+  (e.g. an end-of-post "related" section) is a taste call.
 
 ## 13. Commands
 
@@ -814,7 +357,6 @@ node brain/scripts/verify-storefront.mjs
 curl -s "https://api.github.com/repos/<owner>/<repo>/actions/runs?per_page=1" | grep conclusion
 ```
 
-## 14. History
+---
 
-Resolved and closed — one line each; the reasoning lives in git. Pre-condensation 1000-line text at `75beccf` · S11 findability + generated sitemap (I6 case-variant trap) · date export via frontmatter (I7) · desk picks rendered at deploy (I8) · rehaul + header Desk link (I9/I10) · 11.9.1–11.9.3 measured fixes + `verify-storefront.mjs` (I11) · plan went repo-canonical 2026-10-02, vault mirror deleted · crimson accent owned by `emerson` theme · default dark mode + working toggle (I2) · body serif reaching paragraphs (I3) · favicon on both halves · empty right sidebar collapsed, measure held at ~74ch · header bar · naming settled ("Emerson's Desk") · rename to `/desk/` with `/brain/` redirect · thin landing page · tag taxonomy + `depth: 100` graph · no breadcrumbs, no About page · **yellow tag pills fixed twice over (token pinned *and* property owned unlayered), legacy desktop-only `.tag-link` block merged, confirmed on mobile + desktop** · **header declutter: `content-meta` + ToC disabled, duplicate date gone** · **verification suite fully green, 95/95 (F14)** · **mobile: article precedes the explorer (11.9.7c); sticky header is nav-only — search, reader mode and theme toggle dropped below 800px (11.9.7d)**
-- Graph at `depth: 100` so the whole map shows; breadcrumbs disabled entirely; `/desk/` is a thin landing page.
+**Pre-condensation** text (1000 lines) at `75beccf`. Full narrative history: `git log`.
