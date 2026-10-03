@@ -557,13 +557,18 @@ check(
   )
 }
 
-// (d) The recent-posts list is generated, not typed. `recent-notes` is already
-// `afterBody` with limit 5, so the page gets a list that cannot go stale — the
-// property the hand-written doors and year cards did not have.
-const recentItems = (homeDoc.match(/class="recent-li"/g) ?? []).length
+// (d) The recent-posts list is generated, not typed — the property the
+// hand-written doors and year cards did not have.
+//
+// 12.7: this was asserted against `@quartz-community/recent-notes`' markup
+// (`class="recent-notes"` / `recent-li`). That component is now DISABLED and
+// replaced by ./quartz/plugins/eb-latest, which renders in the body instead of
+// the sidebar, so the assertion follows the new markup. The property being
+// protected is unchanged: five posts, newest first, generated from the build.
+const latestItems = (homeDoc.match(/class="eb-latest__item"/g) ?? []).length
 check(
-  /class="recent-notes"/.test(homeDoc) && recentItems === 5,
-  `the landing page lists the newest 5 dispatches, generated (found ${recentItems})`,
+  /class="eb-latest"/.test(homeDoc) && latestItems === 5,
+  `the landing page lists the newest 5 dispatches, generated (found ${latestItems})`,
 )
 
 // (e) About is deleted by decision, not by accident: no source file, and — the
@@ -1348,30 +1353,43 @@ check(
   )
 
   // 10. NO PAGE STATES A COUNT IT CANNOT BACK UP. The recent-notes overflow line
-  //     reads `allFiles.length - limit`, and allFiles holds nine virtual tag pages
+  //     read `allFiles.length - limit`, and allFiles holds nine virtual tag pages
   //     plus content/index.md, so it said "See 53 more" and then "See 45 more"
   //     against 49 posts. There is no YAML option that expresses the one filter
   //     that would fix it, and a wrapper plugin supplying it silently removed the
-  //     whole list from the page. So the link is off rather than the number being
-  //     wrong, and the honest total is the fold-out heading's.
+  //     whole list from the page. So there is no overflow link at all rather than
+  //     a wrong number, and the honest total is the fold-out heading's.
+  //
+  //     12.7: `recent-notes` is now disabled outright and eb-latest emits no
+  //     count either, so the property holds for a second and stronger reason —
+  //     there is no component left that COULD print one.
   check(!/See \d+ more/.test(homeDoc), "the Desk states no dispatch count it cannot verify")
   check(
     new RegExp(`>${builtPosts.length} posts</span>`).test(homeDoc),
     "the fold-out heading is the one place the archive states its size",
   )
   // And the list itself must still be there — the wrapper plugin took it away
-  // silently, which is the failure this whole round is about.
+  // silently, which is the failure this whole round is about. eb-latest has the
+  // same exposure and a new way to lose it, so the count is asserted again.
   check(
-    (homeDoc.match(/class="recent-li"/g) ?? []).length === 5,
+    (homeDoc.match(/class="eb-latest__item"/g) ?? []).length === 5,
     "the Latest dispatches list still renders its five posts",
   )
   check(
     !/source: "\.\/quartz\/plugins\/latest-dispatches"/.test(config),
     "the failed recent-notes wrapper is not back in the config",
   )
+  // 12.7 — the sidebar orphan must stay off. It was rendering, but ~30,000
+  // characters after the cards it duplicated, inside the graph container: the
+  // page answered "what is newest" in a place nobody reads. Re-enabling it would
+  // put a second, invisible copy of this same list back on the Desk.
   check(
-    /linkToMore: false/.test(config),
-    "recent-notes renders no overflow link rather than a wrong count",
+    /source: "@quartz-community\/recent-notes"[\s\S]{0,80}enabled: false/.test(config),
+    "the sidebar recent-notes orphan stays disabled",
+  )
+  check(
+    !/class="recent-notes"/.test(homeDoc),
+    "no orphaned sidebar 'Latest dispatches' list is rendered anywhere",
   )
 
   // 11.9.11 — every post is recognisable without opening it.
@@ -1447,6 +1465,88 @@ const hubHrefs = [...hubHtml.matchAll(/eb-hub__link internal" href="([^"]+)"/g)]
 check(
   hubHrefs.length === hubItems && hubHrefs.every((x) => x.startsWith("./newsletters/")),
   `all ${hubHrefs.length} hub links point at real newsletter posts`,
+)
+
+// 12.7 — eb-latest, the newest dispatches at the top of the Desk.
+//
+// The reader's own behaviour was the brief: they opened /desk/ and scrolled
+// past the topic cards to the year fold-outs, because what they wanted was the
+// newest writing. Both existing sections were thematic, so the one chronological
+// question had no answer in the reading order.
+//
+// The list this guards already existed — `@quartz-community/recent-notes` was
+// enabled and rendering — but at offset ~48465 in the built index, inside the
+// sidebar's graph container. The page WAS answering the question, in the one
+// place nobody scrolls. So the first two checks below are the ones that matter:
+// the newest five must be in the BODY, and they must come before the cards.
+
+// Document order, not just presence. `indexOf` compares character offsets, so
+// this is a real assertion about reading order rather than about existence.
+const iLatest = hubHtml.indexOf('class="eb-latest"')
+const iHub = hubHtml.indexOf('class="eb-hub"')
+const iYears = hubHtml.indexOf('class="eb-years"')
+check(
+  iLatest !== -1 && iHub !== -1 && iLatest < iHub && iHub < iYears,
+  `the Desk leads with the newest dispatches, then topics, then years (offsets ${iLatest} < ${iHub} < ${iYears})`,
+)
+
+// AND in the body, not the sidebar. The old component's markup was also on this
+// page and also said "Latest dispatches"; the difference is which element
+// contains it, so this is asserted by the absence of the sidebar's own class.
+check(
+  !/class="recent-notes"/.test(hubHtml) && !/class="recent-li"/.test(hubHtml),
+  "the newest-dispatches list is the body section, not a sidebar panel",
+)
+
+// Newest first, read from the rendered dates rather than trusted from the
+// component's sort. The dates here are display strings ("Jun 2026"), so this
+// checks the ORDER as a string comparison against the ISO in the attribute —
+// which is why it compares `datetime`, not the text.
+const latestDates = [...hubHtml.matchAll(/class="eb-latest__date" datetime="([^"]+)"/g)].map(
+  (m) => m[1],
+)
+check(
+  latestDates.length === 5 &&
+    latestDates.join(",") === [...latestDates].sort().reverse().join(","),
+  `the latest five are newest-first (${latestDates.map((d) => d.slice(0, 10)).join(", ")})`,
+)
+
+// Every one of them is a real post, so the list cannot rot into 404s.
+const latestHrefs = [...hubHtml.matchAll(/eb-latest__link internal" href="([^"]+)"/g)].map((m) => m[1])
+check(
+  latestHrefs.length === 5 && latestHrefs.every((x) => x.startsWith("./newsletters/")),
+  `all ${latestHrefs.length} latest links point at real newsletter posts`,
+)
+
+// Standfirsts, because 11.9.11's rule is that every post is recognisable
+// without opening it — and `recent-notes` dropped `description`, which is one of
+// the two reasons it was replaced rather than restyled.
+const latestDescs = (hubHtml.match(/class="eb-latest__desc"/g) ?? []).length
+check(
+  latestDescs === 5,
+  `every latest dispatch carries its standfirst (${latestDescs}/5)`,
+)
+
+// On the Desk and nowhere else. Same exposure tag-hub and year-foldouts have:
+// the config's `condition: is-index` is a name Quartz does not know, so the
+// component's own slug guard is the only thing holding it to one page.
+let latestElsewhere = 0
+{
+  const walkLatest = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        if (entry.name !== "static") walkLatest(p)
+      } else if (entry.name.endsWith(".html") && p !== join(brain, "public", "index.html")) {
+        if (/class="eb-latest"/.test(readFileSync(p, "utf-8"))) latestElsewhere++
+      }
+    }
+  }
+  walkLatest(join(brain, "public"))
+}
+check(
+  latestElsewhere === 0,
+  `eb-latest renders on the Desk and on no other page (${latestElsewhere} others)`,
 )
 
 const scriptsDir = join(brain, "public", "static", "scripts")

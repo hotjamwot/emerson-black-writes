@@ -968,6 +968,88 @@ h2.page-title,
   overflow: hidden;
 }
 
+// ── 3e. eb-latest — "Latest dispatches", the first section on the Desk (12.7)
+// [SAFE — brand] Own .eb-* classes only; no upstream selector is touched.
+//
+// The row shape is deliberately the SAME as `.eb-years__row` below — a fixed
+// date column with title + standfirst hanging off a block beside it. Two lists
+// of dated dispatches on one page that shaped differently would read as two
+// unrelated things, and the reason that shape exists (dates forming a column is
+// what makes a by-date list scannable) applies identically here.
+.eb-latest {
+  margin: 0 0 1.5rem;
+}
+
+.eb-latest__title {
+  font-family: var(--eb-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--eb-line);
+}
+
+.eb-latest__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+
+.eb-latest__item {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.35rem 0;
+  // A hairline between rows, top-aligned so it reads as a rule between
+  // entries rather than a box around each one.
+  border-top: 1px solid var(--eb-line);
+}
+
+.eb-latest__item:first-child {
+  border-top: none;
+}
+
+.eb-latest__date {
+  font-family: var(--eb-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  // --eb-meta, not --lightgray: the same token 12.1(a) introduced after
+  // measuring --lightgray at 1.82:1 on this surface. A date nobody can read is
+  // the defect this section exists to remove, so it must not reintroduce it.
+  color: var(--eb-meta);
+}
+
+.eb-latest__link {
+  font-family: var(--eb-display);
+  font-size: 0.98rem;
+  color: var(--dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--eb-accent);
+  }
+}
+
+// ONE line, same reasoning as `.eb-years__desc`: this is a skimmable index, not
+// a preview, and descriptions run to a full sentence.
+.eb-latest__desc {
+  grid-column: 2;
+  margin: 0.15rem 0 0;
+  // Load-bearing: a grid item's default `min-width: auto` refuses to shrink
+  // below its content, so one long word would widen the row and push the
+  // standfirst past the edge.
+  min-width: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--gray);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
 // [OVERRIDE — upstream] Re-templates Quartz's grid shell (empty right column,
 //   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes articleW 780 -> 742. Do not delete; fix upstream or re-measure.

@@ -454,6 +454,25 @@ plugins:
   # quartz/plugins/loader/conditions.ts. The component ALSO self-guards on
   # `fileData.slug !== "index"`, so this cannot regress silently a second way.
   # verify-default-mode asserts the hub is on the index and on no other page.
+  # 12.7 — "Latest dispatches", the FIRST thing in the body.
+  #
+  # The reader arrives at /desk/ wanting the newest writing and works backwards.
+  # Until this, both sections on the page were thematic (topic cards = "what is
+  # this about", fold-outs = "browse the archive"), so the one chronological
+  # question had no answer in the reading order. Priority 4 puts this above
+  # tag-hub (8) and year-foldouts, directly under the standfirst.
+  #
+  # `condition: is-index` is DECORATIVE here, exactly as it is on tag-hub and
+  # year-foldouts: Quartz does not know that condition name, so it resolves to
+  # undefined and is silently ignored. The component's own
+  # `fileData?.slug !== "index"` guard is what actually holds it to the Desk.
+  # verify-default-mode asserts it renders on the index and on no other page.
+  - source: "./quartz/plugins/eb-latest"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 4
+      condition: is-index
   - source: "./quartz/plugins/tag-hub"
     enabled: true
     layout:
@@ -485,8 +504,27 @@ plugins:
   # component cannot state correctly. The archive is reached by the "Browse the
   # archive" button above, which jumps to the fold-outs, and the honest total
   # lives in that section's own heading.
+  # 12.7 — DISABLED, and deliberately replaced by ./quartz/plugins/eb-latest.
+  #
+  # This component WAS enabled and WAS rendering, and it is the reason the Desk
+  # gave no answer to "what is newest". Measured in the built index.html: its
+  # markup sat at offset ~48465, inside the sidebar's graph container — after
+  # the topic cards, after the fold-outs, off the reading path entirely. The
+  # reader's own report was that they scroll past the topic cards to the years
+  # looking for recent posts; the answer was on the page the whole time, in the
+  # sidebar, below everything.
+  #
+  # It is turned off rather than restyled because it cannot do what this needs
+  # in the body: `recent-notes` has no `beforeBody` priority that lands it
+  # above the hub, and it drops the `description` field, leaving bare titles —
+  # which is precisely the complaint 11.9.11 already fixed in the year rows.
+  # eb-latest renders in reading order, above the cards, with standfirsts.
+  #
+  # Turning this off also removes a second copy of "Latest dispatches" from the
+  # Desk: with eb-latest present, the sidebar orphan would be a duplicate list
+  # of the same five posts about 30,000 characters further down the document.
   - source: "@quartz-community/recent-notes"
-    enabled: true
+    enabled: false
     options:
       title: Latest dispatches
       limit: 5

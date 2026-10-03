@@ -1,0 +1,29 @@
+{
+  "name": "eb-latest",
+  "version": "1.0.0",
+  "description": "Desk: the newest dispatches, at the top, with standfirsts",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "eb-latest",
+    "displayName": "Latest Dispatches",
+    "description": "The newest dispatches, newest first, at the top of the Desk",
+    "components": {
+      "EbLatest": {
+        "name": "EbLatest",
+        "displayName": "Latest Dispatches",
+        "description": "The newest dispatches, newest first, with standfirsts",
+        "version": "1.0.0",
+        "defaultPosition": "beforeBody"
+      }
+    }
+  }
+}
