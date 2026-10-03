@@ -2222,6 +2222,60 @@ for (const p of ["canvas-page", "bases-page", "obsidian-plugin-excalidraw"]) {
   )
   check(Boolean(block) && block[1] === "false", `F2–F4: ${p} stays disabled (no matching input)`)
 }
+// ── §12.6: the override inventory must not go stale ─────────────────────────
+//
+// Every [OVERRIDE — upstream] block in custom.scss carries a MEASURED line
+// saying what breaks if it is deleted, produced by disabling each block,
+// rebuilding and re-measuring in Chrome (2026-10-04). All 13 proved load-
+// bearing; the pill and highlight ones are the reason the truce exists at all.
+//
+// These checks cannot re-run that experiment — it needs a browser and thirteen
+// rebuilds — so they assert the INVENTORY is intact rather than that it is
+// still true. What they buy is the failure that actually happens: someone adds
+// a new override, or deletes a measured line, and nobody notices the file is
+// quietly no longer self-documenting.
+//
+// The measured values themselves go stale on a Quartz upgrade, and nothing here
+// can detect that. It is recorded as a known limit rather than papered over: the
+// upgrade-day procedure in package.json's `//ebw` block is where the audit gets
+// re-run.
+console.log("\nOverride inventory (§12.6)")
+// The SOURCE stylesheet, not the built bundle: the banners and measured lines
+// are comments, and comments do not survive compilation. Reading public/*.css
+// would find none of them and this check would pass for the wrong reason —
+// the same mistake the highlight guard made when it grepped index.html.
+const customCss = readFileSync(join(brain, "quartz", "styles", "custom.scss"), "utf8")
+const overrideBlocks = customCss.split("\n").filter((l) => l.includes("OVERRIDE — upstream"))
+const measuredLines = customCss.split("\n").filter((l) => l.includes("MEASURED 2026-10-04"))
+// The header block that documents the audit also contains the string, so it is
+// not a block. Count banners that are NOT inside the header comment.
+const realBanners = overrideBlocks.filter((l) => !l.includes("[OVERRIDE — upstream]  Restyles"))
+check(
+  realBanners.length > 0,
+  `custom.scss still carries override banners (${realBanners.length} found)`,
+)
+check(
+  measuredLines.length === realBanners.length,
+  `every override block carries a measured verdict (${measuredLines.length}/${realBanners.length})`,
+)
+check(
+  /All \d+ are LOAD-BEARING/.test(customCss),
+  "the stylesheet header records that the audit found nothing deletable",
+)
+// The two that the whole truce rests on, named so their loss is loud.
+//
+// Matched on fragments that survive being wrapped across comment lines: the
+// first version searched for "0.18-alpha crimson slab" as one string and failed,
+// because that phrase is split over two lines in the header. A guard that
+// asserts on reflowed prose will break the next time someone edits a comment,
+// so match the short anchors instead.
+for (const [needle, what] of [
+  ["rgba(255, 208, 0", "the amber search-highlight the highlight override prevents"],
+  ["0.18-alpha", "the tag-pill slab the pill override prevents"],
+]) {
+  check(customCss.includes(needle), `the header still warns about ${what}`)
+}
+
 // ── §12.6: Quartz provenance, so an upgrade is diffable ─────────────────────
 //
 // Quartz core is VENDORED here — brain/quartz is upstream's own source tree,

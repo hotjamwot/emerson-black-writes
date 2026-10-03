@@ -47,9 +47,10 @@ the storefront was hiding.
 | Repo (code) | `~/Movies/PROJECTS/Websites/EBW website/` |
 | Images (shared) | `~/Documents/Obsidian/Nexus/organise/Images/newsletters/<year>/` |
 | Quartz config | `brain/quartz.config.yaml` |
-| Brand CSS | `brain/quartz/styles/custom.scss` (~1,000 lines, unlayered overrides) |
+| Brand CSS | `brain/quartz/styles/custom.scss` (~1,840 lines; 12 measured `[OVERRIDE]` blocks + the `[SAFE]` brand layer) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
 | Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs` |
+| Override audit | `brain/scripts/audit-overrides.mjs` + `brain/scripts/probe.mjs` — "is this override still needed?" |
 | Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` |
 
 ## 3. Frontmatter spec
@@ -196,6 +197,7 @@ selectors (`.page`, `.tag-link`, `.section`, layered theme rules). See §12.6.
 | F16 | **"No dates" was "dates at 1.82:1".** Drawn in the DOM, invisible in light mode. Fixed with a real `--eb-meta` token + a computed-contrast guard | ✅ fixed |
 | F17 | **`--gray` (#6b7a91) as *text* is 3.94:1 on the page background** — below AA. Used by section labels, `.folder-title`, tag pills, `h4–h6` and table headers | ⏳ open |
 | F18 | **Three wordmark guards had been failing since 11.9.6 and nobody saw it**, because they only run when `public/` is served — a plain build skips them, so a permanently red section looked like a passing one | ✅ fixed |
+| F19 | **The override audit's first pass called three blocks "deletable" and all three were wrong** — the probe had only loaded pages that do not contain the affected elements. A negative result measured on the wrong page is the same failure as a guard that greps the wrong file | ✅ fixed |
 
 **F14's lesson — a red guard is not automatically a bug.** Two checks were filed as
 "known-failing, ignore" long enough to become scenery. A guard that has never passed is
@@ -221,6 +223,20 @@ that needs a browser must be run deliberately, with the server up, or it is deco
 Both halves now assert the *current* contract (stacked name, real `aria-label`, both
 lines measured) and were confirmed falsifiable: hiding either line reports `0px`, and
 dropping the `aria-label` reports `null`.
+
+**F19's lesson — "no measured effect" is a claim about coverage, not about the code.**
+The override audit disabled each of the 12 `[OVERRIDE]` blocks and re-measured. Three
+came back with zero differences, which reads as "deletable". All three were wrong. The
+probe had loaded the Desk and one post, and those blocks govern the year/tag archives
+and the chrome fonts — none of which exist on either page. The element was never
+measured. Re-run across all four page types, all three showed large changes.
+
+The general form, which has now appeared three times in this project: **a negative
+result is only as good as the coverage behind it.** Grepping `index.html` for theme
+variables (F13), a coverage guard that compared zero pairs (12.1a), and this. The
+defence is always the same — when a check reports "nothing", first ask *what would have
+had to be true for it to fire*, and prove that. A "no change" verdict from a probe that
+never loaded the element is the same error as a guard that greps the wrong file.
 
 ### 9.3 Dead code and traps worth remembering
 
@@ -379,8 +395,31 @@ explicitly approves an override after seeing the Quartz-native alternative (§9.
   a banner: `[SAFE — brand]` (own `eb-*` classes, `:root` tokens — survives any
   update) or `[OVERRIDE — upstream]` (restyles Quartz's selectors, with the
   Quartz-native fallback named so a future LLM can price the fight before
-  joining it). No visual change — build + verify green. LLM edit rule from here:
-  touch `eb-*` and tokens only; an upstream selector needs an explicit ask first.
+  joining it). LLM edit rule from here: touch `eb-*` and tokens only; an upstream
+  selector needs an explicit ask first.
+- **Every override is now MEASURED, and none is deletable (2026-10-04).** The open
+  question was whether the truce was real or cosmetic. Answered by experiment
+  rather than argument: each of the 12 `[OVERRIDE]` blocks was disabled, rebuilt,
+  and re-measured in Chrome, then diffed against the baseline. **All 12 change
+  something a reader sees** — body copy reverts to the system sans, the graph
+  collapses to 250px, the article loses its 780px measure, the explorer goes
+  16px, the page title loses its uppercase, the listing grid loses its spacing.
+  Each banner now carries the measured consequence, and five new guards keep the
+  inventory intact.
+  **The two that matter most are proven, not assumed.** Removing the highlight
+  block paints search hits `rgba(255, 208, 0, 0.4)` — the amber this whole truce
+  was called to kill. Removing the pill block turns every tag pill into a
+  `0.18`-alpha crimson slab at `8px` radius, because upstream's
+  `a.internal { background-color: var(--highlight) }` matches a pill and no
+  Quartz-native setting stops that short of not using `<a>`. **So: the fighting
+  is bounded, and it is nearly all load-bearing.** CSS is byte-identical — this
+  was documentation only.
+  **Method worth keeping:** the first pass reported three blocks as having "no
+  measured effect". All three were wrong — its probe had loaded only the Desk and
+  one post, and those blocks govern the year/tag archives and the chrome fonts,
+  which exist on neither. Re-run across all four page types and all three proved
+  load-bearing. A deletability claim measured on a page that does not show the
+  element is the same error as a guard that greps the wrong file.
 - **Additive plugins stay; replacement plugins are pinned.** `tag-hub`, `year-foldouts`,
   `post-deck`, `post-dates` render into slots upstream leaves open — update-safe, keep.
   `listing-descriptions` (replaces `tag-page`) and `year-archives` (replaces `folder-page`)
@@ -433,6 +472,12 @@ node brain/scripts/verify-storefront.mjs
 cd ~/Movies/PROJECTS/Websites/EBW\ website/brain && node quartz/check-quartz-upstream.mjs
 #   exit 0 = up to date · 1 = upstream is ahead · 2 = could not reach GitHub
 #   Deliberately NOT part of verify-default-mode: that suite must never need a network.
+
+# Re-run the override audit — "is this override still needed?" (§12.6)
+# Needs the server up. ~10 min: 12 rebuilds x 4 pages x 2 widths.
+cd ~/Movies/PROJECTS/Websites/EBW\ website/brain/public && python3 -m http.server 8099 &
+cd ~/Movies/PROJECTS/Websites/EBW\ website/brain && node scripts/audit-overrides.mjs
+#   Restores custom.scss automatically, even if killed — see the header comment.
 
 # Publish vault → site (or double-click "Publish Brain.command")
 # Local preview: double-click "Preview Brain.command"

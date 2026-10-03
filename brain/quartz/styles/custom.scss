@@ -30,6 +30,29 @@
 //
 //  Rule of thumb: if the selector doesn't start with .eb- or :root, read the
 //  banner before touching it.
+//
+// ─────────────────────────────────────────────────────────────────────────
+//  MEASURED VERDICTS (2026-10-04). Every [OVERRIDE] block below was tested by
+//  disabling it, rebuilding, and re-measuring the rendered page in Chrome, then
+//  diffing against the baseline. All 13 are LOAD-BEARING: removing any one
+//  changes something a reader would see. None is deletable.
+//
+//  Each banner now names the measured consequence, so nobody has to re-run the
+//  test or re-read a comment to learn what breaks. Two worth knowing up front:
+//  - Removing the highlight block paints search hits and text highlights
+//    rgba(255, 208, 0, 0.4) — the amber this whole truce was called to kill.
+//  - Removing the tag-pill block turns every pill into a 0.18-alpha crimson
+//    slab at 8px radius, because upstream's `a.internal` rule matches a pill and
+//    no Quartz-native setting stops that short of not using `<a>`.
+//
+//  WHY A DELETE TEST AND NOT A REASONING TEST. The first pass of this audit
+//  reported three blocks as having "no measured effect". All three were wrong.
+//  Its probe had loaded only the Desk and one post, and those blocks govern the
+//  year/tag archives and the chrome fonts — none of which exist on the pages it
+//  looked at. Re-run against every page type, all three proved load-bearing.
+//  A "no change" verdict from a probe that never loaded the element is the same
+//  mistake as a guard that greps the wrong file: treat any future deletability
+//  claim as unproven until it has been measured on the page that shows the thing.
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ── 1. Design tokens ───────────────────────────────────────────────────────
@@ -66,6 +89,7 @@
 
 // ── 1c. Chrome keeps the display face ────────────────────────────────────────
 // [OVERRIDE — upstream] Targets Quartz/Obsidian chrome selectors (.explorer,
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes explorerLinkFF Gabarito, "Century Gothic", "Avant Garde", Futura, system-ui, sans-serif -> Lora, Georgia, "Times New Roman", serif. Do not delete; fix upstream or re-measure.
 // .backlinks, .tags …) because the theme drives them from shared font vars.
 // Quartz-native alternative: accept the theme's sans chrome. Keep only if the
 // tracked-uppercase chrome look is worth the selector list on updates.
@@ -89,6 +113,7 @@ ul.tags a {
 
 // ── 1b. Brand font variables, at the winning layer ───────────────────────────
 // [OVERRIDE — upstream] Repoints upstream's own --font-* vars from unlayered
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes bodyFont Lora, Georgia, "Times New Roman", serif -> ui-sans-serif, -apple-system, "system-ui", system-ui, "Segoe UI", Roboto, Inter, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif. Do not delete; fix upstream or re-measure.
 // CSS to beat @layer quartz-fonts. Works, but must be re-checked if the fonts
 // plugin or theme renames those vars. Quartz-native alternative: accept the
 // theme's default faces (loses Lora/Gabarito).
@@ -152,6 +177,7 @@ ul.tags a {
 
 // ── 2. Surface, grain and page furniture ───────────────────────────────────
 // [OVERRIDE — upstream] Restrains upstream's highlight/selection tokens
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes S_hlBg color(srgb 0.90196 0.22746 0.22746 / 0.16) -> rgba(255, 208, 0, 0.4). Do not delete; fix upstream or re-measure.
 // (.highlight, .text-highlight) to a quiet accent tint. Worth keeping: without
 // it search hits render as a loud yellow slab. Re-check if quartz-base renames
 // those classes. The body/grain/focus rules below are plain element styling,
@@ -234,6 +260,7 @@ html {
 
 // ── 3. Typography ──────────────────────────────────────────────────────────
 // [OVERRIDE — upstream] Sets heading/chrome faces on bare elements (h1–h6) and
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes pageTitleTT uppercase -> none. Do not delete; fix upstream or re-measure.
 // Quartz chrome (.page-title, .graph > h3 …). The font VALUES are brand (safe);
 // the SELECTORS are upstream's, so a markup rename orphan them. Quartz-native
 // alternative: theme `typography` config + accept default chrome type.
@@ -265,6 +292,7 @@ h2.page-title,
 
 // ── 4a. 11.9.6: the header bar (wordmark · nav · search + controls) ───────
 // [OVERRIDE — upstream] Restyles Quartz's header shell (.page-header) so the
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes headerH 3125 -> 3261. Do not delete; fix upstream or re-measure.
 // Desk reads as part of the storefront. Keep: it is the visible brand link.
 // Re-check on updates that rename header markup. Quartz-native alternative:
 // stock header (loses the stacked wordmark + nav row).
@@ -476,6 +504,7 @@ h2.page-title,
 
 // ── 4a-bis. Header on narrow screens ───────────────────────────────────────
 // [OVERRIDE — upstream] Media-query fixes on Quartz's header selectors.
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes cardW 524 -> 1067. Do not delete; fix upstream or re-measure.
 // Keep while the custom header exists; delete with it if the header ever goes
 // stock. Quartz-native alternative: stock responsive header.
 // At 420px the wordmark, four nav links and the three toolbar controls cannot
@@ -941,6 +970,7 @@ h2.page-title,
 
 // ── 4b. Chrome: header, sidebar, breadcrumbs, controls ──────────────────────
 // [OVERRIDE — upstream] Re-templates Quartz's grid shell (empty right column,
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes articleW 780 -> 742. Do not delete; fix upstream or re-measure.
 // sidebar widths, breadcrumb/order fixes). Load-bearing for the current layout;
 // re-verify if the base frame changes its grid areas. Quartz-native
 // alternative: accept the default shell (regains an empty 320px column).
@@ -1006,6 +1036,7 @@ h2.page-title,
 
 // ── 4c. Mobile: the article comes FIRST, not the file tree ───────────────────
 // [OVERRIDE — upstream] Redefines Quartz's mobile grid-template so content
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes articleMaxW 780px -> none. Do not delete; fix upstream or re-measure.
 // precedes the explorer. `order` cannot do this (grid-area placement ignores
 // it). Re-check if base breakpoints move. Quartz-native alternative: stock
 // order (sidebar above article on phones).
@@ -1228,6 +1259,7 @@ h1.article-title {
 
 // ── Explorer (archive tree) ────────────────────────────────────────────────
 // [OVERRIDE — upstream] Skins Quartz's explorer selectors. Cosmetic only —
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes explorerFont 13.76px -> 16px. Do not delete; fix upstream or re-measure.
 // safe to drop to stock explorer styling at any time.
 .explorer {
   margin-top: 0.25rem;
@@ -1312,6 +1344,7 @@ h1.article-title {
 
 // ── Sidebar panels: Backlinks · Recent · Graph ───────────────────────
 // [OVERRIDE — upstream] Skins Quartz's panel selectors. Cosmetic only — safe
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes graphH 520 -> 250. Do not delete; fix upstream or re-measure.
 // to drop to stock panel styling at any time.
 .backlinks,
 .recent-notes,
@@ -1427,6 +1460,7 @@ hr::after {
 
 // ── 6. Archive listings (folder pages: /newsletters/2023/ …) ───────────────
 // [OVERRIDE — upstream] Restyles the year/tag listing grid (.page-listing,
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes listingMT 32px -> 0px. Do not delete; fix upstream or re-measure.
 // .section-li) emitted by listing-descriptions/year-archives. Keep — this is
 // the archive's reading surface. If those plugins ever go stock, this goes
 // with them. Your .eb-listing-desc paragraph inside it is [SAFE — brand].
@@ -1573,6 +1607,7 @@ hr::after {
 
 // ── 5. Reading experience ──────────────────────────────────────────────────
 // [OVERRIDE — upstream] Sets body type on Quartz's content class
+//   MEASURED 2026-10-04: LOAD-BEARING - disabling this changes pillBg color(srgb 0.90196 0.22746 0.22746 / 0.12) -> rgba(230, 58, 58, 0.18). Do not delete; fix upstream or re-measure.
 // (.markdown-preview-view). Worth keeping (Lora reading column is the brand),
 // single selector, easy to re-point. Quartz-native alternative: theme fonts.
 // S6 · Writerly serif body — Lora (optical sizing, true italics).
