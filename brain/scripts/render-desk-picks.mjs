@@ -14,31 +14,21 @@
  * errors, the deploy fails loudly instead of a visitor seeing an empty box.
  *
  * WHAT IT WRITES
- * Two placeholders in `index.html`:
- *   #desk-latest   -> the three newest posts, newest first
+ * 12.7(b) — two containers in `index.html`, both filled from the same
+ * postDates.json so neither can fall out of date with the archive:
+ *   #desk-latest   -> the six newest dispatches as dense rows
+ *   #desk-topics   -> every topic as ONE line of links
  *   {{DESK_COUNT}} -> the total number of published posts
  *
- * 12.7 — the "Start here" trio is GONE, replaced by #desk-topics, a topic strip
- * generated from the `tags` every post already carries. It was the last
+ * 12.7 — the "Start here" trio is GONE, replaced by #desk-topics. It was the last
  * hand-maintained list on the homepage, and the reader had already flagged the
  * Desk section as the thing that should change. Every one of those six cards
  * could rot silently: a renamed post leaves a link to nothing, and the deploy
- * guard that checks the URLs cannot tell a dead link from a live one.
+ * guard that checks the URLs could not tell a dead link from a live one.
  *
- * WHAT IT DOES NOT WRITE — the decision behind the strip's shape. The Desk's own
- * topic cards list FIVE posts per topic, and bringing that to the homepage was
- * considered and rejected: it puts 34 post titles above the signup and turns a
- * storefront into an index. The homepage already sells books, states the
- * premise, and collects emails; what it needs from the Desk is proof that a
- * person writes these things and a route to more. So the strip is one row —
- * topic name, post count, link — and the substance stays on /desk/.
- *
- * `news` is excluded by NAME here, matching tag-hub on the Desk. Excluding a tag
- * by string is an editorial choice, so it is a named constant and both halves of
- * the site say so, rather than one filtering it and the other not.
- *
- * It deliberately does NOT touch the hand-written "Start here" list — that list
- * no longer exists. See above.
+ * SHAPE — why rows and not cards, and why one line and not pills. Both were
+ * tried and both were rejected on first render, and the reasons are recorded at
+ * the constants below (`LATEST`, `topicSentence`) rather than here.
  */
 
 import { readFileSync, writeFileSync, readdirSync } from "node:fs"
@@ -61,17 +51,49 @@ const monthYear = (iso) => {
   return `${MONTHS[Number(m) - 1]} ${y}`
 }
 
-const LATEST = 3
+// SIX, not three. Density is the whole point: three cards out of forty-nine
+// posts showed three, and each shouted equally, so nothing led. Six rows in two
+// columns show twice as much at a third of the height. A MINIMUM in the deploy
+// guard rather than an exact count, so writing a post never means editing a
+// number in a workflow file — the upkeep this whole change exists to remove.
+const LATEST = 6
 const picks = data.slice(0, LATEST)
 
-if (picks.length < LATEST) {
-  console.error(`ERROR: expected at least ${LATEST} dated posts, found ${picks.length}.`)
+if (picks.length < 3) {
+  console.error(`ERROR: expected at least 3 dated posts, found ${picks.length}.`)
   process.exit(1)
 }
 
-// 12.7 — the topic strip. Counts come from the tags in the SAME file the posts
-// come from, so the strip cannot disagree with the archive: there is no second
-// list to fall out of date.
+// 12.7(b) — the section's two halves, and why they are shaped differently.
+//
+// SIX DENSE ROWS, NOT THREE CARDS. The first attempt used the old card
+// treatment and was rejected as "large and clunky", and the diagnosis was not
+// padding — it was DENSITY. Three cards out of forty-nine posts means you see
+// three, and each shouts equally, so nothing leads. A card that says everything
+// says nothing. Six rows in two columns show twice as much at a third of the
+// height, and the standfirsts — already written as hooks ("Or: how I wrote a
+// truly terrible first draft") — do the pulling. No new copy is written here;
+// the persuasion was already in the frontmatter.
+//
+// THE ROW SHAPE IS THE DESK'S, DELIBERATELY. `/desk/` now leads with
+// `.eb-latest`: a fixed date column, title, one-line standfirst. Using the same
+// shape upstairs means the homepage stops DESCRIBING the archive and starts BEING
+// a window onto it, which is the integration the reader asked for. It also means
+// one clamp rule and one date-column width, not two.
+//
+// TOPICS BECOME A SENTENCE, NOT PILLS. The first attempt rendered seven chips
+// reading "process 15". Measured, they were not broken — but they do not invite a
+// click, and the reason is that they answer no question: a bare label plus a
+// number is a database row, not an invitation. They were also a second competing
+// block directly beneath a list, which is the same mistake the cards made.
+//
+// An earlier idea was to head each group with a hand-written line ("Writing can
+// be hard. It's important to keep a strong mindset") and list posts under it.
+// REJECTED, and the reason is maintenance rather than taste: that is one written
+// sentence PER TOPIC, forever — the same category of upkeep as the curated trio
+// this change deleted, and the same thing that rots silently. What is available
+// for free is the topic name, and a line of names costs one row instead of a
+// competing block.
 //
 // `news` is excluded by name, matching tag-hub on the Desk. Two places make the
 // same editorial decision, so it is stated in both.
@@ -99,20 +121,25 @@ if (topics.length === 0) {
   process.exit(1)
 }
 
-const topicCards = topics
-  .map(
-    ([tag, n]) =>
-      `                <a class="desk-topic" href="/desk/tags/${esc(tag)}"><span class="desk-topic__name">${esc(
-        tag.replace(/-/g, " "),
-      )}</span><span class="desk-topic__n">${n}</span></a>`,
-  )
-  .join("\n")
+// A sentence, not pills. No counts: a number next to a word on a storefront is
+// trivia, and it was the half of the chip that read as "database row".
+const topicSentence = topics
+  .map(([tag]) => `<a href="/desk/tags/${esc(tag)}">${esc(tag.replace(/-/g, " "))}</a>`)
+  .join(" · ")
 
-/** Replace one placeholder container, idempotently. */
-function fillContainer(source, id, className, body) {
+/**
+ * Replace one placeholder container by its `id`, idempotently.
+ *
+ * Matches on the id alone rather than on `class` + `id`: 12.7(b) changed the
+ * topic container from a `<div class="desk-topics-strip" id="desk-topics">` to a
+ * bare `<span id="desk-topics">` sitting inside a hand-written sentence, so the
+ * class is no longer a reliable part of the pattern. Requiring the class would
+ * have made the script silently render nothing.
+ */
+function fillContainer(source, id, body) {
   return source.replace(
-    new RegExp(`(<div class="${className}" id="${id}">)([\\s\\S]*?)(</div>)`),
-    (_, open, existing, close) => {
+    new RegExp(`(<(\\w+)[^>]*\\bid="${id}"[^>]*>)([\\s\\S]*?)(</\\2>)`),
+    (_, open, _tag, existing, close) => {
       // ⚠️ IDEMPOTENCE, same reason as before: the deployed `_site/index.html`
       // is a COPY, the generator re-runs every deploy, and treating
       // "already rendered with this exact content" as success is what keeps a
@@ -124,20 +151,27 @@ function fillContainer(source, id, className, body) {
   )
 }
 
-const cards = picks
+// The rows. `.desk-row` mirrors `.eb-latest__item` on the Desk: a fixed date
+// column, then a block holding title + standfirst, so the dates form a column
+// and the titles align down the page. `<time datetime>` carries the machine
+// value, matching the Desk's rows, and it is the ISO straight from the
+// frontmatter — never a re-parsed display string.
+const ROWS = picks
   .map(
-    (p) => `                <a class="desk-pick" href="/desk/${esc(p.slug)}">
-                    <span class="desk-pick-date">${esc(monthYear(p.date))}</span>
-                    <span class="desk-pick-title">${esc(p.title)}</span>
-                    <span class="desk-pick-desc">${esc(p.description)}</span>
-                </a>`,
+    (p) => `<a class="desk-row" href="/desk/${esc(p.slug)}">
+                        <time class="desk-row__date" datetime="${esc(p.date)}">${esc(monthYear(p.date))}</time>
+                        <span class="desk-row__body">
+                            <span class="desk-row__title">${esc(p.title)}</span>
+                            ${p.description ? `<span class="desk-row__desc">${esc(p.description)}</span>` : ""}
+                        </span>
+                    </a>`,
   )
   .join("\n")
 
-let out = fillContainer(html, "desk-latest", "desk-picks-grid", cards)
+let out = fillContainer(html, "desk-latest", ROWS)
 
-// 12.7 — the topic strip, rendered from the tags in the same file.
-out = fillContainer(out, "desk-topics", "desk-topics-strip", topicCards)
+// 12.7(b) — the topic sentence, rendered from the tags in the same file.
+out = fillContainer(out, "desk-topics", topicSentence)
 
 out = out.replace(/\{\{DESK_COUNT\}\}/g, String(data.length))
 
@@ -185,7 +219,7 @@ if (deadTopics.length) {
 }
 
 writeFileSync(INDEX, out)
-console.log(`desk-picks: rendered ${picks.length} latest + ${data.length} total`)
+console.log(`desk-rows: rendered ${picks.length} latest + ${data.length} total`)
 for (const p of picks) console.log(`  ${p.date}  ${p.title}`)
-console.log(`desk-topics: rendered ${topics.length} topics`)
+console.log(`desk-topics: rendered ${topics.length} topics into one line`)
 for (const [tag, n] of topics) console.log(`  ${n}  ${tag}`)

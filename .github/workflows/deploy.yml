@@ -233,67 +233,62 @@ jobs:
             echo "::error::Guard failure: {{DESK_COUNT}} placeholder shipped to production! Deployment aborted."
             exit 1
           fi
-          # 12.7 — the Desk section is now ONE automatic topic strip plus the
-          # generated latest picks. The hand-written "Start here" trio is gone,
-          # so the old "exactly 6 = 3 curated + 3 latest" arithmetic could not
-          # be kept by changing the numbers: it described a split that no longer
-          # exists, and a guard that outlives its feature is how this repo got
-          # its "See 45 more" incident. So it is rewritten around what the
-          # section now owes the reader.
+          # 12.7(b) — the Desk section is now SIX DENSE ROWS in two columns, plus the
+          # topic SENTENCE. Both earlier designs were tried and rejected on first
+          # render: three large cards (read as "clunky"; the problem was density,
+          # not padding) and a row of topic pills ("process 15" answers no
+          # question, and as a block it competed with the list above it).
           #
-          # The counts are asserted as MINIMUMS, not exact numbers. An exact
-          # count is a number that has to be edited every time a post is
-          # written, which is the upkeep this change exists to remove; a floor
-          # still catches the only failure that matters — a strip that rendered
-          # empty or collapsed to one topic.
-          TOPIC_COUNT=$(sed -n '/id="desk-topics"/,/<\/div>/p' _site/index.html | grep -c 'class="desk-topic"' || true)
-          if [ "$TOPIC_COUNT" -lt 3 ]; then
-            echo "::error::Guard failure: topic strip rendered only $TOPIC_COUNT topics! Deployment aborted."
+          # The counts are MINIMUMS, not exact numbers. An exact count is a number
+          # to edit every time a post is written, which is the upkeep this change
+          # exists to remove; a floor still catches the only failure that matters
+          # — a block that rendered empty.
+          ROW_COUNT=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -c 'class="desk-row"' || true)
+          if [ "$ROW_COUNT" -lt 4 ]; then
+            echo "::error::Guard failure: Desk section rendered only $ROW_COUNT rows! Deployment aborted."
             exit 1
           fi
-          # And every one must link to a tag page that EXISTS. The old guard
-          # counted links matching a URL SHAPE, which cannot distinguish a live
-          # page from a dead one — a renamed tag passed it. This resolves each
-          # href against the built tag pages.
+          # Every row must be a real post, and every row must carry its
+          # standfirst. The standfirst is the whole reason the rows replaced the
+          # cards: the persuasion was already in the frontmatter, and a row
+          # without one is a bare title.
+          ROWS_BROKEN=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -oE 'class="desk-row" href="[^"]*"' | grep -cE 'href="/desk/newsletters/[0-9]{4}/' || true)
+          if [ "$ROWS_BROKEN" -ne "$ROW_COUNT" ]; then
+            echo "::error::Guard failure: only $ROWS_BROKEN/$ROW_COUNT rows point at a dated post URL! Deployment aborted."
+            exit 1
+          fi
+          ROW_DESCS=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -c 'class="desk-row__desc"' || true)
+          if [ "$ROW_DESCS" -ne "$ROW_COUNT" ]; then
+            echo "::error::Guard failure: only $ROW_DESCS/$ROW_COUNT rows carry a standfirst! Deployment aborted."
+            exit 1
+          fi
+          # The topic line, and every link resolved against the built tag pages.
+          # The old guard counted links matching a URL SHAPE, which cannot
+          # distinguish a live page from a dead one — a renamed tag passed it.
           node -e '
             const fs = require("fs");
             const html = fs.readFileSync("_site/index.html", "utf8");
-            const strip = (html.match(/<div class="desk-topics-strip" id="desk-topics">([\s\S]*?)<\/div>/) || [])[1] || "";
-            const tags = [...strip.matchAll(/href="\/desk\/tags\/([^"]+)"/g)].map((m) => m[1]);
-            if (tags.length < 3) { console.error(`::error::only ${tags.length} topic links in the strip`); process.exit(1); }
+            const span = (html.match(/<span id="desk-topics">([\s\S]*?)<\/span>/) || [])[1] || "";
+            const tags = [...span.matchAll(/href="\/desk\/tags\/([^"]+)"/g)].map((m) => m[1]);
+            if (tags.length < 3) { console.error(`::error::only ${tags.length} topic links in the line`); process.exit(1); }
             const missing = tags.filter((t) => !fs.existsSync(`_site/desk/tags/${t}.html`));
             if (missing.length) {
-              console.error(`::error::topic strip links to ${missing.length} tag page(s) that do not exist: ${missing.join(", ")}`);
+              console.error(`::error::topic line links to ${missing.length} tag page(s) that do not exist: ${missing.join(", ")}`);
               process.exit(1);
             }
-            console.log(`Guard: topic strip — ${tags.length} topics, every tag page exists.`);
+            console.log(`Guard: topic line — ${tags.length} topics, every tag page exists.`);
           '
-          LATEST_COUNT=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -c 'class="desk-pick"' || true)
-          if [ "$LATEST_COUNT" -lt 3 ]; then
-            echo "::error::Guard failure: expected at least 3 generated latest picks, found $LATEST_COUNT! Deployment aborted."
+          # Neither rejected design may come back. Asserting only what is PRESENT
+          # is how the old guard missed a section that had quietly changed shape.
+          if grep -q 'class="desk-pick"' _site/index.html; then
+            echo "::error::Guard failure: the rejected card treatment is back in the Desk section! Deployment aborted."
             exit 1
           fi
-          # Every latest pick must be a real, reachable Desk URL.
-          LATEST_BROKEN=$(sed -n '/id="desk-latest"/,/<\/div>/p' _site/index.html | grep -oE 'class="desk-pick" href="[^"]*"' | grep -cE 'href="/desk/newsletters/[0-9]{4}/' || true)
-          if [ "$LATEST_BROKEN" -ne "$LATEST_COUNT" ]; then
-            echo "::error::Guard failure: only $LATEST_BROKEN/$LATEST_COUNT latest picks point at a dated post URL! Deployment aborted."
+          if grep -q 'class="desk-topic__n"' _site/index.html; then
+            echo "::error::Guard failure: the rejected topic pills are back in the Desk section! Deployment aborted."
             exit 1
           fi
-          # The hand-written trio must NOT come back. It is the one piece of this
-          # section that needed a human, and a guard that only checks for what is
-          # present cannot notice it returning.
-          #
-          # ⚠️ Matches the RENDERED markup, not the raw file: index.html's own
-          # comment explains that 12.7 removed this trio, and grepping raw HTML
-          # reports that comment as the feature coming back (the I9 lesson).
-          node -e '
-            const fs = require("fs");
-            const html = fs.readFileSync("_site/index.html", "utf8").replace(/<!--[\s\S]*?-->/g, "");
-            if (/Start here/.test(html)) {
-              console.log("::warning::The Start here trio is back in the rendered homepage - 12.7 removed it as the last hand-maintained list.");
-            }
-          '
-          echo "Guard: desk section rendered ($TOPIC_COUNT topics + $LATEST_COUNT latest), no placeholders."
+          echo "Guard: desk section rendered ($ROW_COUNT rows with standfirsts + topic line), no rejected markup."
 
       # S11 §11.9: the storefront, measured AS RENDERED rather than as written.
       # Three visual regressions shipped in the §11.3c rehaul (I10) — a hero that

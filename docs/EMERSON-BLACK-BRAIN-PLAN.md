@@ -49,7 +49,7 @@ the storefront was hiding.
 | Quartz config | `brain/quartz.config.yaml` |
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,840 lines; 12 measured `[OVERRIDE]` blocks + the `[SAFE]` brand layer) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
-| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs` |
+| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs`, `brain/scripts/check-desk-section.mjs`, `brain/scripts/check-desk-density.mjs` |
 | Override audit | `brain/scripts/audit-overrides.mjs` + `brain/scripts/probe.mjs` — "is this override still needed?" |
 | Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` |
 
@@ -301,7 +301,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 12.1(a)/12.1(d) + F1–F4 (2026-10-03) | Desk metadata contrast fixed with a real `--eb-meta` token (light **5.57:1** / dark **6.56:1** on the card; was `--lightgray` at **1.82:1**); `.eb-hub__desc` aligned to `.eb-listing-desc`; the contradicting per-tag count chip dropped; the orphaned landing kit pruned (**276 lines**); `canvas-page` / `bases-page` / `obsidian-plugin-excalidraw` disabled. **17 new checks**, all proven red by breakage |
 | 12.1(b) card widths (2026-10-04) | **Not a grid bug: `.page article` capped every card at 780px + `margin-inline: auto`, which un-stretches grid items** — measured 399–524px ragged at 1440px. Scoped to `:not(.eb-hub__card)`; tracks now equal |
 | 12.1(c) year archives (2026-10-04) | **New `year-archives` page-type plugin**: the four `/newsletters/<year>/` URLs are real listing pages again (newest first, title + standfirst + tags, tag-page row shape); top-level `/newsletters/` stays a redirect |
-| 12.7 (2026-10-04) | **`eb-latest`** puts the newest five dispatches first on the Desk, with standfirsts — replacing a `recent-notes` list that was rendering ~48k chars into the document, inside the sidebar graph. The homepage's hand-written "Start here" trio is **deleted**; the Desk section is now one automatic **topic strip** (7 chips, counts from tags already in every post). Guard arithmetic rewritten to minimums + resolved tag links |
+| 12.7 (2026-10-04) | **`eb-latest`** puts the newest five dispatches first on the Desk, with standfirsts — replacing a `recent-notes` list that was rendering ~48k chars into the document, inside the sidebar graph. The homepage's hand-written "Start here" trio is **deleted**; its Desk section is now **six dense rows in two columns** in the same shape as the Desk, plus a one-line topic sentence. Guard arithmetic rewritten to minimums + resolved tag links, and **density is now measured** (`check-desk-density.mjs`) |
 
 ## 12. Open items
 
@@ -412,11 +412,21 @@ Both items came from the reader, not from an audit. *"I click Desk and always sc
 
 **(a) The newest dispatches, at the TOP of the Desk.** New `eb-latest` plugin, `beforeBody` priority **4** — above the topic cards (8) and the fold-outs. **The list already existed and was invisible**: `@quartz-community/recent-notes` was enabled, rendering, and sitting at offset **~48465** in the built index, *inside the sidebar's graph container* — after everything, off the reading path. The page was answering the question in the one place nobody scrolls. Disabled it and replaced it with one that renders in the body, with standfirsts. It could not have been restyled: no `beforeBody` priority lands it above the hub, and it drops `description`, which is the 11.9.11 bare-titles complaint all over again. Five rows, one-line-clamped standfirsts, `--eb-meta` dates (never re-introducing the 1.82:1 `--lightgray` bug 12.1(a) fixed).
 
-**(b) The homepage's topic strip replaces the curated trio.** The three hand-chosen "Start here" posts are **deleted**, not relocated. They were the last hand-maintained list on the site, and their guard could only check that a URL matched a *shape* — a renamed post left a dead link and passed. Now one automatic strip of **7 chips** (topic + count), generated from tags that were already in every post's frontmatter; `news` excluded by name, matching tag-hub. A **strip, not the Desk's cards**, on purpose: five posts per topic upstairs would put 34 titles above the signup and turn a storefront into an index. `tags` is now exported by `export-post-dates.mjs` and handles **both** YAML shapes — verified against `writing-abroad.md`, the one block-sequence file in the archive, which a flow-only regex would have silently dropped.
+**(b) The homepage's topic strip replaces the curated trio.** The three hand-chosen "Start here" posts are **deleted**, not relocated. They were the last hand-maintained list on the site, and their guard could only check that a URL matched a *shape* — a renamed post left a dead link and passed. Now generated entirely from tags that were already in every post's frontmatter; `news` excluded by name, matching tag-hub. `tags` is now exported by `export-post-dates.mjs` and handles **both** YAML shapes — verified against `writing-abroad.md`, the one block-sequence file in the archive, which a flow-only regex would have silently dropped.
+
+**(c) …then the section was rebuilt twice more, because it was wrong twice.** Worth recording, because both failures were invisible to a source-level check and only showed up when rendered:
+
+- **Three cards → six dense rows.** The cards were rejected as *"large and clunky"*, and the real cause was **density, not padding**: three cards out of forty-nine posts means you see three, and each shouts equally, so nothing leads. Measured after: **6 posts in 181px (30px each)** against the cards' **3 in 168px (56px each)** — nearly double the content per screenful. The rows use **the Desk's own shape** (`.eb-latest`), so the homepage stops describing the archive and becomes a window onto it. The standfirsts do the pulling and were already written as hooks; **no copy is authored for this page.**
+- **Topic pills → one sentence.** Seven chips reading `process 15` were not *broken* — measured, they rendered correctly. They failed because a bare label plus a number **answers no question**, and as a block they competed with the list above them, which is the same mistake the cards made. Seven names on one line give the same signal for a third of the weight.
+- **The grouped-with-a-written-line idea was rejected on maintenance, not taste.** *"Writing can be hard. It's important to keep a strong mindset"* is one hand-written sentence **per topic, forever** — the same category of upkeep as the curated trio this change deleted. What is free is the topic name; that is what ships.
 
 **The guards were rewritten, not renumbered.** The old *"exactly 6 = 3 curated + 3 latest"* described a split that no longer exists, so it is now: ≥3 topics, every tag href **resolved against the built tag pages** (a dead link now fails — proven red by pointing `bookcraft` at `bookcraff`, which the old shape-check would have passed), ≥3 latest picks, all pointing at dated posts. Counts are **minimums, not exact numbers** — an exact count is a number to edit every time a post is written, which is the upkeep this change exists to remove. `check-desk-section.mjs` runs the same block locally against an assembled `_site`.
 
 **Three guards proven red, and one false positive caught by measuring.** eb-latest's ordering guard fails when its priority moves to 40; its newest-first and standfirst guards fail on a reversed sort and stripped descriptions. Then the *"Start here must not come back"* check fired on a **correct** build — because `index.html`'s own comment explains that 12.7 removed it, and grepping raw HTML reports that comment as the feature returning. Both the local checker and the CI guard now strip comments before matching (the I9 rule). Empty tags fail loudly and name the suspect script; the renderer is idempotent across repeat runs.
+
+**§12.7(c) added two more guard sets, because a section can fail in ways a source check cannot see.** `check-desk-density.mjs` measures the rendered block and asserts *density as a property*: two columns wide, one column on a phone, every standfirst clamped to a single line, and posts-per-height under 40px. The clamp is proven red by removing it (tallest goes 19px → 39px, and 58px on mobile). `check-desk-section.mjs` asserts that **neither rejected design can return** — `desk-pick` and `desk-topic__n` in the markup now abort the deploy, because a guard that only checks what is *present* is how the old one missed a section that had quietly changed shape.
+
+**One of the new density checks was itself wrong, and measuring caught it.** It first compared the block's height against the old cards' 168px and failed at 181px — but three cards was ONE row of three and six rows in two columns is THREE rows of two, so the blocks were never comparable at equal height. The assertion is now posts-per-height, which is what "denser" actually means.
 
 **No new frontmatter, no new data, nothing to maintain.**
 
@@ -520,7 +530,11 @@ node quartz/verify-default-mode.mjs        # serve public/ on :8099 first for br
 node quartz/theme/verify-brand.mjs
 
 # Storefront geometry (rendered; needs Chrome) — run from the repo root
-node brain/scripts/verify-storefront.mjs
+node brain/scripts/verify-storefront.mjs _site
+
+# The homepage Desk section: content + rendered density (12.7c)
+node brain/scripts/check-desk-section.mjs _site
+node brain/scripts/check-desk-density.mjs _site
 
 # Has upstream Quartz moved? (§12.6 — needs network, READ-ONLY, safe to run anytime)
 cd ~/Movies/PROJECTS/Websites/EBW\ website/brain && node quartz/check-quartz-upstream.mjs

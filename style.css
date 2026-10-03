@@ -951,63 +951,107 @@ a:hover { color: var(--accent-red-bright); }
     margin-bottom: 0;
 }
 
-/* The topic strip — 12.7. Replaces the hand-written "Start here" trio.
-
-   ONE ROW, NOT A GRID, and that is the decision rather than a shortcut. The
-   Desk's topic cards list five posts each because that page IS the archive;
-   the same treatment here would put 34 post titles above the signup and turn
-   a storefront into an index. This section only needs to say "a person writes
-   these things, and here is the shape of it" — so each topic is a chip: name,
-   count, link.
-
-   The count is the whole point of a chip. Without it the strip is just a row of
-   words; with it, a reader can see at a glance that `process` is fifteen notes
-   deep and `bookcraft` is four, and choose accordingly. */
-.desk-topics-strip {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-sm);
+/* 12.7(b) — the Desk section's two halves.
+ *
+ * SIX DENSE ROWS IN TWO COLUMNS, in the same shape as `.eb-latest` on /desk/:
+ * a fixed date column, then a block holding title + standfirst. The first
+ * attempt used the old card treatment and it read as "large and clunky" — the
+ * problem was density, not padding. Three cards out of forty-nine posts means
+ * you see three, and each shouts equally, so nothing leads. Six rows show twice
+ * as much at a third of the height, and the standfirsts do the pulling.
+ *
+ * The shape is deliberately the Desk's. Using it upstairs means the homepage is a
+ * window onto the archive instead of a description of it, and it means one date
+ * column width and one clamp rule rather than two.
+ *
+ * `min-width: 0` on the body is load-bearing: it is a grid item, and a grid
+ * item's default `min-width: auto` refuses to shrink below its content, so one
+ * long word in a title would widen the column and push the standfirst out. */
+.desk-rows {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* Column gap is wider than row gap so the two columns read as two lists
+       rather than one wrapped list — the eye scans down a column first. */
+    column-gap: var(--space-xl);
+    row-gap: 0;
     max-width: 1100px;
-    margin: 0 auto var(--space-2xl);
+    margin: 0 auto var(--space-lg);
+    text-align: left;
 }
 
-.desk-topic {
-    display: inline-flex;
+.desk-row {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 0.75rem;
     align-items: baseline;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.02);
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
-}
-
-.desk-topic:hover {
-    border-color: var(--accent-red);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-}
-
-.desk-topic__name {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: inherit;
+    text-decoration: none;
+    transition: color 0.25s ease;
 }
 
-.desk-topic__n {
+.desk-row:hover .desk-row__title { color: var(--accent-red-bright); }
+
+.desk-row__date {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.desk-row__body {
+    min-width: 0;
+    display: block;
+}
+
+.desk-row__title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary);
+    transition: color 0.25s ease;
+}
+
+/* ONE line, matching `.eb-latest__desc` and `.eb-years__desc`: this is a
+   skimmable index, not a preview, and the standfirsts run to a full sentence.
+   Unclamped, six of them would triple the height of the section — which is the
+   exact problem the cards had. */
+.desk-row__desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 0.1rem;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+}
+
+/* TOPICS: one sentence, not a row of pills.
+ *
+ * The pills were tried first and rejected. Measured, they were not broken — but
+ * a bare label plus a count ("process 15") answers no question, which is why
+ * they did not invite a click; and as a block they competed with the list above
+ * them, which is the same mistake the cards made. Seven names on one line gives
+ * the same "shape of the archive" signal for a third of the visual weight.
+ *
+ * The links keep the site-wide red, so they read as links without needing an
+ * underline, and the separators inherit a muted colour so they stay structure
+ * rather than content. */
+.desk-topics-line {
+    max-width: 1100px;
+    margin: 0 auto var(--space-lg);
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.9;
     color: var(--text-muted);
 }
 
-/* The count sits inside the pill it belongs to, so it must not become the link's
-   primary read. On hover the name goes bright; the count stays muted, which is
-   what makes the chip read as "name, in a quantity" rather than as a link with a
-   number stuck on the end. */
-.desk-topic:hover .desk-topic__n { color: var(--accent-red-bright); }
+.desk-topics-line a { letter-spacing: 0.01em; }
 
 .desk-picks-more {
     text-align: center;
@@ -1020,6 +1064,14 @@ a:hover { color: var(--accent-red-bright); }
 @media (max-width: 768px) {
     .desk-picks-grid { grid-template-columns: 1fr; }
     .desk-picks-sub::before, .desk-picks-sub::after { width: 1rem; }
+
+    /* 12.7(b) — two dated columns do not survive a phone. At 390px each column
+       would be ~150px, which fits a four-character date and nothing else: titles
+       would wrap to three lines and the standfirsts to five. The Desk's own
+       `.eb-latest` has no columns at all for the same reason, so one column here
+       matches it rather than inventing a third behaviour. */
+    .desk-rows { grid-template-columns: 1fr; column-gap: 0; }
+    .desk-topics-line { line-height: 2.1; }
 }
 
 /* Footer nav — the thread between the storefront and The Brain */

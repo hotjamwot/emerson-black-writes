@@ -13,22 +13,34 @@ const fail = (m) => {
   process.exit(1)
 }
 
-const strip = (html.match(/<div class="desk-topics-strip" id="desk-topics">([\s\S]*?)<\/div>/) || [])[1] || ""
-const tags = [...strip.matchAll(/href="\/desk\/tags\/([^"]+)"/g)].map((m) => m[1])
-console.log(`topics in strip: ${tags.length} (${tags.join(", ")})`)
-if (tags.length < 3) fail(`only ${tags.length} topic links in the strip`)
+// 12.7(b) — the topic container is a bare <span id="desk-topics"> inside a
+// hand-written sentence, so match on the id alone.
+const span = (html.match(/<span id="desk-topics">([\s\S]*?)<\/span>/) || [])[1] || ""
+const tags = [...span.matchAll(/href="\/desk\/tags\/([^"]+)"/g)].map((m) => m[1])
+console.log(`topics in line: ${tags.length} (${tags.join(", ")})`)
+if (tags.length < 3) fail(`only ${tags.length} topic links in the line`)
 
 const missing = tags.filter((t) => !existsSync(join(site, "desk", "tags", `${t}.html`)))
 if (missing.length) fail(`tag page(s) that do not exist: ${missing.join(", ")}`)
 console.log("every tag page exists")
 
-const latestBlock = (html.match(/<div class="desk-picks-grid" id="desk-latest">([\s\S]*?)<\/div>/) || [])[1] || ""
-const latest = [...latestBlock.matchAll(/class="desk-pick" href="([^"]+)"/g)].map((m) => m[1])
-console.log(`latest picks: ${latest.length}`)
-if (latest.length < 3) fail(`only ${latest.length} latest picks`)
+const latestBlock = (html.match(/<div class="desk-rows" id="desk-latest">([\s\S]*?)<\/div>\s*<p class="desk-topics-line">/) || [])[1] || ""
+const latest = [...latestBlock.matchAll(/class="desk-row" href="([^"]+)"/g)].map((m) => m[1])
+console.log(`latest rows: ${latest.length}`)
+if (latest.length < 3) fail(`only ${latest.length} latest rows`)
 const badLatest = latest.filter((h) => !/^\/desk\/newsletters\/\d{4}\//.test(h))
-if (badLatest.length) fail(`latest picks not pointing at dated posts: ${badLatest.join(", ")}`)
-console.log("every latest pick points at a dated post")
+if (badLatest.length) fail(`latest rows not pointing at dated posts: ${badLatest.join(", ")}`)
+console.log("every latest row points at a dated post")
+
+// 12.7(b) — the rows carry standfirsts. This is the whole reason the cards were
+// replaced: the persuasion was already written into the frontmatter, and a row
+// without it is a bare title, which is the 11.9.11 complaint.
+const descs = (latestBlock.match(/class="desk-row__desc"/g) ?? []).length
+if (descs !== latest.length) fail(`${descs}/${latest.length} rows carry a standfirst`)
+
+// And no card/pill markup may survive from the rejected designs.
+if (/class="desk-pick"/.test(html)) fail("the old card treatment is still in the markup")
+if (/class="desk-topic__n"/.test(html)) fail("the topic pills are still in the markup")
 
 if (html.includes("{{DESK_COUNT}}")) fail("{{DESK_COUNT}} placeholder shipped")
 
