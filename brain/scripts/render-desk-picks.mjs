@@ -18,11 +18,30 @@
  *   #desk-latest   -> the three newest posts, newest first
  *   {{DESK_COUNT}} -> the total number of published posts
  *
- * It deliberately does NOT touch the hand-written "Start here" list. Those three
- * are an editorial choice, not a computed one — see §11.3b in the plan.
+ * 12.7 — the "Start here" trio is GONE, replaced by #desk-topics, a topic strip
+ * generated from the `tags` every post already carries. It was the last
+ * hand-maintained list on the homepage, and the reader had already flagged the
+ * Desk section as the thing that should change. Every one of those six cards
+ * could rot silently: a renamed post leaves a link to nothing, and the deploy
+ * guard that checks the URLs cannot tell a dead link from a live one.
+ *
+ * WHAT IT DOES NOT WRITE — the decision behind the strip's shape. The Desk's own
+ * topic cards list FIVE posts per topic, and bringing that to the homepage was
+ * considered and rejected: it puts 34 post titles above the signup and turns a
+ * storefront into an index. The homepage already sells books, states the
+ * premise, and collects emails; what it needs from the Desk is proof that a
+ * person writes these things and a route to more. So the strip is one row —
+ * topic name, post count, link — and the substance stays on /desk/.
+ *
+ * `news` is excluded by NAME here, matching tag-hub on the Desk. Excluding a tag
+ * by string is an editorial choice, so it is a named constant and both halves of
+ * the site say so, rather than one filtering it and the other not.
+ *
+ * It deliberately does NOT touch the hand-written "Start here" list — that list
+ * no longer exists. See above.
  */
 
-import { readFileSync, writeFileSync } from "node:fs"
+import { readFileSync, writeFileSync, readdirSync } from "node:fs"
 import { join } from "node:path"
 
 const BRAIN = process.argv[2] || "."
@@ -50,6 +69,61 @@ if (picks.length < LATEST) {
   process.exit(1)
 }
 
+// 12.7 — the topic strip. Counts come from the tags in the SAME file the posts
+// come from, so the strip cannot disagree with the archive: there is no second
+// list to fall out of date.
+//
+// `news` is excluded by name, matching tag-hub on the Desk. Two places make the
+// same editorial decision, so it is stated in both.
+const EXCLUDED_TAGS = new Set(["news"])
+
+const topicCounts = new Map()
+for (const p of data) {
+  for (const tag of p.tags ?? []) {
+    if (EXCLUDED_TAGS.has(tag)) continue
+    topicCounts.set(tag, (topicCounts.get(tag) ?? 0) + 1)
+  }
+}
+
+// Busiest first, ties alphabetical — the same ordering tag-hub uses, so the
+// homepage strip and the Desk's cards present the topics in the same order.
+const topics = [...topicCounts.entries()].sort(
+  (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+)
+
+if (topics.length === 0) {
+  console.error(
+    "ERROR: no tags found in postDates.json — the topic strip would render empty.",
+  )
+  console.error("       The tag export in export-post-dates.mjs is the suspect.")
+  process.exit(1)
+}
+
+const topicCards = topics
+  .map(
+    ([tag, n]) =>
+      `                <a class="desk-topic" href="/desk/tags/${esc(tag)}"><span class="desk-topic__name">${esc(
+        tag.replace(/-/g, " "),
+      )}</span><span class="desk-topic__n">${n}</span></a>`,
+  )
+  .join("\n")
+
+/** Replace one placeholder container, idempotently. */
+function fillContainer(source, id, className, body) {
+  return source.replace(
+    new RegExp(`(<div class="${className}" id="${id}">)([\\s\\S]*?)(</div>)`),
+    (_, open, existing, close) => {
+      // ⚠️ IDEMPOTENCE, same reason as before: the deployed `_site/index.html`
+      // is a COPY, the generator re-runs every deploy, and treating
+      // "already rendered with this exact content" as success is what keeps a
+      // no-op rebuild from failing the deploy.
+      const already = existing.replace(/<!--[^]*?-->/g, "").trim()
+      if (already === body.trim()) return `${open}${existing}${close}`
+      return `${open}\n${body}\n            ${close}`
+    },
+  )
+}
+
 const cards = picks
   .map(
     (p) => `                <a class="desk-pick" href="/desk/${esc(p.slug)}">
@@ -60,28 +134,14 @@ const cards = picks
   )
   .join("\n")
 
-let out = html.replace(
-  /(<div class="desk-picks-grid" id="desk-latest">)([\s\S]*?)(<\/div>)/,
-  (_, open, body, close) => {
-    // ⚠️ IDEMPOTENCE. The deployed `_site/index.html` is a COPY of this file,
-    // but the generator is re-run on every deploy, and a previous run's cards
-    // are already in the source. The regex would then match the previous run's
-    // markup and replace it — which is fine — EXCEPT that the "nothing changed"
-    // guard below would then see an unchanged file and abort, failing the whole
-    // deploy on a no-op rebuild. So we treat "already rendered with this exact
-    // content" as success rather than as an error.
-    const already = body.replace(/<!--[^]*?-->/g, "").trim()
-    if (already === cards.trim()) {
-      console.log("desk-picks: already up to date; nothing to render.")
-      process.exit(0)
-    }
-    return `${open}\n${cards}\n            ${close}`
-  },
-)
+let out = fillContainer(html, "desk-latest", "desk-picks-grid", cards)
+
+// 12.7 — the topic strip, rendered from the tags in the same file.
+out = fillContainer(out, "desk-topics", "desk-topics-strip", topicCards)
 
 out = out.replace(/\{\{DESK_COUNT\}\}/g, String(data.length))
 
-// The placeholders exist to be replaced; if either survives, the section would
+// The placeholders exist to be replaced; if any survives, the section would
 // ship with literal "{{DESK_COUNT}}" text or an empty box, so fail the deploy
 // rather than publish a visibly broken page.
 if (out.includes("{{DESK_COUNT}}")) {
@@ -92,11 +152,40 @@ if (/id="desk-latest">\s*<\/div>/.test(out)) {
   console.error("ERROR: #desk-latest rendered empty.")
   process.exit(1)
 }
+if (/id="desk-topics">\s*<\/div>/.test(out)) {
+  console.error("ERROR: #desk-topics rendered empty.")
+  process.exit(1)
+}
 if (!out.includes('id="desk-latest"')) {
   console.error("ERROR: #desk-latest container not found in index.html.")
+  process.exit(1)
+}
+if (!out.includes('id="desk-topics"')) {
+  console.error("ERROR: #desk-topics container not found in index.html.")
+  process.exit(1)
+}
+
+// 12.7 — every topic must link to a tag page that EXISTS in the built Desk.
+// The old guard counted links that matched a URL SHAPE, which cannot tell a
+// live page from a dead one — a renamed tag would have passed it. This one
+// resolves each href against the built output.
+const tagPages = new Set(
+  readdirSync(join(SITE, "tags"))
+    .filter((f) => f.endsWith(".html"))
+    .map((f) => f.replace(/\.html$/, "")),
+)
+const deadTopics = topics
+  .map(([tag]) => tag)
+  .filter((tag) => !tagPages.has(tag))
+if (deadTopics.length) {
+  console.error(
+    `ERROR: topic strip links to ${deadTopics.length} tag page(s) that do not exist: ${deadTopics.join(", ")}`,
+  )
   process.exit(1)
 }
 
 writeFileSync(INDEX, out)
 console.log(`desk-picks: rendered ${picks.length} latest + ${data.length} total`)
 for (const p of picks) console.log(`  ${p.date}  ${p.title}`)
+console.log(`desk-topics: rendered ${topics.length} topics`)
+for (const [tag, n] of topics) console.log(`  ${n}  ${tag}`)

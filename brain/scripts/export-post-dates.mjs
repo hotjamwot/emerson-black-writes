@@ -72,6 +72,44 @@ function frontmatter(src, key) {
   return line[1].trim().replace(/^["']|["']$/g, "")
 }
 
+/**
+ * The `tags` field, as an array of strings.
+ *
+ * 12.7: added so the storefront can render a topic strip without a second
+ * source of truth. Tags were already in the frontmatter of every post — the
+ * Desk's tag-hub builds its cards from them — but they were never exported, so
+ * the homepage had no way to know what the writing is about without a
+ * hand-maintained list.
+ *
+ * Two shapes appear in the wild and BOTH are handled:
+ *   tags: [process, news]     inline flow sequence
+ *   tags:\n  - process\n  - news   block sequence
+ * A regex that only knew the first would silently return an empty array for
+ * every post in the second shape, and the strip would render zero topics with
+ * nothing failing — which is exactly the "silently wrong" failure the deploy
+ * guards exist to catch. Anything unrecognised returns [] rather than a
+ * half-parsed value, and the caller reports the total.
+ */
+function frontmatterTags(src) {
+  const block = src.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  if (!block) return []
+  const inline = block[1].match(/^tags:\s*\[(.*)\]\s*$/m)
+  if (inline) {
+    return inline[1]
+      .split(",")
+      .map((t) => t.trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean)
+  }
+  const blockList = block[1].match(/^tags:\s*\r?\n((?:\s*-\s*.+\r?\n?)+)/m)
+  if (blockList) {
+    return blockList[1]
+      .split("\n")
+      .map((l) => l.replace(/^\s*-\s*/, "").trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean)
+  }
+  return []
+}
+
 const posts = []
 for (const file of mdFiles(CONTENT)) {
   const src = readFileSync(file, "utf8")
@@ -90,6 +128,7 @@ for (const file of mdFiles(CONTENT)) {
     date: iso,
     title: frontmatter(src, "title") ?? "",
     description: frontmatter(src, "description") ?? "",
+    tags: frontmatterTags(src),
   })
 }
 
@@ -114,3 +153,16 @@ if (undated.length) {
 }
 console.log("newest 3:")
 for (const p of withDates.slice(0, 3)) console.log(`  ${p.date}  ${p.title}`)
+
+// 12.7 — report the tag extraction, loudly, because the storefront's topic strip
+// is built from it and an empty result would render an empty strip rather than
+// fail. Same reasoning as the undated warning above: a silent gap is what
+// produced the misleading "Writing Abroad" link.
+const untagged = withDates.filter((p) => (p.tags ?? []).length === 0)
+const allTags = new Set(withDates.flatMap((p) => p.tags ?? []))
+console.log(`tags: ${allTags.size} distinct across ${withDates.length} posts`)
+if (untagged.length) {
+  console.warn(`WARNING: ${untagged.length} post(s) have no tags and cannot appear in the topic strip:`)
+  for (const p of untagged.slice(0, 5)) console.warn(`  ${p.slug}`)
+  if (untagged.length > 5) console.warn(`  …and ${untagged.length - 5} more`)
+}

@@ -301,6 +301,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 12.1(a)/12.1(d) + F1–F4 (2026-10-03) | Desk metadata contrast fixed with a real `--eb-meta` token (light **5.57:1** / dark **6.56:1** on the card; was `--lightgray` at **1.82:1**); `.eb-hub__desc` aligned to `.eb-listing-desc`; the contradicting per-tag count chip dropped; the orphaned landing kit pruned (**276 lines**); `canvas-page` / `bases-page` / `obsidian-plugin-excalidraw` disabled. **17 new checks**, all proven red by breakage |
 | 12.1(b) card widths (2026-10-04) | **Not a grid bug: `.page article` capped every card at 780px + `margin-inline: auto`, which un-stretches grid items** — measured 399–524px ragged at 1440px. Scoped to `:not(.eb-hub__card)`; tracks now equal |
 | 12.1(c) year archives (2026-10-04) | **New `year-archives` page-type plugin**: the four `/newsletters/<year>/` URLs are real listing pages again (newest first, title + standfirst + tags, tag-page row shape); top-level `/newsletters/` stays a redirect |
+| 12.7 (2026-10-04) | **`eb-latest`** puts the newest five dispatches first on the Desk, with standfirsts — replacing a `recent-notes` list that was rendering ~48k chars into the document, inside the sidebar graph. The homepage's hand-written "Start here" trio is **deleted**; the Desk section is now one automatic **topic strip** (7 chips, counts from tags already in every post). Guard arithmetic rewritten to minimums + resolved tag links |
 
 ## 12. Open items
 
@@ -399,8 +400,25 @@ CSS was touched. **One of the two was real; one was not.**
 - **11.7 Series reading order** — visible 0→1→2→3 with one-line hooks and a "start here"
   for the free novella.
 - **11.5 Tag constellation, not a graph** — settled: no force graph on the homepage. Static
-  chips sized by post count, linking to tag pages, no JS. The full graph returns once the
-  link graph is dense enough.
+  chips sized by post count, linking to tag pages, no JS. **Largely SHIPPED by 12.7:**
+  the homepage now carries exactly this — 7 static chips with post counts, linking
+  to real tag pages, no JS. What is left is only whether they should also appear
+  higher up (the hero), which is the remaining taste question. The full graph
+  returns once the link graph is dense enough.
+
+### 12.7 ✅ The Desk leads with recency; the homepage's last hand-written list is gone (2026-10-04)
+
+Both items came from the reader, not from an audit. *"I click Desk and always scroll to the year dropdowns, because I want the most recent posts and to work backwards"* is a report of the page's ordering being wrong. The homepage's Desk section was flagged at the same time as manual upkeep.
+
+**(a) The newest dispatches, at the TOP of the Desk.** New `eb-latest` plugin, `beforeBody` priority **4** — above the topic cards (8) and the fold-outs. **The list already existed and was invisible**: `@quartz-community/recent-notes` was enabled, rendering, and sitting at offset **~48465** in the built index, *inside the sidebar's graph container* — after everything, off the reading path. The page was answering the question in the one place nobody scrolls. Disabled it and replaced it with one that renders in the body, with standfirsts. It could not have been restyled: no `beforeBody` priority lands it above the hub, and it drops `description`, which is the 11.9.11 bare-titles complaint all over again. Five rows, one-line-clamped standfirsts, `--eb-meta` dates (never re-introducing the 1.82:1 `--lightgray` bug 12.1(a) fixed).
+
+**(b) The homepage's topic strip replaces the curated trio.** The three hand-chosen "Start here" posts are **deleted**, not relocated. They were the last hand-maintained list on the site, and their guard could only check that a URL matched a *shape* — a renamed post left a dead link and passed. Now one automatic strip of **7 chips** (topic + count), generated from tags that were already in every post's frontmatter; `news` excluded by name, matching tag-hub. A **strip, not the Desk's cards**, on purpose: five posts per topic upstairs would put 34 titles above the signup and turn a storefront into an index. `tags` is now exported by `export-post-dates.mjs` and handles **both** YAML shapes — verified against `writing-abroad.md`, the one block-sequence file in the archive, which a flow-only regex would have silently dropped.
+
+**The guards were rewritten, not renumbered.** The old *"exactly 6 = 3 curated + 3 latest"* described a split that no longer exists, so it is now: ≥3 topics, every tag href **resolved against the built tag pages** (a dead link now fails — proven red by pointing `bookcraft` at `bookcraff`, which the old shape-check would have passed), ≥3 latest picks, all pointing at dated posts. Counts are **minimums, not exact numbers** — an exact count is a number to edit every time a post is written, which is the upkeep this change exists to remove. `check-desk-section.mjs` runs the same block locally against an assembled `_site`.
+
+**Three guards proven red, and one false positive caught by measuring.** eb-latest's ordering guard fails when its priority moves to 40; its newest-first and standfirst guards fail on a reversed sort and stripped descriptions. Then the *"Start here must not come back"* check fired on a **correct** build — because `index.html`'s own comment explains that 12.7 removed it, and grepping raw HTML reports that comment as the feature returning. Both the local checker and the CI guard now strip comments before matching (the I9 rule). Empty tags fail loudly and name the suspect script; the renderer is idempotent across repeat runs.
+
+**No new frontmatter, no new data, nothing to maintain.**
 
 ### 12.4 🟠 Cosmetic — shipped 2026-10-03
 
