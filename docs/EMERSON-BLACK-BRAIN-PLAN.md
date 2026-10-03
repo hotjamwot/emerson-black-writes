@@ -1,7 +1,7 @@
 # Emerson Black — Site Plan
 
 **Status:** Live · `emersonblackwrites.com/` (storefront) + `/desk/` (Emerson's Desk) · Quartz v5
-**Updated:** 2026-10-03 · **Owner:** HayJay + AI assistant
+**Updated:** 2026-10-04 · **Owner:** HayJay + AI assistant
 
 **Goal:** Write in Obsidian → run `Publish Brain.command` → the archive is live at
 **`emersonblackwrites.com/desk/`**, built by GitHub Actions.
@@ -284,7 +284,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 11.3c Storefront rehaul | Series pitch replaces the dated hero; `#about` replaces the `bio.html` stub (kept as a `noindex` redirect) |
 | 11.4 Desk link in header | Moved footer-only → sticky header |
 | 11.9.1–3 | Hero full-bleed, section rhythm, prequel cover 5:8 — all measured, not eyeballed |
-| 11.9.4 Mobile | ⚠️ **Partly open** — see §12.2 |
+| 11.9.4 Mobile | ✅ **Closed 2026-10-04** (§12.2) — header never wrapped (guarded across 7 widths); series hook's premise no longer stacks below two decorative images |
 | 11.9.5(a) Desk hub | One card per topic, 5 most recent each; `news` excluded by name (award announcements date badly and pull a craft archive toward a newswire) |
 | 11.9.5(b) Tag page descriptions | `listing-descriptions` — a **full replacement** for `tag-page`; the community plugin drops `description` and cannot be patched |
 | 11.9.5(c) Standfirst on posts | Shipped *twice* and read as never shipped: it was on `/desk/` and `/tags/`, never in a post body. An empty paragraph under a title is worse than nothing |
@@ -344,14 +344,50 @@ count (`15`, `9`, `7`…) above a list of five; `.eb-hub__more` ("6 more on proc
 carries the honest remainder, so the chip was deleted from the `tag-hub` component *and* the
 stylesheet. The suite asserts `eb-hub__n` is absent from the built HTML and CSS.
 
-### 12.2 🔴 11.9.4 Mobile — partly open, **needs a real phone**
+### 12.2 ✅ 11.9.4 Mobile — closed by measurement (2026-10-04)
 
-Closed by 11.9.7c/d: mobile header is nav-only; the article precedes the explorer. Still
-open: (a) the storefront header has 4 items and only drops "Subscribe" below 700px, so at
-701–900px it is at its most crowded; (b) `.series-hook` collapses to one column and the
-two decorative silhouettes stack *above* the text, pushing the premise below two large
-images. I cannot verify rendered geometry without a device, and guessing from CSS is how
-this became a list of unfixed suspects.
+Closed by 11.9.7c/d (header nav-only; article precedes explorer) and finished here.
+**Both open items were filed as "needs a real phone". They did not — they needed
+rendered geometry, which `verify-storefront.mjs` already had.** The suite was
+extended from 3 widths to **7 (1400/ 1100 / 900 / 768 / 701 / 690 / 390)**,
+chosen to straddle both named breakpoints, then each item was measured before any
+CSS was touched. **One of the two was real; one was not.**
+
+- **(a) The crowded header — NOT A DEFECT. It never wrapped at any width.** All
+  four nav links share one `top` at **every** width from 1400 down to 701, and the
+  nav's right edge stays inside the header at all seven (1218 ≤ 1250 at 1400;
+  374 ≤ 390 at 390). §12.2(a) guessed "most crowded at 701–900px" from reading CSS
+  and measuring nothing; the rendered row simply fits, because the wordmark is
+  allowed to shrink before anything is dropped. The suspicion was reasonable and
+  the conclusion was wrong — which is the same lesson as the override audit in
+  §12.6, one layer up: **a claim of crowding is not a measurement of it.**
+  What did ship is the *guard*: nav links are read from computed style, so a
+  `display: none` item cannot masquerade as present, and "one line" is asserted
+  as one distinct `top` rather than eyeballed.
+- **(b) The premise below two silhouettes — REAL, fixed.** Below the 768px
+  breakpoint the grid goes to one column and stacks in DOM order, which is
+  visuals → text → visuals. Both images are decorative (`alt=""`,
+  `aria-hidden="true"`) and ~250px tall, so the band opened on **two pictures
+  before any words**: measured text top **2716 vs image top 2634** at 768, and
+  **4194 vs 4190** at 390 — the premise sat ~278px down the band, under both.
+  Fixed with `.series-hook > .series-hook-text { order: -1 }` in the existing
+  `max-width: 768px` block. **`order` works here and did NOT in §11.9.7c**, and
+  the difference is the whole point: no child of this grid is `grid-area`-placed,
+  so items are placed by source order and `order` is the honest lever. Text now
+  leads at every width (4194 vs 4893 at 390).
+- **Two of my own new checks were wrong on first run, and both were caught by
+  measuring instead of fixing.** The desktop "text between the silhouettes" check
+  was written backwards (`t[0] < v1[2]`) and failed a band that is measurably
+  correct — v1 ends at 352, text runs 380…1020, v2 starts at 1048. And I first
+  asserted a 14px floor on nav type, which would have failed the design's
+  deliberate `0.72rem` uppercase micro-labels — the 14px floor in the CSS is
+  about *prose*, not navigation. Both were recalibrated to what the design
+  actually is, not relaxed to whatever passed. **A guard that rejects the good
+  case trains you to ignore the guard**, which is the failure mode §9's false
+  failures were about.
+- **Proven red, not assumed green.** With `order: -1` reverted to `order: 0` the
+  suite fails on exactly the 4 premise checks and nothing else; restored, it
+  passes. That is the standard every new check here is held to.
 
 ### 12.3 🟢 Product — untouched, in ceiling order
 

@@ -162,6 +162,34 @@ f.onload = () => setTimeout(() => {
       hero: R(".hero"), books: R(".books"), hook: R(".series-hook"),
       start: R(".start-reading"), desk: R(".desk-picks"), chars: R(".characters"),
       about: R("#about"), cover: R(".prequel-cover"), coverImg: R(".prequel-cover img"),
+
+      // ── §12.2: the header and the series hook, measured ──────────────────────
+      // The header was the one band whose failure is invisible in source: four
+      // nav links plus a wordmark in a flex row simply *fit* at every width the
+      // stylesheet declares, so every source-level check passed. What breaks is
+      // the rendered line — a wrapped nav, or a "Subscribe" that is still there
+      // at 690px because the rule that hides it is nested one block too deep.
+      headerInner: R(".site-header-inner"),
+      headerNav: R(".site-nav"),
+      navLinks: [...d.querySelectorAll(".site-nav a")].map((a) => {
+        const r = a.getBoundingClientRect()
+        const cs = w.getComputedStyle(a)
+        return {
+          label: a.textContent.trim(),
+          // A display:none link is not on a line at all; reading its rect as
+          // "present" is how a dropped nav item looks like it survived.
+          shown: cs.display !== "none" && cs.visibility !== "hidden",
+          top: Math.round(r.top), bottom: Math.round(r.bottom),
+          fontPx: Math.round(parseFloat(cs.fontSize) * 10) / 10,
+        }
+      }),
+
+      // The hook's three grid children. Which one lands FIRST is the whole
+      // question: the premise is the point of the band, and two decorative
+      // silhouettes stacked above it push it below the fold on a phone.
+      hookFirstVisual: R(".series-hook > .series-hook-visuals:first-child"),
+      hookText: R(".series-hook > .series-hook-text"),
+      hookLastVisual: R(".series-hook > .series-hook-visuals:last-child"),
     })
   } catch (e) { out = "PROBE ERROR: " + e.message }
   document.title = out
@@ -243,6 +271,14 @@ if (!chrome) {
     for (const [w, h] of [
       [1400, 900],
       [1100, 900],
+      // §12.2(a) lived entirely in the gap between the widths we measured. 900 and
+      // 701 are the two edges of the "most crowded" band 12.2 named; 768 is the
+      // series-hook breakpoint itself; 690 is inside the phone band, where the
+      // header rules are supposed to have taken over.
+      [900, 900],
+      [768, 900],
+      [701, 900],
+      [690, 900],
       [390, 844],
     ]) {
       console.log(`Rendered at ${w}px`)
@@ -308,6 +344,78 @@ if (!chrome) {
           min = Math.min(min, cur[1] - prev[3])
         }
         check(min >= 64, `every section is ≥ 64px from the last (tightest gap measured ${min}px)`)
+      }
+
+      // ── §12.2(a): the header must not wrap, and must not crowd ───────────────
+      // A wrapped nav is the failure mode, and it is *only* visible rendered:
+      // four links plus a wordmark fit inside a flex row at every declared
+      // width, so nothing in the source says "too full". Measuring `top` on each
+      // link is the honest test — one line means one top.
+      const links = g.navLinks ?? []
+      const shown = links.filter((l) => l.shown)
+      if (!shown.length) {
+        check(false, `header nav has visible links at ${w}px`)
+      } else {
+        const tops = new Set(shown.map((l) => l.top))
+        check(
+          tops.size === 1,
+          `header nav stays on ONE line at ${w}px (${shown.length} links across ${tops.size} line(s): ${shown.map((l) => l.label).join(", ")})`,
+        )
+        // Shrink floor for the nav. NOT 14px: the nav is a set of uppercase,
+        // letter-spaced 0.72rem micro-labels, and that is a deliberate part of
+        // the header's look, not body copy — the 14px floor in the 600px block's
+        // comment is about prose. What matters is that shrinking to make room
+        // never goes past legibility, and that the phone band is not paid for
+        // twice. 10px is the floor; the design ships 11.5px desktop / 10.4px
+        // phone, so this catches a real collapse without fighting the design.
+        const smallest = Math.min(...shown.map((l) => l.fontPx))
+        check(
+          smallest >= 10,
+          `header nav type never falls below 10px at ${w}px (smallest measured ${smallest}px)`,
+        )
+      }
+
+      // The header must fit its own width: the nav's right edge cannot pass the
+      // header's, and the header cannot have grown a second row's worth of
+      // height by squeezing the wordmark out of existence.
+      if (g.headerInner && g.headerNav) {
+        check(
+          g.headerNav[2] <= g.headerInner[2] + 1,
+          `header nav stays inside the header at ${w}px (nav right ${g.headerNav[2]} ≤ header ${g.headerInner[2]})`,
+        )
+      }
+
+      // ── §12.2(b): the premise comes FIRST, not two silhouettes ───────────────
+      // Below the hook's breakpoint the grid goes to one column and DOM order
+      // decides the stack: visuals, text, visuals. The images are decorative
+      // (aria-hidden, alt="") but they are ~250px each, so the premise — the one
+      // thing in the band that says anything — is pushed below them. The test is
+      // vertical position, because that is what a reader experiences.
+      const t = g.hookText
+      const firstVis = g.hookFirstVisual
+      const lastVis = g.hookLastVisual
+      if (w > 768) {
+        // The text must not OVERLAP either silhouette, and must sit horizontally
+        // between them. Direction matters: `text.left >= v1.right` and
+        // `text.right <= v2.left`. (My first version wrote it the other way
+        // round and failed a band that is measurably correct — v1 ends at 352,
+        // text runs 380…1020, v2 starts at 1048. A guard that rejects the good
+        // case teaches you to ignore the guard.)
+        check(
+          !!t && !!firstVis && !!lastVis && t[0] >= firstVis[2] - 1 && t[2] <= lastVis[0] + 1,
+          `series hook keeps the text BETWEEN the two silhouettes at ${w}px (text ${t ? `${t[0]}…${t[2]}` : "MISSING"}, left image ends ${firstVis ? firstVis[2] : "?"}, right image starts ${lastVis ? lastVis[0] : "?"})`,
+        )
+      } else {
+        // Single column: the text must be the FIRST child painted, so a phone
+        // reader meets the premise before any imagery.
+        check(
+          !!t && !!firstVis && t[1] <= firstVis[1] + 1,
+          `series hook shows the premise BEFORE the silhouettes at ${w}px (text top ${t ? t[1] : "MISSING"} ≤ image top ${firstVis ? firstVis[1] : "MISSING"})`,
+        )
+        check(
+          !!t && !!lastVis && t[1] <= lastVis[1] + 1,
+          `series hook shows the premise before the closing silhouette at ${w}px (text top ${t ? t[1] : "MISSING"} ≤ image top ${lastVis ? lastVis[1] : "MISSING"})`,
+        )
       }
     }
   } finally {

@@ -1015,6 +1015,14 @@ a:hover { color: var(--accent-red-bright); }
     .series-hook > .series-hook-visuals:last-child {
         grid-column: auto;
     }
+    /* §12.2(b), measured: in one column the grid stacks in DOM order, which is
+       visuals → text → visuals. Both images are decorative (alt="",
+       aria-hidden) and ~250px tall, so the premise — the only thing in the band
+       that says anything — rendered ~278px down and below two pictures of a rock
+       star and a politician. `order` is the correct lever here, and unlike the
+       Desk's §11.9.7c case nothing is grid-area-placed, so it works: the text
+       takes the first row on a phone and both silhouettes follow it. */
+    .series-hook > .series-hook-text { order: -1; }
     .series-hook-visuals:first-child,
     .series-hook-visuals:last-child {
         justify-content: center;
