@@ -1011,6 +1011,110 @@ h2.page-title,
   border-top: none;
 }
 
+// ── 3f. eb-book-mentions — the door from a dispatch to the books (§11.6)
+// [SAFE — brand] Own .eb-* classes only; no upstream selector is touched.
+//
+// EVERY COLOUR, FONT AND RULE HERE IS AN EXISTING TOKEN. This card is the
+// clearest test of the §12.9 rule applied to styling: the theme already exposes
+// --eb-accent, --eb-line, --eb-surface, --eb-meta, --eb-display/serif and
+// --eb-radius, so the card inherits the brand by REFERENCING it and cannot drift
+// from the rest of the reading room. Writing hex values here would have created a
+// fourth place the palette lives, and the §11.3c rehaul is a reminder of what
+// happens when the palette stops having one home.
+//
+// NOT A CARD, THOUGH. It is a bordered block with a hairline top rule, because a
+// floating shadowed box in the middle of a prose column reads as an advertisement
+// — and the whole point (§11.6) is that this is a quiet door, not a pitch. It
+// looks like the end of the article, which is what it is.
+.eb-mentions {
+  margin: 2.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--eb-line);
+}
+
+.eb-mentions__title {
+  font-family: var(--eb-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  // The uppercase micro-label, same as .eb-years__title and the Desk's section
+  // heads. Tracking comes from the token rather than a literal so the card tracks
+  // the theme rather than restating it.
+  text-transform: uppercase;
+  letter-spacing: var(--eb-tracking);
+  color: var(--eb-meta);
+  margin: 0 0 0.75rem;
+}
+
+.eb-mentions__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.eb-mentions__item {
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.4rem;
+  background: var(--eb-surface);
+  border-radius: var(--eb-radius);
+}
+
+// The label sits AFTER the title in the DOM and is simply spaced beside it with a
+// margin, rather than being reordered with flex `order` or pulled up with a
+// negative margin. Both of those would put the visual order and the DOM order out
+// of sync, so a screen reader would announce "Book 1" before the title it belongs
+// to. In document order the card reads title → number, which is the sentence a
+// person would say out loud.
+.eb-mentions__title-link {
+  font-family: var(--eb-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--eb-accent);
+  }
+}
+
+.eb-mentions__label {
+  font-family: var(--eb-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--eb-meta);
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+// The blurb is the author's own `logline`, already written, so the card adds no
+// copy the author has to maintain. Clamped to two lines: the point is to say
+// which book, not to preview the fiction.
+.eb-mentions__blurb {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--eb-meta);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.eb-mentions__more {
+  margin: 0.9rem 0 0;
+}
+
+.eb-mentions__more-link {
+  font-family: var(--eb-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--eb-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .eb-latest__date {
   font-family: var(--eb-mono);
   font-size: 0.7rem;

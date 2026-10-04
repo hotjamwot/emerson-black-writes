@@ -371,6 +371,14 @@ jobs:
       - name: Check book data and links
         run: node brain/scripts/check-book-links.mjs .
 
+      # §11.6 — the book mention cards. This guard exists because the feature's
+      # first two versions BOTH shipped zero cards with a clean build: Quartz
+      # called the component as a constructor with no props, and then
+      # `String(tree)` returned "[object Object]". Neither failure is visible in
+      # the output, so without this the cards could disappear again unnoticed.
+      - name: Check book mention cards
+        run: node brain/scripts/check-book-mentions.mjs _site
+
       - name: Storefront geometry check (rendered)
         run: node brain/scripts/verify-storefront.mjs _site
       - name: Upload artifact

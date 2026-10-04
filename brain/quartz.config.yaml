@@ -479,6 +479,23 @@ plugins:
       position: beforeBody
       priority: 8
       condition: is-index
+  # §11.6 — the door from a dispatch to the books.
+  #
+  # `afterBody`, so the card sits at the END of the post: a reader has finished
+  # the argument by then, which is the only moment naming a book is welcome
+  # rather than an interruption. Priority 5 puts it above the (disabled)
+  # comments slot and directly under the article.
+  #
+  # There is deliberately NO `condition: is-index` here, unlike eb-latest and
+  # tag-hub — this one is meant to run on EVERY post and nowhere else. The
+  # component's own slug guard is what holds it to real dispatches: the Desk's
+  # slug is "index" and a folder page's ends in "/", and either would otherwise
+  # grow a card about a book that the page never mentioned.
+  - source: "./quartz/plugins/eb-book-mentions"
+    enabled: true
+    layout:
+      position: afterBody
+      priority: 5
   - source: "@quartz-community/comments"
     enabled: false
     options:

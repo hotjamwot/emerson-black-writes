@@ -1,0 +1,29 @@
+{
+  "name": "eb-book-mentions",
+  "version": "1.0.0",
+  "description": "A door from a dispatch to the books: named, linked, never sold",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    },
+    "./components": {
+      "import": "./components.js"
+    }
+  },
+  "quartz": {
+    "name": "eb-book-mentions",
+    "displayName": "Book Mentions",
+    "description": "Names the books a dispatch mentions, at the end of the post",
+    "components": {
+      "EbBookMentions": {
+        "name": "EbBookMentions",
+        "displayName": "Book Mentions",
+        "description": "A quiet card naming the books mentioned in this post",
+        "version": "1.0.0",
+        "defaultPosition": "afterBody"
+      }
+    }
+  }
+}
