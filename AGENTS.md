@@ -35,7 +35,7 @@ this repo into `_site/`. Read this file before changing anything.
 | `docs/ARCHITECTURE.md` | How it's built: paths, frontmatter, design system, **all commands** | Before touching config, content or CSS |
 | `docs/LESSONS.md` | The traps, each bought with a failed deploy | **Before writing any guard or touching the theme** |
 | `docs/SHIPPED.md` | What's done and *why* | Before proposing work |
-| `docs/EMERSON-BLACK-BRAIN-PLAN.md` | **Only genuinely open work** | To pick up a task |
+| `docs/TODO.md` | **Only genuinely open work** | To pick up a task |
 | `README.md` | The author, the series, the audience | Writing copy or judging tone |
 
 > If you finish an item in the plan, **move it to `SHIPPED.md` in the same commit.** A

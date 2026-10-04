@@ -32,7 +32,7 @@ console.log("§ docs — the plan/architecture/lessons split")
 const DOCS = {
   agents: "AGENTS.md",
   readme: "README.md",
-  plan: "docs/EMERSON-BLACK-BRAIN-PLAN.md",
+  plan: "docs/TODO.md",
   architecture: "docs/ARCHITECTURE.md",
   lessons: "docs/LESSONS.md",
   shipped: "docs/SHIPPED.md",
@@ -76,7 +76,7 @@ check(
 // AGENTS.md is the entry point; if it goes missing the whole point of the split is
 // lost, and agents silently fall back to reading whatever they find.
 const agents = read("agents")
-for (const must of ["docs/ARCHITECTURE.md", "docs/LESSONS.md", "docs/SHIPPED.md", "docs/EMERSON-BLACK-BRAIN-PLAN.md"]) {
+for (const must of ["docs/ARCHITECTURE.md", "docs/LESSONS.md", "docs/SHIPPED.md", "docs/TODO.md"]) {
   check(agents.includes(must), `AGENTS.md points readers at ${must}`)
 }
 check(/build|verify/i.test(agents), "AGENTS.md says how to build and verify")

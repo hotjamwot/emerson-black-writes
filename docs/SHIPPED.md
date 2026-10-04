@@ -1,6 +1,7 @@
 # Shipped — the record of what is done, and why
 
-**Moved here from `EMERSON-BLACK-BRAIN-PLAN.md` §10–11 on 2026-10-04, verbatim.**
+**Moved here from the old single plan file on 2026-10-04, verbatim** (then called
+`EMERSON-BLACK-BRAIN-PLAN.md`; it now holds only open work and is `TODO.md`).
 Git history is the real archive; this exists because git cannot be *read* the way a
 decision log can. Each entry is one line of decision kept — the alternatives are in
 git, but the reasoning behind the choice is not, and that is what stops the same

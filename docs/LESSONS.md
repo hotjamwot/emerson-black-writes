@@ -1,6 +1,7 @@
 # Lessons — the traps that cost a deploy
 
-**Moved here from `EMERSON-BLACK-BRAIN-PLAN.md` §9 and §8 on 2026-10-04, verbatim.**
+**Moved here from the old single plan file on 2026-10-04, verbatim** (then called
+`EMERSON-BLACK-BRAIN-PLAN.md`; it now holds only open work and is `TODO.md`).
 Nothing was rewritten. It was split out because it has the longest half-life of any
 document here — the architecture changes rarely and the open items change weekly, but
 every rule below was bought with a failed deploy or a guard that lied, and none expire.

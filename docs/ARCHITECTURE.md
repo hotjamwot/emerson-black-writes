@@ -1,12 +1,13 @@
 # Architecture — how the site is built
 
-**Moved here from `EMERSON-BLACK-BRAIN-PLAN.md` §1–7 and §13 on 2026-10-04, verbatim.**
+**Moved here from the old single plan file on 2026-10-04, verbatim** (then called
+`EMERSON-BLACK-BRAIN-PLAN.md`; it now holds only open work and is `TODO.md`).
 Split out because architecture changes rarely and open items change weekly — bundling
 them meant all three documents churned together, which is how §12 came to be 55% of a
 614-line file and quietly stopped meaning what its own header claimed.
 
 This is the **how**: what the pieces are, where they live, what the rules are, and the
-commands to run. For the **what is left to do**, see `EMERSON-BLACK-BRAIN-PLAN.md`. For
+commands to run. For the **what is left to do**, see `TODO.md`. For
 **what went wrong and why the checks are written the way they are**, see `LESSONS.md`.
 
 Sections 1–7 are the original §1–7. Section 8 is the original §13 (Commands).
@@ -47,7 +48,7 @@ Sections 1–7 are the original §1–7. Section 8 is the original §13 (Command
 | Book data (canonical) | `brain/scripts/books.mjs` — number, title, ASIN, short link, cover, blurb, match patterns |
 | Cover thumbnails | `brain/scripts/make-cover-thumbs.mjs` → `img/covers/thumbs/`. **Run when a cover changes, then commit.** Cards link these, not the 190 KB originals |
 | Override audit | `brain/scripts/audit-overrides.mjs` + `brain/scripts/probe.mjs` — "is this override still needed?" |
-| Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` — **open work only** |
+| Plan (canonical, git-tracked) | `docs/TODO.md` — **open work only** |
 | Entry point for agents | `AGENTS.md` — rules, layout, build & verify commands |
 | Split docs | `docs/ARCHITECTURE.md` (this file's old §1–7 + §13) · `docs/LESSONS.md` (§8–9, verbatim) · `docs/SHIPPED.md` (§10–11 + the §12 narratives) |
 

@@ -26,7 +26,7 @@ layout, how to build and verify, and the traps worth knowing before you touch an
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Paths, frontmatter spec, design system, full command list |
 | [`docs/LESSONS.md`](docs/LESSONS.md) | Traps, each bought with a failed deploy — read before writing a guard |
 | [`docs/SHIPPED.md`](docs/SHIPPED.md) | What's done and why |
-| [`docs/EMERSON-BLACK-BRAIN-PLAN.md`](docs/EMERSON-BLACK-BRAIN-PLAN.md) | **Only genuinely open work** |
+| [`docs/TODO.md`](docs/TODO.md) | **Only genuinely open work** |
 
 ## Author identity
 
