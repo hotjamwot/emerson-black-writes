@@ -117,6 +117,17 @@ And now, finally, the covers are done. I’ve uploaded them to the [Amazon](http
 
 Phew, now the covers are done, I can get back to focusing on writing the books…
 
+---
+
+#### Updated October 2026:
+
+Since these posts, the titles of the books have changed!
+
+You Heard It Here First -> A Rockstar Has Exploded
+You Should Have Said -> An Actress Is Missing
+
+---
+
 ## 👩‍🏫 What I’m Reading: The Midnight Feast by Lucy Foley
 
 ![The Midnight Feast by Lucy Foley | Goodreads](/organise/images/newsletters/2025/the-seen-covers-get-a-facelift-part-558-09.webp)

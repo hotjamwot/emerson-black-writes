@@ -1,11 +1,13 @@
 ---
-title: The Stormhouse Book Awards 2024
+title: The Stormhouse Book Awards 2023
 description: Emerson Black's 2023 Review ... IN BOOKS
 date: 2024-01-16
 created: 2024-01-16
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [reading, news]
+tags:
+  - reading
+  - news
 aliases: []
 type: post
 publish: true

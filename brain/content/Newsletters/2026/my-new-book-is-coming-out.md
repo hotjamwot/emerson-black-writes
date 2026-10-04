@@ -5,7 +5,8 @@ date: 2026-04-27
 created: 2026-04-27
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [news, process]
+tags:
+  - news
 aliases: []
 type: post
 publish: true
@@ -50,7 +51,7 @@ In February, I finally finished it and sent it to the editor. She did an incredi
 
 > YOU CAN ORDER IT NOW!
 >
-> The book is live for [pre-sale now on Amazon](https://www.amazon.com/dp/B0GY5YH83F), but tell you what… Since you’ve read this far, I’d love to give you a free copy to read in exchange for a review on Goodreads, Amazon, or Storygraph. Just hit me a reply, and I’ll email you an epub.
+> The book is live for [sale now on Amazon](https://www.amazon.com/dp/B0GY5YH83F), but tell you what… Since you’ve read this far, I’d love to give you a free copy to read in exchange for a review on Goodreads, Amazon, or Storygraph. Just hit me a reply, and I’ll email you an epub.
 
 Thank you so much for reading, and I can’t wait for you to join the Seen team for another adventure. I’ve already written the first draft of the fourth book, so I promise it won’t be as long a wait until the next one.
 

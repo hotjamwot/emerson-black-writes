@@ -116,3 +116,14 @@ So, once again, I went back to the design process. And after more back and forth
 … and I’ll share them next time.
 
 Read more with [[the-seen-covers-get-a-facelift-part-2|Part 2]]!
+
+---
+
+#### Updated October 2026:
+
+Since these posts, the titles of the books have changed!
+
+You Heard It Here First -> A Rockstar Has Exploded
+You Should Have Said -> An Actress Is Missing
+
+---

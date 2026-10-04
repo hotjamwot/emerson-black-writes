@@ -5,7 +5,8 @@ date: 2026-06-30
 created: 2026-06-30
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [news, process]
+tags:
+  - news
 aliases: []
 type: post
 publish: true

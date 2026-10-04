@@ -93,7 +93,7 @@ Once you’ve got the faces in place, it’s time to move on to the harder part.
 
 There are a bunch of variables that make up a person’s character, and you can split them up into two categories: **Material** and **Intangible**.
 
-Favourite sport, favA Rockstar Has Explodednguishing physical traits…. These can all be measured. But how does someone react when they’re cornered? How does somebody deal with bad news? What’s a formative memory from their childhood? Those are just as important, maybe more so, and a lot harder to pin down.
+Favourite sport, distinguishing physical traits…. These can all be measured. But how does someone react when they’re cornered? How does somebody deal with bad news? What’s a formative memory from their childhood? Those are just as important, maybe more so, and a lot harder to pin down.
 
 This is where you stretch your creative muscle. And don’t just write down the first thing you think of. Really consider every one of these variables because they all contribute to making your character feel more like your Character**,** with a capital C and in italics. They become themselves.
 
