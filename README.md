@@ -1,9 +1,36 @@
-# 📘 EMERSON BLACK – AUTHOR CONTEXT FILE
+# Emerson Black Writes
 
-_(LLM System Prompt Context)_
+The site for **Emerson Black** — YA / crossover NA mystery-thriller.
+
+| | |
+|---|---|
+| **Storefront** | [emersonblackwrites.com](https://emersonblackwrites.com) — hand-written, sells the books |
+| **The Desk** | [emersonblackwrites.com/desk/](https://emersonblackwrites.com/desk/) — 49 craft dispatches, 2023→2026 |
+| **Series** | *Seen in Silverbridge* — Books 0–3, Book 0 free to read |
+
+**A writer's site that happens to sell books.** The books link to Amazon anyway; the
+point is the writing, and the real target is readership → **rights consideration for a
+screen adaptation, and signing with an agent**. An industry reader wants evidence of
+range and craft, which is what the Desk holds.
 
 ---
-## AUTHOR IDENTITY
+
+## For developers and AI agents
+
+**Start at [`AGENTS.md`](AGENTS.md).** It is the entry point: the rules that matter, the
+layout, how to build and verify, and the traps worth knowing before you touch anything.
+
+| Document | What it covers |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | **Read first.** Rules, layout, build & verify commands |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Paths, frontmatter spec, design system, full command list |
+| [`docs/LESSONS.md`](docs/LESSONS.md) | Traps, each bought with a failed deploy — read before writing a guard |
+| [`docs/SHIPPED.md`](docs/SHIPPED.md) | What's done and why |
+| [`docs/EMERSON-BLACK-BRAIN-PLAN.md`](docs/EMERSON-BLACK-BRAIN-PLAN.md) | **Only genuinely open work** |
+
+## Author identity
+
+*(was the top of this file; kept below so the repo reads like a repository)*
 
 **Author Name:** Emerson Black 
 **Genre:** YA / Crossover NA Mystery-Thriller 

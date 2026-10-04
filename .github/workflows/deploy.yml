@@ -379,6 +379,14 @@ jobs:
       - name: Check book mention cards
         run: node brain/scripts/check-book-mentions.mjs _site
 
+      # The docs split (2026-10-04). This guard exists because the plan doc spent
+      # weeks claiming "the only section with work in it" while holding twenty ✅
+      # marks and 55% of the file - and §11.7 was consequently proposed TWICE as
+      # already-shipped work. The split fixed it; this stops it rotting back, by
+      # asserting the open plan contains no finished work.
+      - name: Check docs split
+        run: node brain/scripts/check-docs.mjs
+
       - name: Storefront geometry check (rendered)
         run: node brain/scripts/verify-storefront.mjs _site
       - name: Upload artifact
