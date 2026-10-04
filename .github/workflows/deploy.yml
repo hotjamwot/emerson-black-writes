@@ -290,6 +290,58 @@ jobs:
           fi
           echo "Guard: desk section rendered ($ROW_COUNT rows with standfirsts + topic line), no rejected markup."
 
+          # §12.8 — THE BOOKS SECTION IS HAND-MAINTAINED, and that is a decision,
+          # not an oversight. Its metadata lives in an Obsidian vault that is not
+          # a git repository, so a build reading it would work on the author's
+          # machine and FAIL here. The alternatives (commit a generated
+          # books.json, vendor the files, or point the build at the vault) each
+          # cost either a broken vault, a broken CI, or a return trip to VSCode
+          # whenever a book file moves — and the author's stated preference is to
+          # edit HTML directly when an ASIN changes.
+          #
+          # So this guard is deliberately the LIGHTEST here: it does not try to
+          # know the right answer, only to catch the three mistakes that are
+          # invisible in a diff — a typo'd cover filename, a buy link pasted as
+          # a full product URL instead of a short link, and a book missing or
+          # out of series order.
+          #
+          # It does NOT fetch the URLs. A network call per deploy fails when
+          # Amazon rate-limits or the runner has no egress, and a deploy that
+          # fails for a reason the author cannot fix is worse than a stale ASIN.
+          node -e '
+            const fs = require("fs");
+            const site = "_site";
+            const html = fs.readFileSync(`${site}/index.html`, "utf8");
+            const die = (m) => { console.error(`::error::Guard failure: ${m} Deployment aborted.`); process.exit(1); };
+            const section = (html.match(/<section id="books"[\s\S]*?<\/section>/) || [])[0];
+            if (!section) die("no #books section found");
+
+            const list = [...section.matchAll(/<span>Book (\d+)<\/span>([^<]+)<\/h3>([\s\S]*?)(?=<div class="book"|$)/g)]
+              .map((m) => ({ n: Number(m[1]), title: m[2].trim(), body: m[3] }));
+            if (list.length !== 4) die(`expected 4 released books, found ${list.length}`);
+
+            const nums = list.map((b) => b.n);
+            if (nums.join(",") !== "0,1,2,3") die(`books are not in series order: ${nums.join(",")}`);
+
+            const free = list.filter((b) => /href="#start-reading"/.test(b.body));
+            if (free.length !== 1) die(`expected exactly 1 free-novella link, found ${free.length}`);
+            if (free[0].n !== 0) die("the free novella must be Book 0");
+
+            for (const b of list) {
+              if (b.n === 0) continue;
+              const links = [...b.body.matchAll(/href="([^"]+)"/g)].map((m) => m[1]).filter((u) => /^https?:/.test(u));
+              if (links.length !== 1) die(`Book ${b.n} has ${links.length} buy links, expected 1`);
+              if (!/^https:\/\/(www\.)?(amzn\.eu|a\.co)\/d\//.test(links[0]))
+                die(`Book ${b.n} buy link is not an Amazon short link: ${links[0]}`);
+            }
+
+            const covers = [...section.matchAll(/src="img\/covers\/([^"]+)"/g)].map((m) => m[1]);
+            if (covers.length !== 4) die(`expected 4 covers, found ${covers.length}`);
+            for (const c of covers) if (!fs.existsSync(`${site}/img/covers/${c}`)) die(`cover file missing: img/covers/${c}`);
+
+            console.log(`Guard: books section — 4 books in order, links and ${covers.length} covers verified.`);
+          '
+
       # S11 §11.9: the storefront, measured AS RENDERED rather than as written.
       # Three visual regressions shipped in the §11.3c rehaul (I10) — a hero that
       # was not full-width, a section rhythm that vanished, and a cover that

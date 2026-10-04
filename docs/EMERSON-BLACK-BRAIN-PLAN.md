@@ -302,6 +302,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 12.1(b) card widths (2026-10-04) | **Not a grid bug: `.page article` capped every card at 780px + `margin-inline: auto`, which un-stretches grid items** — measured 399–524px ragged at 1440px. Scoped to `:not(.eb-hub__card)`; tracks now equal |
 | 12.1(c) year archives (2026-10-04) | **New `year-archives` page-type plugin**: the four `/newsletters/<year>/` URLs are real listing pages again (newest first, title + standfirst + tags, tag-page row shape); top-level `/newsletters/` stays a redirect |
 | 12.7 (2026-10-04) | **`eb-latest`** puts the newest five dispatches first on the Desk, with standfirsts — replacing a `recent-notes` list that was rendering ~48k chars into the document, inside the sidebar graph. The homepage's hand-written "Start here" trio is **deleted**; its Desk section is now **six dense rows in two columns** in the same shape as the Desk, plus a one-line topic sentence. Guard arithmetic rewritten to minimums + resolved tag links, and **density is now measured** (`check-desk-density.mjs`) |
+| 12.7d / 12.8 (2026-10-04) | **11.7 closed as already-shipped** — the Books section already shows 0→1→2→3 with hooks and a free-novella start-here. **The Books section stays hand-maintained** (author's decision): its source of truth is an Obsidian vault outside the repo, so automating it would *add* upkeep. Given the **lightest guard in the repo** — cover files exist, links are Amazon short links, books are in order |
 
 ## 12. Open items
 
@@ -394,11 +395,21 @@ CSS was touched. **One of the two was real; one was not.**
 
 - **11.6 Bridge the craft writing to the books** — highest ceiling, zero cost. A line on
   craft posts pointing at the books that used the technique turns the Desk into a funnel,
-  which is the actual goal.
+  which is the actual goal. **Revision after §12.8:** this was previously costed as
+  *needing* a book data layer. It does not — the four books are named in `index.html`, so
+  a `book: 3` line on a post is four characters in frontmatter and a plugin read. The
+  **loglines are already written** in the vault, so the hook copy costs the author
+  nothing. Cheaper than originally assessed; still the best remaining item.
 - **11.8 A unifying "How I Write" page** — craft posts next to the books they produced;
   arguably the most agent-interesting page on the site. Flagged, not built.
-- **11.7 Series reading order** — visible 0→1→2→3 with one-line hooks and a "start here"
-  for the free novella.
+- ~~**11.7 Series reading order**~~ — **CLOSED as already-shipped (§12.7d).** The line
+  read *"visible 0→1→2→3 with one-line hooks and a 'start here' for the free novella"*, and
+  the Books section **already is exactly that**: explicit `Book 0`–`Book 3` labels in
+  ascending order, a one-line hook on each, and Book 0 badged `Free` with the line
+  *"the prequel novella, and the easiest place to start"*. Nothing to build. It was
+  proposed twice by reading the checklist line without opening the page — the same error
+  as mistaking the Safari CSS cache for broken pills. **An item on a plan is a claim about
+  the site, not a description of the site; verify before building.**
 - **11.5 Tag constellation, not a graph** — settled: no force graph on the homepage. Static
   chips sized by post count, linking to tag pages, no JS. **Largely SHIPPED by 12.7:**
   the homepage now carries exactly this — 7 static chips with post counts, linking
@@ -427,6 +438,14 @@ Both items came from the reader, not from an audit. *"I click Desk and always sc
 **§12.7(c) added two more guard sets, because a section can fail in ways a source check cannot see.** `check-desk-density.mjs` measures the rendered block and asserts *density as a property*: two columns wide, one column on a phone, every standfirst clamped to a single line, and posts-per-height under 40px. The clamp is proven red by removing it (tallest goes 19px → 39px, and 58px on mobile). `check-desk-section.mjs` asserts that **neither rejected design can return** — `desk-pick` and `desk-topic__n` in the markup now abort the deploy, because a guard that only checks what is *present* is how the old one missed a section that had quietly changed shape.
 
 **One of the new density checks was itself wrong, and measuring caught it.** It first compared the block's height against the old cards' 168px and failed at 181px — but three cards was ONE row of three and six rows in two columns is THREE rows of two, so the blocks were never comparable at equal height. The assertion is now posts-per-height, which is what "denser" actually means.
+
+**§12.8 The Books section stays hand-maintained — a settled decision, not an oversight.** Author's call after being shown the automation. The book metadata lives in an Obsidian vault (`~/Documents/Obsidian/Nexus/…/See in Silverbridge`, **not a git repository**), so a build reading it would work locally and **fail in CI**. Every alternative costs something the author actually values: a committed `books.json` means **returning to VSCode to re-run a script whenever a book file moves**; vendoring the files breaks the vault; pointing the build at the vault breaks CI outright. The author's stated preference: *"Easier to come back to VSCode if the ASIN changes, or when a new book publishes, and just update that section in `index.html`."*
+
+This is the **general lesson of §12.8** — automation was the right default for the *Desk*, which is generated from files that are **already in this repo** and regenerate on every deploy, so it costs nothing. The Books section is the counter-case: its source of truth is **outside the repo**, so automating it would *add* upkeep rather than remove it. The rule that follows: **generate from what is already committed; leave alone what is maintained elsewhere.** A system that is technically superior and that you will not maintain is worse than the manual thing you will.
+
+**The guard is therefore the lightest in the repo** — it does not try to know the right answer, only to catch the three mistakes invisible in a diff: a **typo'd cover filename** (a broken image nobody notices until it ships), a buy link pasted as a full product URL instead of a short link, and a book missing or out of series order. It **deliberately does not fetch the URLs**: a network call per deploy fails when Amazon rate-limits or the runner has no egress, and a deploy that fails for a reason the author cannot fix is worse than a stale ASIN. All three proven red in both the local checker and the CI block.
+
+**Two things the vault revealed that the site does not yet say.** The vault holds **six** books, but only four are released — `A Supermodel Slain` is `3rd draft` and `Silver and Gold` is `1st draft` (151k words, *"Once Silverbridge series finishes…"*). Filtering on `status` would need **matching, not `==`**, since values are free text (`"1st draft is 151,000 words"`). And Book 0 is numbered **`0.5`** in the vault but reads **"Book 0"** on the site. Neither blocks anything today; both are the kind of drift a manual section accumulates, which is why the count and the order are now asserted.
 
 **No new frontmatter, no new data, nothing to maintain.**
 
