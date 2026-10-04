@@ -53,17 +53,54 @@ const plan = read("plan")
 // an actual open item means a finished thing is sitting in the backlog. The prose
 // that *explains* the split is allowed to mention them, so check the Open items
 // section specifically rather than the whole file.
+//
+// SPLIT THE SECTION FIRST, then filter to item lines. Filtering first silently
+// dropped the "### Closed by the author" heading — so the split below found one
+// part, `stillOpen` was empty, and every closure check passed vacuously. That is
+// the F18 lesson in miniature: a guard that cannot fail is worse than no guard.
+//
+// The heading carries a date ("### Closed by the author, 2026-10-04"), so match the
+// phrase and swallow whatever follows it. An anchored exact match silently found
+// nothing, which emptied `closedBlock` and made every closure check below report
+// the wrong answer rather than an error.
+//
+// The section is bounded by the NEXT `###` heading, so slice by heading rather
+// than joining the tail — joining left the closed item inside `stillOpen`, which is
+// why every closure assertion failed against a correctly-written file.
 const openSection = plan.split("## Open items")[1] ?? ""
-const items = openSection
-  .split("\n")
-  .filter((l) => l.trim().startsWith("- ") || l.trim().startsWith("- **"))
+const sections = openSection.split(/^### /m).slice(1) // drop the text before the first ###
+const closed = sections.find((s) => s.startsWith("Closed by the author"))
+const stillOpen = sections
+  .filter((s) => !s.startsWith("Closed by the author"))
+  .map((s) => `### ${s}`)
   .join("\n")
 
-check(items.trim().length > 0, "the plan still lists open items (not emptied by mistake)")
-check(!items.includes("✅"), "no ✅ in any open item — finished work belongs in SHIPPED.md")
-check(!/~~.*~~/.test(items), "no struck-through item left in the open list")
+const items = (s) =>
+  s
+    .split("\n")
+    .filter((l) => l.trim().startsWith("- ") || l.trim().startsWith("- **"))
+    .join("\n")
+
+const openItems = items(stillOpen)
+
+check(openItems.trim().length > 0, "the plan still lists open items (not emptied by mistake)")
+check(!openItems.includes("✅"), "no ✅ in any open item — finished work belongs in SHIPPED.md")
+
+// A struck-through item is legitimate ONLY under the "Closed by the author"
+// heading, where it records a decision rather than hiding work. Anywhere else it
+// means something finished is still sitting in the backlog — which is the
+// §11.7 failure. This distinction was added after the guard rejected the
+// author's own closure of 11.8, which is the guard working, not the guard wrong.
 check(
-  !/\bSHIPPED\b/.test(items),
+  /~~/.test(items(closed ?? "")),
+  "the 'Closed by the author' section actually records a closure (is the split working?)",
+)
+check(
+  !/~~/.test(openItems),
+  "no struck-through item outside the 'Closed by the author' section",
+)
+check(
+  !/\bSHIPPED\b/.test(openItems),
   "no open item claims something is SHIPPED — move it to SHIPPED.md",
 )
 

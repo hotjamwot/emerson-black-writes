@@ -30,22 +30,50 @@ Item numbers (`11.8`, `11.5`) are **kept deliberately** — they are how the wor
 discussed with the author and how `SHIPPED.md` refers back to it. Renumbering them would
 break every cross-reference for no gain.
 
-### Product — in ceiling order
+### Closed by the author, 2026-10-04
 
-- **11.8 A unifying "How I Write" page** — craft posts next to the books they produced;
-  arguably the most agent-interesting page on the site. Flagged, not built.
-- **11.5 Tag constellation, not a graph** — settled: no force graph on the homepage. Static
-  chips sized by post count, linking to tag pages, no JS. **The homepage part is done**
-  (see `SHIPPED.md` §12.7): 7 static chips with post counts, linking to real tag pages,
-  no JS. **What is left here is only** whether they should also appear higher up (the
-  hero) — which is a taste question, below. The full graph returns once the link graph
-  is dense enough.
+- ~~**11.8 A unifying "How I Write" page**~~ — **NOT NEEDED.** The author's call: the
+  §11.6 *"Mentioned in this post"* cards already do the job this page would have done.
+  They connect craft writing to the books **per post**, automatically, and only where
+  the post actually mentions a book — which is more accurate than a hand-built page
+  pairing posts with books, and free to maintain. **Superseded, not descoped.**
 
-### Taste — HayJay's call, not a defect
+### Graph — the Desk shows one dot, and it should show the map
 
-- **Backlinks** sit `position: left`, so desktop puts them in the sidebar and mobile under
-  the article. Defensible as-is; whether related posts deserve a more prominent slot
-  (e.g. an end-of-post "related" section) is a taste call.
+**Measured, not guessed** (Chrome, 1440px, built site):
+
+- `contentIndex.json` holds **63 entries, but only 8 have any `links` at all** — and
+  the Desk's own entry has `links: []`. **A graph of one node is the correct rendering
+  of the data.** This is the documented §12.6 condition: *"the full graph returns once
+  the link graph is dense enough."* It is not dense enough.
+- **This is a content problem, not a config problem.** `localGraph.depth: 100` is already
+  set; depth cannot invent edges that the markdown does not contain.
+- **Homepage stays graph-free** — author's decision, settled. The concern here is only
+  the graph *on the Desk*.
+- **So the fix is authoring, not code:** more `[[wikilinks]]` between posts. That is
+  the author's own writing, and it also fixes backlinks (below), which are driven by
+  exactly the same links.
+
+### Sidebar — two real defects, both confirmed by measurement
+
+Both were reported by the author as "worth checking", and both are real. Measured on
+`the-art-of-restraint.html`, which has the most backlinks of any post:
+
+| | Desktop 1440 | Mobile 390 |
+|---|---|---|
+| Backlinks block | 255×**106px** | 241×115px |
+| Explorer (Archive) | **1023px tall, 53 links** | **34px tall, collapsed** |
+| Sidebar children | `backlinks:106 explorer:1023` | `backlinks:115 explorer collapsed:34` |
+
+- **Backlinks: 11 of 53 posts render them at all.** `content` page type
+  **excludes** `backlinks` in `quartz.config.yaml`, and separately **only 8 posts in
+  the archive contain any wikilinks** — so most posts have no backlinks to show. On
+  the busiest post it is a 106px block: small, as reported. **Not a styling bug.** It is
+  thin for the same reason the graph is a dot — the link graph is nearly empty.
+- **Mobile blank space: real, and it is the collapsed Archive.** At 390px the whole
+  sidebar is 147px, of which the collapsed explorer header is 34px. The page still
+  scrolls **8420px**. So the reader gets a short "Archive" heading, no visible links, and
+  then has to keep scrolling — a dead zone where navigation should be.
 
 ---
 
