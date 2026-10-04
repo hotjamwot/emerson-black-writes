@@ -1,5 +1,5 @@
 import { h } from "preact"
-import { BOOKS_IN_ORDER } from "../../../scripts/books.mjs"
+import { BOOKS_IN_ORDER, coverThumb } from "../../../scripts/books.mjs"
 
 /**
  * eb-book-mentions — a "door" from a dispatch to the books. §11.6.
@@ -145,9 +145,40 @@ function EbBookMentionsComponent({ fileData, tree } = {}) {
         h(
           "li",
           { class: "eb-mentions__item" },
-          h("a", { class: "eb-mentions__title-link", href: SERIES_URL }, book.title),
-          h("span", { class: "eb-mentions__label" }, `Book ${book.number}`),
-          book.blurb ? h("p", { class: "eb-mentions__blurb" }, book.blurb) : null,
+          // The cover is small on purpose: ~76px, not a hero. At 500px (the
+          // homepage's size) it would turn the end of a craft post into an
+          // advertisement for a book. At thumbnail size it does the job the text
+          // cannot — it makes the four covers recognisable at a glance, so a
+          // returning reader knows which book this is before reading a word.
+          //
+          // `alt` is the TITLE, not a description of the artwork. The cover's own
+          // design carries no more information than its title does, so describing
+          // it would make a screen reader announce the same word twice. And it is
+          // NOT `aria-hidden`: a decorative-looking image next to a link that
+          // already carries the same title IS redundant, and the duplication is
+          // the price of the image being findable by the people who cannot see it.
+          h(
+            "img",
+            {
+              class: "eb-mentions__cover",
+              src: coverThumb(book),
+              alt: book.title,
+              // Intrinsic 150x240. Declaring width/height stops the row jumping
+              // when the image lands — the same reason the homepage declares them.
+              width: 150,
+              height: 240,
+              // Cards sit below the fold at the end of a long post, so every one
+              // of them is genuinely below it. `lazy` keeps the book's artwork out
+              // of the critical path on every page that happens to mention it.
+              loading: "lazy",
+              decoding: "async",
+            },
+          ),
+          h("div", { class: "eb-mentions__body" },
+            h("a", { class: "eb-mentions__title-link", href: SERIES_URL }, book.title),
+            h("span", { class: "eb-mentions__label" }, `Book ${book.number}`),
+            book.blurb ? h("p", { class: "eb-mentions__blurb" }, book.blurb) : null,
+          ),
         ),
       ),
     ),

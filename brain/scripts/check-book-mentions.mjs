@@ -92,6 +92,34 @@ for (const rel of withCard) {
 
   // A sell inside a craft post breaks the thing that makes people read the author.
   check(!/amazon|amzn\.eu|a\.co/.test(block), `${rel}: no Amazon link inside the card`)
+
+  // The covers. Each one must (a) exist as a file in the assembled site, and
+  // (b) be a THUMBNAIL, not the 190 KB artwork.
+  //
+  // (b) is the interesting one. Nothing about a broken `src` is visible in a
+  // build — a typo, or shipping `img/covers/` instead of `img/covers/thumbs/`,
+  // produces valid HTML, a green build, and cards that are either blank or
+  // silently cost a reader 190 KB per book to paint 60 pixels.
+  const covers = [...block.matchAll(/eb-mentions__cover"[^>]*src="([^"]+)"/g)].map((m) => m[1])
+  check(covers.length > 0, `${rel}: card carries a cover for each book (${covers.length})`)
+
+  for (const src of covers) {
+    const file = join(site, src.replace(/^\//, ""))
+    check(existsSync(file), `${rel}: cover exists on disk — ${src}`)
+    if (existsSync(file)) {
+      const kb = statSync(file).size / 1024
+      // 32 KB is generous against a ~6 KB thumbnail but nowhere near the 179 KB
+      // artwork, so a thumbs/ -> covers/ regression fails loudly.
+      check(kb < 32, `${rel}: ${src.split("/").pop()} is a thumbnail (${kb.toFixed(1)} KB)`)
+    }
+    // Absolute-from-root is load-bearing: pages are served from /desk/, so a
+    // relative src would resolve to /desk/img/... and 404 on every card.
+    check(src.startsWith("/img/"), `${rel}: cover src is absolute from root — ${src}`)
+    check(
+      !/<img[^>]+eb-mentions__cover[^>]*alt=""/.test(block),
+      `${rel}: every cover has non-empty alt text`,
+    )
+  }
 }
 
 // A book must never be named with the wrong series number.

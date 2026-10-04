@@ -1051,11 +1051,37 @@ h2.page-title,
   padding: 0;
 }
 
+// The row is cover | text. The grid is the same reason `.eb-latest__item` is:
+// two columns of unequal width, content hanging off the second, because the left
+// column is a fixed-size object and the right is prose.
 .eb-mentions__item {
+  display: grid;
+  // 3.75rem = 60px of cover, plus 0.9rem of gap. Load-bearing: a grid item's
+  // default `min-width: auto` refuses to shrink below its content, which is the
+  // classic cause of a prose column overflowing at narrow widths — hence
+  // minmax(0, 1fr) rather than a bare 1fr.
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
   padding: 0.6rem 0.75rem;
   margin-bottom: 0.4rem;
   background: var(--eb-surface);
   border-radius: var(--eb-radius);
+}
+
+// 60px wide, not 76: these covers are tall 2:3 shapes, and a larger one turns a
+// two-book card into a bookshelf. `aspect-ratio` + `object-fit: cover` means a
+// replacement artwork with different proportions is cropped to the same shape
+// rather than making one row taller than its neighbours. Only --eb-shadow, an
+// existing token, for any lift at all.
+.eb-mentions__cover {
+  width: 3.75rem;
+  height: auto;
+  aspect-ratio: 150 / 240;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+  box-shadow: var(--eb-shadow);
 }
 
 // The label sits AFTER the title in the DOM and is simply spaced beside it with a

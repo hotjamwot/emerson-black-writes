@@ -104,6 +104,22 @@ export const BOOKS = [
   },
 ]
 
+/**
+ * Thumbnail path for a card, relative to the SITE ROOT.
+ *
+ * ABSOLUTE ON PURPOSE. The cards render on pages served from `/desk/…`, while
+ * `img/` is deployed at the site root, so a relative `img/covers/…` would resolve
+ * to `/desk/img/covers/…` and 404 on every single card. The homepage gets away
+ * with relative paths because it IS the root.
+ *
+ * `thumb` is derived from `cover` rather than authored separately: a second
+ * filename in the canonical data is a second thing to forget when a cover is
+ * replaced, and this way there is exactly one place to update.
+ */
+export function coverThumb(book) {
+  return `/img/covers/thumbs/${book.cover}`
+}
+
 /** Books in series order — the array is authored in order and asserted to be. */
 export const BOOKS_IN_ORDER = [...BOOKS].sort((a, b) => a.number - b.number)
 
