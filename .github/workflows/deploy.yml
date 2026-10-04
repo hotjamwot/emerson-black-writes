@@ -353,6 +353,24 @@ jobs:
       # regression; if Chrome is ever missing it says so loudly and skips, because
       # "cannot measure here" is not evidence of a failed guard, whereas
       # "measured, and wrong" is.
+      # §12.9 — canonical book data. The homepage and the (upcoming) §11.6 mention
+      # cards both resolve against brain/scripts/books.mjs, so there is ONE answer
+      # to "which book is Book 2" and "what does it sell for".
+      #
+      # This exists because the repo carried two contradictory Amazon link sets and
+      # nothing compared them: the homepage's short links, and 18 posts linking
+      # books directly. The homepage's turned out to be correct — but there was no
+      # guard that could have said so, and a bare ASIN pasted into a post would have
+      # quietly sent readers to one country's storefront.
+      #
+      # It deliberately does NOT fetch the short links. Amazon rate-limits and CI
+      # runners have no guaranteed egress, and a deploy that fails for a reason the
+      # author cannot fix is worse than a stale link. The geo-redirect behaviour was
+      # verified once by hand and is recorded in books.mjs; what this enforces is
+      # that the links ARE short links, which needs no network call.
+      - name: Check book data and links
+        run: node brain/scripts/check-book-links.mjs .
+
       - name: Storefront geometry check (rendered)
         run: node brain/scripts/verify-storefront.mjs _site
       - name: Upload artifact

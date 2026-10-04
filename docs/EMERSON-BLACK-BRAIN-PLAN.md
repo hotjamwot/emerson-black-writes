@@ -303,6 +303,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 12.1(c) year archives (2026-10-04) | **New `year-archives` page-type plugin**: the four `/newsletters/<year>/` URLs are real listing pages again (newest first, title + standfirst + tags, tag-page row shape); top-level `/newsletters/` stays a redirect |
 | 12.7 (2026-10-04) | **`eb-latest`** puts the newest five dispatches first on the Desk, with standfirsts — replacing a `recent-notes` list that was rendering ~48k chars into the document, inside the sidebar graph. The homepage's hand-written "Start here" trio is **deleted**; its Desk section is now **six dense rows in two columns** in the same shape as the Desk, plus a one-line topic sentence. Guard arithmetic rewritten to minimums + resolved tag links, and **density is now measured** (`check-desk-density.mjs`) |
 | 12.7d / 12.8 (2026-10-04) | **11.7 closed as already-shipped** — the Books section already shows 0→1→2→3 with hooks and a free-novella start-here. **The Books section stays hand-maintained** (author's decision): its source of truth is an Obsidian vault outside the repo, so automating it would *add* upkeep. Given the **lightest guard in the repo** — cover files exist, links are Amazon short links, books are in order |
+| 12.9 (2026-10-04) | **Canonical book data** (`brain/scripts/books.mjs`) — built while scoping §11.6, and it found a real bug: the homepage and 18 posts carried **two contradictory ASIN sets**, with no guard comparing them. Also fixed `index.html`'s *"A Rock Star"* → **"A Rockstar"** (author-confirmed; 17 posts already used it). Short links proven to geo-redirect, bare ASINs cannot. `check-book-links.mjs` + a CI step keep homepage, posts and cards in agreement |
 
 ## 12. Open items
 
@@ -439,7 +440,27 @@ Both items came from the reader, not from an audit. *"I click Desk and always sc
 
 **One of the new density checks was itself wrong, and measuring caught it.** It first compared the block's height against the old cards' 168px and failed at 181px — but three cards was ONE row of three and six rows in two columns is THREE rows of two, so the blocks were never comparable at equal height. The assertion is now posts-per-height, which is what "denser" actually means.
 
-**§12.8 The Books section stays hand-maintained — a settled decision, not an oversight.** Author's call after being shown the automation. The book metadata lives in an Obsidian vault (`~/Documents/Obsidian/Nexus/…/See in Silverbridge`, **not a git repository**), so a build reading it would work locally and **fail in CI**. Every alternative costs something the author actually values: a committed `books.json` means **returning to VSCode to re-run a script whenever a book file moves**; vendoring the files breaks the vault; pointing the build at the vault breaks CI outright. The author's stated preference: *"Easier to come back to VSCode if the ASIN changes, or when a new book publishes, and just update that section in `index.html`."*
+**§12.9 Canonical book data — found by building §11.6, and it was a bug hunt.** Author approved: *"Nice to play cleanup as we go."*
+
+**🔴 THE FINDING: two contradictory ASIN sets were already in the repo.** 18 posts link books straight to Amazon, and they did **not** match the homepage. Resolving the homepage's short links proved what they point at:
+
+| Book | Homepage short link | → resolves to | Posts' own ASIN |
+|---|---|---|---|
+| 1 Rockstar | `amzn.eu/d/2hPym9v` | **B0BTML7L86** | `B0BTML7L86` ✅ same |
+| 2 Actress | `amzn.eu/d/7QcaE4n` | **B0CJ5Z85S4** | `7Vg6bSy` ❌ differs |
+| 3 Fiancé | `a.co/d/0bxUbDmW` | **B0GY5YH83F** | `B0GY5YH83F` ✅ same |
+
+So Book 2 was the odd one, and `B0CJ5Z85S4` — which looked like a **stray ASIN belonging to no book** — is in fact **Book 2**. Two posts pointed at it without a matching homepage entry. **Short links are preferred over bare ASINs for a reason now proven, not assumed: `amzn.eu`/`a.co` short links geo-redirect** (Book 1's landed on `amazon.co.uk`, Book 3's on `amazon.com`), whereas a hardcoded `amazon.com/dp/…` in a post **cannot** — it sends a Swedish or Japanese reader to the US storefront. That is the author's stated requirement, and a bare ASIN would have failed it.
+
+**"Mentioned in this post" is the assertion that makes §11.6 safe to automate** (author's framing, and the correction to the objection that killed the earlier version). A title mention is a **verifiable statement about the text**, not a claim that the book came out of this post — which is why code may assert it and why 15 posts qualify without the site over-claiming on the author's behalf. The earlier objection was to *"this book demonstrates this post"*, which is unfalsifiable; this is not.
+
+**Two content bugs found while building it.** The site spells Book 1 *"A Rock **Star** Has Exploded"*; **17 posts spell it *"Rockstar"***, and the author confirmed *Rockstar* is correct — so `index.html` was wrong. And one post contains **corrupted text**: `favA Rockstar Has Explodednguishing physical traits` — a title glued into a word, which no reader has reported because it is mid-paragraph and reads as a typo rather than a break.
+
+**The canonical set is the ASIN plus the short link**, so the file serves two needs: bare ASINs for diagnostics, short links for the country-redirect behaviour actually wanted.
+
+**§12.8 (unchanged by 12.9) The Books section stays hand-maintained — a settled decision, not an oversight.** Author's call after being shown the automation. The book metadata lives in an Obsidian vault (`~/Documents/Obsidian/Nexus/…/See in Silverbridge`, **not a git repository**), so a build reading it would work locally and **fail in CI**. Every alternative costs something the author actually values: a committed `books.json` means **returning to VSCode to re-run a script whenever a book file moves**; vendoring the files breaks the vault; pointing the build at the vault breaks CI outright. The author's stated preference: *"Easier to come back to VSCode if the ASIN changes, or when a new book publishes, and just update that section in `index.html`."*
+
+Note the two sections are complementary, not in tension: **§12.8 keeps the homepage's layout hand-written, while §12.9 makes the underlying links correct and single-sourced.** The author still edits HTML to reorder or re-badge books; they no longer have to guess which ASIN is right.
 
 This is the **general lesson of §12.8** — automation was the right default for the *Desk*, which is generated from files that are **already in this repo** and regenerate on every deploy, so it costs nothing. The Books section is the counter-case: its source of truth is **outside the repo**, so automating it would *add* upkeep rather than remove it. The rule that follows: **generate from what is already committed; leave alone what is maintained elsewhere.** A system that is technically superior and that you will not maintain is worse than the manual thing you will.
 
