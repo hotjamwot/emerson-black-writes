@@ -49,7 +49,9 @@ the storefront was hiding.
 | Quartz config | `brain/quartz.config.yaml` |
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,840 lines; 12 measured `[OVERRIDE]` blocks + the `[SAFE]` brand layer) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
-| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs`, `brain/scripts/check-desk-section.mjs`, `brain/scripts/check-desk-density.mjs` |
+| Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs`, `brain/scripts/check-desk-section.mjs`, `brain/scripts/check-desk-density.mjs`, `brain/scripts/check-book-links.mjs`, `brain/scripts/check-book-mentions.mjs` |
+| Book data (canonical) | `brain/scripts/books.mjs` — number, title, ASIN, short link, cover, blurb, match patterns |
+| Cover thumbnails | `brain/scripts/make-cover-thumbs.mjs` → `img/covers/thumbs/`. **Run when a cover changes, then commit.** Cards link these, not the 190 KB originals |
 | Override audit | `brain/scripts/audit-overrides.mjs` + `brain/scripts/probe.mjs` — "is this override still needed?" |
 | Plan (canonical, git-tracked) | `docs/EMERSON-BLACK-BRAIN-PLAN.md` |
 
@@ -590,6 +592,21 @@ node brain/scripts/verify-storefront.mjs _site
 # The homepage Desk section: content + rendered density (12.7c)
 node brain/scripts/check-desk-section.mjs _site
 node brain/scripts/check-desk-density.mjs _site
+
+# Books (§12.9 canonical data)
+node brain/scripts/check-book-links.mjs .          # homepage + posts agree with books.mjs
+node brain/scripts/check-book-mentions.mjs _site   # the §11.6 cards: covers, order, numbers
+
+# ⚠️ RUN THIS WHEN A COVER CHANGES, AND COMMIT THE RESULT.
+# Generates img/covers/thumbs/*.webp (150x240, ~6 KB) from the 1600x2560 artwork
+# in img/covers/. The §11.6 mention cards link these, not the originals: serving
+# 190 KB artwork to paint a 60px cover would add ~5.7 MB across 15 posts.
+#
+# The thumbs are COMMITTED, not built in CI — deployed bytes would otherwise
+# depend on the runner's libvips. Needs `sharp`, which lives in brain/node_modules
+# (Quartz's own image dep), so there is nothing to install. macOS `sips` CANNOT do
+# this: it reads WebP but not write it (Error 13).
+node brain/scripts/make-cover-thumbs.mjs
 
 # Has upstream Quartz moved? (§12.6 — needs network, READ-ONLY, safe to run anytime)
 cd ~/Movies/PROJECTS/Websites/EBW\ website/brain && node quartz/check-quartz-upstream.mjs
