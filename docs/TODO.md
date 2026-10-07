@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Three items, and only three.
+**Everything still open on this site. Nothing else.** Seven items, and only seven.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -74,6 +74,38 @@ Both were reported by the author as "worth checking", and both are real. Measure
   sidebar is 147px, of which the collapsed explorer header is 34px. The page still
   scrolls **8420px**. So the reader gets a short "Archive" heading, no visible links, and
   then has to keep scrolling — a dead zone where navigation should be.
+
+### 11.10 Homepage head nav — "Desk" should leave the homepage
+
+- The head nav on the homepage: **Desk** currently links to the Desk *section of the
+  homepage* (an in-page anchor). It should navigate to
+  **emersonblackwrites.com/desk/** instead — that is what the label promises.
+
+### 11.11 Desk — post images are huge on desktop, right on mobile
+
+- In the Desk, images render far too large on desktop; they need to display at a much
+  more comfortable size. Mobile sizing is nice as-is, so any fix must be
+  responsive — improve desktop without regressing mobile. (*No approach chosen yet —
+  per AGENTS.md, ask the Quartz-native question first.*)
+
+### 11.12 "Mentioned in this post" cards — the homepage Books-section link isn't reliable
+
+- The §11.6 cards in the Desk link to the **Books section of the homepage**, which
+  isn't a reliable destination. Open question, author's call:
+  - **Option A:** link each card to its **Amazon short link** (already single-sourced
+    in `brain/scripts/books.mjs`).
+  - **Option B:** build a **dedicated page per book** — blurb, some reviews, and room
+    for bonus content later (character backstories, etc.). More to maintain, but it
+    gives the cards a durable on-site destination.
+  - Not decided; flagged for discussion rather than implementation.
+
+### 11.13 Desk header nav — "Books" and "About" don't go where they're meant to
+
+- In the Desk's header nav, clicking **Books** doesn't take us to the book section,
+  even though it's meant to; clicking **About** just lands at the top of the homepage
+  instead of the `#about` section.
+- Possibly a Brave-specific bug — **verify in a second browser before treating it as
+  a site defect.**
 
 ---
 
