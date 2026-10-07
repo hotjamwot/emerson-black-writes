@@ -287,13 +287,12 @@ plugins:
     enabled: true
     options:
       localGraph:
-        # 11.14b · the neighbourhood, close in — not the whole map. depth 100
-        # crammed 41 nodes + tag spheres into view so nothing was readable;
-        # depth 2 shows the current post, its tags and its linked neighbours.
-        # scale starts zoomed in; centerForce is eased so a dragged node is
-        # less insistent about snapping home. repelForce / linkDistance /
-        # fontSize deliberately untouched.
-        depth: 2
+        # 11.14c · the whole Desk on every page (author's call 2026-10-07).
+        # depth 2 showed only the neighbourhood; the Desk graph's job is the
+        # *map* — every node on every graph. scale 1.5 keeps the close-in
+        # start; centerForce stays eased so dragged nodes snap home less.
+        # repelForce / linkDistance / fontSize deliberately untouched.
+        depth: 100
         scale: 1.5
         showTags: true
         focusOnHover: true
