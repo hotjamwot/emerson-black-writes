@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Seven items, and only seven.
+**Everything still open on this site. Nothing else.** Nine items, and only nine.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -106,6 +106,25 @@ Both were reported by the author as "worth checking", and both are real. Measure
   instead of the `#about` section.
 - Possibly a Brave-specific bug — **verify in a second browser before treating it as
   a site defect.**
+
+### 11.15 Year/Topic pages — tag pills use odd vertical space vs. short titles
+
+- On the Desk's Year pages (`newsletters/<year>`) and Topic (tag) pages, the tag pills
+  in the post lists look squeezed and take odd vertical space next to comparatively
+  short post titles and subtitles.
+- Open: ideas for making the list styling fit better.
+
+### 11.16 Desk sidebar — sort by publishing date, and show the dates
+
+- The Explorer sidebar ("The Archive") currently sorts posts by **modified** date, so a
+  touch-up to an old post silently reorders the archive. It should sort by the
+  original **publishing date** (`frontmatter` → `date:`, already plumbed through as
+  `defaultDateType: created` in `quartz.config.yaml`).
+- Upstream default `sortFn` is display-name only and has no date branch; the local
+  `year-archives` plugin already sorts by publish date (`byDateAndAlphabetical`), so
+  the precedent is in-repo. A custom `sortFn` on the explorer options should do it.
+- Also: showing each post's date in the sidebar would help orientation. (Taste call —
+  dates in a file-tree nav add clutter as well as context.)
 
 ---
 

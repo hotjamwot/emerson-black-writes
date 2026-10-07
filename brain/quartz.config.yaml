@@ -287,18 +287,19 @@ plugins:
     enabled: true
     options:
       localGraph:
-        # S10 · show the WHOLE Desk graph on every page, not just the current
-        # post's 2-hop neighbourhood. The tags (8 spheres) and wikilinks are the
-        # navigation now, so the local graph's job is the *map*: you should be
-        # able to see where a post sits in the whole body of work, with the
-        # current node already highlighted in the accent. A high depth means
-        # "show everything reachable" — the current post is the one in accent.
-        depth: 100
+        # 11.14b · the neighbourhood, close in — not the whole map. depth 100
+        # crammed 41 nodes + tag spheres into view so nothing was readable;
+        # depth 2 shows the current post, its tags and its linked neighbours.
+        # scale starts zoomed in; centerForce is eased so a dragged node is
+        # less insistent about snapping home. repelForce / linkDistance /
+        # fontSize deliberately untouched.
+        depth: 2
+        scale: 1.5
         showTags: true
         focusOnHover: true
         fontSize: 0.8
         repelForce: 0.6
-        centerForce: 0.4
+        centerForce: 0.3
         linkDistance: 40
       globalGraph:
         showTags: true
