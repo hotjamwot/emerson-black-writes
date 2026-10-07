@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Nine items, and only nine.
+**Everything still open on this site. Nothing else.** Eight items, and only eight.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -116,15 +116,11 @@ Both were reported by the author as "worth checking", and both are real. Measure
 
 ### 11.16 Desk sidebar — sort by publishing date, and show the dates
 
-- The Explorer sidebar ("The Archive") currently sorts posts by **modified** date, so a
-  touch-up to an old post silently reorders the archive. It should sort by the
-  original **publishing date** (`frontmatter` → `date:`, already plumbed through as
-  `defaultDateType: created` in `quartz.config.yaml`).
-- Upstream default `sortFn` is display-name only and has no date branch; the local
-  `year-archives` plugin already sorts by publish date (`byDateAndAlphabetical`), so
-  the precedent is in-repo. A custom `sortFn` on the explorer options should do it.
-- Also: showing each post's date in the sidebar would help orientation. (Taste call —
-  dates in a file-tree nav add clutter as well as context.)
+- **CLOSED, author's call 2026-10-07: sidebar stays as-is.** Sorting by publish
+  date would need a custom `sortFn` fed from per-file dates, and showing dates
+  in the tree would need custom node rendering — both extra scripts and upkeep
+  for a nav the author wants to keep tight and lean. The year folders already
+  give date order; leave it there.
 
 ---
 
