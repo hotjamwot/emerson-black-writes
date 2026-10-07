@@ -3,8 +3,8 @@ title: Emerson's Desk Has Launched!
 description: I have a renewed enthusiasm for these newsletters now I've added my back catalogue of newsletters to my website
 date: 2026-10-07
 created: 2026-10-07
-updated: 2026-10-02
-modified: 2026-10-02
+updated: 2026-10-07
+modified: 2026-10-07
 tags:
   - news
 aliases: []
@@ -51,7 +51,7 @@ My morning routine is still strong. Early start, quick stretches while my coffee
 
 Now, I just have to seriously consider adding the newsletters back into the routine, and then we can bring this glorious relationship we've been lucky enough to keep simmering back to a healthy boil. 
 
-## Oh yeah, let me introduce: [Emerson's Desk](www.emersonblackwrites.com/desk/)
+## Oh yeah, let me introduce: Emerson's Desk
 
 I've spent the last few days finagling with my computer and website, converting all my newsletters from Substack into markdown, loading them into Obsidian, then pushing them through another converter and uploading them to my website. 
 
