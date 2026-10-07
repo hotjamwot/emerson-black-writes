@@ -336,13 +336,16 @@ explicitly approves an override after seeing the Quartz-native alternative (§9.
   sort picks `9.0.0` as newer than `10.0.1`, verified.
 - **Updates become deliberate.** That record + the verify suites turn an upstream
   release into bump → build → read the failures, instead of surprise catchup.
-- **11.11 — post images capped desktop-height, portrait covers tamed (done 2026-10-07).**
-  Article images were full-bleed slabs at the 780px column; a 40rem width cap fixed
-  landscape but left 1070×1708 portrait covers rendering ~1000px tall. One line in
-  our own space — `max-height: 80vh` + `width: auto` on `.page article img`
-  (whichever cap bites first wins, aspect ratio kept) — landscape still hits the
-  width cap, portrait renders a figure not a slab, mobile never noticed. Guard
-  proven red by breaking the cap; author's choice of 80vh.
+- **11.11 — post images capped desktop-height, portrait tamed (done 2026-10-07,
+  reworked 2026-10-07).** Article images were full-bleed slabs at the 780px
+  column; a 40rem width cap fixed landscape but the first height cap — bare
+  `max-height: 80vh` — scaled with the monitor and left a 1200×1518 portrait
+  rendering 660×835 on a normal Mac screen. Now `max-height: min(32rem, 80vh)`
+  + `width: auto` + `display: block` on `.page article img` (whichever cap
+  bites first wins, aspect ratio kept, narrowed portrait truly centred) —
+  landscape still hits the width cap (780×444 untouched), portrait renders a
+  figure not a slab (405×512 measured in Chrome at 1440px), mobile never
+  noticed. Guards proven red against the old 80vh-only rule.
 - **Stray `content/Newsletters/index.md` excluded at the mirror (done 2026-10-07).**
   The vault's retired "Newsletter Archive" page kept republishing over the
   `archive-redirects` stub, building to `newsletters/index.html` with a 2023 date —

@@ -1091,17 +1091,23 @@ check(
 
 // (f) Post images. `img { max-width: 100% }` is not a size — it means "as wide
 // as the column", and the column is 780px, so every image was a full-bleed slab.
-// 11.11 adds the height half: a 40rem width cap leaves a 1070×1708 portrait
-// ~1000px tall, so `max-height: 80vh` caps the tall dimension too. Both are
-// asserted — a width-only regression would pass a width-only guard while
-// portrait covers quietly went full-viewport again.
+// 11.11 adds the height half: a 40rem width cap leaves a 1200×1518 portrait
+// 660×835 on a ~1044px viewport, so `max-height: min(32rem,80vh)` caps the
+// tall dimension with an absolute ~512px ceiling alongside the viewport arm.
+// Both are asserted — a width-only regression would pass a width-only guard
+// while portrait quietly went full-viewport again. The 80vh-only form is
+// explicitly rejected: on a tall monitor it is still a slab.
 check(
   /\.page article img\{[^}]*max-width:40rem/.test(hubCss),
   "article images are capped at 40rem and centred (they were filling 780px)",
 )
 check(
-  /\.page article img\{[^}]*max-height:80vh/.test(hubCss),
-  "article images are capped at 80vh tall (portrait covers were ~1000px)",
+  /\.page article img\{[^}]*max-height:min\(32rem,80vh\)/.test(hubCss),
+  "article images are capped at min(32rem,80vh) tall (portrait was 660x835)",
+)
+check(
+  !/\.page article img\{[^}]*max-height:80vh;/.test(hubCss),
+  "article images carry the absolute 32rem ceiling, not bare 80vh (which scales with the monitor)",
 )
 
 // (f) THE GUARD THAT MATTERS, and the one this round of work exists for. The

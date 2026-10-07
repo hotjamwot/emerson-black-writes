@@ -1338,22 +1338,26 @@ h2.page-title,
   margin-inline: auto;
 }
 
-// 11.11 — portrait covers were rendering ~1000px tall on desktop. The width
-// cap above is correct for landscape (1600×803 → 640×320, comfortable) but
-// does nothing for portrait: a 1070×1708 cover at 640px wide is still over a
-// full viewport tall. Mobile never noticed because a ~350px column keeps the
-// same file at ~560px tall on its own.
+// 11.11 — portrait images were rendering ~835px tall on desktop (measured
+// 660×835 for a 1200×1518 file on a ~1044px viewport). The width cap above is
+// correct for landscape (1600×803 → 640×320, comfortable) but does nothing
+// for portrait: the 80vh ceiling alone scales with the monitor, so on a tall
+// screen the "cap" is still a slab. Mobile never noticed because a ~350px
+// column keeps the same file at ~560px tall on its own.
 //
-// max-height: 80vh is the only addition. With both maxima set and auto
-// dimensions the browser keeps aspect ratio and applies whichever cap bites
-// first — landscape still hits the 640px width cap; portrait hits 80vh and
-// its width shrinks proportionally (a 1070×1708 cover on a 900px viewport
-// renders ~460×720: a figure, not a slab). vh, not px, so a short laptop and
-// a tall monitor both get "most of a screen, never more". `width: auto`
-// travels with the new height cap, or a capped-tall image would stretch wide
-// to fill the column — the mirror of the `height: auto` lesson above.
+// max-height: min(32rem, 80vh) adds an absolute ~512px ceiling alongside the
+// viewport-relative one — whichever is smaller wins. With both maxima set and
+// auto dimensions the browser keeps aspect ratio and applies whichever cap
+// bites first — landscape still hits the 640px width cap; portrait hits the
+// height cap and its width shrinks proportionally (1200×1518 → ~404×512: a
+// figure with text visible above and below, not a slab). `width: auto`
+// travels with the height cap, or a capped-tall image would stretch wide to
+// fill the column — the mirror of the `height: auto` lesson above.
+// `display: block` lets margin-inline: auto truly centre the narrowed figure
+// (img is inline by default, so auto margins were no-ops on portrait).
 .page article img {
-  max-height: 80vh;
+  display: block;
+  max-height: min(32rem, 80vh);
   width: auto;
 }
 
