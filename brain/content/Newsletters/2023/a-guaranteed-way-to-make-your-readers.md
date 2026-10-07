@@ -3,15 +3,17 @@ title: "Emotional Gutting 101: Your Guide to Breaking Reader Hearts"
 description: Learn the secret sauce that turns stoic readers into blubbering messes
 date: 2023-03-14
 created: 2023-03-14
-updated: 2026-09-28
-modified: 2026-09-28
-tags: [craft-character, reading]
+updated: 2026-10-07
+modified: 2026-10-07
+tags:
+  - craft-character
+  - reading
 aliases: []
 type: post
 publish: true
 source: substack:108237352
 ---
-### 👋 Hello beautiful person who gets this newsletter!
+### 👋 Hello beautiful person!
 
 When was the last time you cried in a book? Have you **ever** cried in a book?
 
@@ -19,11 +21,11 @@ For me, I can’t remember the last time I bawled. Like, properly wept. I think 
 
 When it comes to screen, don’t get me started on this scene:
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-01.gif)
+![[a-guaranteed-way-to-make-your-readers-cry-01.jpg]]
 
 Or this one:
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-02.gif)
+![[a-guaranteed-way-to-make-your-readers-cry-02.webp|574]]
 
 ### **How can we play our readers’ hearts like a violin?**
 
@@ -99,11 +101,11 @@ Say you have a character, a tough detective. He or she is probably physically bi
 
 Picture Arnie in… well, anything.
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-03.gif)
+![[a-guaranteed-way-to-make-your-readers-cry-03.jpg]]
 
 Or Sigourney Weaver in *Alien*.
 
-![](/organise/images/newsletters/2023/a-guaranteed-way-to-make-your-readers-04.gif)
+![[a-guaranteed-way-to-make-your-readers-cry-04.jpg]]
 
 Now, how can we make them vulnerable? Ooh, how about we give him… an addiction, like Sherlock Holmes (cocaine)? Or a disability, like Cormoran Strike in the *Strike books* (amputated leg from war injury)? Or some kind tragic backstory, like Robin Griffin in *Top of the Lake* (assaulted as a teen) or Veronica Mars in *Veronica Mars* (dead best friend)?
 

@@ -7,13 +7,11 @@ updated: 2026-09-28
 modified: 2026-09-28
 tags:
   - reading
-  - news
 aliases: []
 type: post
 publish: true
 source: substack:140619404
 ---
-
 What better way to start the year with a look back at last year?
 
 If you read my [[the-nerdiest-book-roundup-ever-2023|nerdy post]] about my Book Tracker spreadsheet, you’ll know that I am a gigantic nerd for tracking what I read:
