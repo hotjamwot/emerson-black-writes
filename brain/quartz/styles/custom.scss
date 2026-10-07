@@ -1315,10 +1315,9 @@ h2.page-title,
 // to render the full 780px: a full-bleed slab with a hard edge against the text
 // on both sides.
 //
-// 40rem (640px) is the cap. An image narrower than its column also stops reading
-// as a slab and starts reading as a figure, and centring it is what makes that
-// read. `height: auto` travels with the width, or a tall screenshot would
-// stretch to 780px tall.
+// 40rem (640px) is the WIDTH cap. The HEIGHT cap (11.11, below) travels with
+// it — see there for why an 80vh ceiling costs portrait covers nothing in
+// aspect ratio and saves them from rendering 1000px tall.
 //
 // `custom.scss` is unlayered, so this beats the layered `img` rule on cascade
 // order alone. `.page article` rather than a bare `article` keeps it off chrome
@@ -1337,6 +1336,25 @@ h2.page-title,
   max-width: 40rem;
   height: auto;
   margin-inline: auto;
+}
+
+// 11.11 — portrait covers were rendering ~1000px tall on desktop. The width
+// cap above is correct for landscape (1600×803 → 640×320, comfortable) but
+// does nothing for portrait: a 1070×1708 cover at 640px wide is still over a
+// full viewport tall. Mobile never noticed because a ~350px column keeps the
+// same file at ~560px tall on its own.
+//
+// max-height: 80vh is the only addition. With both maxima set and auto
+// dimensions the browser keeps aspect ratio and applies whichever cap bites
+// first — landscape still hits the 640px width cap; portrait hits 80vh and
+// its width shrinks proportionally (a 1070×1708 cover on a 900px viewport
+// renders ~460×720: a figure, not a slab). vh, not px, so a short laptop and
+// a tall monitor both get "most of a screen, never more". `width: auto`
+// travels with the new height cap, or a capped-tall image would stretch wide
+// to fill the column — the mirror of the `height: auto` lesson above.
+.page article img {
+  max-height: 80vh;
+  width: auto;
 }
 
 // Left sidebar wordmark

@@ -10,8 +10,11 @@ CONTENT="$REPO/brain/content"
 
 # 1. Mirror notes (drafts excluded: kept out of the repo AND hidden by ExplicitPublish)
 #    --exclude='_*' drops _drafts/ at any depth.
+#    --exclude='index.md' (11.9.10): the vault's "Newsletter Archive" page was retired —
+#    its URL is a redirect stub emitted by archive-redirects, and re-mirroring it
+#    resurrects a real page that leaks into search (contentIndex) and the graph.
 /usr/bin/rsync -a --delete \
-  --exclude='.DS_Store' --exclude='_*' \
+  --exclude='.DS_Store' --exclude='_*' --exclude='index.md' \
   "$VAULT/Newsletters/" "$CONTENT/Newsletters/" || exit 1
 
 # 2. Mirror newsletter images alongside the notes so Quartz can serve them.

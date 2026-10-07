@@ -336,3 +336,17 @@ explicitly approves an override after seeing the Quartz-native alternative (§9.
   sort picks `9.0.0` as newer than `10.0.1`, verified.
 - **Updates become deliberate.** That record + the verify suites turn an upstream
   release into bump → build → read the failures, instead of surprise catchup.
+- **11.11 — post images capped desktop-height, portrait covers tamed (done 2026-10-07).**
+  Article images were full-bleed slabs at the 780px column; a 40rem width cap fixed
+  landscape but left 1070×1708 portrait covers rendering ~1000px tall. One line in
+  our own space — `max-height: 80vh` + `width: auto` on `.page article img`
+  (whichever cap bites first wins, aspect ratio kept) — landscape still hits the
+  width cap, portrait renders a figure not a slab, mobile never noticed. Guard
+  proven red by breaking the cap; author's choice of 80vh.
+- **Stray `content/Newsletters/index.md` excluded at the mirror (done 2026-10-07).**
+  The vault's retired "Newsletter Archive" page kept republishing over the
+  `archive-redirects` stub, building to `newsletters/index.html` with a 2023 date —
+  a 51st "post" in the 2023 fold-out and a leak into search and the graph.
+  `Publish Brain.command` now excludes `index.md` from the Newsletters mirror, and
+  `year-foldouts` belts-and-braces filters `newsletters` / `newsletters/index` from
+  its listing. Year/post-count guards derive from the build instead of hardcoding.

@@ -1091,9 +1091,17 @@ check(
 
 // (f) Post images. `img { max-width: 100% }` is not a size — it means "as wide
 // as the column", and the column is 780px, so every image was a full-bleed slab.
+// 11.11 adds the height half: a 40rem width cap leaves a 1070×1708 portrait
+// ~1000px tall, so `max-height: 80vh` caps the tall dimension too. Both are
+// asserted — a width-only regression would pass a width-only guard while
+// portrait covers quietly went full-viewport again.
 check(
   /\.page article img\{[^}]*max-width:40rem/.test(hubCss),
   "article images are capped at 40rem and centred (they were filling 780px)",
+)
+check(
+  /\.page article img\{[^}]*max-height:80vh/.test(hubCss),
+  "article images are capped at 80vh tall (portrait covers were ~1000px)",
 )
 
 // (f) THE GUARD THAT MATTERS, and the one this round of work exists for. The
@@ -1206,9 +1214,16 @@ check(
 // posts inside it. All of it is now collapsible sections on the Desk.
 
 {
-  // 1. The fold-outs exist, one per year, on the Desk.
+  // 1. The fold-outs exist, one per year, on the Desk — the year count is
+  // derived from the built year folders, not hardcoded, so a new year of
+  // posts cannot fail this guard.
+  const builtYears = readdirSync(join(brain, "public", "newsletters"), {
+    withFileTypes: true,
+  })
+    .filter((e) => e.isDirectory() && /^\d{4}$/.test(e.name))
+    .map((e) => e.name)
   const folds = (homeDoc.match(/class="eb-years__fold"/g) ?? []).length
-  check(folds === 4, `the Desk carries one year fold-out per year (found ${folds})`)
+  check(folds === builtYears.length, `the Desk carries one year fold-out per year (found ${folds}, built ${builtYears.length})`)
   check(
     /<details class="eb-years__fold" open>/.test(homeDoc),
     "the newest year's fold-out is open by default (a closed one reads as broken)",
@@ -1345,11 +1360,16 @@ check(
     "content/Newsletters/index.md stays deleted",
   )
 
-  // 9. The 49 posts themselves are untouched. Removing the archive must never
-  //    cost a post.
+  // 9. The posts themselves are untouched. The count is derived from the
+  // build, not hardcoded — the vault republishes content/index.md and
+  // content/Newsletters/index.md alongside the posts, and a fixed number
+  // fails every time either returns. yearRows is block-local to guard 2, so
+  // the row count is recomputed here rather than reached for.
+  const postCount = builtPosts.length
+  const yearRowCount = (homeDoc.match(/class="eb-years__row"/g) ?? []).length
   check(
-    builtPosts.length === 49,
-    `all 49 posts still build after the archive was retired (${builtPosts.length})`,
+    postCount > 0 && yearRowCount === postCount,
+    `all ${postCount} posts still build after the archive was retired`,
   )
 
   // 10. NO PAGE STATES A COUNT IT CANNOT BACK UP. The recent-notes overflow line

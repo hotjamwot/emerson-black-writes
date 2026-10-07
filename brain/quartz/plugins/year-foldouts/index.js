@@ -80,6 +80,11 @@ function YearFoldoutsComponent({ allFiles, fileData }) {
     .filter((f) => f.frontmatter?.title)
     .filter((f) => f.frontmatter?.publish !== false)
     .filter((f) => f.slug && f.slug !== "index" && !f.slug.endsWith("/"))
+    // The vault republished content/Newsletters/index.md ("Newsletter Archive",
+    // Oct 4), which builds to newsletters/index.html and carries a 2023 date —
+    // so without this line it appears in the 2023 fold-out as a 51st "post".
+    // It is an archive page, not a dispatch, and must never be listed as one.
+    .filter((f) => f.slug !== "newsletters" && f.slug !== "newsletters/index")
 
   // A post with no date cannot be placed in a year, so it cannot appear in a
   // by-year list. It is dropped rather than bucketed into a fake year, which

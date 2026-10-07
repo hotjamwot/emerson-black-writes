@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Eight items, and only eight.
+**Everything still open on this site. Nothing else.** Seven items, and only seven.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -80,13 +80,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
 - The head nav on the homepage: **Desk** currently links to the Desk *section of the
   homepage* (an in-page anchor). It should navigate to
   **emersonblackwrites.com/desk/** instead — that is what the label promises.
-
-### 11.11 Desk — post images are huge on desktop, right on mobile
-
-- In the Desk, images render far too large on desktop; they need to display at a much
-  more comfortable size. Mobile sizing is nice as-is, so any fix must be
-  responsive — improve desktop without regressing mobile. (*No approach chosen yet —
-  per AGENTS.md, ask the Quartz-native question first.*)
 
 ### 11.12 "Mentioned in this post" cards — the homepage Books-section link isn't reliable
 
