@@ -187,11 +187,12 @@ jobs:
             exit 1
           fi
           echo "Guard: sitemap lists $SITEMAP_POSTS posts; meta + og + canonical on index.html; bio.html is a safe redirect."
-          # S11 §11.4: the header nav is in-page anchors, so a renamed section id
-          # silently breaks navigation — the link still renders, it just goes
-          # nowhere. A nav that does nothing looks like a broken site and is the
-          # single most likely thing to rot in a one-page design.
-          NAV_TARGETS="top books desk about characters start-reading"
+          # S11 §11.4: the header nav is in-page anchors (Desk excepted — 11.10
+          # sends it to /desk/), so a renamed section id silently breaks
+          # navigation — the link still renders, it just goes nowhere. A nav
+          # that does nothing looks like a broken site and is the single most
+          # likely thing to rot in a one-page design.
+          NAV_TARGETS="top books about characters start-reading"
           for t in $NAV_TARGETS; do
             if ! grep -q "id=\"$t\"" _site/index.html; then
               echo "::error::Guard failure: nav target #$t does not exist in index.html — a header link would go nowhere! Deployment aborted."

@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Seven items, and only seven.
+**Everything still open on this site. Nothing else.** Five items, and only five.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -26,7 +26,7 @@ entry was read without opening the page it described. So the file was split:
 
 ## Open items
 
-Item numbers (`11.8`, `11.5`) are **kept deliberately** — they are how the work was
+Item numbers (`11.8`, `11.12`) are **kept deliberately** — they are how the work was
 discussed with the author and how `SHIPPED.md` refers back to it. Renumbering them would
 break every cross-reference for no gain.
 
@@ -75,12 +75,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
   scrolls **8420px**. So the reader gets a short "Archive" heading, no visible links, and
   then has to keep scrolling — a dead zone where navigation should be.
 
-### 11.10 Homepage head nav — "Desk" should leave the homepage
-
-- The head nav on the homepage: **Desk** currently links to the Desk *section of the
-  homepage* (an in-page anchor). It should navigate to
-  **emersonblackwrites.com/desk/** instead — that is what the label promises.
-
 ### 11.12 "Mentioned in this post" cards — the homepage Books-section link isn't reliable
 
 - The §11.6 cards in the Desk link to the **Books section of the homepage**, which
@@ -106,14 +100,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
   in the post lists look squeezed and take odd vertical space next to comparatively
   short post titles and subtitles.
 - Open: ideas for making the list styling fit better.
-
-### 11.16 Desk sidebar — sort by publishing date, and show the dates
-
-- **CLOSED, author's call 2026-10-07: sidebar stays as-is.** Sorting by publish
-  date would need a custom `sortFn` fed from per-file dates, and showing dates
-  in the tree would need custom node rendering — both extra scripts and upkeep
-  for a nav the author wants to keep tight and lean. The year folders already
-  give date order; leave it there.
 
 ---
 

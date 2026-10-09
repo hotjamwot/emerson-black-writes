@@ -103,6 +103,15 @@ check(
   !/\bSHIPPED\b/.test(openItems),
   "no open item claims something is SHIPPED — move it to SHIPPED.md",
 )
+// 11.10/11.16 (2026-10-09): a bold **CLOSED** is the same lie as ✅ or ~~ —
+// finished work sitting in the backlog under ## Open items. The guard caught
+// ✅, struck-through, and SHIPPED, but 11.16 sat open for days reading
+// "CLOSED, author's call" because no check matched the word. Case-insensitive
+// on purpose: "Closed", "CLOSED", "closed:" are all the same claim.
+check(
+  !/\bCLOSED\b/i.test(openItems),
+  "no open item claims to be CLOSED — move it to SHIPPED.md",
+)
 
 // A plan that has shrunk to nothing usually means the split ate it.
 check(

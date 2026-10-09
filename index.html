@@ -28,12 +28,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="img/favicon.png" type="image/png">
 
-    <!-- S11 §11.4 — the storefront now has a real header. Anchors only: this is a
-         one-page site, and in-page targets work on a static host with no JS, no
-         smooth-scroll library and no router. #books and #desk are the two places
-         a reader actually wants to go; "About" is #about at the foot of the page.
-         All of them EXIST as sections — verified by the §11.5 anchor guard, which
-         fails the deploy if a link points at an id the page does not contain. -->
+    <!-- S11 §11.4 — the storefront now has a real header. Books and About are
+         in-page anchors: this is a one-page site, and in-page targets work on a
+         static host with no JS and no router. Desk is the exception (11.10) — it
+         leaves the page for emersonblackwrites.com/desk/, which is what the label
+         promises. All in-page targets EXIST as sections — verified by the §11.5
+         anchor guard, which fails the deploy if a link points at an id the page
+         does not contain. -->
 </head>
 <body>
     <a class="skip-link" href="#books">Skip to the books</a>

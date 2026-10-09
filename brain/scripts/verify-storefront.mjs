@@ -101,6 +101,21 @@ check(
   `.prequel-cover (the box) carries aspect-ratio, like .book-cover does`,
 )
 
+// 11.10 — the header's Desk link must LEAVE the homepage. It was an in-page
+// anchor (#desk) until 2026-10-07 and the TODO entry sat open two days after
+// the fix shipped, because no guard named the destination. Assert the href,
+// not the label: a link reading "Desk" that points at "#desk" renders fine
+// and goes nowhere the label promises.
+const deskNav = /<nav[^>]*class="site-nav"[^>]*>([\s\S]*?)<\/nav>/.exec(html)?.[1] ?? ""
+check(
+  /<a[^>]*href="[^"]*\/desk\/"[^>]*>\s*Desk\s*<\/a>/.test(deskNav),
+  `header nav "Desk" links to /desk/ (not an in-page anchor)`,
+)
+check(
+  !/<a[^>]*href="#desk"[^>]*>\s*Desk\s*<\/a>/.test(deskNav),
+  `header nav has no "#desk" anchor masquerading as the Desk link`,
+)
+
 // A hard-coded half-shell cannot survive a change to --shell, and it silently
 // collapses to 0 padding below ~1164px, where it was supposed to be widening.
 check(!/550px/.test(css), `no hard-coded \`550px\` half-shell padding left in the CSS`)
