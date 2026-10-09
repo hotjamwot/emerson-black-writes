@@ -91,8 +91,13 @@ check(!openItems.includes("✅"), "no ✅ in any open item — finished work bel
 // means something finished is still sitting in the backlog — which is the
 // §11.7 failure. This distinction was added after the guard rejected the
 // author's own closure of 11.8, which is the guard working, not the guard wrong.
+//
+// 2026-10-09: the "Closed by the author" section is OPTIONAL — 11.8 lived there
+// from the split until it moved to SHIPPED.md, and an empty backlog-with-history
+// is the same lie the split killed. When present it must record a closure;
+// when absent there must be no strikethrough anywhere open.
 check(
-  /~~/.test(items(closed ?? "")),
+  !closed || /~~/.test(items(closed)),
   "the 'Closed by the author' section actually records a closure (is the split working?)",
 )
 check(

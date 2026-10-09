@@ -1044,6 +1044,23 @@ check(
   "no popover stylesheet is shipped (the hover-preview boxes are gone)",
 )
 check(/enablePopovers:\s*false/.test(config), "enablePopovers stays false in quartz.config.yaml")
+// Graph — every instance renders the ENTIRE map (author's call 2026-10-07,
+// fixed 2026-10-09). The client BFS-filters when localGraph.depth >= 0, so
+// any non-negative depth on the Desk hub (links: [], tags: []) correctly
+// renders one dot — the neighbourhood of a node with no edges. depth -1
+// takes the else branch and adds every node. Assert the built containers too:
+// the config is only a promise until the HTML carries it.
+check(
+  /localGraph:\s*\n(\s+#[^\n]*\n|\s+[a-zA-Z]+:[^\n]*\n)*\s+depth:\s*-1/.test(config),
+  "localGraph.depth is -1 in quartz.config.yaml (every graph is the whole map)",
+)
+const builtDepths = [...page.matchAll(/graph-container" data-cfg="([^"]*)"/g)].map((m) =>
+  (m[1].replace(/&quot;/g, '"').match(/"depth":(-?\d+)/) ?? [])[1],
+)
+check(
+  builtDepths.length > 0 && builtDepths.every((d) => d === "-1"),
+  `every built graph container carries depth -1 (${builtDepths.length} container(s): ${[...new Set(builtDepths)].join(", ") || "none found"})`,
+)
 
 // The hub cards were red on red. `--secondary` is the Emerson ACCENT (#CA2626)
 // in this theme, not a muted grey, so a card background mixing in `--secondary`

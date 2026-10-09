@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Five items, and only five.
+**Everything still open on this site. Nothing else.** Three items, and only three.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -26,33 +26,25 @@ entry was read without opening the page it described. So the file was split:
 
 ## Open items
 
-Item numbers (`11.8`, `11.12`) are **kept deliberately** — they are how the work was
+Item numbers (`11.12`) are **kept deliberately** — they are how the work was
 discussed with the author and how `SHIPPED.md` refers back to it. Renumbering them would
 break every cross-reference for no gain.
 
-### Closed by the author, 2026-10-04
+### Graph — every instance shows the whole map (fixing 2026-10-09)
 
-- ~~**11.8 A unifying "How I Write" page**~~ — **NOT NEEDED.** The author's call: the
-  §11.6 *"Mentioned in this post"* cards already do the job this page would have done.
-  They connect craft writing to the books **per post**, automatically, and only where
-  the post actually mentions a book — which is more accurate than a hand-built page
-  pairing posts with books, and free to maintain. **Superseded, not descoped.**
+**Measured, not guessed** (real `contentIndex.json`: 64 entries, 9 with any
+`links`, the Desk hub itself `links: []`):
 
-### Graph — the Desk shows one dot, and it should show the map
-
-**Measured, not guessed** (Chrome, 1440px, built site):
-
-- `contentIndex.json` holds **63 entries, but only 8 have any `links` at all** — and
-  the Desk's own entry has `links: []`. **A graph of one node is the correct rendering
-  of the data.** This is the documented §12.6 condition: *"the full graph returns once
-  the link graph is dense enough."* It is not dense enough.
-- **This is a content problem, not a config problem.** `localGraph.depth: 100` is already
-  set; depth cannot invent edges that the markdown does not contain.
-- **Homepage stays graph-free** — author's decision, settled. The concern here is only
-  the graph *on the Desk*.
-- **So the fix is authoring, not code:** more `[[wikilinks]]` between posts. That is
-  the author's own writing, and it also fixes backlinks (below), which are driven by
-  exactly the same links.
+- **The one dot was the correct rendering of the config, not a data bug.**
+  The graph client BFS-filters from the current page when `depth >= 0` — and
+  the hub has no edges, so its neighbourhood is itself. `depth: 100` made the
+  filter wider, not absent. Fix: `localGraph.depth: -1`, which takes the
+  else-branch and renders every node on every instance.
+- **Proven by simulation on the real index:** depth 100 from `index` → 1 node;
+  depth -1 → all 64, from the hub and from a post alike.
+- **Homepage stays graph-free** — author's decision, settled.
+- Wikilinks still matter for backlinks and edges — but a sparse archive now
+  reads as a scattered map, not a broken widget.
 
 ### Sidebar — two real defects, both confirmed by measurement
 
@@ -85,14 +77,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
     for bonus content later (character backstories, etc.). More to maintain, but it
     gives the cards a durable on-site destination.
   - Not decided; flagged for discussion rather than implementation.
-
-### 11.13 Desk header nav — "Books" and "About" don't go where they're meant to
-
-- In the Desk's header nav, clicking **Books** doesn't take us to the book section,
-  even though it's meant to; clicking **About** just lands at the top of the homepage
-  instead of the `#about` section.
-- Possibly a Brave-specific bug — **verify in a second browser before treating it as
-  a site defect.**
 
 ### 11.15 Year/Topic pages — tag pills use odd vertical space vs. short titles
 
