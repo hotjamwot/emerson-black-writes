@@ -11,6 +11,16 @@ type: post
 publish: true
 source:
 ---
+> This is the introductory novella in the series, A Student Has Drowned.
+> For Book 1, read the first chapter of [[a-rockstar-has-exploded-chapter-one|A Rockstar Has Exploded]].
+> For Book 2, read the first chapter of [[an-actress-is-missing-chapter-one|An Actress is Missing]].
+> For Book 3, read the first chapter of [[a-fiance-has-flatlined-chapter-one|A Fiancé Has Flatlined]].
+
+---
+
+# Chapter One
+## Luce
+ 
 Rain roared against the lecture hall, lashing at the windows and thumping the doors like a rabid dog trying to get inside. Luce felt as if the weather gods had it out for them. It was meant to be summertime—they were _meant to be_ frolicking at the beach and enjoying frozen margaritas.
 
 She stood up on her seat and peered through the cheap, slatted windows.

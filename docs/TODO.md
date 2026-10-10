@@ -30,21 +30,25 @@ Item numbers are **kept deliberately** — they are how the work was
 discussed with the author and how `SHIPPED.md` refers back to it. Renumbering them would
 break every cross-reference for no gain.
 
-### Graph — every instance shows the whole map (fixing 2026-10-09)
+### Graph — SSP-inspired presentation (author feedback, 2026-10-10)
 
-**Measured, not guessed** (real `contentIndex.json`: 64 entries, 9 with any
-`links`, the Desk hub itself `links: []`):
-
-- **The one dot was the correct rendering of the config, not a data bug.**
-  The graph client BFS-filters from the current page when `depth >= 0` — and
-  the hub has no edges, so its neighbourhood is itself. `depth: 100` made the
-  filter wider, not absent. Fix: `localGraph.depth: -1`, which takes the
-  else-branch and renders every node on every instance.
-- **Proven by simulation on the real index:** depth 100 from `index` → 1 node;
-  depth -1 → all 64, from the hub and from a post alike.
-- **Homepage stays graph-free** — author's decision, settled.
-- Wikilinks still matter for backlinks and edges — but a sparse archive now
-  reads as a scattered map, not a broken widget.
+- The native graph config now shows the whole map on every instance, with drag,
+  zoom, hover focus, restored label sizing, and stronger centering. The
+  plugin initializes labels fully hidden; `opacityScale` only changes their
+  opacity after a zoom event. Its `scale` option changes label size, not the
+  initial graph zoom.
+- The author likes the SSP graph's spacious canvas, readable connected titles,
+  category colors, and legend. The installed `@quartz-community/graph` renderer
+  does not expose a legend or per-category colors; matching those means replacing
+  or extending the renderer, not adding Quartz config options.
+- Idle link contrast is improved by owning `--lightgray` in the Emerson theme
+  overlay; the Obsidian theme overrides Quartz's palette config at runtime.
+- **Every node stays in the graph** (`depth: -1`); the first viewport may be
+  zoomed into the current area, with the rest reachable by pan and zoom.
+- **Decision before plugin work:** keep the current renderer and accept these
+  limits, or authorize a small maintained patch to show labels on first render,
+  and highlight/center the active post. A full renderer replacement is still a
+  separate choice for the reference's legend and category styling.
 
 ### Sidebar — two real defects, both confirmed by measurement
 

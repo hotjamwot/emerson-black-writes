@@ -11,6 +11,16 @@ type: post
 publish: true
 source:
 ---
+> This is the third book in the series, A Fiancé Has Flatlined.
+> For the introduction novella, read the first chapter of [[a-student-has-drowned-chapter-one|A Student Has Drowned]].
+> For Book 1, read the first chapter of [[a-rockstar-has-exploded-chapter-one|A Rockstar Has Exploded]].
+> For Book 2, read the first chapter of [[an-actress-is-missing-chapter-one|An Actress is Missing]].
+
+---
+
+# Chapter One
+## Luce
+
 Screams rent the air. People attempted to flee, but the muddy grounds of the Sharp estate mired them like flies trapped in a spiderweb.
 
 A frantic yell drew Luce’s attention, and she turned in time to see a police officer swinging a baton against the shoulder of one of her engagement party guests.

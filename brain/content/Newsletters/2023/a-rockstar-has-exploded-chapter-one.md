@@ -11,6 +11,17 @@ type: post
 publish: true
 source:
 ---
+> This is the first book in the series, A Rockstar Has Exploded.
+> For the introduction novella, read the first chapter of [[a-student-has-drowned-chapter-one|A Student Has Drowned]].
+> For Book 2, read the first chapter of [[an-actress-is-missing-chapter-one|An Actress is Missing]].
+> For Book 3, read the first chapter of [[a-fiance-has-flatlined-chapter-one|A Fiancé Has Flatlined]].
+
+---
+
+# Chapter One
+## Luce
+
+
 Luce and Huds were tucked so close behind the column that his breath tickled her neck.
 
 “Is that her?” he whispered.

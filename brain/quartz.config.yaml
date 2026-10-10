@@ -287,30 +287,30 @@ plugins:
     enabled: true
     options:
       localGraph:
-        # Graph — the whole Desk on every page (author's call 2026-10-07,
-        # reworked 2026-10-09). depth -1 renders the ENTIRE graph on every
-        # instance: the client script BFS-filters when depth >= 0, so depth 100
-        # on the Desk hub (links: [], tags: []) correctly rendered one dot —
-        # the neighbourhood of a node with no edges. -1 takes the else branch
-        # and adds every node, so sparse content reads as a scattered map, not
-        # a broken widget. scale 1.5 keeps the close-in start; centerForce
-        # stays eased so dragged nodes snap home less. repelForce /
-        # linkDistance / fontSize deliberately untouched.
+        # Scale controls label size in this renderer; depth keeps the full map.
+        drag: true
+        zoom: true
         depth: -1
         scale: 1.5
         showTags: true
         focusOnHover: true
         fontSize: 0.8
         repelForce: 0.6
-        centerForce: 0.3
+        centerForce: 0.6
         linkDistance: 40
+        opacityScale: 1.5
       globalGraph:
+        drag: true
+        zoom: true
+        depth: -1
+        scale: 1.4
         showTags: true
         focusOnHover: true
         fontSize: 0.8
         repelForce: 0.6
-        centerForce: 0.4
+        centerForce: 0.6
         linkDistance: 40
+        opacityScale: 1.5
     layout:
       position: afterBody
       priority: 10

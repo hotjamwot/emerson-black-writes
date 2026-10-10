@@ -11,6 +11,16 @@ type: post
 publish: true
 source:
 ---
+> This is the second book in the series, An Actress is Missing.
+> For the introduction novella, read the first chapter of [[a-student-has-drowned-chapter-one|A Student Has Drowned]].
+> For Book 1, read the first chapter of [[a-rockstar-has-exploded-chapter-one|A Rockstar Has Exploded]].
+> For Book 3, read the first chapter of [[a-fiance-has-flatlined-chapter-one|A Fiancé Has Flatlined]].
+
+---
+
+# Chapter One
+## Unknown
+
 She wasn’t even supposed to be here.
 
 All her friends had told her to stay away from him, and  her family as well. Oh God, if her Dad found out she was with him right now….

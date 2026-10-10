@@ -147,6 +147,7 @@ ${scope} {
      back to the true accent so links match the storefront token exactly. Hover
      still uses --color-accent-2, which stays a brighter crimson. */
   --text-accent: var(--color-accent);
+  --lightgray: ${mode === "dark" ? "#4A4A4A" : "#B8B8B8"};
   /* S10 · --tertiary owned. Quartz's base stylesheet reads this variable in
      three places: ::selection (a 60% wash), the search-hit .highlight
      background, and a:hover (color: var(--tertiary)) behind a 0.2s color
