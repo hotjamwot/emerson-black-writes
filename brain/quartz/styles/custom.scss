@@ -713,15 +713,24 @@ h2.page-title,
   padding: 0 0 0.5rem;
   border-bottom: 1px solid var(--eb-line);
   font-family: var(--eb-display);
-  font-size: 0.82rem;
+  font-size: 1.64rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .eb-hub__tag a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--dark);
   text-decoration: none;
+}
+
+.eb-hub__icon {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
 }
 
 .eb-hub__tag a:hover {

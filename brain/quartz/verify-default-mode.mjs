@@ -607,13 +607,10 @@ check(
 )
 
 // ── 5d. the tag taxonomy holds (S10 §25) ────────────────────────────────────
-// Eight spheres were read out of all 49 posts and signed off (§25.3). Two things
-// can then happen to them silently: a new post ships with `tags: []` (or invents
-// a ninth tag, which mints a near-empty page and fragments the vocabulary), or a
-// tag page stops being generated. Both are invisible in a green build, so they
-// are asserted here. The vocabulary is deliberately a fixed set — a tag earns its
-// place at 3+ posts, not at 1.
-console.log("\nTag taxonomy — 8 spheres, one tag per post (§25)")
+// Eight topic spheres were read out of all 49 posts and signed off (§25.3).
+// Functional tags such as `sample-chapter` describe a reading path, not a topic,
+// and are registered separately so they do not fragment the topic vocabulary.
+console.log("\nTag taxonomy — 8 topic spheres + registered functional tags (§25)")
 const TAXONOMY = [
   "process",
   "mindset",
@@ -624,6 +621,7 @@ const TAXONOMY = [
   "bookcraft",
   "news",
 ]
+const FUNCTIONAL_TAGS = ["sample-chapter"]
 const frontmatterTag = (src) => {
   const fm = src.split("---")[1] ?? ""
   const m = /^tags:\s*\[(.*?)\]\s*$/m.exec(fm)
@@ -666,7 +664,7 @@ check(
   `bridging second tags are in use (${bridges} posts cross a sphere boundary) — this is what makes the tag graph a graph`,
 )
 const offVocabulary = [...tagOf].flatMap(([f, t]) =>
-  t.filter((x) => !TAXONOMY.includes(x)).map((x) => `${f} (${x})`),
+  t.filter((x) => !TAXONOMY.includes(x) && !FUNCTIONAL_TAGS.includes(x)).map((x) => `${f} (${x})`),
 )
 check(
   untagged.length === 0,
@@ -674,7 +672,7 @@ check(
 )
 check(
   offVocabulary.length === 0,
-  `no post invents a tag outside the 8 spheres${offVocabulary.length ? ` — ${offVocabulary.slice(0, 3).join(", ")}` : ""}`,
+  `no post uses an unregistered tag outside the 8 topic spheres${offVocabulary.length ? ` — ${offVocabulary.slice(0, 3).join(", ")}` : ""}`,
 )
 // The trail is gone (S10): a second, folder-shaped navigation model sitting
 // above the title, repeating the current page. Locked off so it cannot creep
@@ -1488,7 +1486,22 @@ const hubHtml = readFileSync(join(brain, "public", "index.html"), "utf8")
 const hubCards = (hubHtml.match(/class="eb-hub__card"/g) ?? []).length
 const hubItems = (hubHtml.match(/class="eb-hub__item"/g) ?? []).length
 const hubDescs = (hubHtml.match(/class="eb-hub__desc"/g) ?? []).length
-check(hubCards > 0, `the Desk hub renders one card per topic (${hubCards} cards)`)
+check(hubCards > 0, `the Desk hub renders its tag cards (${hubCards} cards)`)
+const hubTags = [...hubHtml.matchAll(/<h3 class="eb-hub__tag">([\s\S]*?)<\/h3>/g)].map((m) => m[1])
+const hubIcons = [...hubHtml.matchAll(/<svg class="eb-hub__icon"[^>]*>/g)].map((m) => m[0])
+check(
+  hubTags.length === hubCards && hubTags.every((tag) => (tag.match(/class="eb-hub__icon"/g) ?? []).length === 1),
+  `each of the ${hubCards} tag cards has exactly one icon`,
+)
+check(
+  hubIcons.length === hubCards && hubIcons.every((icon) => /aria-hidden="true"/.test(icon) && /focusable="false"/.test(icon)),
+  `all ${hubIcons.length} card icons are decorative and hidden from assistive technology`,
+)
+const tagHubSource = readFileSync(join(brain, "quartz", "plugins", "tag-hub", "index.js"), "utf8")
+check(
+  /TAG_ICONS\[tag\]\s*\?\?\s*DEFAULT_TAG_ICON/.test(tagHubSource),
+  "unknown future tags receive the generic icon fallback",
+)
 check(
   hubItems > 0 && hubDescs === hubItems,
   `every post in the hub shows its description (${hubDescs}/${hubItems})`,

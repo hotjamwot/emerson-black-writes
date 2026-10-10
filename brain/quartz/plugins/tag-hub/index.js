@@ -63,6 +63,68 @@ import { h } from "preact"
 
 const PER_TAG = 5
 const EXCLUDED_TAGS = new Set(["news"])
+const DEFAULT_TAG_ICON = [
+  { element: "circle", attrs: { cx: 5, cy: 12, r: 2 } },
+  { element: "circle", attrs: { cx: 12, cy: 5, r: 2 } },
+  { element: "circle", attrs: { cx: 19, cy: 12, r: 2 } },
+  { element: "circle", attrs: { cx: 12, cy: 19, r: 2 } },
+  { element: "path", attrs: { d: "m7 11 3.5-4.5m3 0L17 11m0 2-3.5 4.5m-3 0L7 13" } },
+]
+const TAG_ICONS = {
+  mindset: [
+    { element: "circle", attrs: { cx: 12, cy: 12, r: 9 } },
+    { element: "path", attrs: { d: "m15 9-2 4-4 2 2-4 4-2z" } },
+  ],
+  process: [
+    { element: "path", attrs: { d: "M20 7h-5V2M4 17h5v5" } },
+    { element: "path", attrs: { d: "M5.6 9A7 7 0 0 1 18 5l2 2M4 17l2 2a7 7 0 0 0 12.4-4" } },
+  ],
+  reading: [
+    { element: "path", attrs: { d: "M12 7v14M3 18V5a1 1 0 0 1 1-1h3a5 5 0 0 1 5 5 5 5 0 0 1 5-5h3a1 1 0 0 1 1 1v13" } },
+  ],
+  systems: [
+    { element: "path", attrs: { d: "m3 6 9-4 9 4-9 4-9-4zm0 6 9 4 9-4m-18 6 9 4 9-4" } },
+  ],
+  "craft-character": [
+    { element: "path", attrs: { d: "M3 7s4-3 9-3 9 3 9 3v4a9 9 0 0 1-18 0V7z" } },
+    { element: "path", attrs: { d: "M8 11h.01M16 11h.01M9 15c1.8 1.5 4.2 1.5 6 0" } },
+  ],
+  "craft-plot": [
+    { element: "path", attrs: { d: "M5 5v7h7m7-7v7h-7m-7 0v7h14" } },
+    { element: "circle", attrs: { cx: 5, cy: 5, r: 2 } },
+    { element: "circle", attrs: { cx: 19, cy: 5, r: 2 } },
+    { element: "circle", attrs: { cx: 19, cy: 19, r: 2 } },
+  ],
+  bookcraft: [
+    { element: "path", attrs: { d: "M6 3h12v18l-6-4-6 4V3z" } },
+    { element: "path", attrs: { d: "M9 8h6m-6 3h6" } },
+  ],
+  "sample-chapter": [
+    { element: "path", attrs: { d: "M12 7v14M3 18V5a1 1 0 0 1 1-1h3a5 5 0 0 1 5 5 5 5 0 0 1 5-5h3a1 1 0 0 1 1 1v13" } },
+    { element: "path", attrs: { d: "m15 15 2 2 4-4" } },
+  ],
+}
+
+function renderTagIcon(tag) {
+  const shapes = TAG_ICONS[tag] ?? DEFAULT_TAG_ICON
+  return h(
+    "svg",
+    {
+      class: "eb-hub__icon",
+      width: 18,
+      height: 18,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      "stroke-width": 1.75,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      "aria-hidden": "true",
+      focusable: "false",
+    },
+    shapes.map(({ element, attrs }, index) => h(element, { ...attrs, key: index })),
+  )
+}
 
 const fmt = (d) => (d ? d.toLocaleDateString("en-US", { year: "numeric", month: "short" }) : null)
 
@@ -132,7 +194,12 @@ function TagHubComponent({ allFiles, cfg, fileData }) {
         h(
           "h3",
           { class: "eb-hub__tag" },
-          h("a", { class: "internal", href: `./tags/${tag}` }, tag.replace(/-/g, " ")),
+          h(
+            "a",
+            { class: "internal", href: `./tags/${tag}` },
+            renderTagIcon(tag),
+            tag.replace(/-/g, " "),
+          ),
         ),
         h(
           "ul",
