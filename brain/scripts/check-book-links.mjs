@@ -21,6 +21,13 @@ import { join } from "node:path"
 import { BOOKS } from "./books.mjs"
 
 const root = process.argv[2] || "."
+
+/** `samplePath` `/desk/newsletters/2023/foo` → vault note path. */
+function sampleNotePath(samplePath) {
+  const rel = samplePath.replace(/^\/desk\//, "")
+  const [, year, slug] = rel.split("/")
+  return join(root, "brain", "content", "Newsletters", year, `${slug}.md`)
+}
 const problems = []
 const check = (ok, msg) => {
   console.log(`${ok ? "  ✓" : "  ✗"} ${msg}`)
@@ -58,6 +65,14 @@ for (const b of BOOKS.filter((x) => x.url)) {
   )
   check(b.asin.length === 10 && b.asin.startsWith("B0"), `Book ${b.number} has a plausible ASIN`)
 }
+for (const b of BOOKS) {
+  check(!!b.samplePath, `Book ${b.number} has a sample chapter path`)
+  check(
+    b.samplePath.startsWith("/desk/newsletters/"),
+    `Book ${b.number} sample path is a Desk post (${b.samplePath})`,
+  )
+  check(existsSync(sampleNotePath(b.samplePath)), `Book ${b.number} sample note exists on disk`)
+}
 console.log(`  · ${BOOKS.length} books, ${BOOKS.filter((b) => b.url).length} with buy links`)
 // ---------------------------------------------------------------- 2. homepage
 const index = readFileSync(join(root, "index.html"), "utf8")
@@ -79,6 +94,11 @@ if (section) {
     // The bug this section was born for: index.html said "A Rock Star Has
     // Exploded" where 17 posts and the author say "A Rockstar Has Exploded".
     check(shown.title === book.title, `Book ${book.number} title matches books.mjs ("${shown.title}")`)
+
+    check(
+      shown.body.includes(`href="${book.samplePath}"`),
+      `Book ${book.number} links to sample chapter (${book.samplePath})`,
+    )
 
     if (book.free) {
       check(/href="#start-reading"/.test(shown.body), `Book ${book.number} (free) links to the signup, not Amazon`)

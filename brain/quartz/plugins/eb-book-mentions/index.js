@@ -1,5 +1,5 @@
 import { h } from "preact"
-import { BOOKS_IN_ORDER, coverThumb } from "../../../scripts/books.mjs"
+import { BOOKS_IN_ORDER, bookDoorHref, coverThumb } from "../../../scripts/books.mjs"
 
 /**
  * eb-book-mentions — a "door" from a dispatch to the books. §11.6.
@@ -26,11 +26,10 @@ import { BOOKS_IN_ORDER, coverThumb } from "../../../scripts/books.mjs"
  * so the card is real elements with real links and the theme's own stylesheet can
  * style them like anything else. Working WITH Quartz, not around it.
  *
- * IT DOES NOT LINK AMAZON. The card links the SERIES (`/desk/` is the writing;
- * the books live on the homepage), because a hard sell inside a craft post breaks
- * the thing that makes people read the author. The book is NAMED and the path
- * EXISTS; the buying happens on the homepage where the buy links already are.
- * That also means this component needs no ASIN, and cannot drift from one.
+ * IT DOES NOT LINK AMAZON. The card links chapter one on the Desk when
+ * `books.mjs` carries a `samplePath`, otherwise the series block on the
+ * homepage (`/#books`). A hard sell inside a craft post breaks the thing that
+ * makes people read the author; buying stays on the homepage. No ASIN here.
  *
  * WHICH BOOKS. Matched from `../../../../scripts/books.mjs` — the same canonical
  * source the homepage and `check-book-links.mjs` use, so the card cannot name a
@@ -175,7 +174,7 @@ function EbBookMentionsComponent({ fileData, tree } = {}) {
             },
           ),
           h("div", { class: "eb-mentions__body" },
-            h("a", { class: "eb-mentions__title-link", href: SERIES_URL }, book.title),
+            h("a", { class: "eb-mentions__title-link", href: bookDoorHref(book) }, book.title),
             h("span", { class: "eb-mentions__label" }, `Book ${book.number}`),
             book.blurb ? h("p", { class: "eb-mentions__blurb" }, book.blurb) : null,
           ),

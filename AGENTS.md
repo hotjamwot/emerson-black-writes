@@ -97,7 +97,7 @@ cd brain/public && python3 -m http.server 8099 &
   URL on a post must be **absolute** (`/img/…`). A relative path works on the homepage
   and 404s on every post. Asserted by `check-book-mentions.mjs`.
 - **Book data lives in exactly one place:** `brain/scripts/books.mjs` (title, ASIN,
-  short link, cover, blurb, match patterns). Never hardcode a book anywhere else.
+  short link, cover, blurb, sample chapter path, match patterns). Never hardcode a book anywhere else.
 - **Covers:** the cards use `img/covers/thumbs/` (150×240, ~6 KB), **not** the
   1600×2560 originals (~190 KB). If a cover changes, run
   `node brain/scripts/make-cover-thumbs.mjs` and **commit the result**.

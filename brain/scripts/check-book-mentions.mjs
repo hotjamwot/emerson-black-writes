@@ -18,7 +18,7 @@
  */
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
-import { BOOKS } from "./books.mjs"
+import { BOOKS, bookDoorHref } from "./books.mjs"
 
 const site = process.argv[2] || "_site"
 const problems = []
@@ -92,6 +92,21 @@ for (const rel of withCard) {
 
   // A sell inside a craft post breaks the thing that makes people read the author.
   check(!/amazon|amzn\.eu|a\.co/.test(block), `${rel}: no Amazon link inside the card`)
+
+  const titleLinks = [
+    ...block.matchAll(/class="eb-mentions__title-link" href="([^"]+)"[^>]*>([^<]+)</g),
+  ]
+  for (const [, href, title] of titleLinks) {
+    const book = BOOKS.find((b) => b.title === title.trim())
+    if (!book) {
+      check(false, `${rel}: title link for unknown book "${title.trim()}"`)
+      continue
+    }
+    check(
+      href === bookDoorHref(book),
+      `${rel}: "${book.title}" links to sample (${bookDoorHref(book)}), got ${href}`,
+    )
+  }
 
   // The covers. Each one must (a) exist as a file in the assembled site, and
   // (b) be a THUMBNAIL, not the 190 KB artwork.

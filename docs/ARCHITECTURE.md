@@ -45,7 +45,7 @@ Sections 1–7 are the original §1–7. Section 8 is the original §13 (Command
 | Brand CSS | `brain/quartz/styles/custom.scss` (~1,840 lines; 12 measured `[OVERRIDE]` blocks + the `[SAFE]` brand layer) |
 | Theme / accent | `brain/quartz/theme/emerson.ts` |
 | Verification | `brain/quartz/verify-default-mode.mjs`, `brain/quartz/theme/verify-brand.mjs`, `brain/scripts/verify-storefront.mjs`, `brain/scripts/check-desk-section.mjs`, `brain/scripts/check-desk-density.mjs`, `brain/scripts/check-book-links.mjs`, `brain/scripts/check-book-mentions.mjs` |
-| Book data (canonical) | `brain/scripts/books.mjs` — number, title, ASIN, short link, cover, blurb, match patterns |
+| Book data (canonical) | `brain/scripts/books.mjs` — number, title, ASIN, short link, cover, blurb, `samplePath`, match patterns |
 | Cover thumbnails | `brain/scripts/make-cover-thumbs.mjs` → `img/covers/thumbs/`. **Run when a cover changes, then commit.** Cards link these, not the 190 KB originals |
 | Override audit | `brain/scripts/audit-overrides.mjs` + `brain/scripts/probe.mjs` — "is this override still needed?" |
 | Plan (canonical, git-tracked) | `docs/TODO.md` — **open work only** |

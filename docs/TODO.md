@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Seven items, and only seven.
+**Everything still open on this site. Nothing else.** Six items, and only six.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -142,40 +142,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
 - **Follow-through.** Update `custom.scss` §4a-bis comments (still say “four links”),
   `verify-default-mode.mjs` (currently asserts `navLinks === 4`), and any guard that
   assumes `Books / Desk / About / Subscribe` order matches the storefront exactly.
-
-### Sample chapters on the Desk — content + site wiring (author ask, 2026-10-10)
-
-- **The idea (author).** Publish the first chapter of each book on the Desk, linkable
-  from “Mentioned in this post” cards, homepage book buttons, and other sensible doors.
-  Date each piece with the **book’s publish date**; tag with something like `sample-chapter`.
-- **Recommendation — yes, good plan, with one canonical map.** Treat chapters like any
-  other Desk note (`publish: true`, real `title`, `description`, `date:`). Use tag
-  `sample-chapter` (and optionally `type: sample` in frontmatter) so guards and filters
-  can find them. Put notes in a dedicated folder in the vault (e.g. `Samples/` or
-  `Books/Sample chapters/`) so they are easy to spot when syncing — slug becomes the
-  stable ID either way.
-- **Single source of truth (same rule as covers and ASINs).** Add one field per book in
-  `brain/scripts/books.mjs` — e.g. `sampleSlug: "samples/rockstar-chapter-1"` or
-  `sampleUrl: "/desk/…"` — pointing at the built Desk URL. Homepage, `eb-book-mentions`,
-  and future CTAs import that field; never hardcode chapter paths in HTML or posts.
-- **Card behaviour (product call).** Today mention cards link the series block on the
-  homepage (`/#books`) by design — no Amazon in craft posts. With samples live, a strong
-  default is: **card → sample chapter when `sampleSlug` is set**, else keep `/#books`.
-  Secondary “Buy” stays on the homepage/book row. Wording may stay “Mentioned in this post”
-  (text claim) while the link becomes “read the opening” rather than “buy”.
-- **Homepage.** Add a clear secondary action on each paid book (e.g. “Read chapter one” →
-  `/desk/…`). *A Student Has Drowned* is free and already uses `#start-reading` — decide
-  whether it gets a Desk sample, points at a full free text, or stays as-is.
-- **Desk surfacing.** Samples should appear in search and direct links; **open:** exclude
-  from “latest on homepage” / hub hero picks if they would clutter the writing feed
-  (`render-desk-picks.mjs`, tag hub, year lists). Tag page `sample-chapter` is enough for
-  curious readers; no need to spam the main index.
-- **Author workflow (Obsidian).** Draft chapters in the vault → `publish: true` → Publish
-  Brain → we wire links in a follow-up pass once slugs are stable. No code change required
-  in the vault beyond normal frontmatter.
-- **Guard plan (when wiring).** Assert every non-free book with an ASIN has a resolvable
-  `sampleSlug`; built HTML contains the link on mention cards and homepage; sample posts
-  carry `sample-chapter` and the expected `date:`; falsify by breaking one slug.
 
 ---
 

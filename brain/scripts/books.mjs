@@ -32,11 +32,16 @@
  * writing fast may not preserve the accent — but never so loose that an
  * unrelated word can match.
  *
+ * `samplePath` is the Desk URL for chapter one (site-root absolute, `/desk/…`).
+ * Mention cards and the homepage `#books` grid both read it — never hardcode those
+ * links elsewhere.
+ *
  * MAINTENANCE. Edit this file when a book is published (add an entry) or
- * re-released under a new ASIN (update `url` + `asin`). Nothing else. There is
- * no step to run — it is imported at build time — and no post ever needs editing
- * to gain or lose a mention card. That is the §12.8 rule applied: this data is
- * ALREADY COMMITTED, so generating from it is free.
+ * re-released under a new ASIN (update `url` + `asin`), or when a sample chapter
+ * note is added (set `samplePath`). Nothing else. There is no step to run — it is
+ * imported at build time — and no post ever needs editing to gain or lose a mention
+ * card. That is the §12.8 rule applied: this data is ALREADY COMMITTED, so
+ * generating from it is free.
  */
 
 /** @type {Book[]} */
@@ -53,6 +58,7 @@ export const BOOKS = [
     cover: "cover_student_has_drowned.webp",
     blurb:
       "The prequel novella, and the easiest place to start. A drowned student, a rowing club with too many secrets, and a paper that should have folded years ago.",
+    samplePath: "/desk/newsletters/2023/a-student-has-drowned-chapter-one",
     free: true,
     latest: false,
   },
@@ -68,6 +74,7 @@ export const BOOKS = [
     cover: "cover_rockstar_has_exploded.webp",
     blurb:
       "Luce and Huds pick up their first accidental murder case: a Swedish rock star who detonates in his own hotel suite.",
+    samplePath: "/desk/newsletters/2023/a-rockstar-has-exploded-chapter-one",
     free: false,
     latest: false,
   },
@@ -84,6 +91,7 @@ export const BOOKS = [
     cover: "cover_actress_is_missing.webp",
     blurb:
       "The whole team returns. Stella Winston-Frazer has gone missing, and the people who want her found are not the people who want her safe.",
+    samplePath: "/desk/newsletters/2023/an-actress-is-missing-chapter-one",
     free: false,
     latest: false,
   },
@@ -99,6 +107,7 @@ export const BOOKS = [
     cover: "cover_fiance_has_flatlined.webp",
     blurb:
       "The Silverbridge Arrows goalkeeper is found dead at Luce's engagement party. The Seen team take the case.",
+    samplePath: "/desk/newsletters/2026/a-fiance-has-flatlined-chapter-one",
     free: false,
     latest: true,
   },
@@ -143,3 +152,8 @@ export function findMentionedBooks(stripped) {
 
 /** "Book 0", "Book 3" — the series label shown next to a title. */
 export const bookLabel = (book) => `Book ${book.number}`
+
+/** Where a mention card (or similar door) should send a reader for this book. */
+export function bookDoorHref(book) {
+  return book.samplePath ?? "/#books"
+}

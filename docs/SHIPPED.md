@@ -71,6 +71,7 @@ One line each; the reasoning is in git. **S11 = storefront as a writer's site (2
 | 11.13 Desk header nav (2026-10-09) | **No defect — Brave-specific.** Author verified in a second browser: Books and About land where meant. The TODO entry itself said to verify before treating it as a site defect; verified, closed, no code touched |
 | 11.8 "How I Write" page (closed 2026-10-04, moved out of TODO 2026-10-09) | **NOT NEEDED, author's call.** The §11.6 *"Mentioned in this post"* cards already connect craft writing to the books per post, automatically, only where a post mentions a book — more accurate than a hand-built page and free to maintain. **Superseded, not descoped.** Moved here so TODO holds only open work |
 | 11.12 "Mentioned in this post" card links (2026-10-09) | **No defect — browser quirk.** Author re-checked: the cards land on `/#books` as built (`SERIES_URL` in `eb-book-mentions`, asserted by `check-book-mentions.mjs`). The TODO entry itself framed the destination as unreliable; verified working, closed, no code touched |
+| Sample chapters — wiring (2026-10-10) | Four chapter-one posts on the Desk (`sample-chapter` tag). **`samplePath` on each book in `books.mjs`**; mention card title links and homepage `#books` **Read chapter one** buttons use it (`bookDoorHref`). Footer line on cards still **Read the series →** `/#books`. Guards extended in `check-book-links.mjs` and `check-book-mentions.mjs` |
 ---
 
 # 3–7. The larger changes, in detail
