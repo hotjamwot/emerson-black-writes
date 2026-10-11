@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import http from "node:http"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import YAML from "yaml"
 
 const brainDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const publicDir = path.join(brainDir, "public")
@@ -57,8 +58,8 @@ function applyGraphOverrides(html, className, config) {
   return html.replace(pattern, `$1${escapeAttribute(config)}$2`)
 }
 
-function playgroundHtml(localConfig, globalConfig) {
-  const initial = JSON.stringify({ local: localConfig, global: globalConfig }).replaceAll("<", "\\u003c")
+function playgroundHtml(initialState) {
+  const initial = JSON.stringify(initialState).replaceAll("<", "\\u003c")
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -85,6 +86,9 @@ function playgroundHtml(localConfig, globalConfig) {
     .actions button { flex: 1; }
     .yaml-label { margin: 19px 0 6px; color: #c5bfb7; font-size: 11px; }
     pre { max-height: 210px; overflow: auto; margin: 0; padding: 10px; border: 1px solid #393633; border-radius: 4px; background: #181716; color: #d9d0c5; font: 10px/1.55 ui-monospace, monospace; white-space: pre; }
+    .source-status { margin-top: 15px; color: #a9a39b; font-size: 10px; line-height: 1.45; }
+    .source-status p { margin: 5px 0; }
+    #sync-config { width: 100%; margin-top: 6px; font-size: 11px; }
     main { min-width: 0; min-height: 100vh; padding: 12px; }
     .stage { width: 100%; height: calc(100vh - 24px); min-height: 440px; border: 1px solid #393633; border-radius: 5px; overflow: hidden; background: #101010; }
     iframe { display: block; width: 100%; height: 100%; border: 0; }
@@ -112,11 +116,16 @@ function playgroundHtml(localConfig, globalConfig) {
       </div>
       <p class="yaml-label">quartz.config.yaml</p>
       <pre id="yaml"></pre>
+      <div class="source-status" aria-live="polite">
+        <p id="build-status"></p>
+        <p id="config-status">Using current quartz.config.yaml</p>
+        <button id="sync-config" type="button" hidden>Load latest config</button>
+      </div>
     </aside>
     <main><div class="stage"><iframe title="Live Quartz graph preview"></iframe></div></main>
   </div>
   <script>
-    const defaults = ${initial}
+    let defaults = ${initial}
     const state = { local: { ...defaults.local }, global: { ...defaults.global } }
     const ranges = {
       scale: ["Label scale", 0.4, 2.5, 0.05],
@@ -129,12 +138,19 @@ function playgroundHtml(localConfig, globalConfig) {
     const toggles = { showTags: "Show tags", focusOnHover: "Focus on hover", enableRadial: "Radial layout" }
     const controls = document.querySelector("#controls")
     const preview = document.querySelector("iframe")
+    const buildStatus = document.querySelector("#build-status")
+    const configStatus = document.querySelector("#config-status")
+    const syncConfig = document.querySelector("#sync-config")
     let mode = "local"
     let reloadTimer
+    let buildVersion = defaults.buildVersion
+    let configVersion = defaults.configVersion
+
+    buildStatus.textContent = "Built notes and links: " + new Date(defaults.builtAt).toLocaleString()
 
     function yamlFor(config, indent = 8) {
       return Object.entries(config).map(([key, value]) => {
-        const yamlValue = Array.isArray(value) ? "[]" : String(value)
+        const yamlValue = Array.isArray(value) ? JSON.stringify(value) : String(value)
         return " ".repeat(indent) + key + ": " + yamlValue
       }).join("\\n")
     }
@@ -222,11 +238,42 @@ function playgroundHtml(localConfig, globalConfig) {
       event.currentTarget.textContent = "Copied"
       setTimeout(() => { event.currentTarget.textContent = "Copy YAML" }, 1200)
     })
+    syncConfig.addEventListener("click", () => {
+      state.local = { ...defaults.local }
+      state.global = { ...defaults.global }
+      syncConfig.hidden = true
+      configStatus.textContent = "Using current quartz.config.yaml"
+      renderControls()
+      refresh()
+    })
     preview.addEventListener("load", () => {
       if (mode === "global") preview.contentDocument?.querySelector(".global-graph-icon")?.click()
     })
+
+    async function checkForUpdates() {
+      try {
+        const response = await fetch("/__graph-playground-state", { cache: "no-store" })
+        if (!response.ok) return
+        const latest = await response.json()
+        if (latest.buildVersion !== buildVersion) {
+          buildVersion = latest.buildVersion
+          buildStatus.textContent = "Built notes and links updated: " + new Date(latest.builtAt).toLocaleString()
+          refresh()
+        }
+        if (latest.configVersion !== configVersion) {
+          configVersion = latest.configVersion
+          defaults = latest
+          syncConfig.hidden = false
+          configStatus.textContent = "quartz.config.yaml changed"
+        }
+      } catch {
+        buildStatus.textContent = "Waiting for the playground server..."
+      }
+    }
+
     renderControls()
     refresh()
+    setInterval(checkForUpdates, 1500)
   </script>
 </body>
 </html>`
@@ -244,18 +291,48 @@ function contentType(filePath) {
   })[path.extname(filePath)] ?? "application/octet-stream"
 }
 
-const homepage = await fs.readFile(path.join(publicDir, "index.html"), "utf8")
-const defaults = {
-  local: getGraphConfig(homepage, "graph-container"),
-  global: getGraphConfig(homepage, "global-graph-container"),
+async function loadPlaygroundState() {
+  const configPath = path.join(brainDir, "quartz.config.yaml")
+  const homepagePath = path.join(publicDir, "index.html")
+  const contentIndexPath = path.join(publicDir, "static", "contentIndex.json")
+  const [configText, homepage, configStat, homepageStat, contentIndexStat] = await Promise.all([
+    fs.readFile(configPath, "utf8"),
+    fs.readFile(homepagePath, "utf8"),
+    fs.stat(configPath),
+    fs.stat(homepagePath),
+    fs.stat(contentIndexPath),
+  ])
+  const built = {
+    local: getGraphConfig(homepage, "graph-container"),
+    global: getGraphConfig(homepage, "global-graph-container"),
+  }
+  const plugins = YAML.parse(configText)?.plugins ?? []
+  const graphOptions = plugins.find((plugin) => plugin.source === "@quartz-community/graph")?.options ?? {}
+  return {
+    local: { ...built.local, ...graphOptions.localGraph },
+    global: { ...built.global, ...graphOptions.globalGraph },
+    configVersion: `${configStat.mtimeMs}:${configStat.size}`,
+    buildVersion: `${homepageStat.mtimeMs}:${homepageStat.size}:${contentIndexStat.mtimeMs}:${contentIndexStat.size}`,
+    builtAt: contentIndexStat.mtime.toISOString(),
+  }
 }
 
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url ?? "/", `http://${request.headers.host ?? "127.0.0.1"}`)
+    if (url.pathname === "/__graph-playground-state") {
+      const state = await loadPlaygroundState()
+      response.writeHead(200, {
+        "cache-control": "no-store",
+        "content-type": "application/json; charset=utf-8",
+      })
+      response.end(JSON.stringify(state))
+      return
+    }
     if (url.pathname === "/graph-playground" || url.pathname === "/graph-playground/") {
+      const state = await loadPlaygroundState()
       response.writeHead(200, { "content-type": "text/html; charset=utf-8" })
-      response.end(playgroundHtml(defaults.local, defaults.global))
+      response.end(playgroundHtml(state))
       return
     }
 
@@ -267,9 +344,10 @@ const server = http.createServer(async (request, response) => {
     }
     let body = await fs.readFile(filePath)
     if (url.searchParams.get("__gp") === "1" && path.extname(filePath) === ".html") {
+      const state = await loadPlaygroundState()
       let html = body.toString("utf8")
-      const local = getOverrides(url.searchParams, "__gp_local", defaults.local)
-      const global = getOverrides(url.searchParams, "__gp_global", defaults.global)
+      const local = getOverrides(url.searchParams, "__gp_local", state.local)
+      const global = getOverrides(url.searchParams, "__gp_global", state.global)
       html = applyGraphOverrides(html, "graph-container", local)
       html = applyGraphOverrides(html, "global-graph-container", global)
       const isolationStyles = `<style>
@@ -287,7 +365,9 @@ const server = http.createServer(async (request, response) => {
       html = html.replace("</head>", `${isolationStyles}</head>`)
       body = Buffer.from(html)
     }
-    response.writeHead(200, { "content-type": contentType(filePath) })
+    const headers = { "content-type": contentType(filePath) }
+    if (url.pathname.endsWith("/static/contentIndex.json")) headers["cache-control"] = "no-store"
+    response.writeHead(200, headers)
     response.end(body)
   } catch (error) {
     response.writeHead(error.code === "ENOENT" ? 404 : 500, { "content-type": "text/plain; charset=utf-8" })

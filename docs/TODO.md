@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** Six items, and only six.
+**Everything still open on this site. Nothing else.** five items, and only five.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -29,26 +29,6 @@ entry was read without opening the page it described. So the file was split:
 Item numbers are **kept deliberately** — they are how the work was
 discussed with the author and how `SHIPPED.md` refers back to it. Renumbering them would
 break every cross-reference for no gain.
-
-### Graph — SSP-inspired presentation (author feedback, 2026-10-10)
-
-- The native graph config now shows the whole map on every instance, with drag,
-  zoom, hover focus, restored label sizing, and stronger centering. The
-  plugin initializes labels fully hidden; `opacityScale` only changes their
-  opacity after a zoom event. Its `scale` option changes label size, not the
-  initial graph zoom.
-- The author likes the SSP graph's spacious canvas, readable connected titles,
-  category colors, and legend. The installed `@quartz-community/graph` renderer
-  does not expose a legend or per-category colors; matching those means replacing
-  or extending the renderer, not adding Quartz config options.
-- Idle link contrast is improved by owning `--lightgray` in the Emerson theme
-  overlay; the Obsidian theme overrides Quartz's palette config at runtime.
-- **Every node stays in the graph** (`depth: -1`); the first viewport may be
-  zoomed into the current area, with the rest reachable by pan and zoom.
-- **Decision before plugin work:** keep the current renderer and accept these
-  limits, or authorize a small maintained patch to show labels on first render,
-  and highlight/center the active post. A full renderer replacement is still a
-  separate choice for the reference's legend and category styling.
 
 ### Sidebar — two real defects, both confirmed by measurement
 

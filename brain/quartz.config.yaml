@@ -292,29 +292,29 @@ plugins:
         zoom: true
         depth: -1
         scale: 1.15
-        repelForce: 1
-        centerForce: 1
-        linkDistance: 75
+        repelForce: 0.50
+        centerForce: 0.30
+        linkDistance: 80
         fontSize: 0.6
         opacityScale: 1.5
         showTags: true
         removeTags: [""]
         focusOnHover: true
-        enableRadial: true
+        enableRadial: false
       globalGraph:
         drag: true
         zoom: true
         depth: -1
-        scale: 1.15
-        repelForce: 1
-        centerForce: 1
-        linkDistance: 75
+        scale: 1.25
+        repelForce: 0.50
+        centerForce: 0.30
+        linkDistance: 80
         fontSize: 0.6
         opacityScale: 1.5
         showTags: true
         removeTags: [""]
         focusOnHover: true
-        enableRadial: true
+        enableRadial: false
     layout:
       position: afterBody
       priority: 10
