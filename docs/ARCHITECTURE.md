@@ -140,6 +140,13 @@ npx quartz build
 node quartz/verify-default-mode.mjs        # serve public/ on :8099 first for browser checks
 node quartz/theme/verify-brand.mjs
 
+# Graph playground: tune the real graph from the current public/ build.
+# Build Quartz first if you want newly edited or published content in the preview.
+# Open http://127.0.0.1:8081/graph-playground; Ctrl-C stops the server.
+# Controls affect this preview only. Use Copy YAML to apply the selected values
+# to the @quartz-community/graph entry in quartz.config.yaml.
+node scripts/graph-playground.mjs
+
 # Storefront geometry (rendered; needs Chrome) — run from the repo root
 node brain/scripts/verify-storefront.mjs _site
 

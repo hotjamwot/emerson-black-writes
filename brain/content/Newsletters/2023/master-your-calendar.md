@@ -109,6 +109,8 @@ I warned you at the beginning of this newsletter that it’s a doozy of an idea.
 
 After doing this for a couple of weeks, you might begin to feel like a slave to your schedule. If that’s the case, ease up on yourself. Schedule in some breathing exercises or some yoga, or ‘coffee and reading’.
 
+> Side note: make sure you don't waste time reading books that aren't turning you on. It's okay to [[break-up-with-boring-books|break up with boring books.]]
+
 You get more quality work done when you’re rested and leading with joy, so take care of yourself.
 
 For interest, this was my week last week:

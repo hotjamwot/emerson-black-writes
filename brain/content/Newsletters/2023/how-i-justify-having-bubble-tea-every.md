@@ -5,8 +5,10 @@ date: 2023-01-31
 created: 2023-01-31
 updated: 2026-09-28
 modified: 2026-09-28
-tags: [mindset]
-aliases: []
+tags:
+  - mindset
+aliases:
+  - the-art-of-not-feeling-guilty
 type: post
 publish: true
 source: substack:99709581
@@ -73,7 +75,7 @@ It’s typically, “I should have spent more time with those I love.”
 
 More typically for women, the refrain is, “I should have lived my life for **me** instead of constantly placating those around me.”
 
-There’s a book called **[The Top Five Regrets of the Dying](https://amzn.to/3XOISyQ)** which gives you a nice kick up the arse. Highly recommended.
+There’s a book called **[The Top Five Regrets of the Dying](https://amzn.to/3XOISyQ)** which gives you a nice kick up the arse. Highly recommended. I've also written about a thing I call [[grey-time|Grey Time]], which is essentially wasted crappy time that doesn't actually help you in any way.
 
 Your Life Metrics might be different to mine.
 

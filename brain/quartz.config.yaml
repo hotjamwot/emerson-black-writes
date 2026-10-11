@@ -291,26 +291,30 @@ plugins:
         drag: true
         zoom: true
         depth: -1
-        scale: 1.5
-        showTags: true
-        focusOnHover: true
-        fontSize: 0.8
-        repelForce: 0.6
-        centerForce: 0.6
-        linkDistance: 40
+        scale: 1.15
+        repelForce: 1
+        centerForce: 1
+        linkDistance: 75
+        fontSize: 0.6
         opacityScale: 1.5
+        showTags: true
+        removeTags: [""]
+        focusOnHover: true
+        enableRadial: true
       globalGraph:
         drag: true
         zoom: true
         depth: -1
-        scale: 1.4
-        showTags: true
-        focusOnHover: true
-        fontSize: 0.8
-        repelForce: 0.6
-        centerForce: 0.6
-        linkDistance: 40
+        scale: 1.15
+        repelForce: 1
+        centerForce: 1
+        linkDistance: 75
+        fontSize: 0.6
         opacityScale: 1.5
+        showTags: true
+        removeTags: [""]
+        focusOnHover: true
+        enableRadial: true
     layout:
       position: afterBody
       priority: 10

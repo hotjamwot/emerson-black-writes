@@ -11,8 +11,6 @@ type: post
 publish: true
 source: substack:136472057
 ---
-First things first, let me announce that
-
 ## 🕶️ Tint Your Glasses Rose
 
 Being a cynical arsehole is bad for my writing. Not only does it drain my energy, but it also pollutes my output. Too often, I find myself giving time and brainspace to the small frustrations in my day, and it bleeds through into my prose.
@@ -55,7 +53,7 @@ Maybe one day I’ll get back to it…
 > My favourite:
 > Find what gets you off
 
-My gf Julia *loves* espresso coffee. Despite very rarely finishing an entire cup, she adores the process of having the cup nearby. Her love of it is partly ritual-based, and she looks forward to the walk to the cafe as much as drinking the coffee itself.
+My partner Julia *loves* espresso coffee. Despite very rarely finishing an entire cup, she adores the process of having the cup nearby. Her love of it is partly ritual-based, and she looks forward to the walk to the cafe as much as drinking the coffee itself.
 
 My bff Sophie *loves* mall massages. She knows that for her, whenever she’s feeling sore, stressed or restless, the price of a massage (massages are expensive in NZ) and the frustrations of driving and parking at the mall are worth it.
 
@@ -77,7 +75,7 @@ For most of us, very little of these happy memories will be about the act of wri
 
 Does that mean that writing is less worthy of your time? No, because:
 
-**The release of finished projects is memorable.** Hugely so. Our release for A Rockstar Has Exploded was a blast this year (admittedly, I didn’t originally want to do it. I wanted to release it as an ebook only but my pal Sophie pressured me and I’m glad she did).
+**The release of finished projects is memorable.** Hugely so. Our release for [[a-rockstar-has-exploded-chapter-one|A Rockstar Has Exploded]] was a blast this year (admittedly, I didn’t originally want to do it. I wanted to release it as an ebook only but my pal Sophie pressured me and I’m glad she did).
 
 ![](/organise/images/newsletters/2023/what-turns-you-on-01.webp)
 

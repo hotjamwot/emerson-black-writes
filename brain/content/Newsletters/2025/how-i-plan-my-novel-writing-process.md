@@ -16,7 +16,7 @@ source: substack:163538615
 
 The idea of writing a novel or a feature film script can be overwhelming. But if you eat the elephant a little bit at a time, it’s a lot easier to stomach.
 
-When it comes to a lengthy process like writing a book, there are a lot of steps. Planning your story, fleshing out your characters, planning your structure and arcs, writing the first draft, rewriting, sending to friends and gathering feedback, rewriting, rewriting, rewriting, editing, formatting, marketing…
+When it comes to a lengthy process like writing a book, there are a lot of steps. [[whats-your-fantasy|Planning your story]], [[how-to-build-a-human|fleshing out your characters]], planning your structure and arcs, [[how-to-write-with-authenticity-by|writing the first draft]], [[keep-keep-keep-writing|rewriting]], sending to friends and gathering feedback, [[the-furry-region|rewriting]], rewriting, rewriting, editing, formatting, marketing…
 
 ## The Art of the Nibble: Why Granularity is Your Best Friend
 
@@ -56,7 +56,7 @@ Inside each of these dropdown menus is the steps of that phase:
 
 These are deliberately vague and I can always add more or remove some. Each of these tickboxes is essentially a task, and the important trait of each task is that it’s completable. As in, I know when it’s done. When I have a logline, I can tick the ‘logline’ tickbox.
 
-## Task Mastery: Making Every Step Complet-able
+## Task Mastery: Making Every Step Completable
 
 If I’m particularly nervous about a certain task, like the seemingly simple task of ‘Write the first draft’, I’ll often break that into smaller tasks like:
 
