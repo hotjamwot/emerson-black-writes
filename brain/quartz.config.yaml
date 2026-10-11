@@ -291,9 +291,9 @@ plugins:
         drag: true
         zoom: true
         depth: -1
-        scale: 1.15
+        scale: 1.25
         repelForce: 0.50
-        centerForce: 0.30
+        centerForce: 0.80
         linkDistance: 80
         fontSize: 0.6
         opacityScale: 1.5
@@ -307,7 +307,7 @@ plugins:
         depth: -1
         scale: 1.25
         repelForce: 0.50
-        centerForce: 0.30
+        centerForce: 0.80
         linkDistance: 80
         fontSize: 0.6
         opacityScale: 1.5
