@@ -2,6 +2,7 @@
 title: You Have Over 200,000 Hours to Play With; Don't Waste Them
 description: Find the Grey Time and snatch it back
 date: 2026-10-11
+created: 2026-10-11
 updated:
 tags:
   - mindset

@@ -2085,6 +2085,61 @@ if (!findChrome() || !(await isPortUp(PROBE_BASE))) {
     `both wordmark lines are painted (${hf("wmNameH") ?? "n/a"}px / ${hf("wmSeriesH") ?? "n/a"}px tall)`,
   )
   check(Number(hf("wmW") ?? -1) > 0, `the painted mark has real width (got: ${hf("wmW") ?? "n/a"}px)`)
+
+  // ── 11.15: year/tag listing rows — tag pills sit inline, right of the text ──
+  // The defect: custom.scss §6 declared a TWO-column grid for a THREE-child row
+  // (meta | desc | tags), so `ul.tags` auto-placed into row 2, column 1 —
+  // stranded under the date, where two pills stacked vertically. Geometry is
+  // the only way to see this: the markup and the stylesheet are both
+  // individually "correct". Probed at the iframe's 1400px (desktop band; the
+  // 601–900px fallback and the ≤600px hidden-tags rules are separate layouts).
+  //
+  // Coverage (F19): the probe asserts it actually MEASURED pills on rows —
+  // a zero-row pass would otherwise be indistinguishable from a real pass.
+  const listProbe = await computedInBrowser(
+    "newsletters/2024/index.html",
+    `
+    const d = f.contentDocument
+    const rows = [...d.querySelectorAll(".page-listing li.section-li .section")]
+    let pillRows = 0, leftOfDesc = 0, stacked = 0, maxH = 0
+    for (const row of rows) {
+      const tags = row.querySelector(":scope > .tags")
+      const desc = row.querySelector(":scope > .desc")
+      if (!tags || !desc || tags.children.length === 0) continue
+      pillRows++
+      const tr = tags.getBoundingClientRect()
+      const dr = desc.getBoundingClientRect()
+      if (tr.left < dr.right - 1) leftOfDesc++
+      const pills = [...tags.querySelectorAll("a.tag-link")].map((a) => a.getBoundingClientRect())
+      if (pills.length >= 2 && pills.some((p) => Math.abs(p.top - pills[0].top) > 4)) stacked++
+      maxH = Math.max(maxH, Math.round(tr.height))
+    }
+    out.push("pillRows=" + pillRows)
+    out.push("leftOfDesc=" + leftOfDesc)
+    out.push("stacked=" + stacked)
+    out.push("tagsMaxH=" + maxH)
+  `,
+  )
+  const listField = (name) => {
+    const hit = (listProbe ?? "").split(" || ").find((s) => s.startsWith(name + "="))
+    return hit ? hit.slice(name.length + 1) : null
+  }
+  check(
+    Number(listField("pillRows") ?? 0) > 0,
+    `listing probe actually measured tag pills (${listField("pillRows") ?? "n/a"} rows with pills)`,
+  )
+  check(
+    listField("leftOfDesc") === "0",
+    `listing-row pills sit in their own column right of the description, never in the date column (got: ${listField("leftOfDesc") ?? "n/a"} rows left of it)`,
+  )
+  check(
+    listField("stacked") === "0",
+    `multi-pill rows keep pills side by side on one line (got: ${listField("stacked") ?? "n/a"} rows stacked)`,
+  )
+  check(
+    Number(listField("tagsMaxH") ?? 999) <= 34,
+    `pill rows stay one line tall (got: ${listField("tagsMaxH") ?? "n/a"}px max)`,
+  )
 }
 
 // The branding folder also ships `EBW icon.png`, which is the SAME monogram in

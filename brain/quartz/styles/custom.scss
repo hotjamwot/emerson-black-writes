@@ -1729,7 +1729,17 @@ hr::after {
 
   li.section-li .section {
     display: grid;
-    grid-template-columns: 7.5rem 1fr;
+    // 11.15 (2026-11-10). Three children, three columns. This rule used to
+    // declare only `7.5rem 1fr`, so the third child — `ul.tags` — was
+    // auto-placed onto ROW 2, COLUMN 1: stranded in the narrow date column,
+    // where two pills could not fit side by side and stacked vertically.
+    // That was the "squeezed tag pills taking odd vertical space" defect.
+    // The third track is `auto`, not `max-content`: an auto track can shrink
+    // under pressure, so a post with three long tags wraps onto a second pill
+    // row instead of crushing the title column. Below, the 601–900px window
+    // drops back to two columns with the pills under the standfirst — at
+    // tablet width a right-hand pill column would starve long titles.
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
     align-items: baseline;
     gap: 0.35rem 1.1rem;
     padding: 0.85rem 0.6rem 0.85rem 0.75rem;
@@ -1744,6 +1754,28 @@ hr::after {
       background: var(--eb-surface);
       border-left-color: var(--eb-accent);
       transform: translateX(2px);
+    }
+
+    // Pills keep their own baseline alignment with the title line and carry no
+    // vertical margin of their own — upstream's `.tags { margin: 1rem 0 }` is
+    // already zeroed for `.section > .tags`, but this is stated here because
+    // the row's rhythm is owned by the grid gap, not by the children.
+    > .tags {
+      margin: 0;
+    }
+  }
+
+  // The tablet fallback described above: two columns again, with the pills
+  // placed in the text column beneath the standfirst. Below 601px the plugins'
+  // own media query hides `.tags` entirely (phone parity — 11.15 confirms the
+  // year pages don't show tags on phones), so this band is 601–900px only.
+  @media all and (min-width: 601px) and (max-width: 900px) {
+    li.section-li .section {
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+
+      > .tags {
+        grid-column: 2;
+      }
     }
   }
 
