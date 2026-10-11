@@ -361,3 +361,14 @@ explicitly approves an override after seeing the Quartz-native alternative (§9.
   `Publish Brain.command` now excludes `index.md` from the Newsletters mirror, and
   `year-foldouts` belts-and-braces filters `newsletters` / `newsletters/index` from
   its listing. Year/post-count guards derive from the build instead of hardcoding.
+- **11.15 — year/tag listing rows: pills in their own column (done 2026-10-11).**
+  The §6 listing grid declared two columns (`7.5rem 1fr`) for a three-child row
+  (meta | desc | tags), so `ul.tags` auto-placed into row 2, column 1 — stranded
+  in the narrow date column, where two pills stacked vertically and took odd
+  height next to short titles. Now `7.5rem minmax(0, 1fr) auto` (the `auto` track
+  shrinks so long tags wrap instead of crushing titles), `.tags` carries no
+  margin of its own, and the 601–900px band drops back to two columns with pills
+  under the standfirst (≤600px hides tags, per phone parity). Four rendered-
+  geometry guards in `verify-default-mode.mjs` probe `newsletters/2024/` at
+  1400px: pills measured on 14 rows, 0 left of the description, 0 stacked,
+  29px max height. Author-confirmed beautiful on screen.

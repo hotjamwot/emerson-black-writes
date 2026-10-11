@@ -1,6 +1,6 @@
 # Current work
 
-**Everything still open on this site. Nothing else.** five items, and only five.
+**Everything still open on this site. Nothing else.** four items, and only four.
 
 *Renamed from `EMERSON-BLACK-BRAIN-PLAN.md` on 2026-10-04 — same file, shorter name.
 It was 614 lines and had stopped meaning what its own header claimed: it promised
@@ -50,14 +50,6 @@ Both were reported by the author as "worth checking", and both are real. Measure
   sidebar is 147px, of which the collapsed explorer header is 34px. The page still
   scrolls **8420px**. So the reader gets a short "Archive" heading, no visible links, and
   then has to keep scrolling — a dead zone where navigation should be.
-
-### 11.15 Year/Topic pages — tag pills use odd vertical space vs. short titles
-
-- On the Desk's Year pages (`newsletters/<year>`) and Topic (tag) pages, the tag pills
-  in the post lists look squeezed and take odd vertical space next to comparatively
-  short post titles and subtitles.
-- Open: ideas for making the list styling fit better.
-- See '20261009-year-post-view.jpg' file in docs/ for a visual example of what they look like rendered on screen currently. On phone, we don't have the tags visible on the years, so that's fine. Desktop only.
 
 ### Desk header — centre the nav links on desktop (author ask, 2026-10-10)
 
