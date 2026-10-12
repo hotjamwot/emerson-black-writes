@@ -33,7 +33,17 @@ if grep -rq 'organise/[Ii]mages' "$CONTENT/Newsletters/" 2>/dev/null; then
   done
 fi
 
-# 4. Guard: every referenced filename must exist under content/organise/images/newsletters.
+# 4. Strip the vault-side `newsletters/` tag prefix (§12.11) so the site keeps
+#    the bare topic names (`mindset`, not `newsletters/mindset`). Frontmatter
+#    `tags:` only; body text never touched. Idempotent — re-running is a no-op.
+#    Needs `node` (Quartz's own runtime); never fails the publish, just reports.
+if command -v node >/dev/null 2>&1; then
+  node "$REPO/brain/scripts/strip-tag-prefix.mjs" "$CONTENT/Newsletters/" || exit 1
+else
+  echo "WARNING: node not found — skipping tag-prefix strip; prefixed tags will publish as-is."
+fi
+
+# 5. Guard: every referenced filename must exist under content/organise/images/newsletters.
 #    (Line-based loop: `for f in $REFS` word-splits multiline paths — fixed 2026-09-28.)
 MISSING=0
 while IFS= read -r f; do
@@ -42,7 +52,7 @@ while IFS= read -r f; do
 done < <(grep -rho 'organise/images/newsletters/[^)"]*' "$CONTENT/Newsletters/" 2>/dev/null | sed 's/.*newsletters\///;s/[)"]$//' | sort -u)
 if [ "$MISSING" = "1" ]; then echo "Publish aborted: missing images."; exit 1; fi
 
-# 5. Enrich frontmatter with Quartz's date keys so the Brain shows real
+# 6. Enrich frontmatter with Quartz's date keys so the Brain shows real
 #    publication dates instead of "today" for every mirrored note.
 #      date:    -> created:   (archive + per-note date, newest-first sorting)
 #      updated: -> modified:  (used by modified-date views)
