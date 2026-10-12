@@ -93,6 +93,13 @@ for (const rel of withCard) {
   // A sell inside a craft post breaks the thing that makes people read the author.
   check(!/amazon|amzn\.eu|a\.co/.test(block), `${rel}: no Amazon link inside the card`)
 
+  // Goodreads must be goodreads.com/book/show/ — a mistyped vanity URL would
+  // still render; nothing about a wrong-but-plausible href is visible in a build.
+  check(
+    !/goodreads\.com(?!\/book\/show\/)/.test(block),
+    `${rel}: every Goodreads link is a /book/show/ page`,
+  )
+
   const titleLinks = [
     ...block.matchAll(/class="eb-mentions__title-link" href="([^"]+)"[^>]*>([^<]+)</g),
   ]
@@ -106,6 +113,46 @@ for (const rel of withCard) {
       href === bookDoorHref(book),
       `${rel}: "${book.title}" links to sample (${bookDoorHref(book)}), got ${href}`,
     )
+  }
+
+  // Secondary doors, per item block. Goodreads from the canonical field — a
+  // hardcoded URL that disagrees with books.mjs is the §12.9 contradiction bug
+  // again. Get it free on the free book only, absolute-from-root (cards render
+  // under /desk/, so a bare #start-reading would resolve to /desk/#start-reading
+  // and die). Scoped per <li> so a leak onto a paid book fails loudly.
+  const items = [...block.matchAll(/<li class="eb-mentions__item">([\s\S]*?)<\/li>/g)].map(
+    (m) => m[1],
+  )
+  for (const item of items) {
+    const titleMatch = item.match(/class="eb-mentions__title-link"[^>]*>([^<]+)</)
+    const title = titleMatch ? titleMatch[1].trim() : null
+    const book = BOOKS.find((b) => b.title === title)
+    if (!book) {
+      check(false, `${rel}: mention item for unknown book "${title}"`)
+      continue
+    }
+    if (book.goodreads) {
+      check(
+        item.includes(`href="${book.goodreads}"`),
+        `${rel}: "${book.title}" carries its canonical Goodreads link`,
+      )
+    } else {
+      check(
+        !/goodreads\.com/.test(item),
+        `${rel}: "${book.title}" has no Goodreads URL in books.mjs, none rendered`,
+      )
+    }
+    if (book.free) {
+      check(
+        item.includes('href="/#start-reading"'),
+        `${rel}: "${book.title}" (free) carries Get it free → /#start-reading`,
+      )
+    } else {
+      check(
+        !item.includes("Get it free"),
+        `${rel}: "${book.title}" (paid) carries no Get it free link`,
+      )
+    }
   }
 
   // The covers. Each one must (a) exist as a file in the assembled site, and

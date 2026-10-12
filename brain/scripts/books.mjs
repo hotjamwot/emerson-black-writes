@@ -36,6 +36,9 @@
  * Mention cards and the homepage `#books` grid both read it — never hardcode those
  * links elsewhere.
  *
+ * `goodreads` is the canonical Goodreads page per book. Mention cards render it
+ * as a quiet secondary door; never hardcode a Goodreads URL elsewhere.
+ *
  * MAINTENANCE. Edit this file when a book is published (add an entry) or
  * re-released under a new ASIN (update `url` + `asin`), or when a sample chapter
  * note is added (set `samplePath`). Nothing else. There is no step to run — it is
@@ -59,6 +62,7 @@ export const BOOKS = [
     blurb:
       "The prequel novella, and the easiest place to start. A drowned student, a rowing club with too many secrets, and a paper that should have folded years ago.",
     samplePath: "/desk/newsletters/2023/a-student-has-drowned-chapter-one",
+    goodreads: "https://www.goodreads.com/book/show/125481379-a-student-has-drowned",
     free: true,
     latest: false,
   },
@@ -75,6 +79,7 @@ export const BOOKS = [
     blurb:
       "Luce and Huds pick up their first accidental murder case: a Swedish rock star who detonates in his own hotel suite.",
     samplePath: "/desk/newsletters/2023/a-rockstar-has-exploded-chapter-one",
+    goodreads: "https://www.goodreads.com/book/show/107526648-a-rockstar-has-exploded",
     free: false,
     latest: false,
   },
@@ -92,6 +97,7 @@ export const BOOKS = [
     blurb:
       "The whole team returns. Stella Winston-Frazer has gone missing, and the people who want her found are not the people who want her safe.",
     samplePath: "/desk/newsletters/2023/an-actress-is-missing-chapter-one",
+    goodreads: "https://www.goodreads.com/book/show/251062089-an-actress-is-missing",
     free: false,
     latest: false,
   },
@@ -108,6 +114,7 @@ export const BOOKS = [
     blurb:
       "The Silverbridge Arrows goalkeeper is found dead at Luce's engagement party. The Seen team take the case.",
     samplePath: "/desk/newsletters/2026/a-fiance-has-flatlined-chapter-one",
+    goodreads: "https://www.goodreads.com/book/show/251352851-a-fianc-has-flatlined",
     free: false,
     latest: true,
   },

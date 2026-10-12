@@ -72,6 +72,12 @@ for (const b of BOOKS) {
     `Book ${b.number} sample path is a Desk post (${b.samplePath})`,
   )
   check(existsSync(sampleNotePath(b.samplePath)), `Book ${b.number} sample note exists on disk`)
+  // Goodreads canonical per book — /book/show/ pages only, so a mistyped vanity
+  // URL fails here rather than shipping a plausible-looking wrong link on cards.
+  check(
+    /^https:\/\/(www\.)?goodreads\.com\/book\/show\/\d+/.test(b.goodreads ?? ""),
+    `Book ${b.number} has a canonical Goodreads /book/show/ URL (${b.goodreads ?? "missing"})`,
+  )
 }
 console.log(`  · ${BOOKS.length} books, ${BOOKS.filter((b) => b.url).length} with buy links`)
 // ---------------------------------------------------------------- 2. homepage

@@ -1134,6 +1134,24 @@ h2.page-title,
   overflow: hidden;
 }
 
+// Secondary doors (Goodreads / Get it free, 2026-10-12). Quiet by design:
+// small, meta-coloured, below the blurb — the title link stays the door.
+.eb-mentions__links {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--eb-meta);
+}
+
+.eb-mentions__link {
+  color: var(--eb-meta);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--eb-accent);
+    text-decoration: underline;
+  }
+}
+
 .eb-mentions__more {
   margin: 0.9rem 0 0;
 }

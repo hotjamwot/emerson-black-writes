@@ -31,6 +31,14 @@ import { BOOKS_IN_ORDER, bookDoorHref, coverThumb } from "../../../scripts/books
  * homepage (`/#books`). A hard sell inside a craft post breaks the thing that
  * makes people read the author; buying stays on the homepage. No ASIN here.
  *
+ * SECONDARY DOORS (added 2026-10-12, author's call). The title/cover stay the
+ * primary door to the sample chapter. Beneath the blurb each card carries a
+ * quiet `Goodreads →` link (canonical `goodreads` in `books.mjs`, all four
+ * books — including the free prequel, which has nothing to shop). Book 0
+ * additionally carries `Get it free →` to `/#start-reading` (the homepage
+ * email-signup section that delivers the EPUB), which is that book's true
+ * equivalent of a shop door. Still no Amazon anywhere on the card.
+ *
  * WHICH BOOKS. Matched from `../../../../scripts/books.mjs` — the same canonical
  * source the homepage and `check-book-links.mjs` use, so the card cannot name a
  * book the rest of the site contradicts. Matching is on the canonical title and
@@ -47,6 +55,9 @@ import { BOOKS_IN_ORDER, bookDoorHref, coverThumb } from "../../../scripts/books
  */
 
 const SERIES_URL = "/#books"
+
+/** Email-signup section on the homepage — delivers the free prequel EPUB. */
+const START_READING_URL = "/#start-reading"
 
 /** Only dispatched posts, and never the Desk / tag pages / folder pages. */
 function isPost(fileData) {
@@ -177,6 +188,20 @@ function EbBookMentionsComponent({ fileData, tree } = {}) {
             h("a", { class: "eb-mentions__title-link", href: bookDoorHref(book) }, book.title),
             h("span", { class: "eb-mentions__label" }, `Book ${book.number}`),
             book.blurb ? h("p", { class: "eb-mentions__blurb" }, book.blurb) : null,
+            // Secondary doors: quiet, below the blurb, never competing with the
+            // sample-chapter title link. Goodreads on every book; Get it free on
+            // the free prequel only (absolute-from-root: cards render under /desk/).
+            h(
+              "p",
+              { class: "eb-mentions__links" },
+              book.free
+                ? h("a", { class: "eb-mentions__link", href: START_READING_URL }, "Get it free →")
+                : null,
+              book.free && book.goodreads ? " · " : null,
+              book.goodreads
+                ? h("a", { class: "eb-mentions__link", href: book.goodreads }, "Goodreads →")
+                : null,
+            ),
           ),
         ),
       ),
