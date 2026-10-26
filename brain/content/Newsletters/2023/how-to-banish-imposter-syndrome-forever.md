@@ -39,9 +39,9 @@ First, let's acknowledge that imposter syndrome is a common experience, especial
 
 *Clance and Imes (1978)* were the first to describe imposter syndrome and [conducted a study that found that it is more common among high-achieving women](https://psycnet.apa.org/record/1979-26502-001). Doesn’t surprise me. There’s a lot of indirect (and sometimes direct) pressure that says only straight white dudes with degrees are allowed to do anything cool.
 
-![before sunrise GIF](/organise/images/newsletters/2023/how-to-banish-imposter-syndrome-forever-02.gif)
-
 Have you seen *Before Sunrise*? It’s a 90s talky romance film. I first watched it when I was a teenager, and there’s a thought from Hawke’s character that really struck me:
+
+![[how-to-banish-imposter-02.jpeg]]
 
 Jesse: *I remember my mother once told me right in front of my father, they were having this big fight, that he didn't really want to have me. You know, that he was pissed off when he found out she was pregnant with me, that I was this big mistake. That really shaped the way I think. I always saw the world as this place where I really wasn't meant to be.*
 

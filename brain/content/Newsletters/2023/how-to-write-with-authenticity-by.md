@@ -88,10 +88,4 @@ This feeling is often referred to as "flow," and it's a sign that you're tapping
 
 If you keep those 6 ideas in mind, you’ll have a better chance of keeping the Flame (your instincts) alive, which will lead to writing that reads more authentic and true. You’ll also write faster, because when you’re in “flow state”, this shit is easy.
 
-### 🌳 Currently Reading: Birnam Wood by Eleanor Catton
-
-Eleanor Catton is a Kiwi writer who *won the Booker Prize* for her book The Luminaries at the ridiculous age of 28.
-
-[Birnam Wood](https://amzn.to/3N53ZdM) is her latest book, released ten years hence, and I really dug it. There’s a lot of dialogue discussing political ideologies, left vs. right, and quite a few icky characters, but they’re wrapped up in a fun multi-viewpoint thriller.
-
-![](/organise/images/newsletters/2023/how-to-write-with-authenticity-by-01.webp)
+FLAME ON!

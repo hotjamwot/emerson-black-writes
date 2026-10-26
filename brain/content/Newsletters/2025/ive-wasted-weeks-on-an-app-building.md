@@ -33,7 +33,7 @@ As the doc grew in length, I realised that I’d accrued a lot of data almost by
 
 So I migrated the entire document to Google Sheets.
 
-![](/organise/images/newsletters/2025/ive-wasted-weeks-on-an-app-building-02.gif)
+![[ive-wasted-weeks-on-an-app-01-web.jpg]]
 
 And used the data to make some cute charts:
 

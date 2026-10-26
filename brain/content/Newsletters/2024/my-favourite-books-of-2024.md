@@ -17,9 +17,7 @@ How many books did you read this year? How many books did you *want* to read thi
 
 Well, *I —* picture me saying this with a big smug grin — read 47 books in 2024, which is 7 more than my planned 40.
 
-![](/organise/images/newsletters/2024/my-favourite-books-of-2024-01.gif)
-
-That totals 19,817 pages.
+That totals **19,817** pages.
 
 ## 📊 What are the stats?
 
