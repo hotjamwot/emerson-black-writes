@@ -96,6 +96,6 @@ I made 35 that I'm quite proud of, and you can download them [here for free](htt
 - **Remove Sleep Text:** If you want to get rid of the "Sleeping" or custom status text, go to **Settings ▸ Screen ▸ Sleep Screen ▸ Sleep screen message** and toggle off **Add custom message**.
 - **Adjust Scaling/Rotation:** Check options like image scaling or border fill if your pictures appear stretched or misaligned.
 
-Please enjoy. Once you're all set up with your fancy screensavers, why not buy a copy of [A Rockstar Has Exploded](https://www.amazon.com/dp/B0BTML7L86) (or [An Actress is Missing]( https://www.amazon.com/dp/B0CJ5Z85S4) or [A Fiancé Has Flatlined](https://www.amazon.com/dp/B0H6BVC6B8)) to test it out on.
+Please enjoy. Once you're all set up with your fancy screensavers, why not buy a copy of [A Rockstar Has Exploded](https://www.amazon.com/dp/B0BTML7L86) (or [An Actress is Missing]( https://www.amazon.com/dp/B0CJ5Z85S4) or [A Fiancé Has Flatlined](https://www.amazon.com/dp/B0GY5YH83F)) to test it out on.
 
 Happy reading!
